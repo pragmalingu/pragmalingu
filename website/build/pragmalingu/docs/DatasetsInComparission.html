@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>DatasetsInComparission · PragmaLingu</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Datasets in comparission:"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="DatasetsInComparission · PragmaLingu"/><meta property="og:type" content="website"/><meta property="og:url" content="https://pragmalingu.github.io/"/><meta property="og:description" content="Datasets in comparission:"/><meta property="og:image" content="https://pragmalingu.github.io/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://pragmalingu.github.io/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/img/testicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="https://pragmalingu.github.io/blog/atom.xml" title="PragmaLingu Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://pragmalingu.github.io/blog/feed.xml" title="PragmaLingu Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/testicon.ico" alt="PragmaLingu"/><h2 class="headerTitleWithLogo">PragmaLingu</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/docs/doc1" target="_self">Docs</a></li><li class=""><a href="/docs/doc4" target="_self">About</a></li><li class=""><a href="/docs/intro" target="_self">Read</a></li><li class=""><a href="/help" target="_self">Get In Touch</a></li><li class=""><a href="/blog/" target="_self">Blog</a></li><li class=""><a target="_self"></a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">DatasetsInComparission</h1></header><article><div><span><p>Datasets in comparission:</p>
+<p>LISA:
+Link: <a href="http://ir.dcs.gla.ac.uk/resources/test_collections/lisa/">http://ir.dcs.gla.ac.uk/resources/test_collections/lisa/</a></p>
+<p>Documents (lisaX.XXX) : ID &quot;Document XXX&quot;, Titel mit Punkt abgegrenzt, manchmal zwei Sätze auch Autor und Ort, alles in Capslock, getrennt durch * Reihe, relativ kurze Erläuterungen zu den Überschriften als Text</p>
+<p>Queries (lisa.que): Nummer gefolgt von relativ langen Suchanfragen, beendet durch # und aus der Ich-Perspektive</p>
+<p>Relevance assesments (lisarj.num) : Suchanfragen ID mit Anzahl an relevanten Dokumenten und Doc-IDs abgeschlossen durch -1</p>
+<p>Others:lisa.rel old version of relevance assesments which helps to understand new version</p>
+<p>Rating: Data is good to work with, good clear stop marks, easy to understand, maybe too specific, very long queries and texts are a bit short, interesting queries for pragmatic search because the queries aren't questions but statements</p>
+<p>Use Cases:</p>
+<p>NPL:
+Link: <a href="http://ir.dcs.gla.ac.uk/resources/test_collections/npl/">http://ir.dcs.gla.ac.uk/resources/test_collections/npl/</a></p>
+<p>Documents (doc-text &amp; doc-vecs) : ID gefolgt von alles klein ohne Satzzeichen, Abstracts/Titles, getrennt durch Slash, Darstellung als Textdatei und als Wort-Vectoren, end of entry /</p>
+<p>Queries (query-text &amp; query-vecs): Capslock, ID, Short title like query, end marker /</p>
+<p>Relevance assesments (rlv-ass): query ID followed by relevant documents, end marker /</p>
+<p>Others:
+(term-vocab) vocabular with representative IDs, stems, end of entry /
+(term-vecs) occurence of terms in docs, first number vocab ID, second number doc ID, end of entry /
+(term-mst) evtl mutal similarity values, word ID - context-word ID - cooccurences - context similarity
+wurde nur für Wörter gemacht, die in mindestens 2 Dokumenten vorkommen, daher nur bis 4322, alle Wörter danach haben nur einfaches Vorkommen =&gt; irrelevant würde die Ergebnisse verschlechtern</p>
+<p>Rating: Nur Überschriften bzw Abtracts sind schwierig weil sie nicht viel Kontext geben, immer / als Endpunkt sehr konsistent und praktisch zum Auslesen, aber Kontextwahrscheinlichkeiten können sehr hilfreich sein, Problem, man muss das jedes Mal neuberechnen bei neuen Daten. Für die Pragmatik nur teilweise geeignet, da sich hier zu viel direkte Suchanfragen aufgezählt werden.</p>
+<p>Use Cases:</p>
+<p>CACM:
+&quot;CACM is a collection of article abstracts published in ACM journal between 1958 and 1979. Too small to observe real impact brought by proposed approach&quot;
+Link: <a href="http://ir.dcs.gla.ac.uk/resources/test_collections/cacm/">http://ir.dcs.gla.ac.uk/resources/test_collections/cacm/</a></p>
+<p>cite.info - Key to citation info
+common_words - Stop words used by smart
+qrels.text - List of relevance judgements</p>
+<p>Documents(cacm.all): ID (.I), title(.T), abstract (if there is one) (.W), date of pubication of article (B.), author list (.A), add information (.N), list of cross-references to other documents (.X)
+other-doc ID 4/5/6 doc-ID
+4 : &quot;bibliographic coupling&quot; - if document id Y appears in the bibliographic
+coupling subvector for document X with a weight of w, it means X
+and Y have w common references in their bibliographies; the weight
+of did X in the vector for X is the number of items in X's bibliography.
+5 : &quot;links&quot; - documents X and Y are linked if X cites Y, Y cites X, or
+X == Y.
+6 : &quot;co-citations&quot; - if document id Y appears in the co-citation subvector
+for document X with weight w, it means X and Y are cited together in
+w documents; the weight of did X in the vector for X is the number
+of documents that cite X.</p>
+<p>Queries(query.text): sentences with end marks like . or ? ID starts with .I and query starts with .W</p>
+<p>Relevance assesments(qrels.text): query Id followed by doc-ID followed by 0 int and 0.0 float, every doc has own row</p>
+<p>Others: (common_words) a list of stop words</p>
+<p>Rating: Mostly too small to use for most papers, could be interesting, but not so much for similarity in pragmatics, just for semantic connections. No full texts mostly not even the abstract but just the title. But it could be helpful to use the cross connections</p>
+<p>Use Cases:</p>
+<p>CISI:
+Link: <a href="http://ir.dcs.gla.ac.uk/resources/test_collections/cisi/">http://ir.dcs.gla.ac.uk/resources/test_collections/cisi/</a></p>
+<p>Documents(CISI.ALL): ID (.I), title (.T), author (.A), abstract (.W) and list of cross-references to other documents (.X)</p>
+<p>Queries(CISI.QRY): sentences with end marks like . or ? ID starts with .I and query starts with .W</p>
+<p>Relevance assesments(CISI.REL): query Id followed by doc-ID followed by 0 int and 0.0 float, every doc has own row</p>
+<p>Others: (CISI.BLN) list of boolean queries</p>
+<p>Rating: similar to CACM collection, has a very simialar coding . It is the dataset for training IR models when used in conjunction with the Queries (CISI.QRY)</p>
+<p>Use Cases:</p>
+<p>Cranfield:
+Link: <a href="http://ir.dcs.gla.ac.uk/resources/test_collections/cran/">http://ir.dcs.gla.ac.uk/resources/test_collections/cran/</a></p>
+<p>Documents(cran.all): ID (.I), title (.T), author (.A), source (.B), abstract (.W)</p>
+<p>Queries(cran.qury): sentences with end marks like . or ? ID starts with .I and query starts with .W, mostly questions</p>
+<p>Relevance assesments(cranqrel): query number, relevant document number, relevancy code (1,2,3,4 or 5)</p>
+<ol>
+<li>References which are a complete answer to the question.</li>
+<li>References of a high degree of relevance, the lack of which
+either would have made the research impracticable or would
+have resulted in a considerable amount of extra work.</li>
+<li>References which were useful, either as general background
+to the work or as suggesting methods of tackling certain aspects
+of the work.</li>
+<li>References of minimum interest, for example, those that have been
+included from an historical viewpoint.</li>
+<li>References of no interest.</li>
+</ol>
+<p>Others:</p>
+<p>Rating: Seems to have very helpful information on pragmatics because there is a rating of how the relevancy is defined</p>
+<p>Use Cases:</p>
+<p>Time:
+Link: <a href="http://ir.dcs.gla.ac.uk/resources/test_collections/time/">http://ir.dcs.gla.ac.uk/resources/test_collections/time/</a>
+Documents(TIME.ALL): Everything in capslock, text starts with * followed by TEXT, ID, date and page number</p>
+<p>Queries(TIME.QUE): start with * FIND and quiery ID, all capslock, quieries are short demands end mark is .</p>
+<p>Relevance assesments(TIME.REL): Quiery ID followed by relevant docs IDs</p>
+<p>Others: (TIME.STP) list of stop words</p>
+<p>Rating: Relevant for IR but could be hard to use for pragmatic purpose since the text is not very structured and therefore hard to parse</p>
+<p>Use Cases:</p>
+<p>Medline:
+Link: <a href="http://ir.dcs.gla.ac.uk/resources/test_collections/medl/">http://ir.dcs.gla.ac.uk/resources/test_collections/medl/</a></p>
+<p>Documents(MED.ALL): ID (.I), abstract (.W)</p>
+<p>Queries(MED.QRY): ID (.I), quiery (.W), short definitions or keywords</p>
+<p>Relevance assesments(MED.REL): Quiery Id followed by 0 followed by Doc ID followed by 1, 0 and 1 deosn't seem to have a depper meaning other than mark where the IDs start and end, maybe to be trained vectors</p>
+<p>Others: (MED.REL.OLD) older version of Relevance assesments</p>
+<p>Rating: could be usefull for pragmatic search since the quieries are very specific, but we have to look into it by evalutation</p>
+<p>Use Cases:</p>
+<p>ADI:
+Link: <a href="http://ir.dcs.gla.ac.uk/resources/test_collections/adi/">http://ir.dcs.gla.ac.uk/resources/test_collections/adi/</a></p>
+<p>Documents(ADI.ALL): ID (.I), title (.T), author (.A), short texts (.W)</p>
+<p>Queries(ADI.QRY): ID (.I), quiery (.W), short definitions or questions</p>
+<p>Relevance assesments(ADI.REL): Quiery Id followed by 0 followed by Doc ID followed by 0.0, 0 and 0.0 deosn't seem to have a depper meaning other than mark where the IDs start and end, maybe to be trained vectors</p>
+<p>Others: (ADI.BLN) list of boolean quieries</p>
+<p>Rating: extremly small not even 100 examples, doesn't seem to be good for any use except for experimenting with small data sets on machine learining</p>
+<p>Use Cases:</p>
+<p>Reuters 21578 or RCV1:</p>
+<p>Link: <a href="http://www.daviddlewis.com/resources/testcollections/reuters21578/">http://www.daviddlewis.com/resources/testcollections/reuters21578/</a>
+Documents: formatted in sgm with very useful tags like Topic, Test
+Each REUTERS tag contains explicit specifications of the values
+of five attributes, TOPICS, LEWISSPLIT, CGISPLIT, OLDID, and NEWID.
+These attributes are meant to identify documents and groups of
+documents, and have the following meanings:</p>
+<pre><code class="hljs"> 1. TOPICS : The possible values are YES, NO, and BYPASS:
+    a. YES indicates that *in the original data* there was at
+    least one entry in the TOPICS fields.
+    b. NO indicates that *in the original data* the story had no
+    entries in the TOPICS field.
+    c. BYPASS indicates that *in the original data* the story was
+    marked with the string &quot;bypass&quot; (or a typographical variant on that
+    string).
+    Altough this shouldn't be used for Topic search because there could be topics if there is a no even so no if theres a yes
+
+2. LEWISSPLIT : The possible values are TRAINING, TEST, and
+    NOT-USED.  TRAINING indicates it was used in the training set in the
+    experiments reported in LEWIS91d (Chapters 9 and 10), LEWIS92b,
+    LEWIS92e, and LEWIS94b.  TEST indicates it was used in the test set
+    for those experiments, and NOT-USED means it was not used in those
+    experiments.
+
+ 3. CGISPLIT : The possible values are TRAINING-SET and
+    PUBLISHED-TESTSET indicating whether the document was in the training
+    set or the test set for the experiments reported in HAYES89 and
+    HAYES90b.
+
+ 4. OLDID : The identification number (ID) the story had in the
+    Reuters-22173 collection.
+
+ 5. NEWID : The identification number (ID) the story has in the
+    Reuters-21578, Distribution 1.0 collection.  These IDs are assigned to
+    the stories in chronological order.
+</code></pre>
+<p>Queries: No queries, but there are lists of topics, places, people, etc.</p>
+<p>Relevance assesments: -</p>
+<p>Others:</p>
+<p>Rating: Already spliut in Train, Test and Not-Used set which is very helpful, also topics and relations between the topics are documented which makes this collectiojn a very usefull one for pragmatic search development.</p>
+<p>Use Cases:</p>
+</span></div></article></div><div class="docs-prevnext"></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"><img src="/img/testicon.ico" alt="PragmaLingu" width="66" height="58"/></a><div><h5>Docs</h5><a href="/docs/en/doc1.html">Getting Started</a><a href="/docs/en/doc2.html">Guides</a><a href="/docs/en/doc3.html">API Reference</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a><a href="https://stackoverflow.com/questions/tagged/" target="_blank" rel="noreferrer noopener">Stack Overflow</a><a href="https://discordapp.com/">Project Chat</a><a href="https://twitter.com/" target="_blank" rel="noreferrer noopener">Twitter</a></div><div><h5>More</h5><a href="/blog">Blog</a><a href="https://github.com/">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2020 PragmaLingu</section></footer></div></body></html>

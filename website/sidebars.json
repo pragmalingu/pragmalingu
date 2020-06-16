@@ -1,0 +1,16 @@
+{
+  "docs": {
+    "Docusaurus": [
+    	"doc1",
+    	"doc9"
+    ],
+    "Setting up a Elastic Search Engine": ["doc2"],
+    "Evalutate possible Data Sets": ["doc3"]
+  },
+  "docs-other": {
+    "Idea and Concept": ["doc4", "doc5"]},
+
+  "read": {
+    "Intro": ["intro","use-cases"],
+    "Data Set Comparisson": ["overview","data-comparisson"]}
+}

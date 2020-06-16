@@ -1,0 +1,35 @@
+Inhalte dieser Webseite:
+
+- Dokumentation was wir machen 
+- Tutorials wie man es selber machen kann
+- Benchmark Ergebnisse 
+- Schlüssiges Konzept das die Ansätze und Technologien einordnet
+- bisschen witzig und unterhaltsam, obwohl das Thema sehr abstrakt ist
+
+Zielgruppe:
+- Interessierte am Thema interessieren 
+- Lernwillige (erstes Semester sollte hier Hilfe finden können)
+- verständlich für Frachfremde Business-Analysten, um Entscheidungen über den Einsatz und die Investition in bestimmte Technologien treffen können
+
+Allgemein:
+- Orientierung an Tinkerpop: https://tinkerpop.apache.org/ 
+
+
+Startseite:
+
+Willkommen bei PragmaLingu, unser Ziel ist es Interessierten im Bereich Information Retrieval, Suchmaschinenoptimierung und Pragmatischen Suchmaschinenansätzen eine Informationsplattform zu bieten. Wir versuchen alle möglichen Informationen zu sammeln und so aufzubereiten, dass sich jeder schnell einen Überbliock verschaffen kann, egal ob langjähriger Programmierer, Erstsemester oder Interessent aus einer anderen Fachrichtung.
+
+Grundlegende Informationen:
+
+Pragmatik
+Bevor man sich mit dem Thema einer pragmatischen Suchmaschine beschäftigen kann, muss man zunächst verstehen, was hinter der Pragmatik steht. Unter Pragmatik versteht man in der Linguistik die kontextabhängige und nicht-wörtliche Bedeutungen von sprachlichen Ausdrücken in jeweils konkreten Situationen und mit den Bedingungen für ihr Entstehen. 
+Zum Beispiel wäre die Pragmatik von "Hast du eine Uhr?" das Bedürfnis die Uhrzeit zu erfahren, obwohl dies alleine aus den Bedeutungen der Wörter im Satz nicht erkennbar ist. 
+Zur Deutung von pragmatischen Anfragen benötigt es also einen gewissen gesellschaftlichen Kontext. Dieser wird in der Linguistik auch oft als "Weltwissen" bezeichnet. Bei Montague: Pragmatik = indexikalische Ausdrücke
+
+Information Retrieval
+
+Elastic Search
+
+Jupyter
+
+Freiverfügbare Datensätze
