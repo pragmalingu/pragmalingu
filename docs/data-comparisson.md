@@ -499,9 +499,9 @@ fatty acid levels in placenta and fetus.
 
 **Use Cases:**<br>
 
-**Description:**<br>extremly small not even 100 examples, doesn't seem to be good for any use except for experimenting with small data sets on machine learining
+**Description:**<br>An extremly small data set with not even 100 examples, doesn't seem to be good for any use except for experimenting with machine learining on small data sets.
 
-**Documents:**<br>(ADI.ALL): ID (.I), title (.T), author (.A), short texts (.W)
+**Documents:**<br>`ADI.ALL` ID (.I), title (.T), author (.A), short texts (.W)
 
 *Example:*
 ```
