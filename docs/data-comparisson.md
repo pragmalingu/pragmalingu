@@ -501,46 +501,108 @@ fatty acid levels in placenta and fetus.
 
 **Description:**<br>An extremly small data set with not even 100 examples, doesn't seem to be good for any use except for experimenting with machine learining on small data sets.
 
-**Documents:**<br>`ADI.ALL` ID (.I), title (.T), author (.A), short texts (.W)
+**Documents:**<br>`ADI.ALL` contains 83 documents with the same notation as `Cranfield`.
 
 *Example:*
 ```
+.I 3
+.T
+an important need and opportunity for a. d. i. leadership
+in information science education .
+.A
+R. L. TAYLOR
+.W
+current trends in information science education
+appear inadequate for the important need of the nation's
+practicing professional personnel for training in becoming
+information specialists or more proficient users of
+ information systems .  a particular educational program
+ by a. d. i. is suggested to supplement others in meeting
+ this presumptive need .
 ```
 
-**Queries:**<br>ID (.I), query (.W), short definitions or questions
+**Queries:**<br>`ID (.I)`holds 35 short queries that seem to be test questions.
 
 *Example:*
 ```
+.I 3
+.W
+What is information science?  Give definitions where possible.
 ```
 
-**Relevance assesments:**<br>(ADI.REL): Query Id followed by 0 followed by Doc ID followed by 0.0, 0 and 0.0 deosn't seem to have a depper meaning other than mark where the IDs start and end, maybe to be trained vectors
+**Relevance assesments:**<br>The relevance assesments given in `ADI.REL` are in the same format as `CISI` & `CACM`. Query ID followed by relevant doc ID followed by 0 and 0.0. Could be used to create trainable vectors.
 
 *Example:*
 ```
+3   3   0   0.000000   
+3   43   0   0.000000   
+3   45   0   0.000000   
+3   60   0   0.000000   
+4   29   0   0.000000   
+4   63   0   0.000000   
+5   3   0   0.000000   
 ```
 
-**Other files:**<br>(ADI.BLN) list of boolean queries
+**Other files:**<br>`ADI.BLN` - List of boolean queries
 
 **Source:**http://ir.dcs.gla.ac.uk/resources/test_collections/adi/
 
 ## Reuters 21578
 
-**Use Cases:**<br>
+**Use Cases:**<br>Document Similarity, Document Clustering, Word Sense Disambiguation
 
-**Description:**<br>Already spliut in Train, Test and Not-Used set which is very helpful, also topics and relations between the topics are documented which makes this collectiojn a very usefull one for pragmatic search development. But only half of the documents are assigned to topics, so there is a wide range of not marked documents
+**Description:**<br> This collection was originally collected and labeled by Carnegie Group, Inc. and Reuters, Ltd. In the `README.txt` file are further informations documented. <br>
+The files are in SGML format, so it's useful to get familiar with that language first. 
+Already split in Train, Test and Not-Used set which is very helpful, also topics and relations between the topics are documented which makes this collectiojn a very usefull one for pragmatic search development. But only half of the documents are assigned to topics, so there is a wide range of not marked documents
 
-**Documents:**<br>formatted in sgm with very useful tags like Topic, Test
-Each REUTERS tag contains explicit specifications of the values
-of five attributes, TOPICS, LEWISSPLIT, CGISPLIT, OLDID, and NEWID.
-These attributes are meant to identify documents and groups of 
+**Documents:**<br>
+The files `reut2-000.sgm` to `reut2-021.sgm` contain 21.578 documents that are in SGML format. The start of every document is marked with 
+```<!DOCTYPE lewis SYSTEM "lewis.dtd">```
+The entries are clearly distinctable by their notation.
+
+*Example:*
+```
+<REUTERS TOPICS="BYPASS" LEWISSPLIT="TRAIN" CGISPLIT="TRAINING-SET" OLDID="2984" NEWID="14001">
+<DATE> 7-APR-1987 11:02:35.07</DATE>
+<TOPICS></TOPICS>
+<PLACES></PLACES>
+<PEOPLE></PEOPLE>
+<ORGS></ORGS>
+<EXCHANGES></EXCHANGES>
+<COMPANIES></COMPANIES>
+<UNKNOWN> 
+&#5;&#5;&#5;E
+&#22;&#22;&#1;f1137&#31;reute
+b f BC-JOHANNESBURG-GOLD-SHA   04-07 0120</UNKNOWN>
+<TEXT>&#2;
+<TITLE>JOHANNESBURG GOLD SHARES CLOSE MIXED TO FIRMER</TITLE>
+<DATELINE>    JOHANNESBURG, April 7 - </DATELINE><BODY>Gold share prices closed mixed to
+slightly firmer in quiet and cautious trading, showing little
+reaction to a retreat in the bullion price back to below 420
+dlrs and a firmer financial rand, dealers said.
+    Heavyweight Vaal Reefs ended eight rand higher at 398 rand
+but Grootvlei eased 40 cents at 16.60 rand, while mining
+financials had Gold Fields up a rand at 63 rand despite weaker
+quarterly results. Other minings were firm but platinums eased.
+    Industrials also closed mixed to firmer, the index once
+again hitting a new high of 1757 from Friday's 1753 finish. The
+overall index also hit a new high of 2188 versus 2179 on
+Friday.
+ REUTER
+&#3;</BODY></TEXT>
+</REUTERS>
+```
+
+The attributes specified after `<REUTERS` are meant to identify documents and groups of 
 documents, and have the following meanings: 
 
-     1. TOPICS : The possible values are YES, NO, and BYPASS:
-        a. YES indicates that *in the original data* there was at
+```     
+    1. TOPICS : The possible values are YES, NO, and BYPASS:
+        a. YES indicates that (in the original data) there was at
 		least one entry in the TOPICS fields.
-        b. NO indicates that *in the original data* the story had no
+        b. NO indicates that (in the original data) the story had no
 		entries in the TOPICS field.
-        c. BYPASS indicates that *in the original data* the story was
+        c. BYPASS indicates that (in the original data) the story was
 		marked with the string "bypass" (or a typographical variant on that
 		string).
 		Altough this shouldn't be used for Topic search because there could be topics if there is a no even so no if theres a yes
@@ -563,24 +625,79 @@ documents, and have the following meanings:
      5. NEWID : The identification number (ID) the story has in the
 		Reuters-21578, Distribution 1.0 collection.  These IDs are assigned to
 		the stories in chronological order.
+```
+For more detailed describtions see the `VI. Formatting ` section of the `README.txt`.
 
-*Example:*
-```
-```
+**Queries:**<br>There are no queries, but there are several files which contain the topics, places, people, etc. as strings. See `Other files`.
 
-**Queries:**<br>No queries, but there are lists of topics, places, people, etc.
+**Relevance assesments:** -
 
-*Example:*
-```
-```
-
-**Relevance assesments:**<br>
-
-*Example:*
-```
-```
 
 **Other files:**<br>
+`all-exchanges-strings.lc.txt` - Alphabetical list of exchange categories<br>
+`all-orgs-strings.lc.txt` - Alphabetical list of organization categories<br>
+`all-people-strings.lc.txt` - Alphabetical list of names<br>
+`all-places-strings.lc.txt` - Alphabetical list of places<br>
+`all-topics-strings.lc.txt` - Alphabetical list of topics<br>
+
+*Example:*
+```
+acq
+alum
+austdlr
+austral
+barley
+bfr
+bop
+can
+carcass
+castor-meal
+castor-oil
+castorseed
+citruspulp
+cocoa
+coconut
+coconut-oil
+coffee
+copper
+copra-cake
+corn
+corn-oil
+```
+`cat-descriptions_120396.txt` - Speficitations for some categories
+*Example:*
+```
+**Currency Codes (27)
+
+U.S. Dollar (DLR)
+Australian Dollar (AUSTDLR)
+Hong Kong Dollar (HK)
+Singapore Dollar (SINGDLR)
+New Zealand Dollar (NZDLR)
+Canadian Dollar (CAN)
+Sterling (STG)
+D-Mark (DMK)
+Japanese Yen (YEN)
+Swiss Franc (SFR)
+French Franc (FFR)
+Belgian Franc (BFR)
+Netherlands Guilder/Florin (DFL)
+Italian Lira (LIT)
+Danish Krone/Crown (DKR)
+Norwegian Krone/Crown (NKR)
+Swedish Krona/Crown (SKR)
+Mexican Peso (MEXPESO)
+Brazilian Cruzado (CRUZADO)
+Argentine Austral (AUSTRAL)
+Saudi Arabian Riyal (SAUDRIYAL)
+South African Rand (RAND)
+Indonesian Rupiah (RUPIAH)
+Malaysian Ringitt (RINGGIT)
+Portuguese Escudo (ESCUDO)
+Spanish Peseta (PESETA)
+Greek Drachma (DRACHMA)
+
+```
 
 **Source:**http://www.daviddlewis.com/resources/testcollections/reuters21578/
 

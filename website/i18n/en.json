@@ -9,9 +9,6 @@
         "title": "Coparisson of Free-To-Use Data Sets",
         "sidebar_label": "Data Sets"
       },
-      "DatasetsInComparission": {
-        "title": "DatasetsInComparission"
-      },
       "doc1": {
         "title": "Latin-ish",
         "sidebar_label": "Example Page"
@@ -24,9 +21,6 @@
       },
       "doc9": {
         "title": "This is Doc 9"
-      },
-      "Entwicklung": {
-        "title": "Entwicklung"
       },
       "doc4": {
         "title": "Goals and Mission Statement"

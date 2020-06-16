@@ -445,64 +445,178 @@ fatty acid levels <span class="hljs-keyword">in</span> placenta <span class="hlj
 <p><strong>Source:</strong><a href="http://ir.dcs.gla.ac.uk/resources/test_collections/medl/">http://ir.dcs.gla.ac.uk/resources/test_collections/medl/</a></p>
 <h2><a class="anchor" aria-hidden="true" id="adi"></a><a href="#adi" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>ADI</h2>
 <p><strong>Use Cases:</strong><br></p>
-<p><strong>Description:</strong><br>extremly small not even 100 examples, doesn't seem to be good for any use except for experimenting with small data sets on machine learining</p>
-<p><strong>Documents:</strong><br>(ADI.ALL): ID (.I), title (.T), author (.A), short texts (.W)</p>
+<p><strong>Description:</strong><br>An extremly small data set with not even 100 examples, doesn't seem to be good for any use except for experimenting with machine learining on small data sets.</p>
+<p><strong>Documents:</strong><br><code>ADI.ALL</code> contains 83 documents with the same notation as <code>Cranfield</code>.</p>
 <p><em>Example:</em></p>
-<pre><code class="hljs"></code></pre>
-<p><strong>Queries:</strong><br>ID (.I), query (.W), short definitions or questions</p>
+<pre><code class="hljs"><span class="hljs-meta">.I</span> <span class="hljs-string">3</span>
+<span class="hljs-attr">.T</span>
+<span class="hljs-attr">an</span> <span class="hljs-string">important need and opportunity for a. d. i. leadership</span>
+<span class="hljs-attr">in</span> <span class="hljs-string">information science education .</span>
+<span class="hljs-attr">.A</span>
+<span class="hljs-meta">R.</span> <span class="hljs-string">L. TAYLOR</span>
+<span class="hljs-attr">.W</span>
+<span class="hljs-attr">current</span> <span class="hljs-string">trends in information science education</span>
+<span class="hljs-attr">appear</span> <span class="hljs-string">inadequate for the important need of the nation's</span>
+<span class="hljs-attr">practicing</span> <span class="hljs-string">professional personnel for training in becoming</span>
+<span class="hljs-attr">information</span> <span class="hljs-string">specialists or more proficient users of</span>
+ <span class="hljs-attr">information</span> <span class="hljs-string">systems .  a particular educational program</span>
+ <span class="hljs-attr">by</span> <span class="hljs-string">a. d. i. is suggested to supplement others in meeting</span>
+ <span class="hljs-attr">this</span> <span class="hljs-string">presumptive need .</span>
+</code></pre>
+<p><strong>Queries:</strong><br><code>ID (.I)</code>holds 35 short queries that seem to be test questions.</p>
 <p><em>Example:</em></p>
-<pre><code class="hljs"></code></pre>
-<p><strong>Relevance assesments:</strong><br>(ADI.REL): Query Id followed by 0 followed by Doc ID followed by 0.0, 0 and 0.0 deosn't seem to have a depper meaning other than mark where the IDs start and end, maybe to be trained vectors</p>
+<pre><code class="hljs">.I <span class="hljs-number">3</span>
+.W
+What <span class="hljs-keyword">is</span> information science?  Give definitions <span class="hljs-keyword">where</span> possible.
+</code></pre>
+<p><strong>Relevance assesments:</strong><br>The relevance assesments given in <code>ADI.REL</code> are in the same format as <code>CISI</code> &amp; <code>CACM</code>. Query ID followed by relevant doc ID followed by 0 and 0.0. Could be used to create trainable vectors.</p>
 <p><em>Example:</em></p>
-<pre><code class="hljs"></code></pre>
-<p><strong>Other files:</strong><br>(ADI.BLN) list of boolean queries</p>
+<pre><code class="hljs"><span class="hljs-symbol">3 </span>  <span class="hljs-number">3</span>   <span class="hljs-number">0</span>   <span class="hljs-number">0.000000</span>   
+<span class="hljs-symbol">3 </span>  <span class="hljs-number">43</span>   <span class="hljs-number">0</span>   <span class="hljs-number">0.000000</span>   
+<span class="hljs-symbol">3 </span>  <span class="hljs-number">45</span>   <span class="hljs-number">0</span>   <span class="hljs-number">0.000000</span>   
+<span class="hljs-symbol">3 </span>  <span class="hljs-number">60</span>   <span class="hljs-number">0</span>   <span class="hljs-number">0.000000</span>   
+<span class="hljs-symbol">4 </span>  <span class="hljs-number">29</span>   <span class="hljs-number">0</span>   <span class="hljs-number">0.000000</span>   
+<span class="hljs-symbol">4 </span>  <span class="hljs-number">63</span>   <span class="hljs-number">0</span>   <span class="hljs-number">0.000000</span>   
+<span class="hljs-symbol">5 </span>  <span class="hljs-number">3</span>   <span class="hljs-number">0</span>   <span class="hljs-number">0.000000</span>   
+</code></pre>
+<p><strong>Other files:</strong><br><code>ADI.BLN</code> - List of boolean queries</p>
 <p><strong>Source:</strong><a href="http://ir.dcs.gla.ac.uk/resources/test_collections/adi/">http://ir.dcs.gla.ac.uk/resources/test_collections/adi/</a></p>
 <h2><a class="anchor" aria-hidden="true" id="reuters-21578"></a><a href="#reuters-21578" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Reuters 21578</h2>
-<p><strong>Use Cases:</strong><br></p>
-<p><strong>Description:</strong><br>Already spliut in Train, Test and Not-Used set which is very helpful, also topics and relations between the topics are documented which makes this collectiojn a very usefull one for pragmatic search development. But only half of the documents are assigned to topics, so there is a wide range of not marked documents</p>
-<p><strong>Documents:</strong><br>formatted in sgm with very useful tags like Topic, Test
-Each REUTERS tag contains explicit specifications of the values
-of five attributes, TOPICS, LEWISSPLIT, CGISPLIT, OLDID, and NEWID.
-These attributes are meant to identify documents and groups of
-documents, and have the following meanings:</p>
-<pre><code class="hljs"> 1. TOPICS : The possible values are YES, NO, and BYPASS:
-    a. YES indicates that *in the original data* there was at
-    least one entry in the TOPICS fields.
-    b. NO indicates that *in the original data* the story had no
-    entries in the TOPICS field.
-    c. BYPASS indicates that *in the original data* the story was
-    marked with the string &quot;bypass&quot; (or a typographical variant on that
-    string).
-    Altough this shouldn't be used for Topic search because there could be topics if there is a no even so no if theres a yes
-
-2. LEWISSPLIT : The possible values are TRAINING, TEST, and
-    NOT-USED.  TRAINING indicates it was used in the training set in the
-    experiments reported in LEWIS91d (Chapters 9 and 10), LEWIS92b,
-    LEWIS92e, and LEWIS94b.  TEST indicates it was used in the test set
-    for those experiments, and NOT-USED means it was not used in those
-    experiments.
-
- 3. CGISPLIT : The possible values are TRAINING-SET and
-    PUBLISHED-TESTSET indicating whether the document was in the training
-    set or the test set for the experiments reported in HAYES89 and
-    HAYES90b.
-
- 4. OLDID : The identification number (ID) the story had in the
-    Reuters-22173 collection.
-
- 5. NEWID : The identification number (ID) the story has in the
-    Reuters-21578, Distribution 1.0 collection.  These IDs are assigned to
-    the stories in chronological order.
+<p><strong>Use Cases:</strong><br>Document Similarity, Document Clustering, Word Sense Disambiguation</p>
+<p><strong>Description:</strong><br> This collection was originally collected and labeled by Carnegie Group, Inc. and Reuters, Ltd. In the <code>README.txt</code> file are further informations documented. <br>
+The files are in SGML format, so it's useful to get familiar with that language first.
+Already split in Train, Test and Not-Used set which is very helpful, also topics and relations between the topics are documented which makes this collectiojn a very usefull one for pragmatic search development. But only half of the documents are assigned to topics, so there is a wide range of not marked documents</p>
+<p><strong>Documents:</strong><br>
+The files <code>reut2-000.sgm</code> to <code>reut2-021.sgm</code> contain 21.578 documents that are in SGML format. The start of every document is marked with
+<code>&lt;!DOCTYPE lewis SYSTEM &quot;lewis.dtd&quot;&gt;</code>
+The entries are clearly distinctable by their notation.</p>
+<p><em>Example:</em></p>
+<pre><code class="hljs"><span class="hljs-tag">&lt;<span class="hljs-name">REUTERS</span> <span class="hljs-attr">TOPICS</span>=<span class="hljs-string">"BYPASS"</span> <span class="hljs-attr">LEWISSPLIT</span>=<span class="hljs-string">"TRAIN"</span> <span class="hljs-attr">CGISPLIT</span>=<span class="hljs-string">"TRAINING-SET"</span> <span class="hljs-attr">OLDID</span>=<span class="hljs-string">"2984"</span> <span class="hljs-attr">NEWID</span>=<span class="hljs-string">"14001"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">DATE</span>&gt;</span> 7-APR-1987 11:02:35.07<span class="hljs-tag">&lt;/<span class="hljs-name">DATE</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">TOPICS</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">TOPICS</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">PLACES</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">PLACES</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">PEOPLE</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">PEOPLE</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">ORGS</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">ORGS</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">EXCHANGES</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">EXCHANGES</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">COMPANIES</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">COMPANIES</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">UNKNOWN</span>&gt;</span> 
+<span class="hljs-symbol">&amp;#5;</span><span class="hljs-symbol">&amp;#5;</span><span class="hljs-symbol">&amp;#5;</span>E
+<span class="hljs-symbol">&amp;#22;</span><span class="hljs-symbol">&amp;#22;</span><span class="hljs-symbol">&amp;#1;</span>f1137<span class="hljs-symbol">&amp;#31;</span>reute
+b f BC-JOHANNESBURG-GOLD-SHA   04-07 0120<span class="hljs-tag">&lt;/<span class="hljs-name">UNKNOWN</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">TEXT</span>&gt;</span><span class="hljs-symbol">&amp;#2;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">TITLE</span>&gt;</span>JOHANNESBURG GOLD SHARES CLOSE MIXED TO FIRMER<span class="hljs-tag">&lt;/<span class="hljs-name">TITLE</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">DATELINE</span>&gt;</span>    JOHANNESBURG, April 7 - <span class="hljs-tag">&lt;/<span class="hljs-name">DATELINE</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">BODY</span>&gt;</span>Gold share prices closed mixed to
+slightly firmer in quiet and cautious trading, showing little
+reaction to a retreat in the bullion price back to below 420
+dlrs and a firmer financial rand, dealers said.
+    Heavyweight Vaal Reefs ended eight rand higher at 398 rand
+but Grootvlei eased 40 cents at 16.60 rand, while mining
+financials had Gold Fields up a rand at 63 rand despite weaker
+quarterly results. Other minings were firm but platinums eased.
+    Industrials also closed mixed to firmer, the index once
+again hitting a new high of 1757 from Friday's 1753 finish. The
+overall index also hit a new high of 2188 versus 2179 on
+Friday.
+ REUTER
+<span class="hljs-symbol">&amp;#3;</span><span class="hljs-tag">&lt;/<span class="hljs-name">BODY</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">TEXT</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">REUTERS</span>&gt;</span>
 </code></pre>
+<p>The attributes specified after <code>&lt;REUTERS</code> are meant to identify documents and groups of
+documents, and have the following meanings:</p>
+<pre><code class="hljs">    <span class="hljs-attr">1. TOPICS :</span> <span class="hljs-string">The</span> <span class="hljs-string">possible</span> <span class="hljs-string">values</span> <span class="hljs-string">are</span> <span class="hljs-literal">YES</span><span class="hljs-string">,</span> <span class="hljs-literal">NO</span><span class="hljs-string">,</span> <span class="hljs-attr">and BYPASS:</span>
+        <span class="hljs-string">a.</span> <span class="hljs-literal">YES</span> <span class="hljs-string">indicates</span> <span class="hljs-string">that</span> <span class="hljs-string">(in</span> <span class="hljs-string">the</span> <span class="hljs-string">original</span> <span class="hljs-string">data)</span> <span class="hljs-string">there</span> <span class="hljs-string">was</span> <span class="hljs-string">at</span>
+        <span class="hljs-string">least</span> <span class="hljs-string">one</span> <span class="hljs-string">entry</span> <span class="hljs-string">in</span> <span class="hljs-string">the</span> <span class="hljs-string">TOPICS</span> <span class="hljs-string">fields.</span>
+        <span class="hljs-string">b.</span> <span class="hljs-literal">NO</span> <span class="hljs-string">indicates</span> <span class="hljs-string">that</span> <span class="hljs-string">(in</span> <span class="hljs-string">the</span> <span class="hljs-string">original</span> <span class="hljs-string">data)</span> <span class="hljs-string">the</span> <span class="hljs-string">story</span> <span class="hljs-string">had</span> <span class="hljs-literal">no</span>
+        <span class="hljs-string">entries</span> <span class="hljs-string">in</span> <span class="hljs-string">the</span> <span class="hljs-string">TOPICS</span> <span class="hljs-string">field.</span>
+        <span class="hljs-string">c.</span> <span class="hljs-string">BYPASS</span> <span class="hljs-string">indicates</span> <span class="hljs-string">that</span> <span class="hljs-string">(in</span> <span class="hljs-string">the</span> <span class="hljs-string">original</span> <span class="hljs-string">data)</span> <span class="hljs-string">the</span> <span class="hljs-string">story</span> <span class="hljs-string">was</span>
+        <span class="hljs-string">marked</span> <span class="hljs-string">with</span> <span class="hljs-string">the</span> <span class="hljs-string">string</span> <span class="hljs-string">"bypass"</span> <span class="hljs-string">(or</span> <span class="hljs-string">a</span> <span class="hljs-string">typographical</span> <span class="hljs-string">variant</span> <span class="hljs-string">on</span> <span class="hljs-string">that</span>
+        <span class="hljs-string">string).</span>
+        <span class="hljs-string">Altough</span> <span class="hljs-string">this</span> <span class="hljs-string">shouldn't</span> <span class="hljs-string">be</span> <span class="hljs-string">used</span> <span class="hljs-string">for</span> <span class="hljs-string">Topic</span> <span class="hljs-string">search</span> <span class="hljs-string">because</span> <span class="hljs-string">there</span> <span class="hljs-string">could</span> <span class="hljs-string">be</span> <span class="hljs-string">topics</span> <span class="hljs-string">if</span> <span class="hljs-string">there</span> <span class="hljs-string">is</span> <span class="hljs-string">a</span> <span class="hljs-literal">no</span> <span class="hljs-string">even</span> <span class="hljs-string">so</span> <span class="hljs-literal">no</span> <span class="hljs-string">if</span> <span class="hljs-string">theres</span> <span class="hljs-string">a</span> <span class="hljs-literal">yes</span>
+
+    <span class="hljs-attr">2. LEWISSPLIT :</span> <span class="hljs-string">The</span> <span class="hljs-string">possible</span> <span class="hljs-string">values</span> <span class="hljs-string">are</span> <span class="hljs-string">TRAINING,</span> <span class="hljs-string">TEST,</span> <span class="hljs-string">and</span>
+        <span class="hljs-string">NOT-USED.</span>  <span class="hljs-string">TRAINING</span> <span class="hljs-string">indicates</span> <span class="hljs-string">it</span> <span class="hljs-string">was</span> <span class="hljs-string">used</span> <span class="hljs-string">in</span> <span class="hljs-string">the</span> <span class="hljs-string">training</span> <span class="hljs-string">set</span> <span class="hljs-string">in</span> <span class="hljs-string">the</span>
+        <span class="hljs-string">experiments</span> <span class="hljs-string">reported</span> <span class="hljs-string">in</span> <span class="hljs-string">LEWIS91d</span> <span class="hljs-string">(Chapters</span> <span class="hljs-number">9</span> <span class="hljs-string">and</span> <span class="hljs-number">10</span><span class="hljs-string">),</span> <span class="hljs-string">LEWIS92b,</span>
+        <span class="hljs-string">LEWIS92e,</span> <span class="hljs-string">and</span> <span class="hljs-string">LEWIS94b.</span>  <span class="hljs-string">TEST</span> <span class="hljs-string">indicates</span> <span class="hljs-string">it</span> <span class="hljs-string">was</span> <span class="hljs-string">used</span> <span class="hljs-string">in</span> <span class="hljs-string">the</span> <span class="hljs-string">test</span> <span class="hljs-string">set</span>
+        <span class="hljs-string">for</span> <span class="hljs-string">those</span> <span class="hljs-string">experiments,</span> <span class="hljs-string">and</span> <span class="hljs-string">NOT-USED</span> <span class="hljs-string">means</span> <span class="hljs-string">it</span> <span class="hljs-string">was</span> <span class="hljs-string">not</span> <span class="hljs-string">used</span> <span class="hljs-string">in</span> <span class="hljs-string">those</span>
+        <span class="hljs-string">experiments.</span>
+
+     <span class="hljs-attr">3. CGISPLIT :</span> <span class="hljs-string">The</span> <span class="hljs-string">possible</span> <span class="hljs-string">values</span> <span class="hljs-string">are</span> <span class="hljs-string">TRAINING-SET</span> <span class="hljs-string">and</span>
+        <span class="hljs-string">PUBLISHED-TESTSET</span> <span class="hljs-string">indicating</span> <span class="hljs-string">whether</span> <span class="hljs-string">the</span> <span class="hljs-string">document</span> <span class="hljs-string">was</span> <span class="hljs-string">in</span> <span class="hljs-string">the</span> <span class="hljs-string">training</span>
+        <span class="hljs-string">set</span> <span class="hljs-string">or</span> <span class="hljs-string">the</span> <span class="hljs-string">test</span> <span class="hljs-string">set</span> <span class="hljs-string">for</span> <span class="hljs-string">the</span> <span class="hljs-string">experiments</span> <span class="hljs-string">reported</span> <span class="hljs-string">in</span> <span class="hljs-string">HAYES89</span> <span class="hljs-string">and</span>
+        <span class="hljs-string">HAYES90b.</span>
+
+     <span class="hljs-attr">4. OLDID :</span> <span class="hljs-string">The</span> <span class="hljs-string">identification</span> <span class="hljs-string">number</span> <span class="hljs-string">(ID)</span> <span class="hljs-string">the</span> <span class="hljs-string">story</span> <span class="hljs-string">had</span> <span class="hljs-string">in</span> <span class="hljs-string">the</span>
+        <span class="hljs-string">Reuters-22173</span> <span class="hljs-string">collection.</span>
+
+     <span class="hljs-attr">5. NEWID :</span> <span class="hljs-string">The</span> <span class="hljs-string">identification</span> <span class="hljs-string">number</span> <span class="hljs-string">(ID)</span> <span class="hljs-string">the</span> <span class="hljs-string">story</span> <span class="hljs-string">has</span> <span class="hljs-string">in</span> <span class="hljs-string">the</span>
+        <span class="hljs-string">Reuters-21578,</span> <span class="hljs-string">Distribution</span> <span class="hljs-number">1.0</span> <span class="hljs-string">collection.</span>  <span class="hljs-string">These</span> <span class="hljs-string">IDs</span> <span class="hljs-string">are</span> <span class="hljs-string">assigned</span> <span class="hljs-string">to</span>
+        <span class="hljs-string">the</span> <span class="hljs-string">stories</span> <span class="hljs-string">in</span> <span class="hljs-string">chronological</span> <span class="hljs-string">order.</span>
+</code></pre>
+<p>For more detailed describtions see the <code>VI. Formatting</code> section of the <code>README.txt</code>.</p>
+<p><strong>Queries:</strong><br>There are no queries, but there are several files which contain the topics, places, people, etc. as strings. See <code>Other files</code>.</p>
+<p><strong>Relevance assesments:</strong> -</p>
+<p><strong>Other files:</strong><br>
+<code>all-exchanges-strings.lc.txt</code> - Alphabetical list of exchange categories<br>
+<code>all-orgs-strings.lc.txt</code> - Alphabetical list of organization categories<br>
+<code>all-people-strings.lc.txt</code> - Alphabetical list of names<br>
+<code>all-places-strings.lc.txt</code> - Alphabetical list of places<br>
+<code>all-topics-strings.lc.txt</code> - Alphabetical list of topics<br></p>
 <p><em>Example:</em></p>
-<pre><code class="hljs"></code></pre>
-<p><strong>Queries:</strong><br>No queries, but there are lists of topics, places, people, etc.</p>
-<p><em>Example:</em></p>
-<pre><code class="hljs"></code></pre>
-<p><strong>Relevance assesments:</strong><br></p>
-<p><em>Example:</em></p>
-<pre><code class="hljs"></code></pre>
-<p><strong>Other files:</strong><br></p>
+<pre><code class="hljs"><span class="hljs-symbol">acq</span>
+<span class="hljs-symbol">alum</span>
+<span class="hljs-symbol">austdlr</span>
+<span class="hljs-symbol">austral</span>
+<span class="hljs-keyword">barley
+</span><span class="hljs-keyword">bfr
+</span><span class="hljs-keyword">bop
+</span><span class="hljs-symbol">can</span>
+<span class="hljs-symbol">carcass</span>
+<span class="hljs-symbol">castor</span>-meal
+<span class="hljs-symbol">castor</span>-oil
+<span class="hljs-symbol">castorseed</span>
+<span class="hljs-symbol">citruspulp</span>
+<span class="hljs-symbol">cocoa</span>
+<span class="hljs-symbol">coconut</span>
+<span class="hljs-symbol">coconut</span>-oil
+<span class="hljs-symbol">coffee</span>
+<span class="hljs-symbol">copper</span>
+<span class="hljs-symbol">copra</span>-cake
+<span class="hljs-symbol">corn</span>
+<span class="hljs-symbol">corn</span>-oil
+</code></pre>
+<p><code>cat-descriptions_120396.txt</code> - Speficitations for some categories
+<em>Example:</em></p>
+<pre><code class="hljs">**<span class="hljs-selector-tag">Currency</span> <span class="hljs-selector-tag">Codes</span> (<span class="hljs-number">27</span>)
+
+<span class="hljs-selector-tag">U</span><span class="hljs-selector-class">.S</span>. <span class="hljs-selector-tag">Dollar</span> (DLR)
+<span class="hljs-selector-tag">Australian</span> <span class="hljs-selector-tag">Dollar</span> (AUSTDLR)
+<span class="hljs-selector-tag">Hong</span> <span class="hljs-selector-tag">Kong</span> <span class="hljs-selector-tag">Dollar</span> (HK)
+<span class="hljs-selector-tag">Singapore</span> <span class="hljs-selector-tag">Dollar</span> (SINGDLR)
+<span class="hljs-selector-tag">New</span> <span class="hljs-selector-tag">Zealand</span> <span class="hljs-selector-tag">Dollar</span> (NZDLR)
+<span class="hljs-selector-tag">Canadian</span> <span class="hljs-selector-tag">Dollar</span> (CAN)
+<span class="hljs-selector-tag">Sterling</span> (STG)
+<span class="hljs-selector-tag">D-Mark</span> (DMK)
+<span class="hljs-selector-tag">Japanese</span> <span class="hljs-selector-tag">Yen</span> (YEN)
+<span class="hljs-selector-tag">Swiss</span> <span class="hljs-selector-tag">Franc</span> (SFR)
+<span class="hljs-selector-tag">French</span> <span class="hljs-selector-tag">Franc</span> (FFR)
+<span class="hljs-selector-tag">Belgian</span> <span class="hljs-selector-tag">Franc</span> (BFR)
+<span class="hljs-selector-tag">Netherlands</span> <span class="hljs-selector-tag">Guilder</span>/<span class="hljs-selector-tag">Florin</span> (DFL)
+<span class="hljs-selector-tag">Italian</span> <span class="hljs-selector-tag">Lira</span> (LIT)
+<span class="hljs-selector-tag">Danish</span> <span class="hljs-selector-tag">Krone</span>/<span class="hljs-selector-tag">Crown</span> (DKR)
+<span class="hljs-selector-tag">Norwegian</span> <span class="hljs-selector-tag">Krone</span>/<span class="hljs-selector-tag">Crown</span> (NKR)
+<span class="hljs-selector-tag">Swedish</span> <span class="hljs-selector-tag">Krona</span>/<span class="hljs-selector-tag">Crown</span> (SKR)
+<span class="hljs-selector-tag">Mexican</span> <span class="hljs-selector-tag">Peso</span> (MEXPESO)
+<span class="hljs-selector-tag">Brazilian</span> <span class="hljs-selector-tag">Cruzado</span> (CRUZADO)
+<span class="hljs-selector-tag">Argentine</span> <span class="hljs-selector-tag">Austral</span> (AUSTRAL)
+<span class="hljs-selector-tag">Saudi</span> <span class="hljs-selector-tag">Arabian</span> <span class="hljs-selector-tag">Riyal</span> (SAUDRIYAL)
+<span class="hljs-selector-tag">South</span> <span class="hljs-selector-tag">African</span> <span class="hljs-selector-tag">Rand</span> (RAND)
+<span class="hljs-selector-tag">Indonesian</span> <span class="hljs-selector-tag">Rupiah</span> (RUPIAH)
+<span class="hljs-selector-tag">Malaysian</span> <span class="hljs-selector-tag">Ringitt</span> (RINGGIT)
+<span class="hljs-selector-tag">Portuguese</span> <span class="hljs-selector-tag">Escudo</span> (ESCUDO)
+<span class="hljs-selector-tag">Spanish</span> <span class="hljs-selector-tag">Peseta</span> (PESETA)
+<span class="hljs-selector-tag">Greek</span> <span class="hljs-selector-tag">Drachma</span> (DRACHMA)
+
+</code></pre>
 <p><strong>Source:</strong><a href="http://www.daviddlewis.com/resources/testcollections/reuters21578/">http://www.daviddlewis.com/resources/testcollections/reuters21578/</a></p>
 <h2><a class="anchor" aria-hidden="true" id="oshumed"></a><a href="#oshumed" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>OSHUMED</h2>
 <p><strong>Use Cases:</strong><br></p>
