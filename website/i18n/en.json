@@ -28,6 +28,9 @@
       "doc5": {
         "title": "Roadmap"
       },
+      "experiment1": {
+        "title": "First Experiment"
+      },
       "overview": {
         "title": "Overview"
       },
@@ -39,11 +42,10 @@
       }
     },
     "links": {
-      "Docs": "Docs",
+      "Benchmarks": "Benchmarks",
       "About": "About",
-      "Read": "Read",
-      "Get In Touch": "Get In Touch",
-      "Blog": "Blog"
+      "Guides": "Guides",
+      "Experiments": "Experiments"
     },
     "categories": {
       "Docusaurus": "Docusaurus",
