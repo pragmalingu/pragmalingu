@@ -553,7 +553,8 @@ What is information science?  Give definitions where possible.
 
 **Description:**<br> This collection was originally collected and labeled by Carnegie Group, Inc. and Reuters, Ltd. In the `README.txt` file are further informations documented. <br>
 The files are in SGML format, so it's useful to get familiar with that language first. 
-Already split in Train, Test and Not-Used set which is very helpful, also topics and relations between the topics are documented which makes this collectiojn a very usefull one for pragmatic search development. But only half of the documents are assigned to topics, so there is a wide range of not marked documents
+It's already split in Training and Test sets by the tag `LEWISSPLIT`, also topics and relations between the topics are documented which makes this collectiojn a very usefull one for pragmatic search development. But it has to be noted that only half of the documents were manually assigned to topics, so there are unlabled documents which are marked by `LEWISSPLIT="NOT-USED"`.<br>
+The collection is a multi-labled one, so one document can be assigned to more than one topic.
 
 **Documents:**<br>
 The files `reut2-000.sgm` to `reut2-021.sgm` contain 21.578 documents that are in SGML format. The start of every document is marked with 
@@ -664,7 +665,7 @@ copra-cake
 corn
 corn-oil
 ```
-`cat-descriptions_120396.txt` - Speficitations for some categories
+`cat-descriptions_120396.txt` - List of categories with number of items labeled with them
 *Example:*
 ```
 **Currency Codes (27)
@@ -699,88 +700,89 @@ Greek Drachma (DRACHMA)
 
 ```
 
-**Source:**http://www.daviddlewis.com/resources/testcollections/reuters21578/
+**Source:**http://www.daviddlewis.com/resources/testcollections/reuters21578/<br>
+(if the original source isn't available on the website of Alessandro Moschitti at University of Trento are download links for OHSUMED and Reuters http://disi.unitn.eu/moschitti/corpora.htm)
 
-## OSHUMED
+## OHSUMED
 
-**Use Cases:**<br>
+**Use Cases:**<br> SVM, Clustering, Semantic Search
 
-**Description:**<br> subset of MEDLINE database
+**Description:**<br> This collection originally created by William Hersh as a new large medical test collection for experiments on the SMART retrieval system, was splited into a Training and a Test set later. <br>
+The splited documents contain 20.000 abtracts, the unsplited 50.216. Both collections are sorted into 23 medical categories. Since the offical source doesn't seem to be online right now, we will refer to the download files by Alessandro Moschitti.
 
-**Documents:**<br>Liste der Kategorien und anschließend eine Matrix mit den Referenzen aus MEDLINE die die Dokuemente in die KAtegorien einteilen
-
-*Example:*
-```
-```
-
-**Queries:**<br>
+**Documents:**<br>`Cardiocascular diseases abstract` contains 20.000 documents splitted into Training and Test set directories. Inside those directories there are 23 folders which represent the 23 categories the abstracts are assigned to. Every document is written in a file without special notation.
 
 *Example:*
 ```
+Haemophilus influenzae meningitis with prolonged hospital course.
+ A retrospective evaluation of Haemophilus influenzae type b meningitis observed over a 2-year period documented 86 cases.
+ Eight of these patients demonstrated an unusual clinical course characterized by persistent fever (duration: greater than 10 days), cerebrospinal fluid pleocytosis, profound meningeal enhancement on computed tomography, significant morbidity, and a prolonged hospital course.
+ The mean age of these 8 patients was 6 months, in contrast to a mean age of 14 months for the entire group.
+ Two patients had clinical evidence of relapse.
+ Four of the 8 patients tested for latex particle agglutination in the cerebrospinal fluid remained positive after 10 days.
+ All patients received antimicrobial therapy until they were afebrile for a minimum of 5 days.
+ Subsequent neurologic examination revealed a persistent seizure disorder in 5 patients (62.5%), moderate-to-profound hearing loss in 2 (25%), mild ataxia in 1 (12.5%), and developmental delay with hydrocephalus which required shunting in 1 (12.5%).
+ One patient had no sequelae.
 ```
 
-**Relevance assesments:**<br>
+The download link `All Cardiovascular diseases abstracts` contain 50.216 abstracts which are just sorted by the 23 category folders.
 
-*Example:*
-```
-```
+**Queries:** -
 
-**Other files:**<br>
 
-**Source:**ftp://medir.ohsu.edu/pub/ohsumed
+**Relevance assesments:** -
+
+**Other files:**`Category Description` - Defines the 23 categries
+
+**Source:**ftp://medir.ohsu.edu/pub/ohsumed <br>
+(if the original source isn't available on the website of Alessandro Moschitti at University of Trento are download links for OHSUMED and Reuters http://disi.unitn.eu/moschitti/corpora.htm)
 
 ## TREC
 
 **Use Cases:**<br>
 
-**Description:**<br>
+**Description:**<br>TREC (the TExt REtrieval Conference) isn't just one collection, it's a conference which is held regullary since 1992. The TREC workshop series - among other goals - tries to encourage research in IR based on large test collections and increase the communication aroung the IR research and development topic.
+<br><br>
+It has produced many test collections, which all contain a set of documents, a set of topics (questions) and a set of relevance judgments (answers). The collections can be downloaded from the TREC website but are usually copyrighted and must be licensed. The process to licence a collection can be found on the data page entry for the collection of interest (https://trec.nist.gov/data.html).<br>
+The collections cover various interests like 'Chemical IR','Converstional Assistance','Legal','Medical','News','Spoken Document Retrieval', etc.
+<br><br>
+What's  very interesting about this collection is, that it is constantly growing and has high standards to have a homogenous notation. This can be very helpful for developing and testing NLP processing algorithms.
+They also provide tools to process the data.<br>
+Publications about TREC are published by NIST (National Insitute of Standards an Technology) and accessable here: http://trec.nist.gov/pubs.html<br>
+<br>
+Since there are many diffrent data sets, there are no examples given for this collection.
+ 
+**Documents:** -
 
-**Documents:**<br>
+**Queries:** -
 
-*Example:*
-```
-```
+**Relevance assesments:** -
 
-**Queries:**<br>
+**Other files:** -
 
-*Example:*
-```
-```
-
-**Relevance assesments:**<br>
-
-*Example:*
-```
-```
-
-**Other files:**<br>
-
-**Source:**https://trec.nist.gov/data.html
+**Source:**https://trec.nist.gov/
 
 ## Europarl Parallel Corpus
 
-**Use Cases:**<br>
+**Use Cases:**<br>Word Sense Disambiguation, Anaphora Resolution, Information Extraction
 
-**Description:**<br>
+**Description:**<br> Starting in 2001 the corpus collected texts with up to 60 Million words per language. From the proceedings of the European Parlaiment were texts extracted for this 21 European languages: <br>
+Romanic (French, Italian, Spanish, Portuguese, Romanian), Germanic (English, Dutch, German, Danish, Swedish), Slavik (Bulgarian, Czech, Polish, Slovak, Slovene), Finni-Ugric (Finnish, Hungarian, Estonian), Baltic (Latvian, Lithuanian), and Greek.
 
-**Documents:**<br>
+**Documents:**<br>Every file has the structure, there are sections seperated with the tag `<CHAPTER ID=?>` which are followed by the title of the chapter. The `<SPEAKER ID =??>` is a unique ID which marks the spoken part. 
 
-*Example:*
+*Example from the English Corpus:*
 ```
-```
-
-**Queries:**<br>
-
-*Example:*
-```
-```
-
-**Relevance assesments:**<br>
-
-*Example:*
-```
+<CHAPTER ID=6>
+Social and economic situation and development of the regions of the Union
+<SPEAKER ID=80 NAME="President">
+The next item is the debate on the report (A5-0107/1999) by Mr Berend, on behalf of the Committee on Regional Policy, Transport and Tourism, on the sixth periodic report on the social and economic situation and development of the regions of the European Union [SEC(99)0066 - C5-0120/99 - 1999/2123(COS)].
 ```
 
-**Other files:**<br>
+**Queries:** -
+
+**Relevance assesments:** -
+
+**Other files:** -
 
 **Source:**http://www.statmt.org/europarl/
