@@ -31,6 +31,9 @@
       "experiment1": {
         "title": "First Experiment"
       },
+      "impressum": {
+        "title": "Impressum"
+      },
       "overview": {
         "title": "Overview"
       },

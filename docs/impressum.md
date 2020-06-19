@@ -3,9 +3,6 @@ id: impressum
 title: Impressum
 ---
 
-I can write content using [GitHub-flavored Markdown syntax](https://github.github.com/gfm/).
-
-## Impressum
 Angaben gemäß § 5 TMG
 
 Samy Ateia - Software Engineering  
