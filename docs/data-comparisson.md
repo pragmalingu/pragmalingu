@@ -49,7 +49,7 @@ ETC. AUTOMATIC DOCUMENT CLASSIFICATION, CLUSTERS, CLUSTERING, TERM
 CLASSIFICATIONS. #
 ```
 
-**Relevance assesments:**<br>In `lisarj.num` are the relevance assesments represented with IDs. Every query-ID (first row) is followed by document-IDs that are considered as relevant. Depending on the program used to open or parse the file the relevant document-IDs could continue in the next line. Since there is no end marker it would be best to parse the lines depending on the query-ID.
+**Relevance assesments:**<br>In `lisarj.num` are the relevance assesments represented with IDs. Every query-ID (first column) is followed by document-IDs that are considered as relevant. Depending on the program used to open or parse the file the relevant document-IDs could continue in the next line. Since there is no end marker it would be best to parse the lines depending on the query-ID.
 
 *Example:*
 ```
