@@ -1,15 +1,25 @@
 {
   "docs": {
-    "Docusaurus": [
-    	"doc1",
-    	"doc9"
+    "Basics": [
+      "benchmarks",
+      "basic-definitions",
+      "elasticsearch-lucene-intro",
+      "wordembeddings-intro",
+      "futher-literature"
     ],
-    "Setting up a Elastic Search Engine": ["doc2"],
-    "Evalutate possible Data Sets": ["doc3"]
+    "Setup": [
+      "elastic-setup",
+      "docker-setup"
+    ],
+    "Evaluation": [
+    "notebooks"
+    ]
   },
   "docs-other": {
-    "Idea and Concept": ["doc4", "doc5"]},
+    "Idea and Concept": ["goals-mission", "roadmap"],
+    "Team" : ["team"]
 
+  },
   "read": {
     "Intro": ["intro","use-cases"],
     "Data Set Comparisson": ["overview","data-comparisson"]}
