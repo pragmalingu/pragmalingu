@@ -5,34 +5,57 @@
     "previous": "Previous",
     "tagline": "Explore pragmatic search possibilities",
     "docs": {
+      "basic-definitions": {
+        "title": "Basic Terms",
+        "sidebar_label": "Definitions"
+      },
       "data-comparisson": {
         "title": "Coparisson of Free-To-Use Data Sets",
         "sidebar_label": "Data Sets"
       },
-      "doc1": {
-        "title": "Latin-ish",
-        "sidebar_label": "Example Page"
-      },
       "doc2": {
         "title": "document number 2"
-      },
-      "doc3": {
-        "title": "This is document number 3"
       },
       "doc9": {
         "title": "This is Doc 9"
       },
-      "doc4": {
-        "title": "Goals and Mission Statement"
+      "docker-setup": {
+        "title": "How to work with Docker",
+        "sidebar_label": "Docker"
       },
-      "doc5": {
-        "title": "Roadmap"
+      "elastic-setup": {
+        "title": "How to setup an Elasticsearch Instance",
+        "sidebar_label": "Elasticsearch"
+      },
+      "elasticsearch-lucene-intro": {
+        "title": "Introduction to Elasticsearch and Lucene",
+        "sidebar_label": "Elasticsearch and Lucene"
       },
       "experiment1": {
-        "title": "First Experiment"
+        "title": "First Experiment",
+        "sidebar_label": "Data Sets"
+      },
+      "experiment2": {
+        "title": "Second Experiment",
+        "sidebar_label": "Notebooks"
+      },
+      "experiment3": {
+        "title": "Third Experiment",
+        "sidebar_label": "Evaluation"
+      },
+      "futher-literature": {
+        "title": "Read More",
+        "sidebar_label": "Futher Literature"
+      },
+      "goals-mission": {
+        "title": "Goals and Mission Statement"
       },
       "impressum": {
         "title": "Impressum"
+      },
+      "notebooks": {
+        "title": "Working with Notebooks",
+        "sidebar_label": "Notebooks"
       },
       "overview": {
         "title": "Overview"
@@ -40,8 +63,18 @@
       "intro": {
         "title": "Getting Started"
       },
+      "roadmap": {
+        "title": "Roadmap"
+      },
+      "team": {
+        "title": "Active Team"
+      },
       "use-cases": {
         "title": "Use Cases"
+      },
+      "wordembeddings-intro": {
+        "title": "Introduction to Word Embeddings",
+        "sidebar_label": "Word Embeddings"
       }
     },
     "links": {
@@ -51,12 +84,14 @@
       "Experiments": "Experiments"
     },
     "categories": {
-      "Docusaurus": "Docusaurus",
-      "Setting up a Elastic Search Engine": "Setting up a Elastic Search Engine",
-      "Evalutate possible Data Sets": "Evalutate possible Data Sets",
+      "Basics": "Basics",
+      "Setup": "Setup",
+      "Evaluation": "Evaluation",
       "Idea and Concept": "Idea and Concept",
-      "Intro": "Intro",
-      "Data Set Comparisson": "Data Set Comparisson"
+      "Team": "Team",
+      "First Experiment": "First Experiment",
+      "Second Experiment": "Second Experiment",
+      "Third Experiment": "Third Experiment"
     }
   },
   "pages-strings": {
