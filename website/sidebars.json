@@ -20,7 +20,9 @@
     "Team" : ["team"]
 
   },
-  "read": {
-    "Intro": ["intro","use-cases"],
-    "Data Set Comparisson": ["overview","data-comparisson"]}
+  "experiments": {
+    "First Experiment": ["experiment1"],
+    "Second Experiment": ["experiment2"],
+    "Third Experiment": ["experiment3"]
+  }
 }

@@ -32,7 +32,16 @@
         "sidebar_label": "Elasticsearch and Lucene"
       },
       "experiment1": {
-        "title": "First Experiment"
+        "title": "First Experiment",
+        "sidebar_label": "Data Sets"
+      },
+      "experiment2": {
+        "title": "Second Experiment",
+        "sidebar_label": "Notebooks"
+      },
+      "experiment3": {
+        "title": "Third Experiment",
+        "sidebar_label": "Evaluation"
       },
       "futher-literature": {
         "title": "Read More",
@@ -80,8 +89,9 @@
       "Evaluation": "Evaluation",
       "Idea and Concept": "Idea and Concept",
       "Team": "Team",
-      "Intro": "Intro",
-      "Data Set Comparisson": "Data Set Comparisson"
+      "First Experiment": "First Experiment",
+      "Second Experiment": "Second Experiment",
+      "Third Experiment": "Third Experiment"
     }
   },
   "pages-strings": {
