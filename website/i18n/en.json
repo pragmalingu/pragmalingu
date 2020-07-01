@@ -84,6 +84,8 @@
       "Experiments": "Experiments"
     },
     "categories": {
+      "Intro": "Intro",
+      "Data Set Comparisson": "Data Set Comparisson",
       "Basics": "Basics",
       "Setup": "Setup",
       "Evaluation": "Evaluation",
