@@ -1,10 +1,10 @@
 ---
-id: doc1
-title: Latin-ish
-sidebar_label: Example Page
+id: elasticsearch-lucene-intro
+title: Introduction to Elasticsearch and Lucene
+sidebar_label: Elasticsearch and Lucene
 ---
 
-Check the [documentation](https://docusaurus.io) for how to use Docusaurus.
+Content will follow
 
 ## Lorem
 
