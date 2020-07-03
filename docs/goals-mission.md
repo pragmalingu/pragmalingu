@@ -1,5 +1,5 @@
 ---
-id: doc4
+id: goals-mission
 title: Goals and Mission Statement
 
 ---

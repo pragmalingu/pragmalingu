@@ -41,9 +41,9 @@ const siteConfig = {
     // Link to page found at pages/en/read.js or if that does not exist, pages/help.js, for current language
     {doc: 'intro', label: 'Benchmarks'},
     // Link to page found at pages/en/help.js or if that does not exist, pages/help.js, for current language
-    {page: 'help', label: 'About'},
+    {doc: 'team', label: 'About'},
     // Links to document with id doc1 for current language/version
-    {doc: 'doc1', label: 'Guides'},
+    {doc: 'basic-definitions', label: 'Guides'},
     // Links to document with id doc4 for current language/version
     {doc: 'experiment1', label: 'Experiments'},
      // Link to page found at pages/en/help.js or if that does not exist, pages/help.js, for current language

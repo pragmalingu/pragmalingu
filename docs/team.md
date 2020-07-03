@@ -1,9 +1,11 @@
 ---
 id: team
-title: Team
+title: Active Team
 ---
 
-  <div className="docMainWrapper wrapper">
+## About
+
+<div className="row">
   <div className="col col--6 margin-bottom--lg">
     <div className="card card--full-height">
       <div className="card__header">
