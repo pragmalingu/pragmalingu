@@ -1,137 +1,140 @@
 {
   "/": {
-    "component": "c4f5d8e4"
+    "component": "component---site-src-pages-index-jsc-4-f-f99"
+  },
+  "/__docusaurus/debug": {
+    "component": "component---theme-debugd-45-c28"
   },
   "/blog": {
-    "component": "a6aa9e1f",
+    "component": "component---theme-blog-list-pagea-6-a-7ba",
     "items": [
       {
-        "content": "0f56bae2"
+        "content": "content---blog-0-f-5-0ae"
       },
       {
-        "content": "10a2e8c0"
+        "content": "content---blog-10-a-019"
       },
       {
-        "content": "517aa66b"
+        "content": "content---blog-517-b25"
       },
       {
-        "content": "c7a22f1b"
+        "content": "content---blogc-7-a-ec2"
       },
       {
-        "content": "3985f3fe"
+        "content": "content---blog-398-050"
       },
       {
-        "content": "02589645"
+        "content": "content---blog-025-31a"
       }
     ],
-    "metadata": "bbb4ffb5"
+    "metadata": "metadata---blogbbb-5f9"
   },
   "/blog/2016/03/11/blog-post": {
-    "component": "ccc49370",
-    "content": "bf9e930a"
+    "component": "component---theme-blog-post-pageccc-cab",
+    "content": "content---blog-2016-03-11-blog-postbf-9-764"
   },
   "/blog/2017/04/10/blog-post-two": {
-    "component": "ccc49370",
-    "content": "dfadc8c2"
+    "component": "component---theme-blog-post-pageccc-cab",
+    "content": "content---blog-2017-04-10-blog-post-twodfa-94f"
   },
   "/blog/2017/09/25/testing-rss": {
-    "component": "ccc49370",
-    "content": "4d826c8d"
+    "component": "component---theme-blog-post-pageccc-cab",
+    "content": "content---blog-2017-09-25-testing-rss-4-d-8-00d"
   },
   "/blog/2017/09/26/adding-rss": {
-    "component": "ccc49370",
-    "content": "ad7efe8c"
+    "component": "component---theme-blog-post-pageccc-cab",
+    "content": "content---blog-2017-09-26-adding-rssad-7-946"
   },
   "/blog/2017/10/24/new-version-1.0.0": {
-    "component": "ccc49370",
-    "content": "bbb095bf"
+    "component": "component---theme-blog-post-pageccc-cab",
+    "content": "content---blog-2017-10-24-new-version-1-0-0-bbb-777"
   },
   "/blog/2020/06/03/pragma-lingu-site-launched": {
-    "component": "ccc49370",
-    "content": "198f8c39"
+    "component": "component---theme-blog-post-pageccc-cab",
+    "content": "content---blog-2020-06-03-pragma-lingu-site-launched-198-62c"
   },
   "/docs": {
-    "component": "1be78505",
-    "docsMetadata": "20ac7829"
+    "component": "component---theme-doc-page-1-be-9be",
+    "docsMetadata": "docsMetadata---docs-20-a-426"
   },
   "/docs/about/goals-mission": {
-    "component": "17896441",
-    "content": "1fc13286"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-about-goals-mission-1-fc-40c"
   },
   "/docs/about/roadmap": {
-    "component": "17896441",
-    "content": "57902419"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-about-roadmap-579-f54"
   },
   "/docs/about/team": {
-    "component": "17896441",
-    "content": "f2425baf"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-about-teamf-24-b59"
   },
   "/docs/benchmarks/data-comparisson": {
-    "component": "17896441",
-    "content": "fefbd0df"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-benchmarks-data-comparissonfef-465"
   },
   "/docs/benchmarks/intro": {
-    "component": "17896441",
-    "content": "4891a407"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-benchmarks-intro-489-46e"
   },
   "/docs/benchmarks/overview": {
-    "component": "17896441",
-    "content": "497aee5d"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-benchmarks-overview-497-716"
   },
   "/docs/benchmarks/use-cases": {
-    "component": "17896441",
-    "content": "b885f625"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-benchmarks-use-casesb-88-5eb"
   },
   "/docs/doc2": {
-    "component": "17896441",
-    "content": "df361e2b"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-doc-2-df-3-eaa"
   },
   "/docs/doc9": {
-    "component": "17896441",
-    "content": "e1a7ef00"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-doc-9-e-1-a-28f"
   },
   "/docs/experiments/experiment1": {
-    "component": "17896441",
-    "content": "314a6980"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-experiments-experiment-1314-ff0"
   },
   "/docs/experiments/experiment2": {
-    "component": "17896441",
-    "content": "3cf35874"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-experiments-experiment-23-cf-2ec"
   },
   "/docs/experiments/experiment3": {
-    "component": "17896441",
-    "content": "e2083e08"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-experiments-experiment-3-e-20-b9b"
   },
   "/docs/guides/basic-definitions": {
-    "component": "17896441",
-    "content": "cbafdf9d"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-guides-basic-definitionscba-8d8"
   },
   "/docs/guides/docker-setup": {
-    "component": "17896441",
-    "content": "31d4f4b2"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-guides-docker-setup-31-d-446"
   },
   "/docs/guides/elastic-setup": {
-    "component": "17896441",
-    "content": "b0a4a38a"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-guides-elastic-setupb-0-a-3b2"
   },
   "/docs/guides/elasticsearch-lucene-intro": {
-    "component": "17896441",
-    "content": "434da8a5"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-guides-elasticsearch-lucene-intro-434-e8d"
   },
   "/docs/guides/futher-literature": {
-    "component": "17896441",
-    "content": "420177a6"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-guides-futher-literature-420-ee8"
   },
   "/docs/guides/notebooks": {
-    "component": "17896441",
-    "content": "12114f03"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-guides-notebooks-121-078"
   },
   "/docs/guides/wordembeddings-intro": {
-    "component": "17896441",
-    "content": "6ef8120f"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-guides-wordembeddings-intro-6-ef-958"
   },
   "/docs/impressum": {
-    "component": "17896441",
-    "content": "bfe358c2"
+    "component": "component---theme-doc-item-178-a40",
+    "content": "content---docs-impressumbfe-355"
   }
 }
