@@ -1,0 +1,19 @@
+{
+  "id": "experiments/experiment2",
+  "isDocsHomePage": false,
+  "title": "Second Experiment",
+  "description": "Experiments are coming!",
+  "source": "@site/docs/experiments/experiment2.md",
+  "permalink": "/docs/experiments/experiment2",
+  "editUrl": "https://github.com/pragmalingu/pragmalingu/docs/experiments/experiment2.md",
+  "sidebar_label": "Notebooks",
+  "sidebar": "experiments",
+  "previous": {
+    "title": "First Experiment",
+    "permalink": "/docs/experiments/experiment1"
+  },
+  "next": {
+    "title": "Third Experiment",
+    "permalink": "/docs/experiments/experiment3"
+  }
+}

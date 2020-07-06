@@ -1,0 +1,14 @@
+{
+  "id": "about/goals-mission",
+  "isDocsHomePage": false,
+  "title": "Goals and Mission Statement",
+  "description": "The mission of PragmaLingu is:",
+  "source": "@site/docs/about/goals-mission.md",
+  "permalink": "/docs/about/goals-mission",
+  "editUrl": "https://github.com/pragmalingu/pragmalingu/docs/about/goals-mission.md",
+  "sidebar": "docs",
+  "next": {
+    "title": "Roadmap",
+    "permalink": "/docs/about/roadmap"
+  }
+}

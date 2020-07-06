@@ -1,0 +1,19 @@
+{
+  "id": "guides/futher-literature",
+  "isDocsHomePage": false,
+  "title": "Read More",
+  "description": "Here you will find some further reading.",
+  "source": "@site/docs/guides/futher-literature.md",
+  "permalink": "/docs/guides/futher-literature",
+  "editUrl": "https://github.com/pragmalingu/pragmalingu/docs/guides/futher-literature.md",
+  "sidebar_label": "Futher Literature",
+  "sidebar": "guides",
+  "previous": {
+    "title": "Introduction to Word Embeddings",
+    "permalink": "/docs/guides/wordembeddings-intro"
+  },
+  "next": {
+    "title": "How to setup an Elasticsearch Instance",
+    "permalink": "/docs/guides/elastic-setup"
+  }
+}

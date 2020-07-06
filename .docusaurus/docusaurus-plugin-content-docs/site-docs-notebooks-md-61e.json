@@ -1,0 +1,10 @@
+{
+  "id": "notebooks",
+  "isDocsHomePage": false,
+  "title": "Working with Notebooks",
+  "description": "Here we will explain how to evaluate data with Notebooks.",
+  "source": "@site/docs/notebooks.md",
+  "permalink": "/docs/notebooks",
+  "editUrl": "https://github.com/pragmalingu/pragmalingu/docs/notebooks.md",
+  "sidebar_label": "Notebooks"
+}

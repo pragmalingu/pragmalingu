@@ -1,0 +1,9 @@
+{
+  "id": "impressum",
+  "isDocsHomePage": false,
+  "title": "Impressum",
+  "description": "Angaben gemäß § 5 TMG",
+  "source": "@site/docs/impressum.md",
+  "permalink": "/docs/impressum",
+  "editUrl": "https://github.com/pragmalingu/pragmalingu/docs/impressum.md"
+}

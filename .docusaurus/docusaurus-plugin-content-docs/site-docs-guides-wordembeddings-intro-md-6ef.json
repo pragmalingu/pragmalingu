@@ -1,0 +1,19 @@
+{
+  "id": "guides/wordembeddings-intro",
+  "isDocsHomePage": false,
+  "title": "Introduction to Word Embeddings",
+  "description": "Content will follow",
+  "source": "@site/docs/guides/wordembeddings-intro.md",
+  "permalink": "/docs/guides/wordembeddings-intro",
+  "editUrl": "https://github.com/pragmalingu/pragmalingu/docs/guides/wordembeddings-intro.md",
+  "sidebar_label": "Word Embeddings",
+  "sidebar": "guides",
+  "previous": {
+    "title": "Introduction to Elasticsearch and Lucene",
+    "permalink": "/docs/guides/elasticsearch-lucene-intro"
+  },
+  "next": {
+    "title": "Read More",
+    "permalink": "/docs/guides/futher-literature"
+  }
+}
