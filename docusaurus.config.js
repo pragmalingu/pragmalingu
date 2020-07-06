@@ -19,7 +19,7 @@ const allDocHomesPaths = [
 module.exports = {
   title: 'PragmaLingu',
   tagline: 'Explore pragmatic search possibilities',
-  url: 'https://pragmalingu.de',
+  url: 'https://pragmalingu.github.io',
   baseUrl: '/',
   favicon: 'static/img/testicon.ico',
   organizationName: 'pragmalingu', // Usually your GitHub org/user name.
