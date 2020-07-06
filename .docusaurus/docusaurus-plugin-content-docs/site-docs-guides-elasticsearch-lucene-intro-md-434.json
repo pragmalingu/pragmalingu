@@ -1,0 +1,19 @@
+{
+  "id": "guides/elasticsearch-lucene-intro",
+  "isDocsHomePage": false,
+  "title": "Introduction to Elasticsearch and Lucene",
+  "description": "Content will follow",
+  "source": "@site/docs/guides/elasticsearch-lucene-intro.md",
+  "permalink": "/docs/guides/elasticsearch-lucene-intro",
+  "editUrl": "https://github.com/pragmalingu/pragmalingu/docs/guides/elasticsearch-lucene-intro.md",
+  "sidebar_label": "Elasticsearch and Lucene",
+  "sidebar": "guides",
+  "previous": {
+    "title": "Basic Terms",
+    "permalink": "/docs/guides/basic-definitions"
+  },
+  "next": {
+    "title": "Introduction to Word Embeddings",
+    "permalink": "/docs/guides/wordembeddings-intro"
+  }
+}

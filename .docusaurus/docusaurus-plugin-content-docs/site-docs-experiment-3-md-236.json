@@ -1,0 +1,10 @@
+{
+  "id": "experiment3",
+  "isDocsHomePage": false,
+  "title": "Third Experiment",
+  "description": "Experiments are coming!",
+  "source": "@site/docs/experiment3.md",
+  "permalink": "/docs/experiment3",
+  "editUrl": "https://github.com/pragmalingu/pragmalingu/docs/experiment3.md",
+  "sidebar_label": "Evaluation"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "use-cases",
+  "isDocsHomePage": false,
+  "title": "Use Cases",
+  "description": "Here we will explain some Use Cases. For now check out our Data Set Overview.",
+  "source": "@site/docs/use-cases.md",
+  "permalink": "/docs/use-cases",
+  "editUrl": "https://github.com/pragmalingu/pragmalingu/docs/use-cases.md"
+}

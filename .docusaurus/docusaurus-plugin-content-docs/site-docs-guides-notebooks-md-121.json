@@ -1,0 +1,15 @@
+{
+  "id": "guides/notebooks",
+  "isDocsHomePage": false,
+  "title": "Working with Notebooks",
+  "description": "Here we will explain how to evaluate data with Notebooks.",
+  "source": "@site/docs/guides/notebooks.md",
+  "permalink": "/docs/guides/notebooks",
+  "editUrl": "https://github.com/pragmalingu/pragmalingu/docs/guides/notebooks.md",
+  "sidebar_label": "Notebooks",
+  "sidebar": "guides",
+  "previous": {
+    "title": "How to work with Docker",
+    "permalink": "/docs/guides/docker-setup"
+  }
+}
