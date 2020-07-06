@@ -1,9 +1,0 @@
-{
-  "id": "overview",
-  "isDocsHomePage": false,
-  "title": "Overview",
-  "description": "This table shows a short overview comparisson of all researched data sets:",
-  "source": "@site/docs/overview.md",
-  "permalink": "/docs/overview",
-  "editUrl": "https://github.com/pragmalingu/pragmalingu/docs/overview.md"
-}

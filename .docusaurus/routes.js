@@ -11,6 +11,12 @@ export default [
   
 },
 {
+  path: '/__docusaurus/debug',
+  component: ComponentCreator('/__docusaurus/debug'),
+  exact: true,
+  
+},
+{
   path: '/blog',
   component: ComponentCreator('/blog'),
   exact: true,
