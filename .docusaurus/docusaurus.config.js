@@ -89,7 +89,7 @@ export default {
   },
   "title": "PragmaLingu",
   "tagline": "Explore pragmatic search possibilities",
-  "url": "https://pragmalingu.de",
+  "url": "https://pragmalingu.github.io",
   "baseUrl": "/",
   "favicon": "static/img/testicon.ico",
   "organizationName": "pragmalingu",
