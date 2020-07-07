@@ -69,6 +69,7 @@ title: Active Team
         </div>
       </div>
       <div className="card__body">
+      Dário is a MSc Computer and Telematics engineering student at University of Aveiro, Portugal. A Linux and Open Source enthusiast, whose main areas of interest are AI, data mining, computer languages, compilers and low level software development. Through Pragmalingu, he hopes to collaborate in building resources to assess state of the art NLP approaches directed towards information retrieval.
       </div>
       <div className="card__footer">
         <div className="button-group button-group--block">
