@@ -9,7 +9,7 @@ title: Active Team
         <div className="avatar avatar--vertical">
           <img
             className="avatar__photo avatar__photo--xl"
-            src="../../static/img/samy.jpg"
+            src="https://github.com/pragmalingu/pragmalingu/blob/master/static/img/samy.jpg"
           />
           <div className="avatar__intro">
             <h3 className="avatar__name">Samy Ateia</h3>
