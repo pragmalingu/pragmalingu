@@ -33,7 +33,7 @@ title: Active Team
         <div className="avatar avatar--vertical">
           <img
             className="avatar__photo avatar__photo--xl"
-            src="/img/miriam.jpg"
+            src="static/img/miriam.jpg"
           />
           <div className="avatar__intro">
             <h3 className="avatar__name">Miriam Rupprecht</h3>
