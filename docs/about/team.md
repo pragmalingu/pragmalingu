@@ -17,6 +17,7 @@ title: Active Team
         </div>
       </div>
       <div className="card__body">
+      Samy is a software engineer focusing on search and NLP web applications. He worked in big and small enterprise projects and co founded a startup for news aggregation. He started pragmalingu in 2020 to explore modern NLP approaches for search applications and create a guide for interested developers.
       </div>
       <div className="card__footer">
         <div className="button-group button-group--block">
@@ -40,6 +41,7 @@ title: Active Team
         </div>
       </div>
       <div className="card__body">
+      Miriam is a Computerlinguistic student at the Ludwig-Maximialian-University in Munich. Before starting her studies in Munich she got her Bachelor’s degree in Theater, Film and Media Science in Vienna. Her role in PragmaLingu is to research and write topics around NLP.
       </div>
       <div className="card__footer">
         <div className="button-group button-group--block">
@@ -63,6 +65,7 @@ title: Active Team
         </div>
       </div>
       <div className="card__body">
+      Dário is a MSc Computer and Telematics engineering student at University of Aveiro, Portugal. A Linux and Open Source enthusiast, whose main areas of interest are AI, data mining, computer languages, compilers and low level software development. Through Pragmalingu, he hopes to collaborate in building resources to assess state of the art NLP approaches directed towards information retrieval.
       </div>
       <div className="card__footer">
         <div className="button-group button-group--block">
