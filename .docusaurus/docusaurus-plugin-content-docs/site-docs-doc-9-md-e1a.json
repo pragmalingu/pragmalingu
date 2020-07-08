@@ -1,9 +1,0 @@
-{
-  "id": "doc9",
-  "isDocsHomePage": false,
-  "title": "This is Doc 9",
-  "description": "I can write content using GitHub-flavored Markdown syntax.",
-  "source": "@site/docs/doc9.md",
-  "permalink": "/docs/doc9",
-  "editUrl": "https://github.com/pragmalingu/pragmalingu/docs/doc9.md"
-}
