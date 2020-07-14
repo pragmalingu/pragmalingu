@@ -8,12 +8,12 @@
 /* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #3578e5;
-  --ifm-color-primary-dark: #1d68e1;
-  --ifm-color-primary-darker: #1b62d4;
-  --ifm-color-primary-darkest: #1751af;
-  --ifm-color-primary-light: #4e89e8;
-  --ifm-color-primary-lighter: #5a91ea;
-  --ifm-color-primary-lightest: #80aaef;
+  --ifm-color-primary-dark: #e1d41d;
+  --ifm-color-primary-darker: #d41bb5;
+  --ifm-color-primary-darkest: #af1717;
+  --ifm-color-primary-light: #e88c4e;
+  --ifm-color-primary-lighter: #77ea5a;
+  --ifm-color-primary-lightest: #1f3a2b;
   --ifm-code-font-size: 95%;
 }
 
@@ -23,3 +23,141 @@
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
 }
+
+/*customized parts*/
+
+/*
+html[data-theme="dark"] {
+  --ifm-background-color: var(--ifm-color-primary-darker);
+  --ifm-background-surface-color: var(--ifm-color-primary-light);
+}
+*/
+body {
+  font-family: "Ubuntu", sans-serif;
+}
+
+pre,
+pre button {
+  background-color: var(--neutron-color-dark) !important;
+}
+
+pre {
+  white-space: pre !important;
+}
+
+a,
+a:hover {
+  text-decoration: none;
+}
+
+/*Here can we change the color of the navigationbar*/
+.navbar {
+  background-color: var(--ifm-color-primary-darker);
+}
+
+/*Changes Color of the Logo Font*/
+.navbar__brand strong {
+  color: var(--ifm-color-primary-light);
+  font-size: 20px;
+  font-weight: 300;
+}
+
+/*Changes Color of the items in the navigationbar*/
+.navbar__item.navbar__link{
+  color: var(--ifm-color-primary-darkest);
+  font-size: 16px;
+}
+/*Changes Color of the active item in the navigationbar*/
+.navbar__item.navbar__link.navbar__link--active {
+  color: var(--ifm-color-primary-dark);
+  font-size: 16px;
+}
+
+/*Changes Color of*/
+.footer.footer--dark {
+  background-color: var(--ifm-color-primary-light);
+  padding: 72px 0;
+}
+
+/*
+.token-line .token.plain,
+.token-line .token.comment {
+  font-family: "Courier New", Courier, monospace;
+}
+
+.navbar__item.navbar__link[href*="github"] {
+  display: flex;
+  font-size: 0;
+  padding: 0 12px;
+}
+.navbar__item.navbar__link[href*="github"]:before {
+  content: "";
+  width: 24px;
+  height: 24px;
+  background: url("/img/brand-github.svg");
+  background-repeat: no-repeat;
+}
+
+.navbar__item.navbar__link[href*="npmjs"] {
+  display: flex;
+  font-size: 0;
+  padding: 4px 12px 0;
+}
+.navbar__item.navbar__link[href*="npmjs"]:before {
+  content: "";
+  width: 48px;
+  height: 18px;
+  background: url("/img/brand-npm.svg");
+  background-repeat: no-repeat;
+}
+
+.navbar .navbar__items .navbar__toggle {
+  margin-right: 16px;
+}
+
+.navbar .navbar__items .navbar__toggle svg path {
+  stroke: var(--ifm-color-primary-light);
+}
+.navbar .navbar-sidebar {
+  background-color: var(--ifm-color-primary-light);
+}
+.navbar .navbar-sidebar .navbar-sidebar__items .menu .menu__list .menu__list-item .menu__link {
+  margin-left: 12px;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: var(--ifm-color-primary-lightest);
+}
+
+.menu.menu--responsive .button {
+  border: 0;
+  background-color: var(---ifm-color-primary-lighter);
+}
+.menu.menu--responsive .button svg path {
+  stroke: var(--ifm-color-primary-lightest);
+}
+
+.menu.menu--responsive.menu--show  {
+  background-color: var(---ifm-color-primary-lightest);
+}
+html[data-theme="dark"] .menu.menu--responsive.menu--show  {
+  background-color: var(--ifm-color-primary-lightest);
+}
+.menu.menu--responsive.menu--show .button {
+  background-color: var(--ifm-color-primary-lightest);
+}
+
+.badge.badge--info {
+  --ifm-badge-background-color: var(--ifm-color-primary-lightest);
+  border-radius: 2px;
+  font-size: 14px;
+}
+
+.navbar .react-toggle {
+  margin: 0 12px;
+}
+
+@media screen and (max-width: 460px) {
+  .navbar > .navbar__inner > .navbar__items > .navbar__brand > strong {
+    display: none;
+  }
+}*/

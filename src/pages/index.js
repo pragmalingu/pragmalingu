@@ -54,6 +54,16 @@ function Feature({imageUrl, title, description}) {
   );
 }
 
+function ProjectTitle() {
+  return (
+    <div className={styles.coverContainer}>
+      <img src="img/testbanner.jpg" className={styles.cover} />
+      <h1 className={styles.projectTitle}>ALL HAIL THE RACOON!</h1>
+    </div>
+  );
+}
+
+
 function Home() {
   const context = useDocusaurusContext();
   const {siteConfig = {}} = context;
@@ -63,6 +73,7 @@ function Home() {
       description="Description will go into a meta tag in <head />">
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
+          <ProjectTitle />
           <h1 className="hero__title">{siteConfig.title}</h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <div className={styles.buttons}>

@@ -5,18 +5,31 @@
  * and scoped locally.
  */
 
+ html {
+  background-color: var(--ifm-color-primary-lightest);
+}
+
+/*
 .heroBanner {
-  padding: 4rem 0;
+  padding: 16rem 0;
   text-align: center;
   position: relative;
   overflow: hidden;
+  background: url("/img/testbanner.jpg");
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
-
+*/
+/*
 @media screen and (max-width: 966px) {
   .heroBanner {
     padding: 2rem;
   }
 }
+*/
 
 .buttons {
   display: inline-flex;
@@ -35,4 +48,20 @@
 .featureImage {
   height: 200px;
   width: 200px;
+}
+
+/*Zweiter Versuch Banner */
+
+.cover {
+  width: 100%;
+  max-width: 512px;
+}
+
+.coverContainer {
+  text-align: center;
+}
+
+.projectTitle {
+  margin-top: 25px;
+  color: #ffd900;
 }
