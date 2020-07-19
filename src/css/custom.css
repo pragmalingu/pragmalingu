@@ -7,13 +7,13 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #3578e5;
-  --ifm-color-primary-dark: #e1d41d;
-  --ifm-color-primary-darker: #d41bb5;
-  --ifm-color-primary-darkest: #af1717;
-  --ifm-color-primary-light: #e88c4e;
-  --ifm-color-primary-lighter: #77ea5a;
-  --ifm-color-primary-lightest: #1f3a2b;
+  --ifm-color-primary: #464646;
+  --ifm-color-primary-dark: #ffff00;
+  --ifm-color-primary-darker: #ffcc00;
+  --ifm-color-primary-darkest: #cc0000;
+  --ifm-color-primary-light: #ff6600;
+  --ifm-color-primary-lighter: #cccc00;
+  --ifm-color-primary-lightest: #ffffff;
   --ifm-code-font-size: 95%;
 }
 
@@ -52,12 +52,12 @@ a:hover {
 
 /*Here can we change the color of the navigationbar*/
 .navbar {
-  background-color: var(--ifm-color-primary-darker);
+  background-color: var(--ifm-color-primary-lighter);
 }
 
 /*Changes Color of the Logo Font*/
 .navbar__brand strong {
-  color: var(--ifm-color-primary-light);
+  color: var(--ifm-color-primary);
   font-size: 20px;
   font-weight: 300;
 }
@@ -75,7 +75,7 @@ a:hover {
 
 /*Changes Color of*/
 .footer.footer--dark {
-  background-color: var(--ifm-color-primary-light);
+  background-color: var(--ifm-color-primary);
   padding: 72px 0;
 }
 

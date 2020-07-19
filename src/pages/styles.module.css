@@ -36,6 +36,7 @@
   align-items: center;
   margin:10px;
   justify-content: center;
+  color:  #ffd900;
 }
 
 .features {
@@ -63,5 +64,5 @@
 
 .projectTitle {
   margin-top: 25px;
-  color: #ffd900;
+  color:  #ffb900;
 }

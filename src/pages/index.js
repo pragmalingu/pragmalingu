@@ -37,6 +37,36 @@ const features = [
       </>
     ),
   },
+  {
+    title: <>Benchmark on current systems</>,
+    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    description: (
+      <>
+        We provide an overview to all the possibilities on how 
+        pragmatic search can be implemented and used in Information Retrieval and beyond.
+      </>
+    ),
+  },
+  {
+    title: <>Benchmark on current systems</>,
+    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    description: (
+      <>
+        We provide an overview to all the possibilities on how 
+        pragmatic search can be implemented and used in Information Retrieval and beyond.
+      </>
+    ),
+  },
+  {
+    title: <>Benchmark on current systems</>,
+    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    description: (
+      <>
+        We provide an overview to all the possibilities on how 
+        pragmatic search can be implemented and used in Information Retrieval and beyond.
+      </>
+    ),
+  },
 ];
 
 function Feature({imageUrl, title, description}) {
@@ -57,8 +87,7 @@ function Feature({imageUrl, title, description}) {
 function ProjectTitle() {
   return (
     <div className={styles.coverContainer}>
-      <img src="img/testbanner.jpg" className={styles.cover} />
-      <h1 className={styles.projectTitle}>ALL HAIL THE RACOON!</h1>
+      <img src="img/Logo_Test3_dunkel.png" className={styles.cover} />
     </div>
   );
 }
