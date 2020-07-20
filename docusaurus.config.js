@@ -113,7 +113,7 @@ module.exports = {
   },
   presets: [
     [
-      '@docusaurus/preset-classic',
+      '@docusaurus/theme-live-codeblock',
       {
         docs: {
           // It is recommended to set document id as docs home page (`docs/` path).

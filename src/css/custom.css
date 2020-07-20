@@ -26,138 +26,67 @@
 
 /*customized parts*/
 
-/*
-html[data-theme="dark"] {
-  --ifm-background-color: var(--ifm-color-primary-darker);
-  --ifm-background-surface-color: var(--ifm-color-primary-light);
-}
-*/
-body {
-  font-family: "Ubuntu", sans-serif;
-}
-
-pre,
-pre button {
-  background-color: var(--neutron-color-dark) !important;
-}
-
-pre {
-  white-space: pre !important;
-}
-
-a,
-a:hover {
-  text-decoration: none;
-}
-
 /*Here can we change the color of the navigationbar*/
 .navbar {
-  background-color: var(--ifm-color-primary-lighter);
+  background-color: var(--ifm-color-primary-darkest);
 }
 
 /*Changes Color of the Logo Font*/
 .navbar__brand strong {
-  color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary-lightest);
   font-size: 20px;
   font-weight: 300;
 }
 
-/*Changes Color of the items in the navigationbar*/
+/*Changes Color of the items font in the navigationbar*/
 .navbar__item.navbar__link{
-  color: var(--ifm-color-primary-darkest);
+  color: var(--ifm-color-primary-darker);
   font-size: 16px;
 }
+
 /*Changes Color of the active item in the navigationbar*/
 .navbar__item.navbar__link.navbar__link--active {
   color: var(--ifm-color-primary-dark);
   font-size: 16px;
 }
 
-/*Changes Color of*/
-.footer.footer--dark {
-  background-color: var(--ifm-color-primary);
-  padding: 72px 0;
-}
-
-/*
-.token-line .token.plain,
-.token-line .token.comment {
-  font-family: "Courier New", Courier, monospace;
-}
-
-.navbar__item.navbar__link[href*="github"] {
-  display: flex;
-  font-size: 0;
-  padding: 0 12px;
-}
-.navbar__item.navbar__link[href*="github"]:before {
-  content: "";
-  width: 24px;
-  height: 24px;
-  background: url("/img/brand-github.svg");
-  background-repeat: no-repeat;
-}
-
-.navbar__item.navbar__link[href*="npmjs"] {
-  display: flex;
-  font-size: 0;
-  padding: 4px 12px 0;
-}
-.navbar__item.navbar__link[href*="npmjs"]:before {
-  content: "";
-  width: 48px;
-  height: 18px;
-  background: url("/img/brand-npm.svg");
-  background-repeat: no-repeat;
+/*color and thickness of border between navigation bar elements*/
+.navbar__item.navbar__link.navbar__link, li {
+  border-right: 0px solid #ffffff;
 }
 
 .navbar .navbar__items .navbar__toggle {
   margin-right: 16px;
 }
-
+/*Color of hamburger sidebar symbol*/
 .navbar .navbar__items .navbar__toggle svg path {
-  stroke: var(--ifm-color-primary-light);
+  stroke: var(--ifm-color-primary-dark);
 }
+/*color of hamburger sidebar*/
 .navbar .navbar-sidebar {
-  background-color: var(--ifm-color-primary-light);
+  background-color: var(--ifm-color-primary-darkest);
 }
+/*color of hamburger sidebar font*/
 .navbar .navbar-sidebar .navbar-sidebar__items .menu .menu__list .menu__list-item .menu__link {
   margin-left: 12px;
   font-size: 14px;
   text-transform: uppercase;
-  color: var(--ifm-color-primary-lightest);
-}
-
-.menu.menu--responsive .button {
-  border: 0;
-  background-color: var(---ifm-color-primary-lighter);
-}
-.menu.menu--responsive .button svg path {
-  stroke: var(--ifm-color-primary-lightest);
-}
-
-.menu.menu--responsive.menu--show  {
-  background-color: var(---ifm-color-primary-lightest);
-}
-html[data-theme="dark"] .menu.menu--responsive.menu--show  {
-  background-color: var(--ifm-color-primary-lightest);
-}
-.menu.menu--responsive.menu--show .button {
-  background-color: var(--ifm-color-primary-lightest);
-}
-
-.badge.badge--info {
-  --ifm-badge-background-color: var(--ifm-color-primary-lightest);
-  border-radius: 2px;
-  font-size: 14px;
+  color: var(--ifm-color-primary-dark);
 }
 
 .navbar .react-toggle {
   margin: 0 12px;
 }
 
-@media screen and (max-width: 460px) {
-  .navbar > .navbar__inner > .navbar__items > .navbar__brand > strong {
-    display: none;
-  }
-}*/
+/*Define font and color of font for the content*/
+body {
+  font-family: "Ubuntu", sans-serif;
+  color: var(--ifm-color-primary)
+}
+
+/*Changes Color of Footer*/
+.footer.footer--dark {
+  background-color: var(--ifm-color-primary-darkest);
+  padding: 20px 0;
+  color: var(--ifm-color-primary-darker)
+}
