@@ -11,12 +11,12 @@
 }*/
 
 .heroBanner {
-  padding: 10rem 0;
+  padding: rem 0;
   text-align: center;
   position: relative;
+  background: url("/img/Verlauf_Banner_Orange_Kleiner.jpg");
   overflow: hidden;
   background-size: cover;
-  background: url("/img/Verlauf_Banner_Orange_.jpg");
   display: flex;
   justify-content: center;
   align-items: center;
