@@ -60,18 +60,19 @@
 }
 /*Color of hamburger sidebar symbol*/
 .navbar .navbar__items .navbar__toggle svg path {
-  stroke: var(--ifm-color-primary);
+  stroke: var(--ifm-color-primary-light);
 }
 /*color of hamburger sidebar*/
 .navbar .navbar-sidebar {
-  background-color: var(--ifm-color-primary-lighter);
+  width: 220px;
+  background-color: var(--ifm-color-primary);
 }
 /*color of hamburger sidebar font*/
 .navbar .navbar-sidebar .navbar-sidebar__items .menu .menu__list .menu__list-item .menu__link {
   margin-left: 12px;
   font-size: 14px;
   text-transform: uppercase;
-  color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary-lightest);
 }
 
 .navbar .react-toggle {
