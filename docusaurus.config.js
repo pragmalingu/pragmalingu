@@ -31,7 +31,7 @@ module.exports = {
       title: '',
       logo: {
         alt: '',
-        src: 'img/Logo_türkisenerHG.png',
+        src: 'img/Logo_orangenerHG.png',
       },
     links: [
         {

@@ -11,7 +11,7 @@
   --ifm-color-primary-dark: #8cab13;
   --ifm-color-primary-darker: #ffcc00;
   --ifm-color-primary-darkest: #cc0000;
-  --ifm-color-primary-light: #ff6600;
+  --ifm-color-primary-light: #ffb900;
   --ifm-color-primary-lighter: #22ab82;
   --ifm-color-primary-lightest: #ffffff;
   --ifm-code-font-size: 95%;
@@ -28,7 +28,7 @@
 
 /*Here can we change the color of the navigationbar*/
 .navbar {
-  background-color: var(--ifm-color-primary-lighter);
+  background-color: var(--ifm-color-primary);
 }
 
 /*Changes Color of the Logo Font*/
@@ -40,13 +40,13 @@
 
 /*Changes Color of the items font in the navigationbar*/
 .navbar__item.navbar__link{
-  color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary-lightest);
   font-size: 16px;
 }
 
 /*Changes Color of the active item in the navigationbar*/
 .navbar__item.navbar__link.navbar__link--active {
-  color: var(--ifm-color-primary-dark);
+  color: var(--ifm-color-primary-light);
   font-size: 16px;
 }
 

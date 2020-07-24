@@ -87,7 +87,7 @@ function Feature({imageUrl, title, description}) {
 function ProjectTitle() {
   return (
     <div className={styles.coverContainer}>
-      <img src="img/Logo_dunklerHG.png" className={styles.cover} />
+      <img src="img/Logo_orangenerHG.png" className={styles.cover} />
     </div>
   );
 }
@@ -108,7 +108,7 @@ function Home() {
           <div className={styles.buttons}>
             <Link
               className={clsx(
-                'button button--outline button--primary button--lg',
+                'button button--outline button--secondary button--lg',
                 styles.getStarted,
               )}
               to={useBaseUrl('docs/about/team')}>
@@ -118,7 +118,7 @@ function Home() {
           <div className={styles.buttons}>
             <Link
               className={clsx(
-                'button button--outline button--primary button--lg',
+                'button button--outline button--secondary button--lg',
                 styles.getStarted,
               )}
               to={useBaseUrl('docs/experiments/experiment1')}>

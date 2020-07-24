@@ -16,7 +16,7 @@
   position: relative;
   overflow: hidden;
   background-size: cover;
-  background: url("/img/Verlauf_Banner_dunkel_V2.jpg");
+  background: url("/img/Verlauf_Banner_Orange_.jpg");
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,19 +31,17 @@
 
 /*choose colors for buttons, also size*/
 .buttons {
-  border: 0px solid var(--ifm-color-primary-lightest);
+  border: none;
   border-radius: 10px;
   text-align: center;
   display: inline-flex;
   align-items: center;
   margin:10px;
-  background:  var(--ifm-color-primary-lighter);
-  color: var(--ifm-color-primary-darkest);
+  background:  var(--ifm-color-primary-light);
 }
 
 .buttons:hover {
-  background-color: var(--ifm-color-primary-light);
-  color: var(--ifm-color-primary-dark);
+
 }
 
 /*feature settings can be set, including background and font color*/
