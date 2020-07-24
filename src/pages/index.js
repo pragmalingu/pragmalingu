@@ -87,7 +87,7 @@ function Feature({imageUrl, title, description}) {
 function ProjectTitle() {
   return (
     <div className={styles.coverContainer}>
-      <img src="img/Logo_Test3_dunkel.png" className={styles.cover} />
+      <img src="img/Logo_dunklerHG.png" className={styles.cover} />
     </div>
   );
 }
