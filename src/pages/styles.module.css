@@ -42,7 +42,7 @@
 }
 
 .buttons:hover {
-
+  background:  var(--ifm-color-primary-dark);
 }
 
 /*feature settings can be set, including background and font color*/
