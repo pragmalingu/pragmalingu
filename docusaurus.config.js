@@ -28,10 +28,10 @@ module.exports = {
   projectName: 'pragmalingu', // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: 'PragmaLingu',
+      title: '',
       logo: {
         alt: '',
-        src: '',
+        src: 'img/Logo_orangenerHG.png',
       },
     links: [
         {
