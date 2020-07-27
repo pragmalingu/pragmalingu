@@ -17,19 +17,21 @@ const allDocHomesPaths = [
 ];
 
 module.exports = {
-  title: 'PragmaLingu',
-  tagline: 'Explore pragmatic search possibilities',
+  title: '',
+  //'PragmaLingu',
+  tagline: '',
+  //'Explore pragmatic search possibilities',
   url: 'https://pragmalingu.github.io',
   baseUrl: '/',
-  favicon: 'static/img/testicon.ico',
+  favicon: '',
   organizationName: 'pragmalingu', // Usually your GitHub org/user name.
   projectName: 'pragmalingu', // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: 'PragmaLingu',
+      title: '',
       logo: {
         alt: '',
-        src: 'static/img/testicon.ico',
+        src: 'img/Logo_orangenerHG.png',
       },
     links: [
         {

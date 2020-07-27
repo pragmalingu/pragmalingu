@@ -5,11 +5,22 @@
  * and scoped locally.
  */
 
+ /*Body content color can here be changed too
+ html {
+  background-color: var(--ifm-color-primary-lightest);
+}*/
+
 .heroBanner {
-  padding: 4rem 0;
+  padding: rem 0;
   text-align: center;
   position: relative;
+  background: url("/img/Verlauf_Banner_Orange_Kleiner.jpg");
   overflow: hidden;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 @media screen and (max-width: 966px) {
@@ -18,13 +29,23 @@
   }
 }
 
+/*choose colors for buttons, also size*/
 .buttons {
+  color: var(--ifm-color-primary-lightest);
+  border: none;
+  border-radius: 10px;
+  text-align: center;
   display: inline-flex;
   align-items: center;
   margin:10px;
-  justify-content: center;
+  background:  var(--ifm-color-primary-light);
 }
 
+.buttons:hover {
+  background:  var(--ifm-color-primary-dark);
+}
+
+/*feature settings can be set, including background and font color*/
 .features {
   display: flex;
   align-items: center;
@@ -32,7 +53,15 @@
   width: 100%;
 }
 
+/*height and width of space between feature content can be set here*/
 .featureImage {
   height: 200px;
   width: 200px;
 }
+
+/*sets maximum width of the banner*/
+.cover {
+  width: 100%;
+  max-width: 512px;
+}
+

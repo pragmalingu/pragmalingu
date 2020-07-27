@@ -54,6 +54,15 @@ function Feature({imageUrl, title, description}) {
   );
 }
 
+function ProjectTitle() {
+  return (
+    <div className={styles.coverContainer}>
+      <img src="img/Logo_orangenerHG.png" className={styles.cover} />
+    </div>
+  );
+}
+
+
 function Home() {
   const context = useDocusaurusContext();
   const {siteConfig = {}} = context;
@@ -63,26 +72,27 @@ function Home() {
       description="Description will go into a meta tag in <head />">
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
+          <ProjectTitle />
           <h1 className="hero__title">{siteConfig.title}</h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <div className={styles.buttons}>
             <Link
               className={clsx(
-                'button button--outline button--secondary button--lg',
+                'button button--primary button--lg',
                 styles.getStarted,
               )}
               to={useBaseUrl('docs/about/team')}>
-              Contact Us
+              CONTACT US
             </Link>
           </div>
           <div className={styles.buttons}>
             <Link
               className={clsx(
-                'button button--outline button--secondary button--lg',
+                'button button--primary button--lg',
                 styles.getStarted,
               )}
               to={useBaseUrl('docs/experiments/experiment1')}>
-              Get Started
+              GET STARTED
             </Link>
           </div>
         </div>
