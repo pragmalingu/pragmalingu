@@ -7,11 +7,11 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #242526;
+  --ifm-color-primary: #ffb900;
   --ifm-color-primary-dark: #8cab13;
   --ifm-color-primary-darker: #ffcc00;
   --ifm-color-primary-darkest: #cc0000;
-  --ifm-color-primary-light: #ffb900;
+  --ifm-color-primary-light: #242526;
   --ifm-color-primary-lighter: #22ab82;
   --ifm-color-primary-lightest: #ffffff;
   --ifm-code-font-size: 95%;
@@ -28,7 +28,7 @@
 
 /*Here can we change the color of the navigationbar*/
 .navbar {
-  background-color: var(--ifm-color-primary);
+  background-color: var(--ifm-color-primary-light);
 }
 
 /*Changes Color of the Logo Font*/
@@ -60,12 +60,12 @@
 }
 /*Color of hamburger sidebar symbol*/
 .navbar .navbar__items .navbar__toggle svg path {
-  stroke: var(--ifm-color-primary-light);
+  stroke: var(--ifm-color-primary);
 }
 /*color of hamburger sidebar*/
 .navbar .navbar-sidebar {
   width: 220px;
-  background-color: var(--ifm-color-primary);
+  background-color: var(--ifm-color-primary-light);
 }
 /*color of hamburger sidebar font*/
 .navbar .navbar-sidebar .navbar-sidebar__items .menu .menu__list .menu__list-item .menu__link {
@@ -86,7 +86,7 @@ body {
 
 /*Changes Color of Footer*/
 .footer.footer--dark {
-  background-color: var(--ifm-color-primary);
+  background-color: var(--ifm-color-primary-light);
   padding: 20px 0;
   color: var(--ifm-color-primary-lightest)
 }
