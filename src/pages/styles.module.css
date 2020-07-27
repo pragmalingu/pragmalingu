@@ -5,15 +5,16 @@
  * and scoped locally.
  */
 
- /*Body content color can here be changed too*/
+ /*Body content color can here be changed too
  html {
   background-color: var(--ifm-color-primary-lightest);
-}
+}*/
 
 .heroBanner {
-  padding: 10rem 0;
+  padding: rem 0;
   text-align: center;
   position: relative;
+  background: url("/img/Verlauf_Banner_Orange_Kleiner.jpg");
   overflow: hidden;
   background-size: cover;
   display: flex;
@@ -30,19 +31,18 @@
 
 /*choose colors for buttons, also size*/
 .buttons {
-  border: 2px solid var(--ifm-color-primary-lightest);
+  color: var(--ifm-color-primary-lightest);
+  border: none;
   border-radius: 10px;
   text-align: center;
   display: inline-flex;
   align-items: center;
   margin:10px;
-  background:  var(--ifm-color-primary-lighter);
-  color: var(--ifm-color-primary-darkest);
+  background:  var(--ifm-color-primary-light);
 }
 
 .buttons:hover {
-  background-color: var(--ifm-color-primary-light);
-  color: var(--ifm-color-primary-dark);
+  background:  var(--ifm-color-primary-dark);
 }
 
 /*feature settings can be set, including background and font color*/
@@ -51,8 +51,6 @@
   align-items: center;
   padding: 2rem 0;
   width: 100%;
-  color:  var(--ifm-color-primary);
-  background:  var(--ifm-color-primary-lightest);
 }
 
 /*height and width of space between feature content can be set here*/
