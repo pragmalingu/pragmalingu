@@ -37,36 +37,6 @@ const features = [
       </>
     ),
   },
-  {
-    title: <>Benchmark on current systems</>,
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
-    description: (
-      <>
-        We provide an overview to all the possibilities on how 
-        pragmatic search can be implemented and used in Information Retrieval and beyond.
-      </>
-    ),
-  },
-  {
-    title: <>Benchmark on current systems</>,
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
-    description: (
-      <>
-        We provide an overview to all the possibilities on how 
-        pragmatic search can be implemented and used in Information Retrieval and beyond.
-      </>
-    ),
-  },
-  {
-    title: <>Benchmark on current systems</>,
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
-    description: (
-      <>
-        We provide an overview to all the possibilities on how 
-        pragmatic search can be implemented and used in Information Retrieval and beyond.
-      </>
-    ),
-  },
 ];
 
 function Feature({imageUrl, title, description}) {
@@ -112,7 +82,7 @@ function Home() {
                 styles.getStarted,
               )}
               to={useBaseUrl('docs/about/team')}>
-              Contact Us
+              CONTACT US
             </Link>
           </div>
           <div className={styles.buttons}>
@@ -122,7 +92,7 @@ function Home() {
                 styles.getStarted,
               )}
               to={useBaseUrl('docs/experiments/experiment1')}>
-              Get Started
+              GET STARTED
             </Link>
           </div>
         </div>

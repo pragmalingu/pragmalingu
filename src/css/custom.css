@@ -8,10 +8,10 @@
 /* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #ffb900;
-  --ifm-color-primary-dark: #8cab13;
-  --ifm-color-primary-darker: #ffcc00;
-  --ifm-color-primary-darkest: #cc0000;
-  --ifm-color-primary-light: #242526;
+  --ifm-color-primary-dark: #ffcc00;
+  --ifm-color-primary-darker: #8cab13;
+  --ifm-color-primary-darkest: #242526;
+  --ifm-color-primary-light: #cc0000;
   --ifm-color-primary-lighter: #22ab82;
   --ifm-color-primary-lightest: #ffffff;
   --ifm-code-font-size: 95%;
@@ -28,7 +28,7 @@
 
 /*Here can we change the color of the navigationbar*/
 .navbar {
-  background-color: var(--ifm-color-primary-light);
+  background-color: var(--ifm-color-primary-darkest);
 }
 
 /*Changes Color of the Logo Font*/
@@ -46,7 +46,7 @@
 
 /*Changes Color of the active item in the navigationbar*/
 .navbar__item.navbar__link.navbar__link--active {
-  color: var(--ifm-color-primary-light);
+  color: var(--ifm-color-primary-dark);
   font-size: 16px;
 }
 
@@ -65,7 +65,7 @@
 /*color of hamburger sidebar*/
 .navbar .navbar-sidebar {
   width: 220px;
-  background-color: var(--ifm-color-primary-light);
+  background-color: var(--ifm-color-primary-darkest);
 }
 /*color of hamburger sidebar font*/
 .navbar .navbar-sidebar .navbar-sidebar__items .menu .menu__list .menu__list-item .menu__link {
@@ -86,7 +86,7 @@ body {
 
 /*Changes Color of Footer*/
 .footer.footer--dark {
-  background-color: var(--ifm-color-primary-light);
+  background-color: var(--ifm-color-primary-darkest);
   padding: 20px 0;
   color: var(--ifm-color-primary-lightest)
 }
