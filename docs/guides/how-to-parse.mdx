@@ -1,0 +1,173 @@
+---
+id: how-to-parse
+title: How to Parse Data
+sidebar_label: How to Parse for Elasticsearch
+---
+
+For experimenting on Natural Language Processing Algorithms it's always necessary to find a quick and efficent way to process the data we're working with.
+It's is an important task and always depends on the use case and what informations we want to extract. We will look at some diffrent examples of parsing depending on what outcome we might want to show how you approach this task.
+
+So first of all we need to answers this three questions:
+1. How **does** the Data look like?
+2. How do we **want** the Data to look like?
+3. What kind of **preproccesing** would we want to aply?
+
+## Parsing without Preprocessing
+
+For the first example we will only focus on parsing without any preprocessing such as tokenization, stemming, lemmatizing, ignoring stop words, etc. 
+Therefore we will only focus on the first two questions.
+
+**How does the Data look like?**
+
+For this example you can just use our [Data Set Overview](https://https://pragmalingu.de/docs/benchmarks/data-comparisson) to quickly see how the Data Sets are build. Since we already analyzed them in detail, we won't repeat that in this guide as well. We are going to use the [Cranfield Corpus](https://https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield) for this guide as an example.
+
+Normally you would have to download the Data, open some files and look at how they are structed. 
+To have an easy starting point to parse it's important to locate the markers that delimit parts of the Data, which we already did in analyzing [Cranfield Corpus](https://https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield). 
+
+A quick overview of all the notations for our Data Sets can be found [here](https://pragmalingu.de/docs/benchmarks/overview).
+
+**How do we want the Data to look like?**
+
+Depending on the use case the parsing variates a lot. For our example we are going to use the data for the elasticsearch [Ranking API](https://elasticsearch-py.readthedocs.io/en/master/api.html?highlight=_rank_eval#elasticsearch.Elasticsearch.rank_eval). So let's look at the format it needs.
+(If you're not familiar with elasticsearch yet, look at this guide on '[Elasticsearch](https://pragmalingu.de/docs/guides/elasticsearch-lucene-intro)'.
+
+The Cranfield Corpus offers us three diffrent files:
+The *documents*, the *queries* and the *relevance assessments*.
+(You can read the details [here](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield))
+
+We can distinguish between the *documents* which will be stored in our [elasticsearch index](https://www.elastic.co/de/blog/what-is-an-elasticsearch-index) and the *queries* & *relevance assessments*, that will be feed as the evaluation body to the [Ranking API](https://elasticsearch-py.readthedocs.io/en/master/api.html?highlight=_rank_eval#elasticsearch.Elasticsearch.rank_eval) in order to get some result.
+
+The format of the *documents* for our elasticsearch index should have this json format, which can easly be done by saving every document into a simple dictionary or json:
+
+```
+doc = {
+    'author': 'kimchy',
+    'text': 'Elasticsearch: cool. bonsai cool.',
+    'timestamp': datetime.now(),
+}
+```
+
+The *queries* and *relevance assessments* should be passed into this format for the Ranking API:
+
+```
+eval_body = {
+    "requests": [
+        {
+            "id": "\nwhat are the structural and aeroelastic problems associated with flight\nof high speed aircraft .\n",
+            "request": {
+                "query": { "match": { "text": "berlin" }}
+            },
+            "ratings": [
+                { "_index": "pragmalingu-cranfield-corpus", "_id": "184", "rating": 1 },
+                { "_index": "pragmalingu-cranfield-corpus", "_id": "29", "rating": 1 },
+                [...]
+            ]
+        },
+        {
+            "id": "Query_2",
+            "request": {
+                "query": { "match": { "text":  "text": "\nwhat problems of heat conduction in composite slabs have been solved so\nfar .\n"}}
+            },
+            "ratings": [
+                { "_index": "pragmalingu-cranfield-corpus", "_id": "12", "rating": 1 },
+                { "_index": "pragmalingu-cranfield-corpus", "_id": "15", "rating": 1 },
+                [...]
+            ]
+        },
+        [...]
+    ],
+    "metric": {
+      "precision": {
+        "k" : 20,
+        "relevant_rating_threshold": 1,
+        "ignore_unlabeled": "false"
+      }
+   }
+```
+
+In Python this is basically a nested dictionary which can be dumped into a json after it's filled up. Looks complicated at first, but let's do it step by step. 
+
+### Example: Cranfield Corpus
+
+You can get the corpus from [this link](http://ir.dcs.gla.ac.uk/resources/test_collections/cran/).
+For detailed information about the format of the files, see the PragmaLingu [ Benchmarks](https://pragmalingu.de/docs/benchmarks/overview).
+
+#### Process the documents
+
+First of all we need to download the data and make it accessible in out code. 
+The entries in the Cranfield corpus are only seperated by the lines that start with '\\.' followed by a letter to tell us which part of the entry it is. 
+(Definition for the markers can be found [here](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield)) The only exception is the ID-tag where the ID is in the same row as the tag. We can use this to seperate the text into it's entries as a first step. For easier use we just going to split the text which transforms it into a list of entries. We can do the same for the queries since they follow the same notation:
+
+<!--DOCUSAURUS_CODE_TABS-->
+<!--Python-->
+
+```
+ID_marker = re.compile('\.I.')
+
+def get_data(PATH_TO_FILE, marker):
+  """
+  Reads file and spilts text into entries at the ID marker '.I'.
+  First entry is empty, so it's removed.
+  'marker' contains the regex at which we want to split
+  """
+  with open (PATH_TO_FILE,'r') as f:
+    text = f.read().replace('\n'," ")
+    lines = re.split(marker,text)
+    lines.pop(0)
+  return lines
+
+txt_list = get_data(PATH_TO_CRAN_TXT, ID_marker)
+qry_list = get_data(PATH_TO_CRAN_QRY, ID_marker)
+```
+<!--END_DOCUSAURUS_CODE_TABS-->
+
+Afterwards we can try to split the information of the entries in seperate parts of a dictionary. To make the indexing into elsatic search easier we are going to store all documents in one parsebale dictionary of dictionaires:
+
+```
+from collections import defaultdict
+import re
+
+chunk_start = re.compile('\.[A,B,T,W]')
+txt_data = defaultdict(dict)
+
+for line in txt_list:
+  entries= re.split(chunk_start,line)
+  id = entries[0].strip()
+  title = entries[1]
+  author = entries[2]
+  publication_date = entries[3]
+  text = entries[4]
+  txt_data[id]['title'] = title
+  txt_data[id]['author'] = author
+  txt_data[id]['publication_date'] = publication_date
+  txt_data[id]['text'] = text
+```
+
+This corpus is very good notated but we have to be careful, sometimes there are corpora where not every entry has the same information. For example if some entries don't have an athour or no publication date, we have to change the code likewise and try to prepare for this different cases. Most of the times it's not this easy.
+
+After we parsed all our documents we can now parse them to the elasticsearch index one by one:
+
+```
+cran_index = "cranfield-corpus"
+
+for ID, doc_data in txt_data.items():
+  es.index(index=cran_index, id=ID, body=doc_data)
+```
+
+#### Process the queries and relevance assessments
+
+With the queries it's similar to the documents. We start parsing their entries with the ID-tag and continue with splitting every entry into smaller pieces. The queries only consist of the ID and the query, so it's way easier to get that information:
+
+```
+from collections import defaultdict
+import re
+
+chunk_start = re.compile('\.[W]')
+qry_data = defaultdict(dict)
+
+for n in range(0,len(qry_list)-1):
+  line = qry_list[n+1]
+  _ , question = re.split(chunk_start,line)
+  qry_data[n+1]['question'] = question
+```
+## Parsing with Preprocessing

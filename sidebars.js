@@ -27,7 +27,7 @@ module.exports = {
      {
      	type: 'category',
      	label: 'Basics',
-     	items: ['guides/basic-definitions', 'guides/elasticsearch-lucene-intro', 'guides/wordembeddings-intro', 'guides/futher-literature'],
+     	items: ['guides/basic-definitions', 'guides/how-to-parse', 'guides/elasticsearch-lucene-intro', 'guides/wordembeddings-intro', 'guides/futher-literature'],
      },
      {
      	type: 'category',
