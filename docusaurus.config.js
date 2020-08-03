@@ -27,6 +27,9 @@ module.exports = {
   organizationName: 'pragmalingu', // Usually your GitHub org/user name.
   projectName: 'pragmalingu', // Usually your repo name.
   themeConfig: {
+    prism: {
+      theme: require('prism-react-renderer/themes/dracula'),
+    },
     navbar: {
       title: '',
       logo: {

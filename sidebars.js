@@ -15,7 +15,7 @@ module.exports = {
      {
      	type: 'category',
      	label: 'Introduction',
-     	items: ['benchmarks/intro','benchmarks/use-cases'],
+     	items: ['benchmarks/intro'],//, 'benchmarks/use-cases'],
      },
      {
      	type: 'category',
