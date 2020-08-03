@@ -170,4 +170,62 @@ for n in range(0,len(qry_list)-1):
   _ , question = re.split(chunk_start,line)
   qry_data[n+1]['question'] = question
 ```
+
+If we don't need the rating that is provided by the Cranfield corpus we can simply parse the file by splitting it into lines and only save the query-ID and the document-ID:
+
+```
+cran_rel = defaultdict(list)
+
+with open (PATH_TO_CRAN_REL,'r') as f:
+  for line in f:
+    line = re.split(' ',line)
+    cran_rel[int(line[0])].append(line[1])
+```
+
+Otherwise it would also be possible to parse the file as a numpy array for easier accessability:
+
+```
+cran_rel_data = open(PATH_TO_CRAN_REL)
+cran_np = np.loadtxt(cran_rel_data, dtype=int)
+
+cran_rel_rat = defaultdict(list)
+for row in cran_np:
+  cran_rel_rat[row[0]].append(tuple(row[1:])) 
+```
+
+Afterwards we can pass the data into a nested dictionary using this function:
+
+```
+cran_index = "cranfield-corpus"
+
+def create_query_body(query_dict, rel_dict, index_name):
+  """
+  The function creates a request for every query in query_dict and rates the relevant documents with rel_dict to 1.
+  The index name has to be the same as from the documents your looking at.
+  An evaluation body for the elasticsearch ranking API is returned.
+  """
+  eval_body = {
+      "requests":'',
+      "metric": {
+          "precision": {
+              "k" : 20,
+              "relevant_rating_threshold": 1,
+              "ignore_unlabeled": "false"
+              }
+      }
+  }
+  requests = [] 
+  current_request = defaultdict(lambda: defaultdict())
+  current_rel = {"_index": index_name, "_id": '', "rating": int}
+  for query_ID, query_txt in query_dict.items():
+    current_query = {"query": { "match": { "text": '' }}}
+    current_query["query"]["match"]["text"] = query_txt['question']
+    current_request["id"] = 'Query_'+str(query_ID)
+    current_request["request"] = current_query.copy()
+    current_request["ratings"] = [{"_index": index_name, "_id": str(el), "rating": 1} for el in rel_dict[query_ID]]
+    requests.append(current_request.copy())
+  eval_body["requests"] = requests
+  return eval_body
+```
+
 ## Parsing with Preprocessing
