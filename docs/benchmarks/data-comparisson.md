@@ -49,7 +49,7 @@ ETC. AUTOMATIC DOCUMENT CLASSIFICATION, CLUSTERS, CLUSTERING, TERM
 CLASSIFICATIONS. #
 ```
 
-**Relevance assesments:**<br />In `lisarj.num` are the relevance assesments represented with IDs. Every query-ID (first column) is followed by document-IDs that are considered as relevant. Depending on the program used to open or parse the file the relevant document-IDs could continue in the next line. Since there is no end marker it would be best to parse the lines depending on the query-ID.
+**Relevance assessments:**<br />In `lisarj.num` are the relevance assessments represented with IDs. Every query-ID (first column) is followed by document-IDs that are considered as relevant. Depending on the program used to open or parse the file the relevant document-IDs could continue in the next line. Since there is no end marker it would be best to parse the lines depending on the query-ID.
 
 *Example:*
 ```
@@ -62,7 +62,7 @@ CLASSIFICATIONS. #
            5           1        3401  
 ```
 
-**Other files:**<br />The `lisa.rel`file is an old version of the relevance assesments which helps to understand new version, but is not considered important to use. 
+**Other files:**<br />The `lisa.rel`file is an old version of the relevance assessments which helps to understand new version, but is not considered important to use. 
 
 **Source:** http://ir.dcs.gla.ac.uk/resources/test_collections/lisa/ 
 
@@ -108,7 +108,7 @@ USE OF DIGITAL COMPUTERS IN THE DESIGN OF BAND PASS FILTERS HAVING GIVEN PHASE A
   309  360 /
 ```
 
-**Relevance assesments:**<br />In `rlv-ass` are query IDs followed by relevant documents with `/` as an end marker.
+**Relevance assessments:**<br />In `rlv-ass` are query IDs followed by relevant documents with `/` as an end marker.
 
 *Example:*
 ```
@@ -203,7 +203,7 @@ The list of cross-references show the refrences ID followed by `4, 5 or 6`and ma
  10. Alec Grimison, Comp Serv, Uris Hall (parallel lang)
 ```
 
-**Relevance assesments:**<br />In `qrels.text` query ID is followed by doc-ID followed by 0 int and 0.0 float, every doc has it's own row. Could be used as trainable vectors.
+**Relevance assessments:**<br />In `qrels.text` query ID is followed by doc-ID followed by 0 int and 0.0 float, every doc has it's own row. Could be used as trainable vectors.
 
 *Example:*
 ```
@@ -288,7 +288,7 @@ One chapter is devoted to career opportunities for abstractors.
 The need to provide personnel for the information field.
 ```
 
-**Relevance assesments:**<br />In `CISI.REL` query ID is followed by doc-ID followed by 0 int and 0.0 float, every doc has it's own row. Could be used as trainable vectors.
+**Relevance assessments:**<br />In `CISI.REL` query ID is followed by doc-ID followed by 0 int and 0.0 float, every doc has it's own row. Could be used as trainable vectors.
 
 *Example:*
 ```
@@ -313,7 +313,7 @@ The need to provide personnel for the information field.
 
 **Use Cases:**<br />Cross-Connections, Semantic Mapping, Document Clustering
 
-**Description:**<br />Uses same notation as `CACM` and `CISI`. But the relevance evaulation are more detailed and more specific to the query tasks. To Use this collection it is important to note, that the ID of the queries `.I 002` isn't the same the query-ID used in the Relevance Assesments, it seems that the query-IDs come from the order in the file. It could be helpful to update the IDs before working with it to avoid confusion.
+**Description:**<br />Uses same notation as `CACM` and `CISI`. But the relevance evaulation are more detailed and more specific to the query tasks. To Use this collection it is important to note, that the ID of the queries `.I 002` isn't the same the query-ID used in the Relevance Assessments, it seems that the query-IDs come from the order in the file. It could be helpful to update the IDs before working with it to avoid confusion.
 
 **Documents:**<br />`cran.all` holds 1,400 documents, for detailed notation see `CACM`section. In contrast to `CACM` and `CISI` there are no cross-references to other documents listed.
 
@@ -348,7 +348,7 @@ what problems of heat conduction in composite slabs have been solved so
 far .
 ```
 
-**Relevance assesments:**<br />Every row in `cranqrel` holds query ID, relevant document ID and the relevancy code (1,2,3,4 or 5). Every document has it's own row. The relevancy code is defined as follows:
+**Relevance assessments:**<br />Every row in `cranqrel` holds query ID, relevant document ID and the relevancy code (1,2,3,4 or 5). Every document has it's own row. The relevancy code is defined as follows:
 
 1 =  References which are a complete answer to the question.<br />
 2 =  References of a high degree of relevance, the lack of which
@@ -382,7 +382,7 @@ far .
 
 **Use Cases:**<br />Statistical Methods, Topic Clustering
 
-**Description:**<br /> This collection contains 423 articles from the TIME Magazine of the 1960's. With only 423 documents  it's a rather small data set. Problem with the labeling is once again, that the ID used in the relevance assesments aren't identical with the unique text numbers, that mark the start of a document. 
+**Description:**<br /> This collection contains 423 articles from the TIME Magazine of the 1960's. With only 423 documents  it's a rather small data set. Problem with the labeling is once again, that the ID used in the relevance assessments aren't identical with the unique text numbers, that mark the start of a document. 
 
 **Documents:**<br />`TIME.ALL` stores 423 documents, where the first one is labled as `*TEXT 017` and the last one `*TEXT 563`. Every document starts with a line that specifies text number, date and page number. After that line follow sentences of unlabled text. The example is shortend because the articles are quite long.
 
@@ -421,7 +421,7 @@ DEC . 28) . THE ONE ALLIED LEADER WHO UNRESERVEDLY WELCOMED THE POLARIS
 COMMON MARKET .
 ```
 
-**Relevance assesments:**<br />Every row of `TIME.REL` shows query ID followed by relevant docs IDs. The doc IDs are not the same as the text numbers. The IDs are representative for the order in the `TIME.ALL` file.
+**Relevance assessments:**<br />Every row of `TIME.REL` shows query ID followed by relevant docs IDs. The doc IDs are not the same as the text numbers. The IDs are representative for the order in the `TIME.ALL` file.
 
 *Example:*
 ```
@@ -474,7 +474,7 @@ delivery is only slightly dependent upon the maternal level .
 fatty acid levels in placenta and fetus.
 ```
 
-**Relevance assesments:**<br /> In every row of `MED.REL` the query ID is followed by a `0` which seperates it from the relevant doc ID. At the end of every row is a `1`. There is a row for every query ID in combination with the relevant doc ID.
+**Relevance assessments:**<br /> In every row of `MED.REL` the query ID is followed by a `0` which seperates it from the relevant doc ID. At the end of every row is a `1`. There is a row for every query ID in combination with the relevant doc ID.
 
 *Example:*
 ```
@@ -491,7 +491,7 @@ fatty acid levels in placenta and fetus.
 5 0 12 1
 ```
 
-**Other files:**<br />(MED.REL.OLD) - older version of Relevance assesments, here the IDs are followed by `0`and `0.000000` which could be used as trainable embeddings.
+**Other files:**<br />(MED.REL.OLD) - older version of Relevance assessments, here the IDs are followed by `0`and `0.000000` which could be used as trainable embeddings.
 
 **Source:**http://ir.dcs.gla.ac.uk/resources/test_collections/medl/
 
@@ -530,7 +530,7 @@ information specialists or more proficient users of
 What is information science?  Give definitions where possible.
 ```
 
-**Relevance assesments:**<br />The relevance assesments given in `ADI.REL` are in the same format as `CISI` & `CACM`. Query ID followed by relevant doc ID followed by 0 and 0.0. Could be used to create trainable vectors.
+**Relevance assessments:**<br />The relevance assessments given in `ADI.REL` are in the same format as `CISI` & `CACM`. Query ID followed by relevant doc ID followed by 0 and 0.0. Could be used to create trainable vectors.
 
 *Example:*
 ```
@@ -631,7 +631,7 @@ For more detailed describtions see the `VI. Formatting ` section of the `README.
 
 **Queries:**<br />There are no queries, but there are several files which contain the topics, places, people, etc. as strings. See `Other files`.
 
-**Relevance assesments:** -
+**Relevance assessments:** -
 
 
 **Other files:**<br />
@@ -730,7 +730,7 @@ The download link `All Cardiovascular diseases abstracts` contain 50.216 abstrac
 **Queries:** -
 
 
-**Relevance assesments:** -
+**Relevance assessments:** -
 
 **Other files:**`Category Description` - Defines the 23 categries
 
@@ -756,7 +756,7 @@ Since there are many diffrent data sets, there are no examples given for this co
 
 **Queries:** -
 
-**Relevance assesments:** -
+**Relevance assessments:** -
 
 **Other files:** -
 
@@ -781,7 +781,7 @@ The next item is the debate on the report (A5-0107/1999) by Mr Berend, on behalf
 
 **Queries:** -
 
-**Relevance assesments:** -
+**Relevance assessments:** -
 
 **Other files:** -
 
