@@ -12,11 +12,7 @@ module.exports = {
      },
   ],
   benchmark: [
-     {
-     	type: 'category',
-     	label: 'Introduction',
-     	items: ['benchmarks/intro'],//, 'benchmarks/use-cases'],
-     },
+     'benchmarks/intro',
      {
      	type: 'category',
      	label: 'Data Set Comparisson',
