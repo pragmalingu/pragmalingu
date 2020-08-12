@@ -5,7 +5,7 @@ sidebar_label: How to Parse for Elasticsearch
 ---
 
 <div class="myDIV">Hover over me.</div>
-<div class="hide">Here should be some deifinition.</div>
+<div class="hide">Here should be some text.</div>
 
 ## Let's Start
 
@@ -126,14 +126,32 @@ So let's just dive into it!
 
 You can get the corpus from [this link](http://ir.dcs.gla.ac.uk/resources/test_collections/cran/).
 For detailed information about the format of the files, see the PragmaLingu [ Benchmarks](https://pragmalingu.de/docs/benchmarks/overview).
+In Colab you have to add the following lines:
+```python
+!wget http://ir.dcs.gla.ac.uk/resources/test_collections/cran/cran.tar.gz
+!tar -xf cran.tar.gz
+```
 
+After downloading it you should make sure, that you set the paths for every file you want to parse:
+```python
+PATH_TO_CRAN_TXT = '/content/cran.all.1400'
+PATH_TO_CRAN_QRY = '/content/cran.qry'
+PATH_TO_CRAN_REL = '/content/cranqrel'
+```
 
-#### Process the documents
+### Parse for Indexing
 
-First of all we need to download the data and make it accessible in out code. 
-The entries in the Cranfield corpus are only seperated by the lines that start with '\\.' followed by a letter to tell us which part of the entry it is. 
-(Definition for the markers can be found [here](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield)) The only exception is the ID-tag where the ID is in the same row as the tag. We can use this to seperate the text into it's entries as a first step. For easier use we just going to split the text which transforms it into a list of entries. We can do the same for the queries since they follow the same notation:
+Für das Indexieren in Elasticsearch ist zunächst nur die Datei mit den Dokumenten, also dem zu durchsuchenden Text, relevant. In unserem Fall ist das die Datei `cran.all.1400`.
+Praktischerweise beginnt jedes neue Dokument mit dem ID marker '.I', direkt gefolgt von der Id. Deshalb können wir vorerst alle Einträge daran spalten. 
+(Detailed definitions of all the markers can be found [here](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield)) 
 
+Wir erhalten eine Liste aller Einträge:
+
+To create an index in Elasticsearch for the Cranfield corpus we only need the documents file first. In our case this is the file `cran.all.1400`.
+Conveniently, every new document begins with the ID marker '.I', directly followed by the ID. Therefore, we can start by splitting all entries at this marker.
+(Detailed definitions of all the markers can be found [here] (https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield))
+
+We get a list of all the document entries:
 ```python
 ID_marker = re.compile('\.I.')
 
@@ -153,7 +171,9 @@ txt_list = get_data(PATH_TO_CRAN_TXT, ID_marker)
 qry_list = get_data(PATH_TO_CRAN_QRY, ID_marker)
 ```
 
-Afterwards we can try to split the information of the entries in seperate parts of a dictionary. To make the indexing into elsatic search easier we are going to store all documents in one parsebale dictionary of dictionaires:
+As the search queries are also separated by the ID marker, we can split them up in the same step. But we only need the qry_list later.
+
+Afterwards we can split the information of every entry using the other information markers. To make the indexing into elsatic search easier we are going to store all documents in one parsebale dictionary of dictionaires as follows:
 
 ```python
 from collections import defaultdict
@@ -175,7 +195,7 @@ for line in txt_list:
   txt_data[id]['text'] = text
 ```
 
-This corpus is very good notated but we have to be careful, sometimes there are corpora where not every entry has the same information. For example if some entries don't have an athour or no publication date, we have to change the code likewise and try to prepare for this different cases. Most of the times it's not this easy.
+This corpus is very good notated but we have to be careful, sometimes there are corpora where not every entry has the same information. For example if some entries don't have an athour or no publication date, we have to change the code likewise and try to prepare for this different cases. But we're going to look into that later.
 
 After we parsed all our documents we can now parse them to the elasticsearch index one by one:
 
@@ -186,7 +206,12 @@ for ID, doc_data in txt_data.items():
   es.index(index=cran_index, id=ID, body=doc_data)
 ```
 
-#### Process the queries and relevance assessments
+Now that the index is set we can start parsing the evaluation body for the Ranking API.
+
+### Parse for Evaluation Body
+
+**Queries**
+Since we already split the queries into a list in the same step as the documents, we can continue with using the qry_list.
 
 With the queries it's similar to the documents. We start parsing their entries with the ID-tag and continue with splitting every entry into smaller pieces. The queries only consist of the ID and the query, so it's way easier to get that information:
 
@@ -203,7 +228,10 @@ for n in range(0,len(qry_list)-1):
   qry_data[n+1]['question'] = question
 ```
 
-If we don't need the rating that is provided by the Cranfield corpus we can simply parse the file by splitting it into lines and only save the query-ID and the document-ID:
+Counting the queries with the range operator was an easy way to do this, but of course it would also work to split the ID and transform it to an int.
+
+**Relevance Assessments**
+If we don't need the special rating that is provided by the Cranfield corpus (read about that [here](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield)) we can simply parse the file by splitting it into lines and only save the query-ID and the document-ID:
 
 ```python
 cran_rel = defaultdict(list)
@@ -214,7 +242,7 @@ with open (PATH_TO_CRAN_REL,'r') as f:
     cran_rel[int(line[0])].append(line[1])
 ```
 
-Otherwise it would also be possible to parse the file as a numpy array for easier accessability:
+Otherwise it would also be possible to parse the file as a numpy array for easier accessability on the additional ratings:
 
 ```python
 cran_rel_data = open(PATH_TO_CRAN_REL)
@@ -225,7 +253,11 @@ for row in cran_np:
   cran_rel_rat[row[0]].append(tuple(row[1:])) 
 ```
 
-Afterwards we can pass the data into a nested dictionary using this function:
+***Evaluation Body***
+
+Jetzt wo wir alle Daten bereit zum einfüttern in unseren Evaluation Body haben, können wir mittels dieser Funktion einen evaluation body für unsere Ranking API benutzen und unsere evaluation starten:
+
+Now that we have all the data ready, we can feed it to this function to create an evaluation body, with whom we can start evaluating on the Ranking API:
 
 ```python
 cran_index = "cranfield-corpus"
@@ -258,6 +290,16 @@ def create_query_body(query_dict, rel_dict, index_name):
     requests.append(current_request.copy())
   eval_body["requests"] = requests
   return eval_body
+
+# create the eval_body
+cran_create = create_query_body(cran_qry_data, cran_rel, cran_index)
+# dump the body to json and feed it to Ranking API
+cran_eval_body = json.dumps(cran_create)
+cran_res = es.rank_eval(cran_eval_body, cran_index)
+# print the results
+print(json.dumps(cran_res, indent=4, sort_keys=True))
 ```
+
+And that was about it. As already mentioned, it is not always that easy with every corpus. Therefore, in the next section, we would like to introduce you to a few problems that we have encountered and that can save you a lot of time if you consider them in advance.
 
 ## Problems
