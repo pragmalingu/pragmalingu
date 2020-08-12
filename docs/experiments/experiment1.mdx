@@ -23,24 +23,24 @@ At first we implemented a standard Elasticsearch using [multi match query](https
 Here you can see the metrics we choose and an example request of the medline corpus:
 
 ```python
-{   "metric": {
+{
+    "metric": {
         "recall": {
-        "k": 20,
-        "relevant_rating_threshold": 1
+            "k": 20,
+            "relevant_rating_threshold": 1
         }
-      },
+    },
     "request": {
-                "query": {
-                    "multi_match": {
-                        "fields": [
-                            "title",
-                            "text"
-                        ],
-                        "query": "palliation (temporary improvement) of cancer patients by using drugs, x-ray, surgery."
-                    }
-                }
+        "query": {
+            "multi_match": {
+                "fields": [
+                    "title",
+                    "text"
+                ],
+                "query": "palliation (temporary improvement) of cancer patients by using drugs, x-ray, surgery."
             }
-        },
+        }
+    }
 }
 ```
 
@@ -71,16 +71,16 @@ This is how we implemented the stemming analyzer:
 
 ```python
 stemming_analyser = {
-    "filter" : {
-        "eng_stemmer" : {
-        "type" : "stemmer",
-        "name" : "english"
+    "filter": {
+        "eng_stemmer": {
+            "type": "stemmer",
+            "name": "english"
         }
     },
-    "analyzer" : {
-        "default" : {
-            "tokenizer" : "standard",
-            "filter" : ["lowercase", "eng_stemmer"]
+    "analyzer": {
+        "default": {
+            "tokenizer": "standard",
+            "filter": ["lowercase", "eng_stemmer"]
         }
     }
 }
