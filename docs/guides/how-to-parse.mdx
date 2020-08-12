@@ -54,6 +54,60 @@ If you don't want to determine the markers on your own, we have already done all
 
 **What kind of preproccesing would we want to aply?**
 
+Nachdem wir uns klar gemacht haben wie unsere Daten aussehn, können wir uns dem Parsen widmen. Je nachdem wie man die Daten einsetzen möchte muss man natürlich seinen Code so anpassen, dass man am Ende das richtige Format hat.
+
+Um mit Elasticsearch arbeiten zu können muss man zunächst alle Dokumente indexieren, was das bedeutet und wie man eine Elasticsearch Instanz aufsetzt, könnt ihr in unserem [Elasticsearch Guide](https://pragmalingu.de/docs/guides/elasticsearch-lucene-intro) nachlesen.
+
+Zum Indexieren benötigen die Dokumente folgendes Format:
+
+```python
+doc = {
+    'author': 'kimchy',
+    'text': 'Elasticsearch: cool. bonsai cool.',
+    'timestamp': datetime.now(),
+}
+```
+
+
+
+Wir benutzen die Elasticsearch [Ranking API](https://elasticsearch-py.readthedocs.io/en/master/api.html?highlight=_rank_eval#elasticsearch.Elasticsearch.rank_eval) und müssen uns demnach erst einmal ansehen, welches Format und welche Informationen hierfür benötigt werden:
+
+```python
+eval_body = {
+    "requests": [
+        {
+            "id": "\nwhat are the structural and aeroelastic problems associated with flight\nof high speed aircraft .\n",
+            "request": {
+                "query": { "match": { "text": "berlin" }}
+            },
+            "ratings": [
+                { "_index": "pragmalingu-cranfield-corpus", "_id": "184", "rating": 1 },
+                { "_index": "pragmalingu-cranfield-corpus", "_id": "29", "rating": 1 },
+                [...]
+            ]
+        },
+        {
+            "id": "Query_2",
+            "request": {
+                "query": { "match": { "text":  "text": "\nwhat problems of heat conduction in composite slabs have been solved so\nfar .\n"}}
+            },
+            "ratings": [
+                { "_index": "pragmalingu-cranfield-corpus", "_id": "12", "rating": 1 },
+                { "_index": "pragmalingu-cranfield-corpus", "_id": "15", "rating": 1 },
+                [...]
+            ]
+        },
+        [...]
+    ],
+    "metric": {
+      "precision": {
+        "k" : 20,
+        "relevant_rating_threshold": 1,
+        "ignore_unlabeled": "false"
+      }
+   }
+```
+
 Depending on the use case the parsing variates a lot. For our example we are going to use the data for the elasticsearch [Ranking API](https://elasticsearch-py.readthedocs.io/en/master/api.html?highlight=_rank_eval#elasticsearch.Elasticsearch.rank_eval). So let's look at the format it needs.
 (If you're not familiar with elasticsearch yet, look at this guide on '[Elasticsearch](https://pragmalingu.de/docs/guides/elasticsearch-lucene-intro)'.
 
