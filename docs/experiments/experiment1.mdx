@@ -22,7 +22,7 @@ At first we implemented a standard Elasticsearch using [multi match query](https
 
 Here you can see the metrics we choose and an example request of the medline corpus:
 
-```json
+```python
 {   "metric": {
         "recall": {
         "k": 20,
@@ -69,7 +69,7 @@ Yet we expected an improvement to the standard Elasticsearch operator.
 
 This is how we implemented the stemming analyzer:
 
-```json
+```python
 stemming_analyser = {
     "filter" : {
         "eng_stemmer" : {
@@ -88,12 +88,12 @@ stemming_analyser = {
 
 Afterwards we incorporated it into "settings" to index the documents of each corpus with it:
 
-```json
+```python
 settings = {
     "settings": {
         "number_of_shards": 1,
         "number_of_replicas": 0,
-        "analysis": "stemming_analyser"
+        "analysis": stemming_analyser
     }
 }
 
