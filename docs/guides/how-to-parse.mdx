@@ -4,29 +4,55 @@ title: How to Parse Data
 sidebar_label: How to Parse for Elasticsearch
 ---
 
-For experimenting on Natural Language Processing Algorithms it's always necessary to find a quick and efficent way to process the data we're working with.
-It's is an important task and always depends on the use case and what informations we want to extract. We will look at some diffrent examples of parsing depending on what outcome we might want to show how you approach this task.
+<div class="myDIV">Hover over me.</div>
+<div class="hide">Here should be some deifinition.</div>
 
-So first of all we need to answers this three questions:
-1. How **does** the Data look like?
-2. How do we **want** the Data to look like?
-3. What kind of **preproccesing** would we want to aply?
+## Let's Start
 
-## Parsing without Preprocessing
+In order to start experimenting and evaluating different Natural Language Processing (NLP) methods, it is necessary to bring the data you want to use into a suitable form.
 
-For the first example we will only focus on parsing without any preprocessing such as tokenization, stemming, lemmatizing, ignoring stop words, etc. 
-Therefore we will only focus on the first two questions.
+Therefore you should start by answering the following three questions:
+1. How ** does ** the data look like?
+2. How do we ** want ** the data to look like?
+3. What kind of ** preproccesing ** would we want to aply?
+
+Since we are mainly working with Elasticsearch by trying to improve the search results, the third question is not relevant for us. Preprocessing such as tokenization, stemming, lemmatizing, ignoring stop words, etc. will always be applied to raw data. Since Elasticsearch works with automatic tokenization we won't cover tokenization at all. Preproccesing will be excluded for the time being. If you think it would be interested to expand our guide in that way, please don't hesitate [to write us about it](../about/team.md).
+
+The code in the guide is prorgammed in Python3, since Python offers the best build-in methods for language processing out of all programming languages.
+
+## Analyze Data 
 
 **How does the Data look like?**
 
-For this example you can just use our [Data Set Overview](https://https://pragmalingu.de/docs/benchmarks/data-comparisson) to quickly see how the Data Sets are build. Since we already analyzed them in detail, we won't repeat that in this guide as well. We are going to use the [Cranfield Corpus](https://https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield) for this guide as an example.
+Before you can start parsing, you have to take a closer look at the data you want to parse.
 
-Normally you would have to download the Data, open some files and look at how they are structed. 
-To have an easy starting point to parse it's important to locate the markers that delimit parts of the Data, which we already did in analyzing [Cranfield Corpus](https://https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield). 
+It is relevant to determine which information is offered to you. Is it just text you're parsing? Is there additional information such as author, title, date or something similar? If there is additional information, is it labeled seperatly or is it just within the text?
 
-A quick overview of all the notations for our Data Sets can be found [here](https://pragmalingu.de/docs/benchmarks/overview).
+The most difficult to parse are texts that do not provide any information about the parts of the data or that consist exclusively of non-stop text.
 
-**How do we want the Data to look like?**
+Since we decided to data sets that are specifically provided for NLP tasks we knew they would have a certain structure. So we only had to deal with the different characteristics of the data sets not with structuring it in the first place.
+
+We downloaded all the data sets from the [University of Glasgow](http://ir.dcs.gla.ac.uk/resources/test_collections/), looked at them in detail and wrote detailed descriptions on the information each corpus provides.
+So we were for example able to determine that the corpora [Cranfield](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield), [CACM](https://pragmalingu.de/docs/benchmarks/data-comparisson#cacm), [CISI](https://pragmalingu.de/docs/benchmarks/data-comparisson#cisi) and [ADI](https://pragmalingu.de/docs/benchmarks/data-comparisson#adi) use very similar notations. The document text is always marked with a line that only contains ".W" at the beginning:
+
+```
+.W
+one-dimensional transient heat conduction into a double-layer
+slab subjected to a linear heat input for a small time
+internal .
+analytic solutions are presented for the transient heat
+conduction in composite slabs exposed at one surface to a
+triangular heat rate .  this type of heating rate may occur, for
+example, during aerodynamic heating .
+```
+
+In contrast to the text, the additional information can thus be identified very clearly with the other markers provided.
+
+If you don't want to determine the markers on your own, we have already done all the work by analyzing every single [Data Set](../benchmarks/data-comparisson.md) and even wrote an [overview table](../benchmarks/overview.md).
+
+## Parse the hell out of it
+
+**What kind of preproccesing would we want to aply?**
 
 Depending on the use case the parsing variates a lot. For our example we are going to use the data for the elasticsearch [Ranking API](https://elasticsearch-py.readthedocs.io/en/master/api.html?highlight=_rank_eval#elasticsearch.Elasticsearch.rank_eval). So let's look at the format it needs.
 (If you're not familiar with elasticsearch yet, look at this guide on '[Elasticsearch](https://pragmalingu.de/docs/guides/elasticsearch-lucene-intro)'.
@@ -39,7 +65,7 @@ We can distinguish between the *documents* which will be stored in our [elastics
 
 The format of the *documents* for our elasticsearch index should have this json format, which can easly be done by saving every document into a simple dictionary or json:
 
-```
+```python
 doc = {
     'author': 'kimchy',
     'text': 'Elasticsearch: cool. bonsai cool.',
@@ -49,7 +75,7 @@ doc = {
 
 The *queries* and *relevance assessments* should be passed into this format for the Ranking API:
 
-```
+```python
 eval_body = {
     "requests": [
         {
@@ -87,7 +113,9 @@ eval_body = {
 
 In Python this is basically a nested dictionary which can be dumped into a json after it's filled up. Looks complicated at first, but let's do it step by step. 
 
-### Example: Cranfield Corpus
+### Examples and Problems
+
+#### Cranfield Corpus
 
 You can get the corpus from [this link](http://ir.dcs.gla.ac.uk/resources/test_collections/cran/).
 For detailed information about the format of the files, see the PragmaLingu [ Benchmarks](https://pragmalingu.de/docs/benchmarks/overview).
@@ -98,10 +126,7 @@ First of all we need to download the data and make it accessible in out code.
 The entries in the Cranfield corpus are only seperated by the lines that start with '\\.' followed by a letter to tell us which part of the entry it is. 
 (Definition for the markers can be found [here](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield)) The only exception is the ID-tag where the ID is in the same row as the tag. We can use this to seperate the text into it's entries as a first step. For easier use we just going to split the text which transforms it into a list of entries. We can do the same for the queries since they follow the same notation:
 
-<!--DOCUSAURUS_CODE_TABS-->
-<!--Python-->
-
-```
+```python
 ID_marker = re.compile('\.I.')
 
 def get_data(PATH_TO_FILE, marker):
@@ -119,11 +144,10 @@ def get_data(PATH_TO_FILE, marker):
 txt_list = get_data(PATH_TO_CRAN_TXT, ID_marker)
 qry_list = get_data(PATH_TO_CRAN_QRY, ID_marker)
 ```
-<!--END_DOCUSAURUS_CODE_TABS-->
 
 Afterwards we can try to split the information of the entries in seperate parts of a dictionary. To make the indexing into elsatic search easier we are going to store all documents in one parsebale dictionary of dictionaires:
 
-```
+```python
 from collections import defaultdict
 import re
 
@@ -147,7 +171,7 @@ This corpus is very good notated but we have to be careful, sometimes there are 
 
 After we parsed all our documents we can now parse them to the elasticsearch index one by one:
 
-```
+```python
 cran_index = "cranfield-corpus"
 
 for ID, doc_data in txt_data.items():
@@ -158,7 +182,7 @@ for ID, doc_data in txt_data.items():
 
 With the queries it's similar to the documents. We start parsing their entries with the ID-tag and continue with splitting every entry into smaller pieces. The queries only consist of the ID and the query, so it's way easier to get that information:
 
-```
+```python
 from collections import defaultdict
 import re
 
@@ -173,7 +197,7 @@ for n in range(0,len(qry_list)-1):
 
 If we don't need the rating that is provided by the Cranfield corpus we can simply parse the file by splitting it into lines and only save the query-ID and the document-ID:
 
-```
+```python
 cran_rel = defaultdict(list)
 
 with open (PATH_TO_CRAN_REL,'r') as f:
@@ -184,7 +208,7 @@ with open (PATH_TO_CRAN_REL,'r') as f:
 
 Otherwise it would also be possible to parse the file as a numpy array for easier accessability:
 
-```
+```python
 cran_rel_data = open(PATH_TO_CRAN_REL)
 cran_np = np.loadtxt(cran_rel_data, dtype=int)
 
@@ -195,7 +219,7 @@ for row in cran_np:
 
 Afterwards we can pass the data into a nested dictionary using this function:
 
-```
+```python
 cran_index = "cranfield-corpus"
 
 def create_query_body(query_dict, rel_dict, index_name):
@@ -228,4 +252,3 @@ def create_query_body(query_dict, rel_dict, index_name):
   return eval_body
 ```
 
-## Parsing with Preprocessing
