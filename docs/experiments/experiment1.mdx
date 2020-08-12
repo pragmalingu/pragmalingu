@@ -7,43 +7,31 @@ sidebar_label: Stemming
 ---
 import useBaseUrl from '@docusaurus/useBaseUrl'
 
-For our first experiment we connected a Google CoLab Notebook to our Elasticsearch instance and started comparing different build-in search metrics of Elasticsearch.
+For our first experiment we connected a Google CoLab Notebook to our Elasticsearch instance and compared the standard Elasticsearch operator with two build-in search metrics.
 
 Therefore, we parsed [these 8 free available corpora](http://ir.dcs.gla.ac.uk/resources/test_collections/) hosted by the University of Glasgow and feed them to the Elasticsearch [Ranking API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html). With [our parsing guide](https://pragmalingu.de/docs/guides/how-to-parse) you can try this yourself or you can look at our [Data Set Notebooks.]()
 
-We compared the following Elasticsearch build-in operators:
-* [Match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html) 
-* [Simple query string](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)
-* [Standard english stemmer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html)
+These are the two build-in methods we compared to the standard Elasticsearch operator:
 
+* [Standard English Stemmer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html)
+* [Hunspell Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html)
 
-## Match operator
+## Standard Elasticsearch
 
-The [match query operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html) is the standard search operator in Elasticsearch. It starts a full-text search in the given fields of the documents and comes with a standard tokenization and standard analyzer.
+At first we implemented a standard Elasticsearch using [multi match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) which searches through the field 'text' and 'title'. We only looked at the first 20 retrieved documents when messuring precision and recall. 
 
-Here is an example request that searches with the match query operator for the query string in the 'text' field of the medline corpus:
+Here you can see the metrics we choose and an example request of the medline corpus:
 
-```
-"request": {
+```Json
+{   "metric": {
+        "recall": {
+        "k": 20,
+        "relevant_rating_threshold": 1
+        }
+      },
+    "request": {
                 "query": {
-                    "match": {
-                        "text": "palliation (temporary improvement) of cancer patients by using drugs, x-ray, surgery."
-                    }
-                }
-            }
-        },
-```
-
-## Simple query string operator
-
-The [simple query string](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) operator uses a parser with a limited fault-tolerant syntax to search for the given query string in the given fields. It splits and analyzes the query terms separately for the search before returning the relevant documents. It ignores invalid parts of the query string. 
-
-Here is an example request with the simple query string operator searching for the query in the 'text' and 'title' fields of the medline corpus documents:
-
-```
-"request": {
-                "query": {
-                    "simple_query_string": {
+                    "multi_match": {
                         "fields": [
                             "title",
                             "text"
@@ -53,7 +41,14 @@ Here is an example request with the simple query string operator searching for t
                 }
             }
         },
+}
 ```
+|  standard search |   cranfield |   CISI |   ADI |   medline |   CACM |   LISA |   Time |   NPL |
+|------------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
+| recall           |        0.15 |  0.103 | 0.328 |     0.032 |  0.034 |  0.337 |  0.772 | 0.233 |
+| precision        |       0.056 |  0.154 | 0.074 |     0.031 |  0.022 |  0.157 |  0.15  | 0.217 |
+| f1-score         |       0.081 |  0.123 | 0.12  |     0.032 |  0.027 |  0.214 |  0.251 | 0.225 |
+
 
 ## Stemming
 
@@ -69,7 +64,7 @@ The *stemmer token filter* provides different languages and since our corpora wh
 
 We implemented the stemming analyzer:
 
-```
+```Json
 stemming_analyser = {
     "filter" : {
         "eng_stemmer" : {
@@ -88,7 +83,7 @@ stemming_analyser = {
 
 And incorporated it into the settings for indexing the documents of each corpus:
 
-```
+```Json
 settings = {
     "settings": {
         "number_of_shards": 1,
@@ -100,6 +95,12 @@ settings = {
 stemming_prefix = "stemming-"
 ```
 
+| stemming search |   cranfield |   CISI |   ADI |   medline |   CACM |   LISA |   Time |   NPL |
+|-----------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
+| recall          |        0.15 |  0.121 | 0.254 |     0.032 |  0.044 |  0.393 |  0.78  | 0.285 |
+| precision       |       0.057 |  0.169 | 0.063 |     0.031 |  0.028 |  0.191 |  0.152 | 0.258 |
+| f1-score        |       0.082 |  0.141 | 0.101 |     0.032 |  0.034 |  0.257 |  0.255 | 0.271 |
+
 ## Results
 
 For our result we run those three methods on our corpora. We messured Recall, Precision and F1-Score.
@@ -108,31 +109,15 @@ For our result we run those three methods on our corpora. We messured Recall, Pr
 **Recall**
 <img alt="Recall" src={useBaseUrl('img/Recall.png')} />
 
-| corpus                    |   cranfield |   CISI |   ADI |   medline |   CACM |   LISA |   Time |   NPL |
-|---------------------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| match query               |       0.141 |  0.112 | 0.295 |     0.032 |  0.035 |  0.313 |  0.772 | 0.233 |
-| simple query string query |       0.143 |  0.101 | 0.254 |     0.032 |  0.048 |  0.406 |  0.772 | 0.233 |
-| stemming                  |       0.145 |  0.122 | 0.297 |     0.032 |  0.044 |  0.383 |  0.78  | 0.285 |
 
 
 **Precision**
 <img alt="Precision" src={useBaseUrl('img/Precision.png')} />
 
-| corpus                    |   cranfield |   CISI |   ADI |   medline |   CACM |   LISA |   Time |   NPL |
-|---------------------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| match query               |       0.053 |  0.154 | 0.072 |     0.031 |  0.023 |  0.143 |  0.15  | 0.217 |
-| simple query string query |       0.053 |  0.154 | 0.068 |     0.031 |  0.026 |  0.179 |  0.15  | 0.217 |
-| stemming                  |       0.056 |  0.174 | 0.074 |     0.031 |  0.028 |  0.181 |  0.152 | 0.258 |
 
 
 **F1-Score**
 <img alt="F1-Score" src={useBaseUrl('img/F1-Score.png')} />
-
-| corpus                    |   cranfield |   CISI |   ADI |   medline |   CACM |   LISA |   Time |   NPL |
-|---------------------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| match query               |       0.077 |  0.129 | 0.116 |     0.032 |  0.028 |  0.196 |  0.251 | 0.225 |
-| simple query string query |       0.077 |  0.122 | 0.107 |     0.032 |  0.034 |  0.248 |  0.251 | 0.225 |
-| stemming                  |       0.081 |  0.143 | 0.118 |     0.032 |  0.034 |  0.246 |  0.255 | 0.271 |
 
 
 
