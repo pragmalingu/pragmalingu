@@ -12,9 +12,9 @@ sidebar_label: How to Parse for Elasticsearch
 In order to start experimenting and evaluating different Natural Language Processing (NLP) methods, it is necessary to bring the data you want to use into a suitable form.
 
 Therefore you should start by answering the following three questions:
-1. How ** does ** the data look like?
-2. How do we ** want ** the data to look like?
-3. What kind of ** preproccesing ** would we want to aply?
+1. What ** does ** the data look like?
+2. How do we ** want ** the data to look?
+3. What kind of ** preproccesing ** would we want to aply first?
 
 Since we are mainly working with Elasticsearch by trying to improve the search results, the third question is not relevant for us. Preprocessing such as tokenization, stemming, lemmatizing, ignoring stop words, etc. will always be applied to raw data. Since Elasticsearch works with automatic tokenization we won't cover tokenization at all. Preproccesing will be excluded for the time being. If you think it would be interested to expand our guide in that way, please don't hesitate [to write us about it](../about/team.md).
 
@@ -22,7 +22,7 @@ The code in the guide is prorgammed in Python3, since Python offers the best bui
 
 ## Analyze Data 
 
-**How does the Data look like?**
+**What does the Data look like?**
 
 Before you can start parsing, you have to take a closer look at the data you want to parse.
 
@@ -50,27 +50,30 @@ In contrast to the text, the additional information can thus be identified very 
 
 If you don't want to determine the markers on your own, we have already done all the work by analyzing every single [Data Set](../benchmarks/data-comparisson.md) and even wrote an [overview table](../benchmarks/overview.md).
 
-## Parse the hell out of it
+**How do we want the data to look?**
 
-**What kind of preproccesing would we want to aply?**
+After we analyzed our data properly, we can move on to the parsing part. Depending on how you want to use the data, you have to adapt your code for the right format output.
 
-Nachdem wir uns klar gemacht haben wie unsere Daten aussehn, können wir uns dem Parsen widmen. Je nachdem wie man die Daten einsetzen möchte muss man natürlich seinen Code so anpassen, dass man am Ende das richtige Format hat.
+In order to be able to work with Elasticsearch we first have to index all documents. You can read about what that exactly means and how to set up an Elasticsearch instance in our [Elasticsearch Guide](../guides/elastic-setup.md).
 
-Um mit Elasticsearch arbeiten zu können muss man zunächst alle Dokumente indexieren, was das bedeutet und wie man eine Elasticsearch Instanz aufsetzt, könnt ihr in unserem [Elasticsearch Guide](https://pragmalingu.de/docs/guides/elasticsearch-lucene-intro) nachlesen.
-
-Zum Indexieren benötigen die Dokumente folgendes Format:
+The documents we want to index need the following format:
 
 ```python
 doc = {
     'author': 'kimchy',
     'text': 'Elasticsearch: cool. bonsai cool.',
-    'timestamp': datetime.now(),
+    'title': 'Cool things',
 }
 ```
+Further information such as author, title, publication date, etc. can be added as searchable fields using the format ```'field_name': 'content'```. In order to improve the search results later on, it is definitely helpful to include as much additional information as possible.
 
+In order to be able to index all documents in one go, we parsed our documents into a dictionary of dictionaries, which can easily be iterated later on.
+The details will be covered in the parsing section.
 
+For evaluation we use the [Elasticsearch Ranking API](https://elasticsearch-py.readthedocs.io/en/master/api.html?highlight=_rank_eval#elasticsearch.Elasticsearch.rank_eval). Therefore, we need some search queries and a list of documents, that are relevant for the queries, called relevance assessments. A description of how to use the Elasticsearch Ranking API can be found in our [Ranking API Guide](../guides/ranking-api.mdx).
+The search queries, relevance assessments and the index name of the indexed documents are feed to the Ranking API as the evaluation body.
 
-Wir benutzen die Elasticsearch [Ranking API](https://elasticsearch-py.readthedocs.io/en/master/api.html?highlight=_rank_eval#elasticsearch.Elasticsearch.rank_eval) und müssen uns demnach erst einmal ansehen, welches Format und welche Informationen hierfür benötigt werden:
+The evaluation body requires this form, in Python we simply used nested dictionaries:
 
 ```python
 eval_body = {
@@ -108,71 +111,22 @@ eval_body = {
    }
 ```
 
-Depending on the use case the parsing variates a lot. For our example we are going to use the data for the elasticsearch [Ranking API](https://elasticsearch-py.readthedocs.io/en/master/api.html?highlight=_rank_eval#elasticsearch.Elasticsearch.rank_eval). So let's look at the format it needs.
-(If you're not familiar with elasticsearch yet, look at this guide on '[Elasticsearch](https://pragmalingu.de/docs/guides/elasticsearch-lucene-intro)'.
+## Parse Data
 
-The Cranfield Corpus offers us three diffrent files:
-The *documents*, the *queries* and the *relevance assessments*.
-(You can read the details [here](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield))
-
-We can distinguish between the *documents* which will be stored in our [elasticsearch index](https://www.elastic.co/de/blog/what-is-an-elasticsearch-index) and the *queries* & *relevance assessments*, that will be feed as the evaluation body to the [Ranking API](https://elasticsearch-py.readthedocs.io/en/master/api.html?highlight=_rank_eval#elasticsearch.Elasticsearch.rank_eval) in order to get some result.
-
-The format of the *documents* for our elasticsearch index should have this json format, which can easly be done by saving every document into a simple dictionary or json:
-
-```python
-doc = {
-    'author': 'kimchy',
-    'text': 'Elasticsearch: cool. bonsai cool.',
-    'timestamp': datetime.now(),
-}
-```
-
-The *queries* and *relevance assessments* should be passed into this format for the Ranking API:
-
-```python
-eval_body = {
-    "requests": [
-        {
-            "id": "\nwhat are the structural and aeroelastic problems associated with flight\nof high speed aircraft .\n",
-            "request": {
-                "query": { "match": { "text": "berlin" }}
-            },
-            "ratings": [
-                { "_index": "pragmalingu-cranfield-corpus", "_id": "184", "rating": 1 },
-                { "_index": "pragmalingu-cranfield-corpus", "_id": "29", "rating": 1 },
-                [...]
-            ]
-        },
-        {
-            "id": "Query_2",
-            "request": {
-                "query": { "match": { "text":  "text": "\nwhat problems of heat conduction in composite slabs have been solved so\nfar .\n"}}
-            },
-            "ratings": [
-                { "_index": "pragmalingu-cranfield-corpus", "_id": "12", "rating": 1 },
-                { "_index": "pragmalingu-cranfield-corpus", "_id": "15", "rating": 1 },
-                [...]
-            ]
-        },
-        [...]
-    ],
-    "metric": {
-      "precision": {
-        "k" : 20,
-        "relevant_rating_threshold": 1,
-        "ignore_unlabeled": "false"
-      }
-   }
-```
-
-In Python this is basically a nested dictionary which can be dumped into a json after it's filled up. Looks complicated at first, but let's do it step by step. 
-
-### Examples and Problems
+Now that we've figured out what the data looks like and how we want it to be in the end, we can finally get started with parsing.
+Since it's easier to show parsing by using a practical example, we picked one of our [8 free avaiable Data Sets](../benchmarks/overview.md). 
+We chose the [Cranfield Corpus](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield). On the one hand, because it uses the same notation as CACM, CISI and ADI, therefore the code can easily be adapted to parse the other corpora as well. 
+(That's the reason we also started parsing the Cranfield corpus for our experiments) 
+On the other hand, it contains a lot of additional information and at the same time didn't cause major problems while parsing. 
+So it seems to be a perfect example to show you our approach step by step. 
+In the last section, we will also talk about some of the problems we had while parsing the other corpora.
+So let's just dive into it!
 
 #### Cranfield Corpus
 
 You can get the corpus from [this link](http://ir.dcs.gla.ac.uk/resources/test_collections/cran/).
 For detailed information about the format of the files, see the PragmaLingu [ Benchmarks](https://pragmalingu.de/docs/benchmarks/overview).
+
 
 #### Process the documents
 
@@ -306,3 +260,4 @@ def create_query_body(query_dict, rel_dict, index_name):
   return eval_body
 ```
 
+## Problems
