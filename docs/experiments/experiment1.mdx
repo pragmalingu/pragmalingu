@@ -7,44 +7,44 @@ sidebar_label: Stemming
 ---
 import useBaseUrl from '@docusaurus/useBaseUrl'
 
-For our first experiment we connected a Google Colab Notebook to our Elasticsearch instance and compared the standard Elasticsearch operator with two build-in search metrics.
+For our first experiment we connected a Google Colab Notebook to our Elasticsearch instance and compared the standard Elasticsearch operator with two built-in search metrics.
 
-Therefore, we parsed [these 8 free available corpora](http://ir.dcs.gla.ac.uk/resources/test_collections/) hosted by the University of Glasgow and feed them to the Elasticsearch [Ranking API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html). With [our parsing guide](https://pragmalingu.de/docs/guides/how-to-parse) you can try this yourself or you can look at our [Data Set Notebooks.]()
+Therefore, we parsed [these 8 free available corpora](http://ir.dcs.gla.ac.uk/resources/test_collections/) hosted by the University of Glasgow and feed them to the Elasticsearch [Ranking Evaluation API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html). With [our parsing guide](https://pragmalingu.de/docs/guides/how-to-parse) you can try this yourself or you can look at our [Data Set Notebooks.]()
 
-These are the two build-in methods we compared to the standard Elasticsearch operator:
+These are the two built-in methods that we compared to the [standard Elasticsearch analyzer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html):
 
 * [Standard English Stemmer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html)
 * [Hunspell Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html)
 
 ## Standard Elasticsearch
 
-At first we implemented a standard Elasticsearch using [multi match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) which searches through the field 'text' and 'title'. We only looked at the first 20 retrieved documents when messuring precision and recall. 
+At first we evaluated the standard analyzer using a [multi match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) which searches through the field 'text' and 'title'. We only looked at the first 20 retrieved documents and measured precision and recall. 
 
 Here you can see the metrics we choose and an example request of the medline corpus:
 
 ```python
-{   "metric": {
+{
+    "metric": {
         "recall": {
-        "k": 20,
-        "relevant_rating_threshold": 1
+            "k": 20,
+            "relevant_rating_threshold": 1
         }
-      },
+    },
     "request": {
-                "query": {
-                    "multi_match": {
-                        "fields": [
-                            "title",
-                            "text"
-                        ],
-                        "query": "palliation (temporary improvement) of cancer patients by using drugs, x-ray, surgery."
-                    }
-                }
+        "query": {
+            "multi_match": {
+                "fields": [
+                    "title",
+                    "text"
+                ],
+                "query": "palliation (temporary improvement) of cancer patients by using drugs, x-ray, surgery."
             }
-        },
+        }
+    }
 }
 ```
 
-These are results without any further processing of the data other than the standards of Elasticsearch:
+These are the results without any further processing of the data using the default analyzer of Elasticsearch:
 
 |  standard search |   cranfield |   CISI |   ADI |   medline |   CACM |   LISA |   Time |   NPL |
 |------------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
@@ -54,39 +54,39 @@ These are results without any further processing of the data other than the stan
 
 ## Stemming
 
-Elasticsearch provides two build-in stemming methods. 
-First of, is the algorithmic stemming. It applies a series of rules to each word to reduce them, called [stemmer token filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html) in Elasticsearch. 
+Elasticsearch provides two built-in stemming methods. 
+First of, is the algorithmic stemming, it applies a series of rules to each word to reduce them to their base form or stem. In Elasticsearch this can be achieved with the [stemmer token filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html). 
 
-Second of, the dictionary stemming replaces unstemmed words with stemmed variants from a provided dictionary. The Elasticsearch build-in conterpart is called [hunspell token filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html). 
+Second of, the dictionary stemming, which replaces unstemmed words with stemmed variants from a provided dictionary. The Elasticsearch built-in counterpart is called [hunspell token filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html). 
 
 ### Stemmer Token Filter
 
 The *stemmer token filter* supports different languages and since our corpora where all in English we used the English stemmer for our experiment.
-Since it needs less memory and is way faster than a dictionary approach, in most cases it's the better way to go with this one. The implementation in Elasticsearch is also not very complicated and can be done very quickly.
-Irregular words or names could cause strange forms that doesn't give any helpful information since it is only rule based.
+It's the better choice in most cases because it needs less memory and is considered faster than a dictionary approach. It's usage in Elasticsearch is also not complicated and can be configured quickly.
+But irregular words or names could result in strange forms that don't give any helpful information since it is only rule-based.
 
-Yet we expected an improvement to the standard Elasticsearch operator.
+Yet we expected an improvement over the standard Elasticsearch analyzer.
 
-This is how we implemented the stemming analyzer:
+This is how we configured the stemming analyzer:
 
 ```python
 stemming_analyser = {
-    "filter" : {
-        "eng_stemmer" : {
-        "type" : "stemmer",
-        "name" : "english"
+    "filter": {
+        "eng_stemmer": {
+            "type": "stemmer",
+            "name": "english"
         }
     },
-    "analyzer" : {
-        "default" : {
-            "tokenizer" : "standard",
-            "filter" : ["lowercase", "eng_stemmer"]
+    "analyzer": {
+        "default": {
+            "tokenizer": "standard",
+            "filter": ["lowercase", "eng_stemmer"]
         }
     }
 }
 ```
 
-Afterwards we incorporated it into "settings" to index the documents of each corpus with it:
+Afterwards we added it to the "settings" of our indexes where we stored the documents of each corpus:
 
 ```python
 settings = {
@@ -106,12 +106,12 @@ stemming_prefix = "stemming-"
 | precision       |       0.057 |  0.169 | 0.063 |     0.031 |  0.028 |  0.191 |  0.152 | 0.258 |
 | f1-score        |       0.082 |  0.141 | 0.101 |     0.032 |  0.034 |  0.257 |  0.255 | 0.271 |
 
-Surprisingly, the results aren't as different as expected with using the *stemmer token filter*.
+Surprisingly, the improvements over the standard analyzer are marginal.
 
 ### Hunspell Token Filter
 
-Although the * hunspell token filter * from Elasticsearch recognizes irregular words and should therefore preprocess them better, we must keep in mind that words that do not appear in the dictionary are not processed. But in addition, a large dictionary naturally also takes up significantly more time and memory.
-Since dictionaries can never be fully complete, we didn't expect a big change int the results comparing to the * stemmer token filter *. 
+Although the *hunspell token filter* from Elasticsearch recognizes irregular words and should therefore preprocess them better, we must keep in mind that words that do not appear in the dictionary are not processed. But in addition, a large dictionary naturally also takes up significantly more time and memory.
+Since dictionaries can never be fully complete, we didn't expect a big change int the results comparing to the *stemmer token filter *. 
 
 The procedure of the * hunspell token filter * is similar to a lemmatization, but the words are not always reduced to the lemma with hunspell. For example, with the word "lovingly" the stemmer returns "loving" where the lemma would be "love". So the meaning of the words is not sufficiently addressed.
 
