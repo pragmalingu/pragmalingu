@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
@@ -64,6 +64,18 @@ function ProjectTitle() {
 
 
 function Home() {
+  useEffect (() => {
+    const scr = document.createElement('script');
+    scr.innerHTML = `new Crate({
+      server: '731151531818352770', // dima-no-dimo's server
+      channel: '731151532782780499' // #general
+    })`;  // => paste here your discord server data
+    scr.setAttribute('src', 'https://cdn.jsdelivr.net/npm/@widgetbot/crate@3');
+    scr.setAttribute('async', true);
+    scr.setAttribute('defer', true)
+    document.body.appendChild(scr)
+  }, [])
+
   const context = useDocusaurusContext();
   const {siteConfig = {}} = context;
   return (
