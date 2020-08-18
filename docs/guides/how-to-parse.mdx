@@ -303,3 +303,245 @@ print(json.dumps(cran_res, indent=4, sort_keys=True))
 And that was about it. As already mentioned, it is not always that easy with every corpus. Therefore, in the next section, we would like to introduce you to a few problems that we have encountered and that can save you a lot of time if you consider them in advance.
 
 ## Problems
+
+Im Folgenden werde ich einige der auffälligsten Probleme aus den 8 geparsten corpora kurz vorstellen, die in dieser Form auch in anderen Corpora auftauchen können und die aufzeigen, wie wichtig es ist, die Daten vorher gründlich zu sichten.
+
+### Splitted Files
+
+Das war zwar nur in einem der Corpora der Fall, im LISA, und es hat sich sehr schnell lösen lassen, aber aufgeteilte Dokumente können zu Mehraufwand führen und sollte vorher gesichtet werden. Sonst kann es passieren, dass nciht alle Daten im Parsen berücksichtigt werden.
+Im LISA corpus waren die 6004 document entries auf 14 verschiedene Files aufgeteilt.
+
+### Information Inconsistencies
+Bei ADI, CACM and CISI, die rein von der Notation dem Cranfield sehr ähnlich sein sollten, haben sich beim Parsen leider einige Hürden ergeben. Die größte Hürde waren die uneinheitlichen Informationen innerhalb der Einträge in den document files.
+Nachdem wir zunächst davon ausgegangen sind, dass wir bei jedem Eintrag eine bestimmte Menge an Informationen haben, mussten wir schnell feststellen, dass es manchmal z.B. mehr als einen Autor-Tag pro Eintrag gab oder manchmal dieser Tag vollkommen fehlte.
+Wie das bei den Datensätzen im Detail ausgesehen hat werden wir uns jetzt genauer anschauen:
+
+Der ADI corpus ist mit 83 Einträgen von allen der kleinste und somit den Aufwand wahrscheinlich am wenigsten Wert. Dennoch haben wir ihn uns der Vollständigkeithalber genauer angeschaut.
+Im ADI sollte jeder Eintrag die Informationen ID (.I), Titel (.T), Text (.W) und Autor (.A) besitzen. Leider fehlt in einigen Einträgen der Autor-Tag (.A), weswegen der Code beim Parsen schnell einen Fehler ausgeworfen hat. Um dieses Problem zu umgehen, haben wir nach dem Abspeichern der ID eine if-Abfrage nach dem Autor eingebaut:
+
+```python
+adi_title_start = re.compile('\.T')
+adi_author_start = re.compile('\.A')
+adi_text_start = re.compile('\.W')
+
+# process the document data
+
+adi_txt_data = defaultdict(dict)
+
+for line in adi_txt_list:
+  entries = re.split(adi_title_start,line,1)
+  id = entries[0].strip()
+  no_id = entries[1]
+  if len(re.split(adi_author_start, no_id,1)) > 1:
+    no_id_entries = re.split(adi_author_start, no_id,1)
+    adi_txt_data[id]['title'] = no_id_entries[0]
+    no_title = no_id_entries[1]
+    no_title_entries = re.split(adi_text_start, no_title)
+    adi_txt_data[id]['author'] = no_title_entries[0]
+    adi_txt_data[id]['text'] = no_title_entries[1]
+  else:
+    no_id_entries = re.split(adi_text_start, no_id)
+    adi_txt_data[id]['title'] = no_id_entries[0]
+    adi_txt_data[id]['text'] = no_id_entries[1]
+```
+Ein ähnliches Problem hat sich im CACM wiedergefunden. Hier hätten in jedem Eintrag die Informationen ID (.I), title (.T), text (.W), publication date (.B), author (.A), information when entry was added (.N) und cross-references (.X) abgespeichert gewesen sein. Allerdings war nicht jedem Eintrag ein Text und ein Autor zugeordnet. Da aber die Einträge ohne Text und die Einträge ohne Autor nicht die gleichen waren, mussten wir für das Parsen dieses corpus sogar zweimal zwei if-Abfragen einbauen:
+```python
+# process text file
+
+cacm_chunk_title = re.compile('\.[T]\n')
+cacm_chunk_txt = re.compile('\n\.W\n') # not enough
+cacm_chunk_txt_pub = re.compile('\.[W,B]')
+cacm_chunk_publication = re.compile('\.[B]\n')
+cacm_chunk_author = re.compile('^\.[A]\n', re.MULTILINE)
+cacm_chunk_author_add_cross = re.compile('^\.[A,N,X]\n',re.MULTILINE) # not enough
+cacm_chunk_add_cross = re.compile('\.[B,N,X]\n')
+
+# process the document data
+
+cacm_txt_data = defaultdict(dict)
+
+for line in cacm_txt_list:
+  entries= re.split(cacm_chunk_title,line)
+  id = entries[0].strip() #save id
+  no_id = entries[1]
+
+  if len(re.split(cacm_chunk_txt, no_id)) == 2: # is there text
+    no_id_entries = re.split(cacm_chunk_txt_pub, no_id,1)
+    cacm_txt_data[id]['title'] = no_id_entries[0].strip() # save title
+    cacm_txt_data[id]['text'] = no_id_entries[1].strip() # save text
+    no_title_txt = no_id_entries[1]
+
+    if len(re.split(cacm_chunk_author, no_title_txt)) == 2: # is there a auhtor
+      no_title_entries = re.split(cacm_chunk_author_add_cross, no_title_txt)
+      cacm_txt_data[id]['publication_date'] = no_title_entries[0].strip() # save publication date
+      cacm_txt_data[id]['author'] = no_title_entries[1].strip() # save athor
+      cacm_txt_data[id]['add_date'] = no_title_entries[2].strip() # save add date
+      cacm_txt_data[id]['cross-references'] = no_title_entries[3].strip() # save cross-references
+
+    else:
+      no_title_entries = re.split(cacm_chunk_publication, no_title_txt)
+      cacm_txt_data[id]['publication_date'] = no_title_entries[0].strip() # save publication date
+      cacm_txt_data[id]['add_date'] = no_title_entries[1].strip() # save add date
+      cacm_txt_data[id]['cross-references'] = no_title_entries[1].strip() # save cross-references
+
+  else:
+    no_id_entries = re.split(cacm_chunk_publication, no_id,1)
+    cacm_txt_data[id]['title'] = no_id_entries[0].strip() # save title
+    no_title = no_id_entries[1]
+
+    if len(re.split(cacm_chunk_author, no_title,1)) == 2: # is there a auhtor
+      no_title_entries = re.split(cacm_chunk_author_add_cross, no_title)
+      cacm_txt_data[id]['publication_date'] = no_title_entries[0].strip() # save publication date
+      cacm_txt_data[id]['author'] = no_title_entries[1].strip() # save athor
+      cacm_txt_data[id]['add_date'] = no_title_entries[2].strip() # save add date
+      cacm_txt_data[id]['cross-references'] = no_title_entries[3].strip() # save cross-references
+
+    else:
+      no_title_entries = re.split(cacm_chunk_add_cross, no_title)
+      cacm_txt_data[id]['publication_date'] = no_title_entries[0].strip() # save publication date
+      cacm_txt_data[id]['add_date'] = no_title_entries[1].strip() # save add date
+      cacm_txt_data[id]['cross-references'] = no_title_entries[2].strip() # save cross-references
+```
+
+Auch im CISI gab es das Problem, dass nicht immer alle Informationen gegeben waren. Eigentlich sollte jeder Eintrag ID (.I), title (.T), text (.W), publication date (.B), author (.A) und cross-references (.X) beinhalten. Doch manche der Einträge hatten mehr als einen Autoren-Tag, diese Einträge überschnitten sich aber mit den Einträgen bei denen die Information zum publication date fehlte, weswegen sich hier die Anzahl an if-Abfragen wieder etwas übersichtlicher gestaltete:
+
+```python
+cisi_title_start = re.compile('[\n]\.T')
+cisi_author_start = re.compile('[\n]\.A')
+cisi_date_start = re.compile('[\n]\.B')
+cisi_text_start = re.compile('[\n]\.W')
+cisi_cross_start = re.compile('[\n]\.X')
+
+# process the document data
+
+cisi_txt_data = defaultdict(dict)
+
+for line in cisi_txt_list:
+  entries = re.split(cisi_title_start,line,1)
+  id = entries[0].strip()#save the id
+  no_id = entries[1] 
+  
+  if len(re.split(cisi_author_start, no_id)) >= 2: # is there just one author?
+    no_id_entries = re.split(cisi_author_start, no_id,1)
+    cisi_txt_data[id]['title'] = no_id_entries[0].strip() # save title
+    no_title = no_id_entries[1]
+
+    if len(re.split(cisi_date_start, no_title)) > 1: # is there a publication date?
+      no_title_entries = re.split(cisi_date_start, no_title)
+      cisi_txt_data[id]['author'] = no_title_entries[0].strip() # save athour
+      no_author = no_title_entries[1]
+      no_author_entries = re.split(cisi_text_start, no_author)
+      cisi_txt_data[id]['publication_date'] = no_author_entries[0].strip() # save publication date
+      no_author_date = no_author_entries[1]
+    else:
+      no_title_entries = re.split(cisi_text_start, no_title)
+      cisi_txt_data[id]['author'] = no_title_entries[0].strip() # save athour
+      no_author_date = no_title_entries[1]
+
+  else:
+    no_id_entries = re.split(cisi_author_start, no_id)
+    cisi_txt_data[id]['title'] = no_id_entries[0].strip() # save title
+    cisi_txt_data[id]['author'] = no_id_entries[1].strip() # save first author
+    no_title_entries = re.split(cisi_text_start, no_title)
+    cisi_txt_data[id]['author'] += ','+no_title_entries[0].strip() # save second athour
+    no_author_date = no_title_entries[1]
+
+  last_entries = re.split(cisi_cross_start, no_author_date)
+  cisi_txt_data[id]['text'] = last_entries[0].strip() # save text
+  cisi_txt_data[id]['cross-refrences'] = last_entries[1].strip() # save cross refrences
+```
+An diesen Beispielen zeigt sich, dass man beim Parsen immer sehr genau die Daten analysieren und auf eventuelle Regelabweichungen vorbereitet sein sollte, speziell wenn es sich um manuell annotierte Daten handelt.
+
+### Unexpected Text Seperators
+Neben fehlenden Informationen kann auch eine Unregelmäßigkeit in den Abstandsmarkern zu großer Frustation beim Parsen führen. In den corpora LISA und NPL haben die text files sich leider nicht konsequent an eine gleiche Anzahl an Leerzeichen gehalten, weswegen das seperieren der Eintäge nur durch ausprobieren möglich war.
+
+LISA
+Leider waren die Abstände auch inconsitent 
+question erste line war speziell zu behandeln
+```python
+doc_strip = re.compile('\n?Document {1,2}')
+
+lisa_txt_list_stripped = []
+lisa_txt_data = defaultdict(dict)
+
+for el in lisa_txt_list:
+  lisa_txt_list_stripped.append(re.sub(doc_strip,'', el))
+
+for entry in lisa_txt_list_stripped:
+  parts = entry.split('\n')
+  empty_index = parts.index('')
+  ID = parts[0]
+  title = parts[1:empty_index]
+  text = parts[empty_index+1:]
+  lisa_txt_data[ID]['title'] = title
+  lisa_txt_data[ID]['text'] = text
+  ```
+questions in erster Zeile anders behandeln
+
+```python
+# process the query data
+lisa_qry_data = defaultdict(dict)
+
+# first line is a special case because it doesn't start with a newline
+first_line = lisa_qry_list[0]
+first_question = ' '.join(first_line[1:])
+lisa_qry_data[int(first_line[0])]['question'] = first_question
+
+# after that every line can be handle the same way
+for n in range(0,len(lisa_qry_list)-1):
+  line = re.split('\n',lisa_qry_list[n+1])
+  question = ' '.join(line[2:])
+  lisa_qry_data[int(line[1])]['question'] = question
+  ```
+
+
+NPL
+
+```python
+# process the documents
+
+npl_txt_data = defaultdict(dict)
+
+for entry in npl_txt_list:
+  splitted = entry.split('\n')
+  splitted = list(filter(None, splitted))
+  ID = splitted[0]
+  text = ' '.join(map(str, splitted[1:]))
+  npl_txt_data[ID]['text'] = text
+```
+
+### Unexpected Number Seperators 
+Time, LISA, 
+
+LISA
+```python
+# process relevance assesments without rating
+lisa_rel = defaultdict(list)
+
+with open (PATH_TO_LISA_REL,'r') as f:
+  file = f.read().strip('       ').replace('\n','')
+  lines = re.split(' ',file)
+  lines = list(filter(None, lines))
+  n = 0
+  while n < len(lines):
+    ID = int(lines[n])
+    num_rel = int(lines[n+1])
+    rels = lines[(n+2):(n+num_rel+2)]
+    lisa_rel[ID].extend(rels)
+    n = n+1+num_rel+1
+```
+
+Time 
+```python
+# process relevance assesments without rating
+time_rel = defaultdict(list)
+
+rel_marker = re.compile('            \n        ')
+rel_split = re.compile('\n')
+
+with open (PATH_TO_TIME_REL,'r') as f:
+  for lines in f:
+    line = lines.strip().replace('   ',' ').replace('  ',' ').split(' ')
+    if len(line) > 1:
+      time_rel[int(line[0])].extend(line[1:])
+```
