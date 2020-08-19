@@ -1,0 +1,51 @@
+---
+id: ranking-api
+title: How to Use the Elasticsearch Ranking Evaluation API
+sidebar_label: Ranking API
+---
+
+Alle Informationen über die Ranking Evaluation API findet ihr auch auf der [Elasticsearch Webseite](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html).
+
+In unseren Experimenten haben wir eine Evaluation von angewendeten metrics immer anhand der in Elasticsearch eingebauten Ranking Evaluation API ausgwertet.
+
+Um die Ranking API optimal nutzen zu können wollen wir euch in diesem Guide kurz erklären, welche Möglichkeiten sie bietet und wie ihr sie schnell in wenigen Schritten nutzen könnt.
+
+Als erstes muss man die Daten an die Form der Ranking API anpassen. Wie man das macht könnt ihr in unserem [Parsing Guide](../guides/parsing-guide) nachlesen. Nach dem Parsen sollten die Daten diese Form haben:
+
+
+
+```python
+def create_query_body(query_dict, rel_dict, index_name):
+  """
+  The function creates a request for every query in query_dict and rates the relevant documents with rel_dict to 1.
+  The index name has to be the same as from the documents your looking at.
+  An evaluation body for the elasticsearch ranking API is returned.
+  """
+  eval_body = {
+      "requests":'',
+      "metric": {
+          "recall": {
+              "relevant_rating_threshold": 1,
+              "k": 20
+              }
+      }
+  }
+  requests = [] 
+  current_request = defaultdict(lambda: defaultdict())
+  current_rel = {"_index": index_name, "_id": '', "rating": int}
+  for query_ID, query_txt in query_dict.items():
+    current_query = {"query": { "multi_match": { "query": '' , "fields" : ["title","text"]}}}
+    current_query["query"]["multi_match"]["query"] = query_txt['question']
+    current_request["id"] = 'Query_'+str(query_ID)
+    current_request["request"] = current_query.copy()
+    current_request["ratings"] = [{"_index": index_name, "_id": str(el), "rating": 1} for el in rel_dict[query_ID]]
+    requests.append(current_request.copy())
+  eval_body["requests"] = requests
+  return eval_body
+
+create_body = create_query_body(qry_data, rel, index)
+eval_body = json.dumps(create_body)
+res = es.rank_eval(eval_body,index)
+
+print(json.dumps(res, indent=4, sort_keys=True))
+```
