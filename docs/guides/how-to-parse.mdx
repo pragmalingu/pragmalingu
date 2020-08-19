@@ -520,10 +520,28 @@ These examples show you how important it is to know your data when parsing and t
 ### Unexpected Text Seperators
 In addition to the missing information, an irregularity in the distance markers can also lead to a lot of frustration while parsing. The document and the query files of LISA and NPL where a bit inconsitent with spaces around the entry markers.
 
-LISA
-Unfortunately, the gaps were also inconsistent
-question first line was specially treated
+For the LISA corpus irregular spaces have become a problem both in the document files and in the query files.
+As with most corpora, you could split the entries using a marker and then save the information in a dictionary.
+With LISA however the entries looked like this:
+```
+Document  501
+LIBRARY AND INFORMATION SERVICES FOR THE PUBLIC: PROCEEDINGS OF THE 8TH
+CONFERENCE OF THE PAPUA NEW GUINEA LIBRARY ASSOCIATION.
+
+THE CONFERENCE WAS HELD AT THE ADMINISTRATIVE COLLEGE OF PAPUA NEW GUINEA,
+WAIGANI, PORT MORESBY, 18-19 OCT 79. PAPERS ARE IN 5 SECTIONS: STRATEGIES IN
+THE PLANNING OF LIBRARY AND INFORMATION SERVICES; STATE OF LIBRARIES FOR THE
+PUBLIC IN PAPUA NEW GUINEA; LITERACY AND THE LIBRARY; REACHING OUT: ACCESS TO
+LIBRARY-BASED INFORMATION SERVICES IN THE RURAL AREAS OF PAPUA NEW GUINEA; AND
+AGENCIES INVOLVED IN INFORMATION WORK. TRANSCRIPTIONS OF QUESTION AND ANSWER
+SESSIONS ARE ALSO INCLUDED.
+********************************************
+```
+The entries were separated in by splitting at the `txt_entry_marker` and all empty lines were removed from the resulting list. Every document contains information on the ID, title and text. To get the ID we removed the string `Document` beforehand. For the title, the 1-2 newlines with the regex `doc_strip` were replaced by an empty string, as this made the empty line between the title and text an empty entry. Using the indexes of these empty entries, we were then able to save the title and text separately:
+
 ```python
+txt_entry_marker = re.compile('\*{44}',re.MULTILINE)
+
 doc_strip = re.compile('\n?Document {1,2}')
 
 lisa_txt_list_stripped = []
@@ -541,7 +559,7 @@ for entry in lisa_txt_list_stripped:
   lisa_txt_data[ID]['title'] = title
   lisa_txt_data[ID]['text'] = text
   ```
-questions in erster Zeile anders behandeln
+The query files were a little easier to handle, when splitting on the newlines, it was only necessary to handle the first line separately because it does not start with a newline:
 
 ```python
 # process the query data
@@ -559,10 +577,21 @@ for n in range(0,len(lisa_qry_list)-1):
   lisa_qry_data[int(line[1])]['question'] = question
   ```
 
-
-NPL
+In contrast to LISA, the NPL only contains ID and text. That simplified the handling of irregular spaces:
+```
+1
+compact memories have flexible capacities  a digital data storage
+system with capacity up to bits and random and or sequential access
+is described
+   /
+```
+Die größte Schwierigkeit lag darin, dass document, query und relevance assessments file unterschiedliche newlines um die entry marker hatten. Mit dieser Art zu splitten sind uns keine Daten verloren gegangen:
 
 ```python
+txt_entry_marker = re.compile('\n   /\n')
+qry_entry_marker = re.compile('\n/\n')
+rel_entry_marker = re.compile('\n   /\n')
+
 # process the documents
 
 npl_txt_data = defaultdict(dict)
