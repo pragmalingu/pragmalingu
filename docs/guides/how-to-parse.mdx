@@ -23,7 +23,6 @@ The code in the guide is prorgammed in Python3, since Python offers the best bui
 ## Analyze Data 
 
 **What does the Data look like?**
-
 Before you can start parsing, you have to take a closer look at the data you want to parse.
 
 It is relevant to determine which information is offered to you. Is it just text you're parsing? Is there additional information such as author, title, date or something similar? If there is additional information, is it labeled seperatly or is it just within the text?
@@ -51,7 +50,6 @@ In contrast to the text, the additional information can thus be identified very 
 If you don't want to determine the markers on your own, we have already done all the work by analyzing every single [Data Set](../benchmarks/data-comparisson.md) and even wrote an [overview table](../benchmarks/overview.md).
 
 **How do we want the data to look?**
-
 After we analyzed our data properly, we can move on to the parsing part. Depending on how you want to use the data, you have to adapt your code for the right format output.
 
 In order to be able to work with Elasticsearch we first have to index all documents. You can read about what that exactly means and how to set up an Elasticsearch instance in our [Elasticsearch Guide](../guides/elastic-setup.md).
@@ -65,6 +63,7 @@ doc = {
     'title': 'Cool things',
 }
 ```
+
 Further information such as author, title, publication date, etc. can be added as searchable fields using the format ```'field_name': 'content'```. In order to improve the search results later on, it is definitely helpful to include as much additional information as possible.
 
 In order to be able to index all documents in one go, we parsed our documents into a dictionary of dictionaries, which can easily be iterated later on.
@@ -127,13 +126,15 @@ So let's just dive into it!
 You can get the corpus from [this link](http://ir.dcs.gla.ac.uk/resources/test_collections/cran/).
 For detailed information about the format of the files, see the PragmaLingu [ Benchmarks](https://pragmalingu.de/docs/benchmarks/overview).
 In Colab you have to add the following lines:
+
 ```python
 !wget http://ir.dcs.gla.ac.uk/resources/test_collections/cran/cran.tar.gz
 !tar -xf cran.tar.gz
 ```
 
 After downloading it you should make sure, that you set the paths for every file you want to parse:
-```python
+`
+``python
 PATH_TO_CRAN_TXT = '/content/cran.all.1400'
 PATH_TO_CRAN_QRY = '/content/cran.qry'
 PATH_TO_CRAN_REL = '/content/cranqrel'
@@ -152,6 +153,7 @@ Conveniently, every new document begins with the ID marker '.I', directly follow
 (Detailed definitions of all the markers can be found [here] (https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield))
 
 We get a list of all the document entries:
+
 ```python
 ID_marker = re.compile('\.I.')
 
@@ -312,6 +314,7 @@ Sometimes not all the data is collected in one file. For us the only corpus in w
 The LISA corpus is split into 14 different files which contain the 6004 document entries.
 
 We solved it with parsing the file names with a regex:
+
 ```python
 file_regex = re.compile('LISA[0-5]')
 lisa_files = [i for i in os.listdir(PATH_TO_LISA_TXT) if os.path.isfile(os.path.join(PATH_TO_LISA_TXT,i)) and \
@@ -343,6 +346,7 @@ is limited to a punched paper tape application and
  does not cover aspects of a more sophisticated computer
  system.
 ```
+
 Our code quickly threw an error, so to get around this problem, after saving the ID, we added an if query:
 
 ```python
@@ -370,6 +374,7 @@ for line in adi_txt_list:
     adi_txt_data[id]['title'] = no_id_entries[0]
     adi_txt_data[id]['text'] = no_id_entries[1]
 ```
+
 A similar problem can be found in the CACM. Each entry should hold the information on ID (.I), title (.T), text (.W), publication date (.B), author (.A), adding date (.N) and cross-references (.X). However, not every entry was assigned a text and an author.
 
 ```
@@ -385,6 +390,7 @@ CA581103 JB March 22, 1978  8:32 PM
 4	5	4
 4	5	4
 ```
+
 Since the entries without text and the entries without the author are not always the same, we had to include two nested if queries for parsing this corpus:
 
 ```python
@@ -515,14 +521,17 @@ for line in cisi_txt_list:
   cisi_txt_data[id]['text'] = last_entries[0].strip() # save text
   cisi_txt_data[id]['cross-refrences'] = last_entries[1].strip() # save cross refrences
 ```
+
 These examples show you how important it is to know your data when parsing and to be prepared for any irregularities, especially when it comes to manually annotated data.
 
 ### Unexpected Text Seperators
+
 In addition to the missing information, an irregularity in the distance markers can also lead to a lot of frustration while parsing. The document and the query files of LISA and NPL where a bit inconsitent with spaces around the entry markers.
 
 For the LISA corpus irregular spaces have become a problem both in the document files and in the query files.
 As with most corpora, you could split the entries using a marker and then save the information in a dictionary.
 With LISA however the entries looked like this:
+
 ```
 Document  501
 LIBRARY AND INFORMATION SERVICES FOR THE PUBLIC: PROCEEDINGS OF THE 8TH
@@ -537,6 +546,7 @@ AGENCIES INVOLVED IN INFORMATION WORK. TRANSCRIPTIONS OF QUESTION AND ANSWER
 SESSIONS ARE ALSO INCLUDED.
 ********************************************
 ```
+
 The entries were separated in by splitting at the `txt_entry_marker` and all empty lines were removed from the resulting list. Every document contains information on the ID, title and text. To get the ID we removed the string `Document` beforehand. For the title, the 1-2 newlines with the regex `doc_strip` were replaced by an empty string, as this made the empty line between the title and text an empty entry. Using the indexes of these empty entries, we were then able to save the title and text separately:
 
 ```python
@@ -558,7 +568,8 @@ for entry in lisa_txt_list_stripped:
   text = parts[empty_index+1:]
   lisa_txt_data[ID]['title'] = title
   lisa_txt_data[ID]['text'] = text
-  ```
+```
+
 The query files were a little easier to handle, when splitting on the newlines, it was only necessary to handle the first line separately because it does not start with a newline:
 
 ```python
@@ -575,9 +586,10 @@ for n in range(0,len(lisa_qry_list)-1):
   line = re.split('\n',lisa_qry_list[n+1])
   question = ' '.join(line[2:])
   lisa_qry_data[int(line[1])]['question'] = question
-  ```
+```
 
 In contrast to LISA, the NPL only contains ID and text. That simplified the handling of irregular spaces:
+
 ```
 1
 compact memories have flexible capacities  a digital data storage
@@ -585,7 +597,8 @@ system with capacity up to bits and random and or sequential access
 is described
    /
 ```
-Die größte Schwierigkeit lag darin, dass document, query und relevance assessments file unterschiedliche newlines um die entry marker hatten. Mit dieser Art zu splitten sind uns keine Daten verloren gegangen:
+
+The document, query and relevance assessments file had different newlines around the entry marker which caused some difficulties. With this way of splitting we didn't lose any data:
 
 ```python
 txt_entry_marker = re.compile('\n   /\n')
@@ -604,10 +617,21 @@ for entry in npl_txt_list:
   npl_txt_data[ID]['text'] = text
 ```
 
-### Unexpected Number Seperators 
-Time, LISA, 
+### Number Seperators 
 
-LISA
+Some of the relevance assessment files were difficult to parse, especially with the Time and LISA corpus.
+
+In the LISA corpus we had to be a little more creative, as some of the relevance documents were also stored in the following line.
+
+```
+           1           2        3392        3396                                
+           2           2        2623        4291                                
+           3           5        1407        1431        3794        3795        
+        3796         
+```
+
+We split the whole file into a list and deleted all empty entries. Since the number of relevant documents is in the second column, we can use this to mathematically calculate at which index the next ID comes and which document IDs are relevant for the actual ID:
+
 ```python
 # process relevance assesments without rating
 lisa_rel = defaultdict(list)
@@ -625,7 +649,26 @@ with open (PATH_TO_LISA_REL,'r') as f:
     n = n+1+num_rel+1
 ```
 
-Time 
+The Time corpus has all relevant documents in the same line as the ID, but there are also irregularities here.
+
+```
+8  339 358
+
+9   61 155 156 242 269 315 339 358
+
+10  61 156 242 269 339 358
+
+11 195 198
+
+12  61 155 156 242 269 339 358
+
+13  87 170 185
+
+14 269
+```
+
+The spaces between the ID and the first document ID vary a lot, so we have to replace the spaces several times with empty strings, split everything into a list and then remove all empty entries:
+
 ```python
 # process relevance assesments without rating
 time_rel = defaultdict(list)
@@ -639,3 +682,8 @@ with open (PATH_TO_TIME_REL,'r') as f:
     if len(line) > 1:
       time_rel[int(line[0])].extend(line[1:])
 ```
+
+## Fazit
+
+Regardless of which text you are parsing and for which project, it is always important to look at your data and analyze it well. Our guide shows you with examples how you can access such data.
+You can find our already parsed data [here](../benchmarks/data-comparisson).
