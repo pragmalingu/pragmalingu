@@ -46,3 +46,6 @@ However if a lemmatization is well adapted to the data, it can significantly imp
 
 # Stop words
 
+
+<div class="myDIV">Hover over me.</div>
+<div class="hide">Here should be some text.</div>
