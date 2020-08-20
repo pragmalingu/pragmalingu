@@ -1,47 +1,186 @@
 ---
 id: ranking-api
 title: How to Use the Elasticsearch Ranking Evaluation API
-sidebar_label: Ranking API
+sidebar_label: Ranking Evaluation API
 ---
 
-Alle Informationen über die Ranking Evaluation API findet ihr auch auf der [Elasticsearch Webseite](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html).
+To evaluate our experiments we used the build-in Ranking Evaluation API from Elasticsearch.
+In order to adjust the Ranking Evaluation API to your needs, we will give you in this guide short explainations of the operators and metrics we tried during our experiments.
 
-In unseren Experimenten haben wir eine Evaluation von angewendeten metrics immer anhand der in Elasticsearch eingebauten Ranking Evaluation API ausgwertet.
+Before we start, the Ranking Evaluation API needs these three ingredients to give us some results back:
 
-Um die Ranking API optimal nutzen zu können wollen wir euch in diesem Guide kurz erklären, welche Möglichkeiten sie bietet und wie ihr sie schnell in wenigen Schritten nutzen könnt.
+* some documents you want to evaluate
+* a few typical queries for those documents
+* relevance assessments that represent document ratings regarding the queries
 
-Bevor wir starten sind drei Daten Vorraussetzung um die API nutzen zu können:
-* 
+First we have to save the documents you want to search on to an Elasticsearch index. Detailed instructions on how to do that can be found in our [Elasticsearch Guide](../guides/elastic-setup).
 
-Als erstes muss man die Dokumente auf denen man suchen möchte, in einen Index auf Elasticsearch speichern, eine Anleitung dazu haben wir in unserem [Elasticsearch Guide](../guides/elasticsearch) aufgeschrieben. 
+The next thing you need are the search queries in a format that the Ranking Evaluation API can read. We wrote down how you can achieve this from raw data in our [Parsing Guide](../guides/parsing-guide).
 
-Danach muss man die Suchanfragen an die Form der Ranking API anpassen, um sie an Elasticsearch übergeben zu können. Wie man das mit Rohdaten macht könnt ihr in unserem [Parsing Guide](../guides/parsing-guide) nachlesen. 
-Nach dem Parsen sollten die Suchanfragen diese Form haben:
+After parsing the queries, they should be saved into an evaluation body, which looks like this:
 
-```python
+```json
 {
+    
   "requests": [
     {
-      "id": "amsterdam_query",                                  
+      "id": "Query_1",                                  
       "request": {                                              
-          "query": { "match": { "text": "amsterdam" } }
+          "query": { "match": { "text": "\nwhat are the structural and aeroelastic problems associated with flight\nof high speed aircraft .\n" } }
       },
       "ratings": [                                              
-        { "_index": "my-index-000001", "_id": "doc1", "rating": 0 },
-        { "_index": "my-index-000001", "_id": "doc2", "rating": 3 },
-        { "_index": "my-index-000001", "_id": "doc3", "rating": 1 }
+        { "_index": "cranfield-corpus", "_id": "184", "rating": 0 },
+        { "_index": "cranfield-corpus", "_id": "29", "rating": 3 },
+        { "_index": "cranfield-corpus", "_id": "31", "rating": 1 }
       ]
     },
     {
-      "id": "berlin_query",
+      "id": "Query_2",
       "request": {
-        "query": { "match": { "text": "berlin" } }
+        "query": { "match": { "text": "\nwhat problems of heat conduction in composite slabs have been solved so\nfar .\n" } }
       },
       "ratings": [
-        { "_index": "my-index-000001", "_id": "doc1", "rating": 1 }
+        { "_index": "cranfield-corpus", "_id": "12", "rating": 1 }
       ]
     }
   ]
+  "metric": {
+    "precision": {
+      "k": 20,
+      "relevant_rating_threshold": 1,
+      "ignore_unlabeled": false
+    }
+  }
 }
 ```
-Die `id` soll dabei eine individuelle
+
+In our notebooks we send the Ranking Evaluation API body to Elasticsearch search using json:
+
+```python
+eval_body = json.dumps(create_function)
+# our elasticsearch instance is stored in the variable es
+result = es.rank_eval(eval_body,index_we_want_to_search_on)
+# print the evaluation in readable format
+print(json.dumps(result, indent=4, sort_keys=True))
+```
+
+Be aware that if you don't specify an index while calling the Ranking Evaluation API, it will search on all indices in your instance.
+
+You can find all this information about the Ranking Evaluation API also on the [Elasticsearch website](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html).
+
+## Query metrics
+
+Depending on the data, it can be important which query operator you choose. We will briefly explain the three operators that we have tried so far.
+
+### Match query operator
+
+The [match query operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html) is the standard search operator in Elasticsearch. A full-text search in the given fields of the documents comes with standard tokenization and an analyzer.
+
+To use the match operator in the Ranking Evaluation API we need to add it to every query request to the field `"query":` and also add the query text to the field `"text":`. The operator tries to match the string given in `text:` on the documents in the given index.
+Here is an example:
+
+```json
+{
+    
+  "requests": [
+    {
+      "id": "Query_1",                                  
+      "request": {                                              
+          "query": { "match": { "text": "\nwhat are the structural and aeroelastic problems associated with flight\nof high speed aircraft .\n" } }
+      },
+      "ratings": [                                              
+        ...
+      ]
+    },
+    {
+      "id": "Query_2",
+      "request": {
+        "query": { "match": { "text": "\nwhat problems of heat conduction in composite slabs have been solved so\nfar .\n" } }
+      },
+      "ratings": [
+        ...
+  ]
+  "metric": {
+    ...
+  }
+}
+```
+
+
+### Simple query string operator
+ 
+The [simple query string](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) operator uses a parser with a limited fault-tolerant syntax to search for the given query string in the given fields. It splits and analyzes the query terms separately for the search before returning the relevant documents. It ignores invalid parts of the query string. 
+
+Here is an example request with the simple query string operator searching for the query in the 'text' and 'title' fields:
+
+```json
+{
+  "requests": [
+    {
+      "id": "Query_1",                                  
+      "request": {                                              
+          "query": { "simple_query_string" : {
+               "query": "\nwhat are the structural and aeroelastic problems associated with flight\nof high speed aircraft .\n",
+               "fields": ["title", "text"]
+      }}},
+      "ratings": [                                              
+        ...
+      ]
+    },
+    {
+      "id": "Query_2",
+      "request": {
+        "query": { "simple_query_string" : {
+               "query": "\nwhat problems of heat conduction in composite slabs have been solved so\nfar .\n",
+               "fields": ["title", "text"]
+      }}},
+      "ratings": [
+        ...
+  ]
+  "metric": {
+    ...
+  }
+}
+```
+
+### Multi-match query operator
+
+The [multi-match query operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#query-dsl-multi-match-query) builds on the match query operator and allows multi-line match while searching. It does work similar to the simple string query but it rates the documents a little bit diffrent.
+
+If no specific fields are provided it will search on all fields available. We chose "title" and "text" since they have the most information:
+
+```json
+{
+  "requests": [
+    {
+      "id": "Query_1",                                  
+      "request": {                                              
+          "query": { "multi_match" : {
+               "query": "\nwhat are the structural and aeroelastic problems associated with flight\nof high speed aircraft .\n",
+               "fields": ["title", "text"]
+      }}},
+      "ratings": [                                              
+        ...
+      ]
+    },
+    {
+      "id": "Query_2",
+      "request": {
+        "query": { "multi_match" : {
+               "query": "\nwhat problems of heat conduction in composite slabs have been solved so\nfar .\n",
+               "fields": ["title", "text"]
+      }}},
+      "ratings": [
+        ...
+  ]
+  "metric": {
+    ...
+  }
+}
+```
+
+## Rating metrics
+
+
+
+## Evaluation metrics
