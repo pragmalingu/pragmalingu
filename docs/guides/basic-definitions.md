@@ -4,22 +4,45 @@ title: Basic Terms
 sidebar_label: Definitions
 ---
 
-Content will follow
+With this Guide we want to provide you some quick definitions on basic terms used in NLP. If there are terms you think should be explained as well please [let us know](../about/team.md).
 
-# Stemming
+# Token vs. Type
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus elementum massa eget nulla aliquet sagittis. Proin odio tortor, vulputate ut odio in, ultrices ultricies augue. Cras ornare ultrices lorem malesuada iaculis. Etiam sit amet libero tempor, pulvinar mauris sed, sollicitudin sapien.
+When looking at natural language you can't always describe a word as 'word' since the definition of a word isn't very clear throughout linguistics. So we need terms that are better defined.
+In processing language we can distinct between **Types** and **Token**.
+When we talk about **Types** we mean the words in a sentence that are distinct. **Token** on the other hand are words that are seperated through punctation and spaces.
+It's way clearer when we look at an example:
+
+`A rose is a rose`
+
+This sentence has 3 Types but 5 Token. Since `a` and `rose` is doubled they only count as one Type each. 
+If we change the last `rose` the Types count changes:
+
+`A rose is a roses`
+
+This would have 4 Types and still 5 Token.
 
 # Tokenization
 
-```
-Mauris vestibulum ullamcorper nibh, ut semper purus pulvinar ut. Donec volutpat orci sit amet mauris malesuada, non pulvinar augue aliquam. Vestibulum ultricies at urna ut suscipit. Morbi iaculis, erat at imperdiet semper, ipsum nulla sodales erat, eget tincidunt justo dui quis justo. Pellentesque dictum bibendum diam at aliquet. Sed pulvinar, dolor quis finibus ornare, eros odio facilisis erat, eu rhoncus nunc dui sed ex. Nunc gravida dui massa, sed ornare arcu tincidunt sit amet. Maecenas efficitur sapien neque, a laoreet libero feugiat ut.
-```
+
+
+# Stemming
+
+Stemming is one of the most commonly used methods when dealing with search engines. Different methods are applied to the words, depending on the algorithm, to break them down to their stem. The stem is the part of the word that doesn't chang when you apply grammatical rules. The goal is to remove all morphological features from a word so that there are more Types and less Token. Most english stemmers remove mostly the affixes of a word since that's where the biggest morphological differences manifest in English and create truncated, ambiguous stems.
+With that a word like "learning" changes to "learn" after stemming. 
+In most cases, the search query is only improved by a stemmer if the query is not too long. Otherwise there is a risk that too many irrelevant results will be returned.
+But if there are short queries stemming can be very helpful, since small grammatical deviations can be included in the search. However, you have to be careful with too much stemming. 
+If the stemmer cuts off too much information, the word could become too short and loose semantic meaning. This is called overstemming.
+Always keep in mind the quality of a stemmer varies greatly from language to language because some languages have more morphological derivations than others.
 
 # Lemmatization
 
-Nulla facilisi. Maecenas sodales nec purus eget posuere. Sed sapien quam, pretium a risus in, porttitor dapibus erat. Sed sit amet fringilla ipsum, eget iaculis augue. Integer sollicitudin tortor quis ultricies aliquam. Suspendisse fringilla nunc in tellus cursus, at placerat tellus scelerisque. Sed tempus elit a sollicitudin rhoncus. Nulla facilisi. Morbi nec dolor dolor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras et aliquet lectus. Pellentesque sit amet eros nisi. Quisque ac sapien in sapien congue accumsan. Nullam in posuere ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Proin lacinia leo a nibh fringilla pharetra.
+Lemmatization is similar to stemming, as it also tries by preprocessing the words to reduce the Token in the text and to get more Types. However, in contrast to stemming, lemmatization tries to make a connection from each word to their basic form. 
+For example "lovingly" would connect to "love".
+With lemmatization you always need a dictionary implemented, so that the alogrithm can look up the basic form of a word. 
+The biggest problem here is the dictionary.
+It has to be extremely large and of course contain all of the words you're going to search. This slows down the search process and leads to enormous amounts of data.
+However if a lemmatization is well adapted to the data, it can significantly improve the search results.
 
 # Stop words
 
-Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin venenatis lectus dui, vel ultrices ante bibendum hendrerit. Aenean egestas feugiat dui id hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur in tellus laoreet, eleifend nunc id, viverra leo. Proin vulputate non dolor vel vulputate. Curabitur pretium lobortis felis, sit amet finibus lorem suscipit ut. Sed non mollis risus. Duis sagittis, mi in euismod tincidunt, nunc mauris vestibulum urna, at euismod est elit quis erat. Phasellus accumsan vitae neque eu placerat. In elementum arcu nec tellus imperdiet, eget maximus nulla sodales. Curabitur eu sapien eget nisl sodales fermentum.
