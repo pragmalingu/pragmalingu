@@ -29,8 +29,8 @@ After parsing the queries, they should be saved into an evaluation body, which l
           "query": { "match": { "text": "\nwhat are the structural and aeroelastic problems associated with flight\nof high speed aircraft .\n" } }
       },
       "ratings": [                                              
-        { "_index": "cranfield-corpus", "_id": "184", "rating": 0 },
-        { "_index": "cranfield-corpus", "_id": "29", "rating": 3 },
+        { "_index": "cranfield-corpus", "_id": "184", "rating": 1 },
+        { "_index": "cranfield-corpus", "_id": "29", "rating": 1 },
         { "_index": "cranfield-corpus", "_id": "31", "rating": 1 }
       ]
     },
@@ -181,6 +181,44 @@ If no specific fields are provided it will search on all fields available. We ch
 
 ## Rating metrics
 
+You can only make this adjustment if you have annotated data that provides the right metrics. 
+A document rating is represented by an integer. If you don't have more data than relevant and irrelevant you can simply use the binary scale. 0 is irrelevant and 1 is relevant. 
 
+Otherwise you can use higher numbers for higher ratings:
+
+```json
+{
+    
+  "requests": [
+    {
+      "id": "Query_1",                                  
+      "request": {                                              
+          ...
+      },
+      "ratings": [                                              
+        { "_index": "cranfield-corpus", "_id": "184", "rating": 2 },
+        { "_index": "cranfield-corpus", "_id": "29", "rating": 3 },
+        { "_index": "cranfield-corpus", "_id": "31", "rating": 1 }
+      ]
+    },
+    {
+      "id": "Query_2",
+      "request": {
+        ...
+      },
+      "ratings": [
+        { "_index": "cranfield-corpus", "_id": "12", "rating": 1 }
+      ]
+    }
+  ]
+  "metric": {
+    "precision": {
+   ...
+    }
+  }
+}
+```
+Since the Cranfield corpus was the only one which provided ratings graded according to their relevance we only used the binary rating.Also we didn't rate any documents with 0 because we only had the relevant documents IDs and decided that the irrelevant ones won't get any rating at all.
 
 ## Evaluation metrics
+
