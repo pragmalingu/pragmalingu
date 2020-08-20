@@ -37,7 +37,7 @@ module.exports = {
      {
      	type: 'category',
      	label: 'Evaluation',
-     	items: ['guides/notebooks'],
+     	items: ['guides/notebooks','guides/ranking-api'],
      },
   ],
   experiments: [

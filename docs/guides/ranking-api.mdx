@@ -10,42 +10,38 @@ In unseren Experimenten haben wir eine Evaluation von angewendeten metrics immer
 
 Um die Ranking API optimal nutzen zu können wollen wir euch in diesem Guide kurz erklären, welche Möglichkeiten sie bietet und wie ihr sie schnell in wenigen Schritten nutzen könnt.
 
-Als erstes muss man die Daten an die Form der Ranking API anpassen. Wie man das macht könnt ihr in unserem [Parsing Guide](../guides/parsing-guide) nachlesen. Nach dem Parsen sollten die Daten diese Form haben:
+Bevor wir starten sind drei Daten Vorraussetzung um die API nutzen zu können:
+* 
 
+Als erstes muss man die Dokumente auf denen man suchen möchte, in einen Index auf Elasticsearch speichern, eine Anleitung dazu haben wir in unserem [Elasticsearch Guide](../guides/elasticsearch) aufgeschrieben. 
 
+Danach muss man die Suchanfragen an die Form der Ranking API anpassen, um sie an Elasticsearch übergeben zu können. Wie man das mit Rohdaten macht könnt ihr in unserem [Parsing Guide](../guides/parsing-guide) nachlesen. 
+Nach dem Parsen sollten die Suchanfragen diese Form haben:
 
 ```python
-def create_query_body(query_dict, rel_dict, index_name):
-  """
-  The function creates a request for every query in query_dict and rates the relevant documents with rel_dict to 1.
-  The index name has to be the same as from the documents your looking at.
-  An evaluation body for the elasticsearch ranking API is returned.
-  """
-  eval_body = {
-      "requests":'',
-      "metric": {
-          "recall": {
-              "relevant_rating_threshold": 1,
-              "k": 20
-              }
-      }
-  }
-  requests = [] 
-  current_request = defaultdict(lambda: defaultdict())
-  current_rel = {"_index": index_name, "_id": '', "rating": int}
-  for query_ID, query_txt in query_dict.items():
-    current_query = {"query": { "multi_match": { "query": '' , "fields" : ["title","text"]}}}
-    current_query["query"]["multi_match"]["query"] = query_txt['question']
-    current_request["id"] = 'Query_'+str(query_ID)
-    current_request["request"] = current_query.copy()
-    current_request["ratings"] = [{"_index": index_name, "_id": str(el), "rating": 1} for el in rel_dict[query_ID]]
-    requests.append(current_request.copy())
-  eval_body["requests"] = requests
-  return eval_body
-
-create_body = create_query_body(qry_data, rel, index)
-eval_body = json.dumps(create_body)
-res = es.rank_eval(eval_body,index)
-
-print(json.dumps(res, indent=4, sort_keys=True))
+{
+  "requests": [
+    {
+      "id": "amsterdam_query",                                  
+      "request": {                                              
+          "query": { "match": { "text": "amsterdam" } }
+      },
+      "ratings": [                                              
+        { "_index": "my-index-000001", "_id": "doc1", "rating": 0 },
+        { "_index": "my-index-000001", "_id": "doc2", "rating": 3 },
+        { "_index": "my-index-000001", "_id": "doc3", "rating": 1 }
+      ]
+    },
+    {
+      "id": "berlin_query",
+      "request": {
+        "query": { "match": { "text": "berlin" } }
+      },
+      "ratings": [
+        { "_index": "my-index-000001", "_id": "doc1", "rating": 1 }
+      ]
+    }
+  ]
+}
 ```
+Die `id` soll dabei eine individuelle
