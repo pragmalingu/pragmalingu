@@ -46,11 +46,11 @@ Here you can see the metrics we choose and an example request of the medline cor
 
 These are results without any further processing of the data other than the standards of Elasticsearch:
 
-|  standard search |   cranfield |   CISI |   ADI |   medline |   CACM |   LISA |   Time |   NPL |
+|  Standard Search |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
 |------------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| recall           |        0.15 |  0.103 | 0.328 |     0.032 |  0.034 |  0.337 |  0.772 | 0.233 |
-| precision        |       0.056 |  0.154 | 0.074 |     0.031 |  0.022 |  0.157 |  0.15  | 0.217 |
-| f1-score         |       0.081 |  0.123 | 0.12  |     0.032 |  0.027 |  0.214 |  0.251 | 0.225 |
+| Recall           |        0.15 |  0.103 | 0.328 |     0.032 |  0.034 |  0.337 |  0.772 | 0.233 |
+| Precision        |       0.056 |  0.154 | 0.074 |     0.031 |  0.022 |  0.157 |  0.15  | 0.217 |
+| F1-Score         |       0.081 |  0.123 | 0.12  |     0.032 |  0.027 |  0.214 |  0.251 | 0.225 |
 
 ## Stemming
 
@@ -100,35 +100,60 @@ settings = {
 stemming_prefix = "stemming-"
 ```
 
-| stemming search |   cranfield |   CISI |   ADI |   medline |   CACM |   LISA |   Time |   NPL |
+| Stemming Search |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
 |-----------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| recall          |        0.15 |  0.121 | 0.254 |     0.032 |  0.044 |  0.393 |  0.78  | 0.285 |
-| precision       |       0.057 |  0.169 | 0.063 |     0.031 |  0.028 |  0.191 |  0.152 | 0.258 |
-| f1-score        |       0.082 |  0.141 | 0.101 |     0.032 |  0.034 |  0.257 |  0.255 | 0.271 |
+| Recall          |        0.15 |  0.121 | 0.254 |     0.032 |  0.044 |  0.393 |  0.78  | 0.285 |
+| Precision       |       0.057 |  0.169 | 0.063 |     0.031 |  0.028 |  0.191 |  0.152 | 0.258 |
+| F1-Score        |       0.082 |  0.141 | 0.101 |     0.032 |  0.034 |  0.257 |  0.255 | 0.271 |
 
 Surprisingly, the results aren't as different as expected with using the *stemmer token filter*.
 
 ### Hunspell Token Filter
 
-Although the * hunspell token filter * from Elasticsearch recognizes irregular words and should therefore preprocess them better, we must keep in mind that words that do not appear in the dictionary are not processed. But in addition, a large dictionary naturally also takes up significantly more time and memory.
-Since dictionaries can never be fully complete, we didn't expect a big change int the results comparing to the * stemmer token filter *. 
+Although the *hunspell token filter* from Elasticsearch recognizes irregular words and should therefore preprocess them better, we must keep in mind that words that do not appear in the dictionary are not processed. But in addition, a large dictionary naturally also takes up significantly more time and memory.
+Since dictionaries can never be fully complete, we didn't expect a big change int the results comparing to the *stemmer token filter*. 
 
-The procedure of the * hunspell token filter * is similar to a lemmatization, but the words are not always reduced to the lemma with hunspell. For example, with the word "lovingly" the stemmer returns "loving" where the lemma would be "love". So the meaning of the words is not sufficiently addressed.
+The procedure of the *hunspell token filter* is similar to a lemmatization, but the words are not always reduced to the lemma with hunspell. For example, with the word "lovingly" the stemmer returns "loving" where the lemma would be "love". So the meaning of the words is not sufficiently addressed.
 
 First of, we implemented the hunspell stemming analyzer:
 
-
-
+```python
+#the order of filter and analyser is arbitrary
+dictionary_analyser = {
+    "filter" : {
+        "dictionary_stemmer" : {
+          "type" : "hunspell",
+          "locale" : "en_US",
+          "dedup" : True  #duplicate tokens are removed from the filter’s output
+        }
+    },
+    "analyzer" : {
+        "default" : {
+            "tokenizer" : "standard",
+            "filter" : ["lowercase", "dictionary_stemmer"]
+        }
+    }
+}
+```
 Second of, we had to implement the dictionary in our node system:
 
+```python
+settings = {
+    "settings": {
+        "number_of_shards": 1,
+        "number_of_replicas": 0,
+        "analysis": dictionary_analyser
+    }
+```
 
-
-
-| hunspell        |   cranfield |   CISI |   ADI |   medline |   CACM |   LISA |   Time |   NPL |
+| Hunspell        |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
 |-----------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| recall          |             |        |       |           |        |        |        |       |
-| precision       |             |        |       |           |        |        |        |       |
-| f1-score        |             |        |       |           |        |        |        |       |
+| Recall          |       0.149 |  0.12  | 0.256 |     0.045 |  0.037 |  0.391 |  0.777 | 0.292 |
+| Precision       |       0.057 |  0.167 | 0.063 |     0.041 |  0.024 |  0.186 |  0.151 | 0.258 |
+| F1-Score        |       0.082 |  0.14  | 0.101 |     0.043 |  0.029 |  0.252 |  0.252 | 0.274 |
+
+We thought the results would be lower than the *stemmer token filter* relsuts but better than the standard search we used.
+But that wasn't the case for all of the corpora.
 
 ## Results
 
