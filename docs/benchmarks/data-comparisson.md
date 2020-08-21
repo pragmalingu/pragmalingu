@@ -49,7 +49,7 @@ ETC. AUTOMATIC DOCUMENT CLASSIFICATION, CLUSTERS, CLUSTERING, TERM
 CLASSIFICATIONS. #
 ```
 
-**Relevance assessments:**<br />In `lisarj.num` are the relevance assessments represented with IDs. Every query-ID (first column) is followed by document-IDs that are considered as relevant. Depending on the program used to open or parse the file the relevant document-IDs could continue in the next line. Since there is no end marker it would be best to parse the lines depending on the query-ID.
+**Relevance assessments:**<br />In `lisarj.num` are the relevance assessments represented with IDs. Every query-ID (first column) is followed by the number of relevant documents-IDs before the relevant document-IDs start. Depending on the program used to open or parse the file the relevant document-IDs could continue in the next line. Since there is no end marker it would be best to parse the lines depending on the query-ID and number of relevant documents IDs.
 
 *Example:*
 ```
@@ -63,6 +63,10 @@ CLASSIFICATIONS. #
 ```
 
 **Other files:**<br />The `lisa.rel`file is an old version of the relevance assessments which helps to understand new version, but is not considered important to use. 
+
+**Parsing problems**:<br />
+* documents: they are all in seperate files, the newline as online marker to seperate ID, title and text can be a bit tricky
+* relevance assessments: not parseable line by line, the number of relevant documents should be used to parse
 
 **Source:** http://ir.dcs.gla.ac.uk/resources/test_collections/lisa/ 
 
@@ -124,6 +128,10 @@ USE OF DIGITAL COMPUTERS IN THE DESIGN OF BAND PASS FILTERS HAVING GIVEN PHASE A
 * `term-vocab` contains vocabular stems with representative IDs, the end marker is `/`
 * `term-vecs` contains occurrences of the terms in docs. First ID is always vocab ID followed by all the doc IDs terms occurred in, the end marker is `/`
 * `term-mst` contains word ID followed by context-word ID followed by co.occurrences and mutal similarity values. This is only available for words that occurre in at least 2 documents
+
+**Parsing problems**:<br />
+* the spaces between the seperator `/` and the entries is diffrent in documents, queries and relevance assessements
+* relevance assessements: there are many spaces and newlines to remove before getting the raw numbers
 
 **Source:** http://ir.dcs.gla.ac.uk/resources/test_collections/npl/
 
@@ -224,6 +232,9 @@ The list of cross-references show the refrences ID followed by `4, 5 or 6`and ma
 * `common_words` - Stop words used by smart
 * `qrels.text` - List of relevance judgements
 
+**Parsing problems**:<br />
+* documents: not all entries contain information on author and text, those tags won't be there if there is not information
+
 **Source:**http://ir.dcs.gla.ac.uk/resources/test_collections/cacm/
 
 ## CISI
@@ -305,7 +316,11 @@ The need to provide personnel for the information field.
     21    400 0 0.000000
 ```
 
-**Other files:**<br />`CISI.BLN` - List of boolean queries 
+**Other files:**<br />`CISI.BLN` - List of boolean queries
+
+**Parsing problems**:<br />
+* documents: some entries contain more than one author, also with more than one author tag
+* documents: not every entry has information on the publication date, those tags won't be there if there is not information
 
 **Source:**http://ir.dcs.gla.ac.uk/resources/test_collections/cisi/
 
@@ -438,6 +453,10 @@ COMMON MARKET .
 
 **Other files:**<br />`TIME.STP` - List of stop words
 
+**Parsing problems**:<br />
+* relevance assessments: spaces between the ID and the first document ID vary a lot
+
+
 **Source:**http://ir.dcs.gla.ac.uk/resources/test_collections/time/
 
 ## Medline
@@ -544,6 +563,9 @@ What is information science?  Give definitions where possible.
 ```
 
 **Other files:**<br />`ADI.BLN` - List of boolean queries
+
+**Parsing problems**:<br />
+* documents: not every entry has information on the author, those tags won't be there if there is not information
 
 **Source:**http://ir.dcs.gla.ac.uk/resources/test_collections/adi/
 
