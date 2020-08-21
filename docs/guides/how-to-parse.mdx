@@ -6,30 +6,30 @@ sidebar_label: How to Parse for Elasticsearch
 
 ## Let's Start
 
-In order to start experimenting and evaluating different Natural Language Processing (NLP) methods, it is necessary to bring the data you want to use into a suitable form.
+To start experimenting and evaluating different Natural Language Processing (NLP) methods, it is necessary to bring the data you want to use into a suitable form.
 
 Therefore you should start by answering the following three questions:
 1. What ** does ** the data look like?
 2. How do we ** want ** the data to look?
-3. What kind of ** preproccesing ** would we want to aply first?
+3. What kind of ** preprocessing  ** would we want to apply first?
 
-Since we are mainly working with Elasticsearch by trying to improve the search results, the third question is not relevant for us. Preprocessing such as tokenization, stemming, lemmatizing, ignoring stop words, etc. will always be applied to raw data. Since Elasticsearch works with automatic tokenization we won't cover tokenization at all. Preproccesing will be excluded for the time being. If you think it would be interested to expand our guide in that way, please don't hesitate [to write us about it](../about/team.md).
+Since we are mainly working with Elasticsearch by trying to improve the search results, the third question is not as relevant for us. Most preprocessing such as tokenization, stemming, lemmatizing, ignoring stop words, etc. will be applied to raw data. Since Elasticsearch includes automatic tokenization during indexing we won't cover it here. Preprocessing will be excluded for the time being. If you think it would be interesting to include it in our guide, please don't hesitate [to write us about it](../about/team.md).
 
-The code in the guide is prorgammed in Python3, since Python offers the best build-in methods for language processing out of all programming languages.
+The code in the guide is programmed in Python3, since Python offers great tools for language processing.
 
 ## Analyze Data 
 
 **What does the Data look like?**
 Before you can start parsing, you have to take a closer look at the data you want to parse.
 
-It is relevant to determine which information is offered to you. Is it just text you're parsing? Is there additional information such as author, title, date or something similar? If there is additional information, is it labeled seperatly or is it just within the text?
+It is relevant to determine which information is offered to you. Is it just text you're parsing? Is there additional information such as author, title, date or something similar? If there is additional information, is it labeled separately or is it included in the text?
 
 The most difficult to parse are texts that do not provide any information about the parts of the data or that consist exclusively of non-stop text.
 
-Since we decided to data sets that are specifically provided for NLP tasks we knew they would have a certain structure. So we only had to deal with the different characteristics of the data sets not with structuring it in the first place.
+Since we decided to use data sets that are specifically provided for NLP tasks we knew they would have a certain structure. So we only had to deal with the different characteristics of the data sets not with structuring it in the first place.
 
 We downloaded all the data sets from the [University of Glasgow](http://ir.dcs.gla.ac.uk/resources/test_collections/), looked at them in detail and wrote detailed descriptions on the information each corpus provides.
-So we were for example able to determine that the corpora [Cranfield](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield), [CACM](https://pragmalingu.de/docs/benchmarks/data-comparisson#cacm), [CISI](https://pragmalingu.de/docs/benchmarks/data-comparisson#cisi) and [ADI](https://pragmalingu.de/docs/benchmarks/data-comparisson#adi) use very similar notations. The document text is always marked with a line that only contains ".W" at the beginning:
+We could determine that the corpora [Cranfield](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield), [CACM](https://pragmalingu.de/docs/benchmarks/data-comparisson#cacm), [CISI](https://pragmalingu.de/docs/benchmarks/data-comparisson#cisi) and [ADI](https://pragmalingu.de/docs/benchmarks/data-comparisson#adi) use very similar notations. Each document text is always marked with a line that only contains ".W" at the beginning:
 
 ```
 .W
@@ -42,14 +42,14 @@ triangular heat rate .  this type of heating rate may occur, for
 example, during aerodynamic heating .
 ```
 
-In contrast to the text, the additional information can thus be identified very clearly with the other markers provided.
+In contrast to the text, the additional information can thus be identified clearly with the other markers provided.
 
 If you don't want to determine the markers on your own, we have already done all the work by analyzing every single [Data Set](../benchmarks/data-comparisson.md) and even wrote an [overview table](../benchmarks/overview.md).
 
 **How do we want the data to look?**
 After we analyzed our data properly, we can move on to the parsing part. Depending on how you want to use the data, you have to adapt your code for the right format output.
 
-In order to be able to work with Elasticsearch we first have to index all documents. You can read about what that exactly means and how to set up an Elasticsearch instance in our [Elasticsearch Guide](../guides/elastic-setup.md).
+To be able to work with Elasticsearch we first have to index all documents. You can read about what that exactly means and how to set up an Elasticsearch instance in our [Elasticsearch Guide](../guides/elastic-setup.md).
 
 The documents we want to index need the following format:
 
@@ -61,15 +61,15 @@ doc = {
 }
 ```
 
-Further information such as author, title, publication date, etc. can be added as searchable fields using the format ```'field_name': 'content'```. In order to improve the search results later on, it is definitely helpful to include as much additional information as possible.
+Further information such as author, title, publication date, etc. can be added as searchable fields using the format `'field_name': 'content'`. To improve the search results later on, it is definitely helpful to include as much additional information as possible.
 
-In order to be able to index all documents in one go, we parsed our documents into a dictionary of dictionaries, which can easily be iterated later on.
+To be able to index all documents in one go, we parsed our documents into a dictionary of dictionaries, which can easily be iterated later on.
 The details will be covered in the parsing section.
 
-For evaluation we use the [Elasticsearch Ranking API](https://elasticsearch-py.readthedocs.io/en/master/api.html?highlight=_rank_eval#elasticsearch.Elasticsearch.rank_eval). Therefore, we need some search queries and a list of documents, that are relevant for the queries, called relevance assessments. A description of how to use the Elasticsearch Ranking API can be found in our [Ranking API Guide](../guides/ranking-api.mdx).
-The search queries, relevance assessments and the index name of the indexed documents are feed to the Ranking API as the evaluation body.
+For evaluation, we use the [Elasticsearch Ranking evaluation API](https://elasticsearch-py.readthedocs.io/en/master/api.html?highlight=_rank_eval#elasticsearch.Elasticsearch.rank_eval). Therefore, we need some search queries and a list of documents, that are relevant for the queries, called relevance assessments. A description of how to use the Elasticsearch Ranking evaluation API can be found in our [Ranking evaluation API Guide](../guides/ranking-api.mdx).
+The search queries, relevance assessments and the index name of the indexed documents are feed to the Ranking evaluation API as the evaluation body.
 
-The evaluation body requires this form, in Python we simply used nested dictionaries:
+The evaluation body requires the following form, in Python we simply used nested dictionaries:
 
 ```python
 eval_body = {
@@ -109,13 +109,13 @@ eval_body = {
 
 ## Parse Data
 
-Now that we've figured out what the data looks like and how we want it to be in the end, we can finally get started with parsing.
-Since it's easier to show parsing by using a practical example, we picked one of our [8 free avaiable Data Sets](../benchmarks/overview.md). 
-We chose the [Cranfield Corpus](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield). On the one hand, because it uses the same notation as CACM, CISI and ADI, therefore the code can easily be adapted to parse the other corpora as well. 
+Now that we've figured out what the data looks like and how we want it structured in the end, we can finally get started with parsing.
+Since it's easier to demonstrate parsing by using a practical example, we picked one of our [8 free available Data Sets](../benchmarks/overview.md). 
+We chose the [Cranfield Corpus](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield). On the one hand because it uses the same notation as CACM, CISI and ADI, therefore the code can easily be adapted to parse the other corpora as well. 
 (That's the reason we also started parsing the Cranfield corpus for our experiments) 
-On the other hand, it contains a lot of additional information and at the same time didn't cause major problems while parsing. 
+On the other hand, it contains a lot of additional information and didn't cause major problems while parsing. 
 So it seems to be a perfect example to show you our approach step by step. 
-In the last section, we will also talk about some of the problems we had while parsing the other corpora.
+In the last section, we will also talk about some problems we had while parsing the other corpora.
 So let's just dive into it!
 
 #### Cranfield Corpus
@@ -130,8 +130,7 @@ In Colab you have to add the following lines:
 ```
 
 After downloading it you should make sure, that you set the paths for every file you want to parse:
-`
-``python
+```python
 PATH_TO_CRAN_TXT = '/content/cran.all.1400'
 PATH_TO_CRAN_QRY = '/content/cran.qry'
 PATH_TO_CRAN_REL = '/content/cranqrel'
@@ -139,13 +138,7 @@ PATH_TO_CRAN_REL = '/content/cranqrel'
 
 ### Parse for Indexing
 
-Für das Indexieren in Elasticsearch ist zunächst nur die Datei mit den Dokumenten, also dem zu durchsuchenden Text, relevant. In unserem Fall ist das die Datei `cran.all.1400`.
-Praktischerweise beginnt jedes neue Dokument mit dem ID marker '.I', direkt gefolgt von der Id. Deshalb können wir vorerst alle Einträge daran spalten. 
-(Detailed definitions of all the markers can be found [here](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield)) 
-
-Wir erhalten eine Liste aller Einträge:
-
-To create an index in Elasticsearch for the Cranfield corpus we only need the documents file first. In our case this is the file `cran.all.1400`.
+To create an index in Elasticsearch for the Cranfield corpus we only need the documents file first. In our case, this is the file `cran.all.1400`.
 Conveniently, every new document begins with the ID marker '.I', directly followed by the ID. Therefore, we can start by splitting all entries at this marker.
 (Detailed definitions of all the markers can be found [here] (https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield))
 
@@ -172,7 +165,7 @@ qry_list = get_data(PATH_TO_CRAN_QRY, ID_marker)
 
 As the search queries are also separated by the ID marker, we can split them up in the same step. But we only need the qry_list later.
 
-Afterwards we can split the information of every entry using the other information markers. To make the indexing into elsatic search easier we are going to store all documents in one parsebale dictionary of dictionaires as follows:
+Afterwards, we can split the information in every entry using the other information markers. To make the indexing into Elasticsearch easier we are going to store all documents in one parsable dictionary of dictionaries as follows:
 
 ```python
 from collections import defaultdict
@@ -194,9 +187,9 @@ for line in txt_list:
   txt_data[id]['text'] = text
 ```
 
-This corpus is very good notated but we have to be careful, sometimes there are corpora where not every entry has the same information. For example if some entries don't have an athour or no publication date, we have to change the code likewise and try to prepare for this different cases. But we're going to look into that later.
+This corpus is well-structured and has a clear notation, but we have to be careful, in some corpora not every entry includes the same information. For example, if some entries don't have an author or no publication date, we have to change the code likewise and try to prepare for these special cases. But we're going to look into that later.
 
-After we parsed all our documents we can now parse them to the elasticsearch index one by one:
+After we parsed all our documents we can now pass them on to the Elasticsearch index one by one:
 
 ```python
 cran_index = "cranfield-corpus"
@@ -210,7 +203,7 @@ Now that the index is set we can start parsing the evaluation body for the Ranki
 ### Parse for Evaluation Body
 
 **Queries**
-Since we already split the queries into a list in the same step as the documents, we can continue with using the qry_list.
+Since we already split the queries into a list while preparing the documents, we can continue with using the qry_list.
 
 With the queries it's similar to the documents. We start parsing their entries with the ID-tag and continue with splitting every entry into smaller pieces. The queries only consist of the ID and the query, so it's way easier to get that information:
 
@@ -241,7 +234,7 @@ with open (PATH_TO_CRAN_REL,'r') as f:
     cran_rel[int(line[0])].append(line[1])
 ```
 
-Otherwise it would also be possible to parse the file as a numpy array for easier accessability on the additional ratings:
+Otherwise, it would also be possible to parse the file as a numpy array for easier accessibility on the additional ratings:
 
 ```python
 cran_rel_data = open(PATH_TO_CRAN_REL)
@@ -254,9 +247,7 @@ for row in cran_np:
 
 ***Evaluation Body***
 
-Jetzt wo wir alle Daten bereit zum einfüttern in unseren Evaluation Body haben, können wir mittels dieser Funktion einen evaluation body für unsere Ranking API benutzen und unsere evaluation starten:
-
-Now that we have all the data ready, we can feed it to this function to create an evaluation body, with whom we can start evaluating on the Ranking API:
+Now that we have all the data ready, we can feed it to a function that creates an evaluation body for the Ranking evaluation API:
 
 ```python
 cran_index = "cranfield-corpus"
@@ -264,7 +255,7 @@ cran_index = "cranfield-corpus"
 def create_query_body(query_dict, rel_dict, index_name):
   """
   The function creates a request for every query in query_dict and rates the relevant documents with rel_dict to 1.
-  The index name has to be the same as from the documents your looking at.
+  The index name has to identical to the index where the documents are stored.
   An evaluation body for the elasticsearch ranking API is returned.
   """
   eval_body = {
@@ -299,15 +290,15 @@ cran_res = es.rank_eval(cran_eval_body, cran_index)
 print(json.dumps(cran_res, indent=4, sort_keys=True))
 ```
 
-And that was about it. As already mentioned, it is not always that easy with every corpus. Therefore, in the next section, we would like to introduce you to a few problems that we have encountered and that can save you a lot of time if you consider them in advance.
+And that was about it. As already mentioned, it is not always that easy with every corpus. Therefore, in the next section, we will introduce you to a few problems that we have encountered and that can save you a lot of time if you know them in advance.
 
 ## Problems
 
-Hereafter we will briefly present some of the most noticeable problems from the 8 parsed corpora. Those can become problems while parsing other corpora. It will show you how important it is to analyse the data beforehand.
+Hereafter we will briefly present some of the most noticeable problems from the 8 parsed corpora. Those can become problems while parsing other corpora. It will show you how important it is to analyze the data beforehand.
 
-### Splitted Files
+### Split Files
 
-Sometimes not all the data is collected in one file. For us the only corpus in which this was the case, was LISA and it was solved very quickly. But splitted documents can lead to additional work and therefore should be viewed beforehand. Otherwise it can happen that not all data are taken into account while parsing.
+Sometimes not all the data is collected in one file. For us, the only corpus in which this was the case, was LISA and it was solved quickly. But split documents can lead to additional work and therefore should be viewed beforehand. Otherwise, it can happen that not all data is processed while parsing.
 The LISA corpus is split into 14 different files which contain the 6004 document entries.
 
 We solved it with parsing the file names with a regex:
@@ -323,9 +314,9 @@ for name in lisa_files:
 
 ### Information Inconsistencies
 
-Within parsing the ADI, CACM and CISI another common problem showed. Although they have notations very similar to Cranfield, unfortunately some inconsistencies caused problems during parsing. Since the data is annotated manually it can happen that for some entries the annotater just skiped the information tag if there wasn't any information to write. This caused code errors especially while parsing the document files.
+While parsing the ADI, CACM and CISI corpora another common problem showed. Although they have notations very similar to Cranfield, unfortunately some inconsistencies caused problems during parsing. Since the data is annotated manually it can happen that for some entries the annotator just skipped the information tag if there wasn't any information to write. This caused code errors especially while parsing the document files.
 After initially assuming that we have a certain amount of information for each entry, we quickly discovered that sometimes there was for example no author tag and other times more than one.
-We will now take a quick look at some example problems and how we soved them:
+We will now take a quick look at some example problems and how we solved them:
 
 With 83 entries, ADI is the smallest of the corpora and therefore very manageable.
 In the ADI, each entry should have information on ID (.I), title (.T), text (.W) and author (.A). Unfortunately, the information about the author and the tag (.A) are missing in some entries:
@@ -344,7 +335,7 @@ is limited to a punched paper tape application and
  system.
 ```
 
-Our code quickly threw an error, so to get around this problem, after saving the ID, we added an if query:
+Our code quickly threw an error, so to get around this problem, after saving the ID, we added an if clause:
 
 ```python
 adi_title_start = re.compile('\.T')
@@ -372,7 +363,7 @@ for line in adi_txt_list:
     adi_txt_data[id]['text'] = no_id_entries[1]
 ```
 
-A similar problem can be found in the CACM. Each entry should hold the information on ID (.I), title (.T), text (.W), publication date (.B), author (.A), adding date (.N) and cross-references (.X). However, not every entry was assigned a text and an author.
+A similar problem can be found in the CACM corpus. Each entry should hold the information on ID (.I), title (.T), text (.W), publication date (.B), author (.A), adding date (.N) and cross-references (.X). However, not every entry was assigned a text and an author.
 
 ```
 .I 4
@@ -388,7 +379,7 @@ CA581103 JB March 22, 1978  8:32 PM
 4	5	4
 ```
 
-Since the entries without text and the entries without the author are not always the same, we had to include two nested if queries for parsing this corpus:
+Since the entries without text and the entries without the author are not always the same, we had to include two nested if clauses for parsing this corpus:
 
 ```python
 # process text file
@@ -448,7 +439,7 @@ for line in cacm_txt_list:
       cacm_txt_data[id]['cross-references'] = no_title_entries[2].strip() # save cross-references
 ```
 
-The CISI also had the problem that not all information was always given. Every entry should contain ID (.I), title (.T), text (.W), publication date (.B), author (.A) and cross-references (.X). But some of the entries had more than one author tag. These entries overlapped with the entries for which the information on the publication date was missing:
+The CISI also had the problem that not all information was always given. Every entry should contain ID (.I), title (.T), text (.W), publication date (.B), author (.A) and cross-references (.X). But some entries had more than one author tag. These entries overlapped with the entries for which the information on the publication date was missing:
 
 ```
 .I 33
@@ -471,7 +462,7 @@ technical information services..
 41	1	33
 ```
 
-Therefore we only needed one nested if query:
+Therefore, we only needed one nested if clause:
 
 ```python
 cisi_title_start = re.compile('[\n]\.T')
@@ -521,11 +512,11 @@ for line in cisi_txt_list:
 
 These examples show you how important it is to know your data when parsing and to be prepared for any irregularities, especially when it comes to manually annotated data.
 
-### Unexpected Text Seperators
+### Unexpected Text Separators
 
-In addition to the missing information, an irregularity in the distance markers can also lead to a lot of frustration while parsing. The document and the query files of LISA and NPL where a bit inconsitent with spaces around the entry markers.
+In addition to the missing information, an irregularity in the distance markers can also lead to a lot of frustration while parsing. The document and the query files of LISA and NPL where a bit inconsistent with spaces around the entry markers.
 
-For the LISA corpus irregular spaces have become a problem both in the document files and in the query files.
+For the LISA corpus irregular spaces became a problem both in the document files and in the query files.
 As with most corpora, you could split the entries using a marker and then save the information in a dictionary.
 With LISA however the entries looked like this:
 
@@ -544,7 +535,10 @@ SESSIONS ARE ALSO INCLUDED.
 ********************************************
 ```
 
-The entries were separated in by splitting at the `txt_entry_marker` and all empty lines were removed from the resulting list. Every document contains information on the ID, title and text. To get the ID we removed the string `Document` beforehand. For the title, the 1-2 newlines with the regex `doc_strip` were replaced by an empty string, as this made the empty line between the title and text an empty entry. Using the indexes of these empty entries, we were then able to save the title and text separately:
+The entries were separated in by splitting at the `txt_entry_marker` and all empty lines were removed from the resulting list. 
+Every document contains information on the ID, title and text. To get the ID we removed the string `Document` beforehand. 
+For the title, the 1-2 newlines with the regex `doc_strip` were replaced by an empty string, as this made the empty line between the title and text an empty entry. 
+Using the indexes of these empty entries, we could then save the title and text separately:
 
 ```python
 txt_entry_marker = re.compile('\*{44}',re.MULTILINE)
@@ -585,7 +579,7 @@ for n in range(0,len(lisa_qry_list)-1):
   lisa_qry_data[int(line[1])]['question'] = question
 ```
 
-In contrast to LISA, the NPL only contains ID and text. That simplified the handling of irregular spaces:
+In contrast to LISA, the NPL corpus only contains ID and text. That simplified the handling of irregular spaces:
 
 ```
 1
@@ -616,9 +610,9 @@ for entry in npl_txt_list:
 
 ### Number Seperators 
 
-Some of the relevance assessment files were difficult to parse, especially with the Time and LISA corpus.
+Some relevance assessment files were difficult to parse, especially with the Time and LISA corpus.
 
-In the LISA corpus we had to be a little more creative, as some of the relevance documents were also stored in the following line.
+In the LISA corpus we had to be a little more creative, as some relevance document references were also stored in the following line.
 
 ```
            1           2        3392        3396                                
@@ -646,7 +640,7 @@ with open (PATH_TO_LISA_REL,'r') as f:
     n = n+1+num_rel+1
 ```
 
-The Time corpus has all relevant documents in the same line as the ID, but there are also irregularities here.
+The Time corpus has all relevant document references in the same line as the ID, but there are also irregularities here.
 
 ```
 8  339 358
@@ -680,7 +674,7 @@ with open (PATH_TO_TIME_REL,'r') as f:
       time_rel[int(line[0])].extend(line[1:])
 ```
 
-## Fazit
+## Conclusion
 
-Regardless of which text you are parsing and for which project, it is always important to look at your data and analyze it well. Our guide shows you with examples how you can access such data.
+Regardless of which text you are parsing and for which project, it is always important to look at your data and analyze it well. Our guide shows you examples on how you can access such data.
 You can find our already parsed data [here](../benchmarks/data-comparisson).
