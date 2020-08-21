@@ -4,33 +4,35 @@ title: How to setup an Elasticsearch Instance
 sidebar_label: Elasticsearch
 ---
 
-## 1 Elasticsearch Setup
-Most experiments on Pragmalingu focus on search applications. To reproduce these experiments you need a search engine to play with. We choose to focus on [Elasticsearch](https://www.elastic.co/elasticsearch/) because it is the leading open-source solution, has an active community and a lot of documentation.
+### 1 Elasticsearch Setup
+Most experiments on Pragmalingu focus on search applications. To reproduce these experiments you need a search engine to play with. We choose to focus on [Elasticsearch](https://www.elastic.co/elasticsearch/) because it's the leading open-source solution, has an active community and a lot of documentation.
 
 #### 1.1 Elasticsearch with Docker
-Installing and configuring a full search engine on your machine just to run some experiments is not fun. We therefore opted to use the available [Docker containers](https://opensource.com/resources/what-docker) to make it easier to install, setup, run and remove Elasticsearch.
+Installing and configuring a full search engine on your machine just to run some experiments is not fun. We will use the available [Docker containers](https://opensource.com/resources/what-docker) to make it easier to install, setup, run and remove Elasticsearch.
 
 #### 1.2 Install Docker
-You can install docker by following the [official guide on the docker homepage](https://docs.docker.com/get-docker/). If you are using Linux as your operating system you also have to install [Docker Compose](https://docs.docker.com/compose/install/#install-compose). Once you are finished check if docker is running by executing 'docker -v' in your command line or terminal. You should see something like 'Docker version 19.03.8, build afacb8b' as a response. If you get an error instead, troubleshoot your Docker installation, see [troubleshoot for windows](https://docs.docker.com/docker-for-windows/troubleshoot/), [Mac](https://docs.docker.com/docker-for-mac/troubleshoot/) or [Linux](https://docs.docker.com/config/daemon/#troubleshoot-the-daemon).
+You can install docker by following the [official guide on the docker homepage](https://docs.docker.com/get-docker/). If you are using Linux as your operating system you also have to install [Docker Compose](https://docs.docker.com/compose/install/#install-compose). Once you are finished check if docker is running by executing `docker -v` in your command line or terminal. You should see something like `Docker version 19.03.8, build afacb8b` as a response. If you get an error instead, troubleshoot your Docker installation, see [troubleshoot for windows](https://docs.docker.com/docker-for-windows/troubleshoot/), [Mac](https://docs.docker.com/docker-for-mac/troubleshoot/) or [Linux](https://docs.docker.com/config/daemon/#troubleshoot-the-daemon).
 
 #### 1.3 Run Elasticsearch with docker
 Now that you have docker up and running we can start by installing [Elasticsearch with Docker](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html). All you have to do is open your terminal or command line and enter
 ```
 docker run --name elasticsearch -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.8.0
 ```
-This will tell Docker to download the container 'docker.elastic.co/elasticsearch/elasticsearch:7.8.0' and run it with the name 'elasticsearch'.
-<details>
-<summary>What does "-p 9200:9200 -p 9300:9300" mean?</summary>
-
-The '-p 9200:9200 -p 9300:9300' arguments tell Docker to map the network ports '9200' and '9300' of the container to the same ports on your local machine. A [network port](http://www.steves-internet-guide.com/tcpip-ports-sockets/) is like a post box through which you can communicate with an application running on a computer.
-</details>
+This will tell Docker to download the container `docker.elastic.co/elasticsearch/elasticsearch:7.8.0` and run it with the name `elasticsearch`.
 
 <details>
-<summary>What does -e "discovery.type=single-node" mean?</summary>
+<summary>What does "-p 9200:9200 -p 9300:9300" mean?</summary>  
 
-The argument '-e "discovery.type=single-node' tells Elasticsearch to run in single-node mode, this means that only one machine will host the Elasticsearch application. Normally, Elasticsearch is run in [cluster mode](https://logz.io/blog/elasticsearch-cluster-tutorial/) on several machines to enable scaling and make it resilient against single computer failures.
-</details>
+The `-p 9200:9200 -p 9300:9300` arguments tell Docker to map the network ports `9200` and `9300` of the container to the same ports on your local machine. A [network port](http://www.steves-internet-guide.com/tcpip-ports-sockets/) is like a post box through which you can communicate with an application running on a computer.
+</details>  
 
+<details>
+<summary>What does -e "discovery.type=single-node" mean?</summary>  
+
+The argument `-e "discovery.type=single-node` tells Elasticsearch to run in single-node mode, this means that only one machine will host the Elasticsearch application. Normally, Elasticsearch is run in [cluster mode](https://logz.io/blog/elasticsearch-cluster-tutorial/) on several machines to enable scaling and make it resilient against single computer failures.
+</details>  
+
+&nbsp;  
 After you ran the above command you will see a lot of logging output on your command line, that is Elasticsearch telling you what it is doing. You should now be able to access and talk to Elasticsearch via http://localhost:9200/. If you access this site you should get a JSON response similar to this one:
 ```json
 {
@@ -51,7 +53,7 @@ After you ran the above command you will see a lot of logging output on your com
   tagline: "You Know, for Search"
 }
 ```
-This means that you successfully installed and started Elasticsearch on your machine, Woohoo! Great job! Now we can go ahead ans play with it.
+This means that you successfully installed and started Elasticsearch on your machine, Woohoo! Great job! Now we can go ahead and play with it.
 
 #### 1.4 Install and run Elasticsearch & Kibana with Docker-Compose
 Before we actually index our first documents and run our first search we will make it easier for us to work with Elasticsearch and Docker. First we will also run [Kibana](https://www.elastic.co/kibana). Kibana is an application to visualize and manage data in Elasticsearch and is offered by elastic the company behind Elasticsearch.
@@ -73,28 +75,28 @@ services:
     ports:
       - 5601:5601
 ```
-The services section declares and names the applications we want to use. Here they are 'elasticsearch' and 'kibana'. The 'image' sections tells docker which container to use for the declared service. With the 'environment' section we can pass application specific environment variables to the container. The 'ports' section works just like the '-p' argument from the normal docker run command and maps ports from your host computer to the container.
+The services section declares and names the applications we want to use. Here they are `elasticsearch` and `kibana`. The `image` sections tells docker which container to use for the declared service. With the `environment` section we can pass application specific environment variables to the container. The `ports` section works just like the `-p` argument from the normal docker run command and maps ports from your host computer to the container.
 
 Copy the above code and save it to a docker-compose.yml file on your machine.
 
-But before you can start these applications using docker-compose we have to stop the currently running 'elasticsearch' container. To do that just enter 'docker stop elasticsearch' into your command line and hit enter.
+But before you can start these applications using docker-compose we have to stop the currently running `elasticsearch` container. To do that just enter `docker stop elasticsearch` into your command line and hit enter.
 
-You can see all currently running containers by executing 'docker ps'.
+You can see all currently running containers by executing `docker ps`.
 
-Now that the old Elasticsearch container is stopped you can go to the folder where you saved the docker-compose.yml file an open a command line there. Finally you can run 'docker-compose up', wait until docker is finished downloading and setting up all missing container and you will see both Elasticsearch and Kibana printing their logs to your command line. That's it, you have them both setup and running!
+Now that the old Elasticsearch container is stopped you can go to the folder where you saved the docker-compose.yml file an open a command line there. Finally you can run `docker-compose up`, wait until docker is finished downloading and setting up all missing container and you will see both Elasticsearch and Kibana printing their logs to your command line. That`s it, you have them both setup and running!
 
 You should now be able to access the Kibana UI by opening the following link in your browser http://localhost:5601. There is a lot going on there, but you can find the section that is most useful for us is located at: http://localhost:5601/app/kibana#/dev_tools/console
 
 <details>
-  <summary>What happens if I don't stop the old container?</summary>
+  <summary>What happens if I don`t stop the old container?</summary>
 
-  Since we configured both the original container and the one that is started by docker-compose to use the ports '9200' and '9300', these ports will already be in use when the second container wants to start. This will prevent the second container from starting,  because only one running process can hold a port at a time.
+  Since we configured both the original container and the one that is started by docker-compose to use the ports `9200` and `9300`, these ports will already be in use when the second container wants to start. This will prevent the second container from starting,  because only one running process can hold a port at a time.
 </details>
 
 <details>
   <summary>How does Kibana know how to reach Elasticsearch?</summary>
 
-  There is some magic happening in the background when you run 'docker-compose up', docker-compose is actually setting up an isolated network inside your computer where each container gets a network address assigned that corresponds to his service name. The Elasticsearch service will be reachable under the address http://elasticsearch:9200 inside this network. This is the [default address](https://www.elastic.co/guide/en/kibana/current/docker.html#docker-defaults) configured for Kibana in docker to look for Elasticsearch.
+  There is some magic happening in the background when you run `docker-compose up`, docker-compose is actually setting up an isolated network inside your computer where each container gets a network address assigned that corresponds to his service name. The Elasticsearch service will be reachable under the address http://elasticsearch:9200 inside this network. This is the [default address](https://www.elastic.co/guide/en/kibana/current/docker.html#docker-defaults) configured for Kibana in docker to look for Elasticsearch.
 </details>
 
 ### 2 Use Elasticsearch from Kibana
@@ -102,12 +104,6 @@ You should now be able to access the Kibana UI by opening the following link in 
 Kibana offers a lot of different tools to work with Elasticsearch and visualize data. We will use the **Console** it is an interface that offers autocompletion and makes it easy to send HTTP requests to Elasticsearch.
 
 We start by sending a simple requests that lists all [indexes in Elasticsearch](https://www.elastic.co/de/blog/what-is-an-elasticsearch-index).
-<details>
-<summary>What is an index?</summary>
-
-[Indexes](https://en.wikipedia.org/wiki/Inverted_index) are where search engines store the information about **words** and the **documents** that these words appear in. Similar to an index in a book where you can lookup words in alphabetical order and find the pages that contain or explain these words. [In Elasticsearch](https://www.elastic.co/de/blog/what-is-an-elasticsearch-index) an index is the place where you store all the documents that have a similar structure and that you want users to find when they search.
-</details>
-
 ```
 GET /_cat/indices?v
 ```
@@ -122,7 +118,14 @@ green  open   .apm-agent-configuration       _ig6Y8JwRby4NIiPzGCXGw   1   0     
 green  open   .kibana_1                      3GkEN2iyQHaHpCaEjO8saQ   1   0         15            2     94.7kb         94.7kb
 
 ``` 
-Because we haven't created an index yet you only see internal indexes from Kibana that are prefixed with a dot. To create an index now just type in:
+<details>
+<summary>What is an index?</summary>  
+
+[Indexes](https://en.wikipedia.org/wiki/Inverted_index) are where search engines store the information about **words** and the **documents** that these words appear in. Similar to an index in a book where you can lookup words in alphabetical order and find the pages that contain or explain these words. [In Elasticsearch](https://www.elastic.co/de/blog/what-is-an-elasticsearch-index) an index is the place where you store all the documents that have a similar structure and that you want users to find when they search.
+</details>  
+&nbsp;  
+
+Because we haven`t created an index yet you only see internal indexes from Kibana that are prefixed with a dot. To create an index now just type in:
 ```
 PUT myfirstindex
 ``` 
@@ -158,7 +161,7 @@ GET myfirstindex/_search
 ```
 Elasticsearch should respond with the document that you just added to the index.
 
-That's it, you successfully set up your search server, indexed your first document and were able to search on it. Starting from here you can explore natural language processing techniques and configurations that help your search engine find matches, even if the user searches for the term "'documents'" instead or uses completely different but semantically related terms. You can read more about these techniques in our advanced guides.
+That's it, you successfully set up your search server, indexed your first document and were able to search on it. Starting from here you can explore natural language processing techniques and configurations that help your search engine find matches, even if the user searches for the term `documents` instead or uses completely different but semantically related terms. You can read more about these techniques in our advanced guides.
 
 ### 3. Where to go from here
-You learned how to set up your own Elasticsearch instance using docker and docker-compose. You now know how to talk to Elasticsearch via Kibana, create indexes and documents and search on them. Most of the experiments on Pragmalingu don't require you to set up your own Elasticsearch instance but if you want to dive deeper and maybe host your service powered by Elasticsearch or conduct longer running experiments you now know how to start.
+You learned how to set up your own Elasticsearch instance using docker and docker-compose. You now know how to talk to Elasticsearch via Kibana, create indexes and documents and search on them. Most of the experiments on Pragmalingu don`t require you to set up your own Elasticsearch instance but if you want to dive deeper and maybe host your service powered by Elasticsearch or conduct longer running experiments you now know how to start.
