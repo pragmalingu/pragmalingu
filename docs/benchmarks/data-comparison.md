@@ -1,6 +1,6 @@
 ---
 id: data-comparisson
-title: Coparisson of Free-To-Use Data Sets
+title: Comparison of Free-To-Use Data Sets
 sidebar_label: Data Sets
 ---
 
