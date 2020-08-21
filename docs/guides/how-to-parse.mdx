@@ -130,20 +130,13 @@ In Colab you have to add the following lines:
 ```
 
 After downloading it you should make sure, that you set the paths for every file you want to parse:
-`
-``python
+```python
 PATH_TO_CRAN_TXT = '/content/cran.all.1400'
 PATH_TO_CRAN_QRY = '/content/cran.qry'
 PATH_TO_CRAN_REL = '/content/cranqrel'
 ```
 
 ### Parse for Indexing
-
-Für das Indexieren in Elasticsearch ist zunächst nur die Datei mit den Dokumenten, also dem zu durchsuchenden Text, relevant. In unserem Fall ist das die Datei `cran.all.1400`.
-Praktischerweise beginnt jedes neue Dokument mit dem ID marker '.I', direkt gefolgt von der Id. Deshalb können wir vorerst alle Einträge daran spalten. 
-(Detailed definitions of all the markers can be found [here](https://pragmalingu.de/docs/benchmarks/data-comparisson#cranfield)) 
-
-Wir erhalten eine Liste aller Einträge:
 
 To create an index in Elasticsearch for the Cranfield corpus we only need the documents file first. In our case this is the file `cran.all.1400`.
 Conveniently, every new document begins with the ID marker '.I', directly followed by the ID. Therefore, we can start by splitting all entries at this marker.
@@ -253,8 +246,6 @@ for row in cran_np:
 ```
 
 ***Evaluation Body***
-
-Jetzt wo wir alle Daten bereit zum einfüttern in unseren Evaluation Body haben, können wir mittels dieser Funktion einen evaluation body für unsere Ranking API benutzen und unsere evaluation starten:
 
 Now that we have all the data ready, we can feed it to this function to create an evaluation body, with whom we can start evaluating on the Ranking API:
 
