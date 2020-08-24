@@ -15,8 +15,8 @@ module.exports = {
      'benchmarks/intro',
      {
      	type: 'category',
-     	label: 'Data Set Comparisson',
-     	items: ['benchmarks/overview','benchmarks/data-comparisson'],
+     	label: 'Data Set Comparison',
+     	items: ['benchmarks/overview','benchmarks/data-comparison'],
      },
   ],
   guides: [

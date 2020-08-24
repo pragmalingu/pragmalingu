@@ -1,5 +1,5 @@
 ---
-id: data-comparisson
+id: data-comparison
 title: Comparison of Free-To-Use Data Sets
 sidebar_label: Data Sets
 ---
