@@ -21,14 +21,14 @@ module.exports = {
   ],
   guides: [
      {
-     	type: 'category',
-     	label: 'Basics',
-     	items: ['guides/basic-definitions', 'guides/how-to-parse', 'guides/elasticsearch-lucene-intro', 'guides/wordembeddings-intro', 'guides/futher-literature'],
+      type: 'category',
+      label: 'Setup',
+      items: ['guides/elastic-setup', 'guides/docker-setup'],
      },
      {
      	type: 'category',
-     	label: 'Setup',
-     	items: ['guides/elastic-setup', 'guides/docker-setup'],
+     	label: 'Basics',
+     	items: ['guides/basic-definitions', 'guides/how-to-parse', 'guides/elasticsearch-lucene-intro', 'guides/wordembeddings-intro', 'guides/futher-literature'],
      },
      {
      	type: 'category',
