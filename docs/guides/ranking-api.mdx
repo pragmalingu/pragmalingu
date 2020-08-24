@@ -65,20 +65,26 @@ result = es.rank_eval(eval_body,index_we_want_to_search_on)
 print(json.dumps(result, indent=4, sort_keys=True))
 ```
 
-Be aware that if you don't specify an index while calling the Ranking Evaluation API, it will search on all indices in your instance.
+<details>
+<summary>What is "create_function"?</summary>  
+
+The argument `create_function` is a function we wrote to parse our preprocessed data into the evaluation body format. You can find details in our [Parsing Guide](https://pragmalingu.de/docs/guides/how-to-parse#parse-for-evaluation-body). 
+</details> 
+
+We specified on which index the Ranking Evaluation API should search. If you don't be aware that it will search on all indexes in your instance.
 
 You can find all this information about the Ranking Evaluation API also on the [Elasticsearch website](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html).
 
 ## Query metrics
 
-Depending on the data, it can be important which query operator you choose. We will briefly explain the three operators that we have tried so far.
+Depending on the data, it can help your search which query operator you choose. We will briefly explain the three operators that we tested by now.
 
 ### Match query operator
 
-The [match query operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html) is the standard search operator in Elasticsearch. A full-text search in the given fields of the documents comes with standard tokenization and an analyzer.
+The [match query operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html) is the standard search operator in Elasticsearch. It's a full-text search in the given fields of the documents that comes with standard tokenization and an analyzer.
 
-To use the match operator in the Ranking Evaluation API we need to add it to every query request to the field `"query":` and also add the query text to the field `"text":`. The operator tries to match the string given in `text:` on the documents in the given index.
-Here is an example:
+To use the match operator in the Ranking Evaluation API we need to add it to every query request in the field `"query":` and also add the query text to the field `"text":`. The operator tries to match the string given in `text:` on the documents in the given index.
+Here is are some example queries:
 
 ```json
 {
@@ -110,7 +116,7 @@ Here is an example:
 
 ### Simple query string operator
  
-The [simple query string](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) operator uses a parser with a limited fault-tolerant syntax to search for the given query string in the given fields. It splits and analyzes the query terms separately for the search before returning the relevant documents. It ignores invalid parts of the query string. 
+The [simple query string](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) operator uses a parser with a limited error-tolerant syntax to search for the given query string in the given fields. It splits and analyzes the query terms separately for the search before returning the relevant documents. It ignores invalid parts of the query string. 
 
 Here is an example request with the simple query string operator searching for the query in the 'text' and 'title' fields:
 
@@ -180,12 +186,18 @@ If no specific fields are provided it will search on all fields available. We ch
 }
 ```
 
+This operator was also the one we chose for our standard search to stemming comparisson, which you can read in our [first experiment](../experiments/experiment1.md). 
+
 ## Rating metrics
 
-You can only make this adjustment if you have annotated data that provides the right metrics. 
-A document rating is represented by an integer. If you don't have more data than relevant and irrelevant you can simply use the binary scale. 0 is irrelevant and 1 is relevant. 
+With the rating metric we are able to provide better ratings for more relevant documents. For example if we search for `ice cream truck` we could rate documents with `ice cream truck` higher than documents with `ice cream` or `truck` and still lable all those documents as relevant.
+A document rating is represented by an integer. The higher the number the more relevant the document. To use this scale in your search we also have to adjust the `relevant_rating_threshold` variable to the highest rated number. The default would be 1, which means the different rated documents would all be relevant.
 
-Otherwise you can use higher numbers for higher ratings:
+We can only make this adjustment if we have annotated data that provides the right metrics or if we are willing to rate the relevant documents manually. 
+
+So if we don't have more than the information that a document is relevant or irrelevant, we can just use the binary scale. 0 is irrelevant and 1 is relevant. 
+
+This is an example with higher scaled ratings:
 
 ```json
 {
@@ -214,12 +226,14 @@ Otherwise you can use higher numbers for higher ratings:
   ]
   "metric": {
     "precision": {
-   ...
+      "k": 20,
+      "relevant_rating_threshold": 3,
+      "ignore_unlabeled": false
     }
   }
 }
 ```
-Since the Cranfield corpus was the only one which provided ratings graded according to their relevance we only used the binary rating.Also we didn't rate any documents with 0 because we only had the relevant documents IDs and decided that the irrelevant ones won't get any rating at all.
+Since the Cranfield corpus was the only one which provided scaled ratings, we only used the binary rating. We also didn't rate any documents with 0, since every document you don't rate gets the default value 0.
 
 ## Evaluation metrics
 
