@@ -36,6 +36,9 @@ module.exports = {
         alt: '',
         src: 'img/Logo_orangenerHG.png',
       },
+      prism: {
+        theme: require('prism-react-renderer/themes/github'),
+      },
     links: [
         {
           to: 'docs/benchmarks/intro', 
