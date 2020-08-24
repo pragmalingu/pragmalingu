@@ -15,9 +15,9 @@ Before we start, the Ranking Evaluation API needs three ingredients to give us r
 
 At first we have to save the documents you want to search on to an Elasticsearch index. Detailed instructions on how to do that can be found in our [Elasticsearch Setup Guide](../guides/elastic-setup.md).
 
-Next you need the search queries correctly formatted for the Ranking Evaluation API to read. We wrote down how you can achieve this from raw data in our [Parsing Guide](../guides/parsing-guide.mdx).
+Next you need the search queries correctly formatted for the Ranking Evaluation API to read. We wrote down how you can achieve this from raw data in our [Parsing Guide](../guides/how-to-parse.mdx).
 
-After parsing the queries, they should be saved into an evaluation body, which looks like this:
+After parsing the queries, they should have the following format:
 
 ```json
 {
@@ -54,7 +54,8 @@ After parsing the queries, they should be saved into an evaluation body, which l
 }
 ```
 
-In our notebooks we send the Ranking Evaluation API body to Elasticsearch search using json:
+On the [Python API Documentation website](https://elasticsearch-py.readthedocs.io/en/master/api.html) for the Ranking Evaluation API this is called the `body`so we will keep reffering to it as the evaluation body.
+After saving the body to a variable called `eval_body` we send it to the Ranking Evaluation API using json:
 
 ```python
 eval_body = json.dumps(create_function)
