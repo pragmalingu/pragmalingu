@@ -13,9 +13,31 @@ Therefore you should start by answering the following three questions:
 2. How do we ** want ** the data to look?
 3. What kind of ** preprocessing  ** would we want to apply first?
 
-Since we are mainly working with Elasticsearch by trying to improve the search results, the third question is not as relevant for us. Most preprocessing such as tokenization, stemming, lemmatizing, ignoring stop words, etc. will be applied to raw data. Since Elasticsearch includes automatic tokenization during indexing we won't cover it here. Preprocessing will be excluded for the time being. If you think it would be interesting to include it in our guide, please don't hesitate [to write us about it](../about/team.md).
+Since we are mainly working with Elasticsearch by trying to improve the search results, the third question is not as relevant for us. Most preprocessing such as tokenization, stemming, lemmatization, ignoring stop words, etc. will be applied to raw data. Since Elasticsearch includes automatic tokenization during indexing we won't cover it here. Preprocessing will be excluded for the time being. If you think it would be interesting to include it in our guide, please don't hesitate [to write us about it](../about/team.md).
 
 The code in the guide is programmed in Python3, since Python offers great tools for language processing.
+
+<details>
+<summary>What is "tokenization"?</summary>  
+
+When we talk about `Token` we basically mean a sequence of characters or bits that belong together. Within a sentence we mostly mean words. Tokenization is the process of splitting a long sequence like a sentence into Token. 
+For example the sentence "The man bought a big fish." could be split into this list:['The','man','bought','a','big','fish']
+Find more about Tokenization on our [definition page](https://pragmalingu.de/docs/guides/basic-definitions#tokenization).
+</details> 
+
+<details>
+<summary>What is "stemming"?</summary> 
+
+The `Stem` is the part of the word that doesn't chang when you apply grammatical rules. Stemming tries to remove all morphological features from a word so that there are less Token. A word like "learning" would for example change to "learn". If the stemmer cuts off too much information, the word could become too short and loose semantic meaning. This is called overstemming.
+Read more about stemming on our [definition page](https://pragmalingu.de/docs/guides/basic-definitions#stemming).
+</details> 
+
+<details>
+<summary>What is "lemmatization"?</summary>  
+
+A `Lemma` is similar to the `Stem`, since it also doesn't have any grammatical rules applied. But lemmatization doesn't just cut off information based on a alogrithm. It tries replace the word by it's basic form. For example "lovingly" would connect to "love", not just "loving".
+You can find more about lemmatization on our [definition page](https://pragmalingu.de/docs/guides/basic-definitions#lemmatization).
+</details> 
 
 ## Analyze Data 
 
