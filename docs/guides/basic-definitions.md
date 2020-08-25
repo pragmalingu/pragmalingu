@@ -24,7 +24,8 @@ This would have 4 Types and still 5 Token.
 
 # Tokenization
 
-
+Generally by `Token` we mean a sequence of characters or bits that belong together. Within the natural language processing we want them to represent words, as we already defined earlier. And Tokenization is the process of splitting a long sequence like a sentence into Token. For example the sentence "A rose is a rose." could be split into this list:['A','rose','is','a','rose']
+Depending on the tokenizer the punctation can also be a `Token`.
 
 # Stemming
 
@@ -45,7 +46,3 @@ It has to be extremely large and of course contain all of the words you're going
 However if a lemmatization is well adapted to the data, it can significantly improve the search results.
 
 # Stop words
-
-
-<div class="myDIV">Hover over me.</div>
-<div class="hide">Here should be some text.</div>
