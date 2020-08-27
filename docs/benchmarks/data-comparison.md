@@ -1,6 +1,6 @@
 ---
 id: data-comparison
-title: Coparison of Free-To-Use Data Sets
+title: Comparison of Free-To-Use Data Sets
 sidebar_label: Data Sets
 ---
 
@@ -399,7 +399,7 @@ far .
 
 **Description:**<br /> This collection contains 423 articles from the TIME Magazines of the 1960's. With only 423 documents it's a rather small data set. Problems with the labeling are once again present. The IDs used in the relevance assessments do not correlate with the unique text numbers that mark the start of a document.
 
-**Documents:**<br />`TIME.ALL` stores 423 documents, where the first one is labled as `*TEXT 017` and the last one `*TEXT 563`. Every document starts with a line that specifies text number, date and page number. After that line follow sentences of unlabled text. The example is shortend because the articles are quite long.
+**Documents:**<br />`TIME.ALL` stores 423 documents, where the first one is labeled as `*TEXT 017` and the last one `*TEXT 563`. Every document starts with a line that specifies text, date, and page number. The lines are followed by sentences of unlabeled text. The example is shorted because the articles are quite long.
 
 *Example:*
 ```
@@ -628,13 +628,16 @@ documents, and have the following meanings:
         c. BYPASS indicates that (in the original data) the story was
 		marked with the string "bypass" (or a typographical variant on that
 		string).
-		Altough this shouldn't be used for Topic search because there could be topics if there is a no even so no if theres a yes
+		Although this shouldn't be used for Topic search because there could be topics even if there is a NO, or likewise, there could be be no topics even if there is a YES.
 
     2. LEWISSPLIT : The possible values are TRAINING, TEST, and
-		NOT-USED.  TRAINING indicates it was used in the training set in the
+		NOT-USED.  
+        a. TRAINING indicates that it was used in training sets in the
 		experiments reported in LEWIS91d (Chapters 9 and 10), LEWIS92b,
-		LEWIS92e, and LEWIS94b.  TEST indicates it was used in the test set
-		for those experiments, and NOT-USED means it was not used in those
+		LEWIS92e, and LEWIS94b.  
+        b. TEST indicates it was used in the test set
+		for those experiments.
+        c. NOT-USED means it was not used in those
 		experiments.
 
      3. CGISPLIT : The possible values are TRAINING-SET and
@@ -646,7 +649,7 @@ documents, and have the following meanings:
 		Reuters-22173 collection.
 
      5. NEWID : The identification number (ID) the story has in the
-		Reuters-21578, Distribution 1.0 collection.  These IDs are assigned to
+		Reuters-21578, Distribution 1.0 collection. These IDs are assigned to
 		the stories in chronological order.
 ```
 For more detailed descriptions see the `VI. Formatting ` section of the `README.txt`.
@@ -789,7 +792,7 @@ Since there are many different data sets, we provide no examples given for this 
 **Description:**<br /> Starting in 2001, the corpus collected texts with up to 60 Million words per language. From the proceedings of the European Parliament were texts extracted for these 21 European languages: <br />
 Romanic (French, Italian, Spanish, Portuguese, Romanian), Germanic (English, Dutch, German, Danish, Swedish), Slavik (Bulgarian, Czech, Polish, Slovak, Slovene), Finni-Ugric (Finnish, Hungarian, Estonian), Baltic (Latvian, Lithuanian), and Greek.
 
-**Documents:**<br />Every file has the same structure. There are sections separated with the tag `<CHAPTER ID=?>` which are followed by the title of the chapter. The `<SPEAKER ID =??>` is a unique ID which marks the spoken part.  
+**Documents:**<br />Every file has the same structure. There are sections separated with the tag `<CHAPTER ID=?>` which are followed by the title of the chapter. The `<SPEAKER ID =??>` is a unique ID which marks the spoken part. 
 
 *Example from the English Corpus:*
 ```
