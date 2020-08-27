@@ -54,7 +54,7 @@ After parsing the queries, they should have the following format:
 }
 ```
 
-On the [Python API Documentation website](https://elasticsearch-py.readthedocs.io/en/master/api.html) for the Ranking Evaluation API this is called the `body`so we will keep reffering to it as the evaluation body.
+On the [Python API Documentation website](https://elasticsearch-py.readthedocs.io/en/master/api.html) for the Ranking Evaluation API this is called the `body`so we will keep referring to it as the evaluation body.
 After saving the body to a variable called `eval_body` we send it to the Ranking Evaluation API using json:
 
 ```python
@@ -152,7 +152,7 @@ Here is an example request with the simple query string operator searching for t
 
 ### Multi-match query operator
 
-The [multi-match query operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#query-dsl-multi-match-query) builds on the match query operator and allows multi-line match while searching. It does work similar to the simple string query but it rates the documents a little bit diffrent.
+The [multi-match query operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#query-dsl-multi-match-query) builds on the match query operator and allows multi-line match while searching. It does work similar to the simple string query but it rates the documents a little bit different.
 
 If no specific fields are provided it will search on all fields available. We chose "title" and "text" since they have the most information:
 
@@ -186,12 +186,12 @@ If no specific fields are provided it will search on all fields available. We ch
 }
 ```
 
-This operator was also the one we chose for our standard search to stemming comparisson, which you can read in our [first experiment](../experiments/experiment1.md). 
+This operator was also the one we chose for our standard search to stemming comparison, which you can read in our [first experiment](../experiments/experiment1.md). 
 
 ## Rating metrics
 
-With the rating metric we are able to provide better ratings for more relevant documents. For example if we search for `ice cream truck` we could rate documents with `ice cream truck` higher than documents with `ice cream` or `truck` and still lable all those documents as relevant.
-A document rating is represented by an integer. The higher the number the more relevant the document. To use this scale in your search we also have to adjust the `relevant_rating_threshold` variable to the highest rated number. The default would be 1, which means the different rated documents would all be relevant.
+With the rating metric we are able to provide better ratings for more relevant documents. For example if we search for `ice cream truck` we could rate documents with `ice cream truck` higher than documents with `ice cream` or `truck` and still label all those documents as relevant.
+A document rating is represented by an integer. The higher the number the more relevant the document. To use this scale in your search we also have to adjust the `relevant_rating_threshold` variable to the highest rated number. The default would be 1, which means the different rated documents would all be irrelevant.
 
 We can only make this adjustment if we have annotated data that provides the right metrics or if we are willing to rate the relevant documents manually. 
 
@@ -236,4 +236,80 @@ This is an example with higher scaled ratings:
 Since the Cranfield corpus was the only one which provided scaled ratings, we only used the binary rating. We also didn't rate any documents with 0, since every document you don't rate gets the default value 0.
 
 ## Evaluation metrics
+
+Aside from the metrics we can adjust by changing the request, there are some metrics that influence how the evaluation results will be computed.
+
+### Precision at k
+With setting the metric to `precision` and defining `k`, we can measure how many relevant results are returned in the top k results. 
+
+Since the user only looks at the first few results of a search query, it doesn't make sense to set `k` higher than 20. Reducing the number of top results to 10 or 5 could give an even better idea of the performance.
+
+But this metric only recognizes documents as relevant, if they are labeled. So it is possible that documents that would be relevant, but aren't labeled, would actually worsen the results on this.
+Also the position isn't taken in account either. Documents on position 1 and position 10 are considered as equally important.
+
+We already explained the `relevant_rating_threshold` parameter above. With the `ignore_unlabeled` parameter you are able to take the unlabeled documents into account. The default value is `false`, which treats unlabeled documents as irrelevant. But if set to `true`, those documents won't count at all.
+
+An example for the Precision metric:
+
+```json
+{
+    
+  "requests": [
+    ...
+  ]
+  "metric": {
+    "precision": {
+      "k": 20,
+      "relevant_rating_threshold": 3,
+      "ignore_unlabeled": false
+    }
+  }
+}
+```
+
+<details>
+<summary>What is "Precision"?</summary>  
+
+Precision measures the probability that retrieved documents are relevant to the search query. Therefore the number of all retrieved relevant documents is divided by the number of all retrieved documents. </br >
+For example: We retrieve 10 search results and only 5 are relevant for our search. 
+The Precision measure would be: `5/10 = 0.5` </br >
+To measure the Precision it's necessary to have the relevant documents labeled as such. 
+Precision only looks at the documents that are retrieved and doesn't care about what more could've been retrieved.
+</details> 
+
+### Recall at k
+
+The metric `recall` works very similar to the `precision` metric. `k` defines how many relevant results are returned in the top k results and taken into measurement. 
+This metric also has difficulties, if documents aren't labeled.
+The position isn't taken in account either. Which can be problematic since the Recall measure doesn't care about the retrieved irrelevant documents.
+
+The `relevant_rating_threshold` parameter is explained above. 
+
+An example for the Recall metric:
+
+```json
+{
+    
+  "requests": [
+    ...
+  ]
+  "metric": {
+    "recall": {
+      "k": 20,
+      "relevant_rating_threshold": 3
+    }
+  }
+}
+```
+
+<details>
+<summary>What is "Recall"?</summary>  
+
+Recall measures the probability that relevant documents are retrieved. 
+Therefore the number of all retrieved relevant documents is divided by the number all documents that are labeled as relevant. </br >
+For example: We search on 10 documents, 8 of them are relevant and 4 of the relevant ones are retrieved. 
+The Recall measure would be: `4/8 = 0.5` </br >
+To measure the Recall it's necessary to have the relevant documents labeled.
+Recall only looks at the documents that could be retrieved and doesn't take in account, if many irrelevant documents are retrieved aside the relevant ones.
+</details> 
 
