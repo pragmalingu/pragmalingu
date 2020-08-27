@@ -188,7 +188,7 @@ If no specific fields are provided it will search on all fields available. We ch
 
 This operator was also the one we chose for our standard search to stemming comparison, which you can read in our [first experiment](../experiments/experiment1.md). 
 
-## Rating metrics
+## Rating metric
 
 With the rating metric we are able to provide better ratings for more relevant documents. For example if we search for `ice cream truck` we could rate documents with `ice cream truck` higher than documents with `ice cream` or `truck` and still label all those documents as relevant.
 A document rating is represented by an integer. The higher the number the more relevant the document. To use this scale in your search we also have to adjust the `relevant_rating_threshold` variable to the highest rated number. The default would be 1, which means the different rated documents would all be irrelevant.
@@ -270,9 +270,9 @@ An example for the Precision metric:
 <details>
 <summary>What is "Precision"?</summary>  
 
-Precision measures the probability that retrieved documents are relevant to the search query. Therefore the number of all retrieved relevant documents is divided by the number of all retrieved documents. </br >
+Precision measures the probability that retrieved documents are relevant to the search query. Therefore the number of all retrieved relevant documents is divided by the number of all retrieved documents. <br />
 For example: We retrieve 10 search results and only 5 are relevant for our search. 
-The Precision measure would be: `5/10 = 0.5` </br >
+The Precision measure would be: `5/10 = 0.5` <br />
 To measure the Precision it's necessary to have the relevant documents labeled as such. 
 Precision only looks at the documents that are retrieved and doesn't care about what more could've been retrieved.
 </details> 
@@ -306,9 +306,9 @@ An example for the Recall metric:
 <summary>What is "Recall"?</summary>  
 
 Recall measures the probability that relevant documents are retrieved. 
-Therefore the number of all retrieved relevant documents is divided by the number all documents that are labeled as relevant. </br >
+Therefore the number of all retrieved relevant documents is divided by the number all documents that are labeled as relevant. <br />
 For example: We search on 10 documents, 8 of them are relevant and 4 of the relevant ones are retrieved. 
-The Recall measure would be: `4/8 = 0.5` </br >
+The Recall measure would be: `4/8 = 0.5` <br />
 To measure the Recall it's necessary to have the relevant documents labeled.
 Recall only looks at the documents that could be retrieved and doesn't take in account, if many irrelevant documents are retrieved aside the relevant ones.
 </details> 
