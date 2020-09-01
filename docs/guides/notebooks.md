@@ -4,13 +4,37 @@ title: Working with Notebooks
 sidebar_label: Notebooks
 ---
 
-Here we will explain how to evaluate data with Notebooks.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac euismod odio, eu consequat dui. Nullam molestie consectetur risus id imperdiet. Proin sodales ornare turpis, non mollis massa ultricies id. Nam at nibh scelerisque, feugiat ante non, dapibus tortor. Vivamus volutpat diam quis tellus elementum bibendum. Praesent semper gravida velit quis aliquam. Etiam in cursus neque. Nam lectus ligula, malesuada et mauris a, bibendum faucibus mi. Phasellus ut interdum felis. Phasellus in odio pulvinar, porttitor urna eget, fringilla lectus. Aliquam sollicitudin est eros. Mauris consectetur quam vitae mauris interdum hendrerit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Since evaluating data is always connected to using a lot of RAM, it's useful to have step by step code. Notebooks are ideal for such a task.
+Depending on what you want to accomplish and how much memory you have on you own, there are two very good possibilities:
 
-Duis et egestas libero, imperdiet faucibus ipsum. Sed posuere eget urna vel feugiat. Vivamus a arcu sagittis, fermentum urna dapibus, congue lectus. Fusce vulputate porttitor nisl, ac cursus elit volutpat vitae. Nullam vitae ipsum egestas, convallis quam non, porta nibh. Morbi gravida erat nec neque bibendum, eu pellentesque velit posuere. Fusce aliquam erat eu massa eleifend tristique.
+Google Colab and Juypter Notebooks.
 
-Sed consequat sollicitudin ipsum eget tempus. Integer a aliquet velit. In justo nibh, pellentesque non suscipit eget, gravida vel lacus. Donec odio ante, malesuada in massa quis, pharetra tristique ligula. Donec eros est, tristique eget finibus quis, semper non nisl. Vivamus et elit nec enim ornare placerat. Sed posuere odio a elit cursus sagittis.
+## Google Colab
 
-Phasellus feugiat purus eu tortor ultrices finibus. Ut libero nibh, lobortis et libero nec, dapibus posuere eros. Sed sagittis euismod justo at consectetur. Nulla finibus libero placerat, cursus sapien at, eleifend ligula. Vivamus elit nisl, hendrerit ac nibh eu, ultrices tempus dui. Nam tellus neque, commodo non rhoncus eu, gravida in risus. Nullam id iaculis tortor.
+- hat gehosteten Speicherplatz
+- man kann es über github pushen und andere können es local auf ihrem google bearbeiten ohne das endprodukt zu verändern
+- - man muss jedes Mal beim neu öffnen alles neu installieren ud downloaden
+- Laufzeitdauer ist nicht beeinflussbar, da nicht selbst gehosted
+- es ist egal wie wenig effizient etwas geschrieben ist,da man es nicht selber hostet
 
-Nullam at odio in sem varius tempor sit amet vel lorem. Etiam eu hendrerit nisl. Fusce nibh mauris, vulputate sit amet ex vitae, congue rhoncus nisl. Sed eget tellus purus. Nullam tempus commodo erat ut tristique. Cras accumsan massa sit amet justo consequat eleifend. Integer scelerisque vitae tellus id consectetur.
+## Jupyter
+
+- man braucht einen Server oder genug speicherplatz
+- einmal installiert ist alles da 
+- Daten können im Hintergrund abgespeichert werden
+- Laufzeit kann deutlich beschleunigt werden
+- Notebooks können schlecht veröffentlicht werden, da sie jeder ändern kann, wenn er/sie zugriff hat
+- andere können dadurch zugriff auf deinen privaten PC/Server haben
+
+## Conclusion
+
+hosting
+run time
+memory
+security
+writeable
+
+
+Comparison of both in a table
+
+So depending on your need in evaluation you have to decide which solution works best with your project.
