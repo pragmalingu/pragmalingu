@@ -12,32 +12,28 @@ module.exports = {
      },
   ],
   benchmark: [
+     'benchmarks/intro',
      {
      	type: 'category',
-     	label: 'Introduction',
-     	items: ['benchmarks/intro'],//, 'benchmarks/use-cases'],
-     },
-     {
-     	type: 'category',
-     	label: 'Data Set Comparisson',
-     	items: ['benchmarks/overview','benchmarks/data-comparisson'],
+     	label: 'Data Set Comparison',
+     	items: ['benchmarks/overview','benchmarks/data-comparison'],
      },
   ],
   guides: [
      {
-     	type: 'category',
-     	label: 'Basics',
-     	items: ['guides/basic-definitions', 'guides/elasticsearch-lucene-intro', 'guides/wordembeddings-intro', 'guides/futher-literature'],
+      type: 'category',
+      label: 'Setup',
+      items: ['guides/elastic-setup', 'guides/docker-setup'],
      },
      {
      	type: 'category',
-     	label: 'Setup',
-     	items: ['guides/elastic-setup', 'guides/docker-setup'],
+     	label: 'Basics',
+     	items: ['guides/basic-definitions', 'guides/how-to-parse', 'guides/elasticsearch-lucene-intro', 'guides/wordembeddings-intro', 'guides/futher-literature'],
      },
      {
      	type: 'category',
      	label: 'Evaluation',
-     	items: ['guides/notebooks'],
+     	items: ['guides/notebooks','guides/ranking-api'],
      },
   ],
   experiments: [
