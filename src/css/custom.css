@@ -26,6 +26,13 @@
 
 /*customized parts*/
 
+@media only screen and (min-width: 1500px) {
+}
+
+a {
+  color: var(--ifm-color-primary-darker);
+}
+
 /*Here can we change the color of the navigationbar*/
 .navbar {
   background-color: var(--ifm-color-primary-darkest);
