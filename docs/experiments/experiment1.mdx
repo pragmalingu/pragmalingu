@@ -11,7 +11,7 @@ For our first experiment we connected a Google Colab Notebook to our Elasticsear
 
 Therefore, we parsed [these 8 free available corpora](http://ir.dcs.gla.ac.uk/resources/test_collections/) hosted by the University of Glasgow and feed them to the Elasticsearch [Ranking Evaluation API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html). With [our parsing guide](https://pragmalingu.de/docs/guides/how-to-parse) you can try this yourself or take a look at our [Data Set Notebooks.]()
 
-These are the two build-in methods we compared to the standard Elasticsearch operator:
+These are the two built-in methods that we compared to the [standard Elasticsearch analyzer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html):
 
 * [Standard English Stemmer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html)
 * [Hunspell Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html)
@@ -23,12 +23,13 @@ At first we implemented our search with a standard Elasticsearch method, [multi 
 Here you can see the metrics we choose and an example request of the adi corpus:
 
 ```python
-{   "metric": {
+{
+    "metric": {
         "recall": {
-        "k": 20,
-        "relevant_rating_threshold": 1
+            "k": 20,
+            "relevant_rating_threshold": 1
         }
-      },
+    },
     "request": {
                 "query": {
                     "multi_match": {
@@ -40,7 +41,8 @@ Here you can see the metrics we choose and an example request of the adi corpus:
                     }
                 }
             }
-        },
+        }
+    }
 }
 ```
 
@@ -79,16 +81,16 @@ This is how we implemented the stemming analyzer for Elasticsearch:
 
 ```python
 stemming_analyser = {
-    "filter" : {
-        "eng_stemmer" : {
-        "type" : "stemmer",
-        "name" : "english"
+    "filter": {
+        "eng_stemmer": {
+            "type": "stemmer",
+            "name": "english"
         }
     },
-    "analyzer" : {
-        "default" : {
-            "tokenizer" : "standard",
-            "filter" : ["lowercase", "eng_stemmer"]
+    "analyzer": {
+        "default": {
+            "tokenizer": "standard",
+            "filter": ["lowercase", "eng_stemmer"]
         }
     }
 }
