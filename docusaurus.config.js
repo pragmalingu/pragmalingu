@@ -11,7 +11,7 @@
 // List of projects/orgs using your project for the users page.
 const allDocHomesPaths = [
   '/docs/about/',
-  '/docs/benchmarks/',
+  '/docs/comparisons/',
   '/docs/experiments/',
   '/docs/guides/',
 ];
@@ -41,8 +41,8 @@ module.exports = {
       },
     links: [
         {
-          to: 'docs/benchmarks/intro', 
-          label: 'Benchmarks', 
+          to: 'docs/comparisons/intro', 
+          label: 'Comparisons', 
           position: 'left'
         },
         {
