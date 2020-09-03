@@ -46,14 +46,9 @@ module.exports = {
           position: 'left'
         },
         {
-          to: 'docs/about/team', 
-          label: 'About', 
+          to: 'docs/experiments/experiment1', 
+          label: 'Experiments', 
           position: 'left'
-        },
-        {
-          href: 'https://github.com/',
-          label: 'GitHub',
-          position: 'right',
         },
         {
           to: 'docs/guides/basic-definitions', 
@@ -61,9 +56,14 @@ module.exports = {
           position: 'left'
         },
         {
-          to: 'docs/experiments/experiment1', 
-          label: 'Experiments', 
+          to: 'docs/about/team', 
+          label: 'About', 
           position: 'left'
+        },
+        {
+          href: 'https://github.com/pragmalingu',
+          label: 'GitHub',
+          position: 'right',
         },
       ],
     },

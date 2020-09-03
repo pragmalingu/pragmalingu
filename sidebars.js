@@ -3,11 +3,10 @@ module.exports = {
   ],
   comparisons: [
      'comparisons/intro',
-     {
-     	type: 'category',
-     	label: 'Data Set Comparison',
-     	items: ['comparisons/overview','comparisons/data-comparison'],
-     },
+     'comparisons/overview',
+     'comparisons/data-comparison',
+     'comparisons/stemming',
+     'comparisons/embeddings'
   ],
   guides: [
      'guides/elastic-setup',
