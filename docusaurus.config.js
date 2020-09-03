@@ -71,15 +71,19 @@ module.exports = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Content',
           items: [
             {
-              label: 'Getting Started',
+              label: 'Comparisons',
+              to: 'docs/comparisons/data-comparison',
+            },
+            {
+              label: 'Experiments',
               to: 'docs/experiments/experiment1',
             },
             {
               label: 'Guides',
-              to: 'docs/guides/basic-definitions',
+              to: 'docs/guides/elastic-setup',
             },
           ],
         },
@@ -92,11 +96,7 @@ module.exports = {
             },
             {
               label: 'Discord',
-              href: 'https://discordapp.com/invite/pragmalingu',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/',
+              href: 'https://discord.gg/MSJT5EW',
             },
           ],
         },
@@ -104,12 +104,16 @@ module.exports = {
           title: 'More',
           items: [
             {
-              label: 'Impressum',
-              to: 'docs/impressum',
-            },
-            {
               label: 'GitHub',
               href: 'https://github.com/pragmalingu',
+            },
+            {
+              label: 'About',
+              href: 'docs/about/team',
+            },
+            {
+              label: 'Impressum',
+              to: 'docs/impressum',
             },
           ],
         },
