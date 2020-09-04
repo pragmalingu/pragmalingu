@@ -8,28 +8,28 @@ sidebar_label: Notebooks
 Notebooks can be a useful tool in many areas, in our case we mainly used them for evaluating data sets on Elasticsearch. Since Python is currently the best option to work with on NLP, we chose a Python Notebook option. 
 
 <details>
-<summary>What is a "Notebook"?</summary>  
+<summary>Why use a "Notebook"?</summary>  
 
 Within a Notebook it is easy to combine runnable code, text, mathematical equations, tables and many other helpful visualizations.
 Working with a Notebook makes it easier to understand code and to display additional information in one document.
 With the possibility to run it bit by bit, debugging gets easier and clearer for others to understand.
 </details>  
 
-Running data is always connected to using a lot of RAM, it's useful to have step by step code and Notebooks are ideal for such a task. It also makes the debugging process a lot easier and manageable.
+Running data is always connected to using a lot of RAM, it's useful to have step by step code and Notebooks are ideal for such a task.
 Depending on what you want to accomplish and how much memory you have on you own, there are two very good possibilities:
 
 Google Colab and Juypter Notebooks.
 
 Both are similar structured, but there are small differences in handling data with them. For our use cases we decided to choose Google Colab.
 
-To get started with a Google Colab Notbeook, all you need is your browser. If you have a Google Drive account, you the notebooks will save automatically. Otherwise you will have to save changes manually, for example as a commit in Github. Information on that can be found [in this notebook](https://colab.research.google.com/github/googlecolab/colabtools/blob/master/notebooks/colab-github-demo.ipynb). 
+To get started with a Google Colab Notebook, all you need is your browser. If you use the Notebook with a Google Drive account, the notebooks will save automatically. Otherwise you will have to save changes manually, for example as a commit in Github. Information on that can be found [in this notebook](https://colab.research.google.com/github/googlecolab/colabtools/blob/master/notebooks/colab-github-demo.ipynb). 
 
 For further information check out the [Google Colab help notebooks](https://colab.research.google.com/notebooks/intro.ipynb).
 
 ## 2. Cells
 A notebook consists of several parts, so-called 'cells'. These can either be in text or code format. The text format cells are useful for holding information and structuring the notebook. Text is formatted in markdown, so that you can use headlines to create a table of contents that is then displayed on the left.
 
-The code cells are compatible with several programming languages and require the same syntax as the language used. For Python you have to import needed libraries the same way you would normally. A cell only responses with an output if you either tell the cell to print something back or if there is an error. Otherwise everything went smoothly.
+The code cells are compatible with several programming languages and require the same syntax as the language used. For Python you have to import libraries the same way you would normally. A cell only responses with an output, if you either tell the cell to print something or if there is an error. Otherwise everything went smoothly and you won't get any feedback.
 
 The cells can be moved within the notebook at any time, but you should keep in mind, that some cells are dependent on others regarding variables or imports. Basically, you can execute the cells and thus the code snippets in any order as long as you keep track.
 
@@ -65,7 +65,7 @@ To do this, you first have to download Elasticsearch:
 !chown -R daemon:daemon elasticsearch-7.9.1
 ``` 
 
-Then you can start an Elasticsearch server locally and set up an instance:
+Then you can start an Elasticsearch server and set up an instance:
 
 ```python
 # start server
@@ -112,4 +112,3 @@ Our [Elasticsearch Setup Guide](../guides/elastic-setup.md) provides more detail
 ### 6. Summary
 
 Now that you know how to download data, get a local Elasticsearch instance running and how you can work in Google Colab, you can start experimenting on your own. Therefore check out our [first experiment](../experiments/experiment1.mdx).
-
