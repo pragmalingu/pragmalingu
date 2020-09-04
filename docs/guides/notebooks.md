@@ -3,14 +3,112 @@ id: notebooks
 title: Working with Notebooks
 sidebar_label: Notebooks
 ---
+## 1. Google Colab
 
-Here we will explain how to evaluate data with Notebooks.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac euismod odio, eu consequat dui. Nullam molestie consectetur risus id imperdiet. Proin sodales ornare turpis, non mollis massa ultricies id. Nam at nibh scelerisque, feugiat ante non, dapibus tortor. Vivamus volutpat diam quis tellus elementum bibendum. Praesent semper gravida velit quis aliquam. Etiam in cursus neque. Nam lectus ligula, malesuada et mauris a, bibendum faucibus mi. Phasellus ut interdum felis. Phasellus in odio pulvinar, porttitor urna eget, fringilla lectus. Aliquam sollicitudin est eros. Mauris consectetur quam vitae mauris interdum hendrerit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Notebooks can be a useful tool in many areas, in our case we mainly used them for evaluating data sets on Elasticsearch. Since Python is currently the best option to work with on NLP, we chose a Python Notebook option. 
 
-Duis et egestas libero, imperdiet faucibus ipsum. Sed posuere eget urna vel feugiat. Vivamus a arcu sagittis, fermentum urna dapibus, congue lectus. Fusce vulputate porttitor nisl, ac cursus elit volutpat vitae. Nullam vitae ipsum egestas, convallis quam non, porta nibh. Morbi gravida erat nec neque bibendum, eu pellentesque velit posuere. Fusce aliquam erat eu massa eleifend tristique.
+<details>
+<summary>Why use a "Notebook"?</summary>  
 
-Sed consequat sollicitudin ipsum eget tempus. Integer a aliquet velit. In justo nibh, pellentesque non suscipit eget, gravida vel lacus. Donec odio ante, malesuada in massa quis, pharetra tristique ligula. Donec eros est, tristique eget finibus quis, semper non nisl. Vivamus et elit nec enim ornare placerat. Sed posuere odio a elit cursus sagittis.
+Within a Notebook it is easy to combine runnable code, text, mathematical equations, tables and many other helpful visualizations.
+Working with a Notebook makes it easier to understand code and to display additional information in one document.
+With the possibility to run it bit by bit, debugging gets easier and clearer for others to understand.
+</details>  
 
-Phasellus feugiat purus eu tortor ultrices finibus. Ut libero nibh, lobortis et libero nec, dapibus posuere eros. Sed sagittis euismod justo at consectetur. Nulla finibus libero placerat, cursus sapien at, eleifend ligula. Vivamus elit nisl, hendrerit ac nibh eu, ultrices tempus dui. Nam tellus neque, commodo non rhoncus eu, gravida in risus. Nullam id iaculis tortor.
+Running data is always connected to using a lot of RAM, it's useful to have step by step code and Notebooks are ideal for such a task.
+Depending on what you want to accomplish and how much memory you have on you own, there are two very good possibilities:
 
-Nullam at odio in sem varius tempor sit amet vel lorem. Etiam eu hendrerit nisl. Fusce nibh mauris, vulputate sit amet ex vitae, congue rhoncus nisl. Sed eget tellus purus. Nullam tempus commodo erat ut tristique. Cras accumsan massa sit amet justo consequat eleifend. Integer scelerisque vitae tellus id consectetur.
+Google Colab and Juypter Notebooks.
+
+Both are similar structured, but there are small differences in handling data with them. For our use cases we decided to choose Google Colab.
+
+To get started with a Google Colab Notebook, all you need is your browser. If you use the Notebook with a Google Drive account, the notebooks will save automatically. Otherwise you will have to save changes manually, for example as a commit in Github. Information on that can be found [in this notebook](https://colab.research.google.com/github/googlecolab/colabtools/blob/master/notebooks/colab-github-demo.ipynb). 
+
+For further information check out the [Google Colab help notebooks](https://colab.research.google.com/notebooks/intro.ipynb).
+
+## 2. Cells
+A notebook consists of several parts, so-called 'cells'. These can either be in text or code format. The text format cells are useful for holding information and structuring the notebook. Text is formatted in markdown, so that you can use headlines to create a table of contents that is then displayed on the left.
+
+The code cells are compatible with several programming languages and require the same syntax as the language used. For Python you have to import libraries the same way you would normally. A cell only responses with an output, if you either tell the cell to print something or if there is an error. Otherwise everything went smoothly and you won't get any feedback.
+
+The cells can be moved within the notebook at any time, but you should keep in mind, that some cells are dependent on others regarding variables or imports. Basically, you can execute the cells and thus the code snippets in any order as long as you keep track.
+
+### 3. Install packages
+Since Google Colab is hosted on Google's servers, you have to install the necessary packages and download data every time you reconnect the notebook.
+
+To install packages that aren't already installed on the Colab server, like for example the Python package for elasticsearch, simply run `!pip` followed by the package you want to install:
+```python
+!pip install Elasticsearch -q
+```
+
+### 4. Get Data
+
+As already mentioned, data must also be downloaded again with each new connection. Download and other commands follow the same syntax as using your terminal on Linux. You can find the downloaded files on the left when you click on the folder sign. 
+The files can be referenced like this:
+
+```python
+!wget http://ir.dcs.gla.ac.uk/resources/test_collections/cran/cran.tar.gz
+!tar -xf cran.tar.gz
+
+PATH_TO_CRAN_TXT = '/content/cran.all.1400'
+```
+
+### 5. Setup Elasticsearch instance
+
+If you don't want to host Elasticsearch on your own server, you can also initialize Elasticsearch in Google Colab.
+To do this, you first have to download Elasticsearch:
+
+```python
+# download elasticsearch
+!wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.1-linux-x86_64.tar.gz -q
+!tar -xzf elasticsearch-7.9.1-linux-x86_64.tar.gz
+!chown -R daemon:daemon elasticsearch-7.9.1
+``` 
+
+Then you can start an Elasticsearch server and set up an instance:
+
+```python
+# start server
+import os
+from subprocess import Popen, PIPE, STDOUT
+es_server = Popen(['elasticsearch-7.9.1/bin/elasticsearch'], 
+                  stdout=PIPE, stderr=STDOUT,
+                  preexec_fn=lambda: os.setuid(1)
+                 )
+# wait a bit then test
+!curl -X GET "localhost:9200/"
+
+# client-side
+!pip install elasticsearch -q
+from elasticsearch import Elasticsearch
+from datetime import datetime
+es = Elasticsearch()
+es.ping()  # got True
+```
+
+You can check whether everything worked with a short example search request. To do this, we create an index, add a document and search on it:
+
+```python
+doc = {
+    'author': 'kimchy',
+    'text': 'Elasticsearch: cool. bonsai cool.',
+    'timestamp': datetime.now(),
+}
+res = es.index(index="test-index", id=1, body=doc)
+
+response = es.cat.indices()
+print(response)
+
+res = es.get(index="test-index", id=1)
+print(res['_source'])
+
+es.indices.refresh(index="test-index")
+
+res = es.search(index="test-index", body={"query": {"match_all": {}}})
+```
+
+Our [Elasticsearch Setup Guide](../guides/elastic-setup.md) provides more details on how to set up Elasticsearch on your own server.
+
+### 6. Summary
+
+Now that you know how to download data, get a local Elasticsearch instance running and how you can work in Google Colab, you can start experimenting on your own. Therefore check out our [first experiment](../experiments/experiment1.mdx).
