@@ -3,8 +3,9 @@ id: notebooks
 title: Working with Notebooks
 sidebar_label: Notebooks
 ---
+## 1. Google Colab
 
-Notebooks can be a useful tool in many areas, in our case we mainly used them for evaluating data sets on Elasticsearch. We used Notebooks that are compatible with Python, which has the most useful libraries on NLP. 
+Notebooks can be a useful tool in many areas, in our case we mainly used them for evaluating data sets on Elasticsearch. Since Python is currently the best option to work with on NLP, we chose a Python Notebook option. 
 
 <details>
 <summary>What is a "Notebook"?</summary>  
@@ -14,62 +15,101 @@ Working with a Notebook makes it easier to understand code and to display additi
 With the possibility to run it bit by bit, debugging gets easier and clearer for others to understand.
 </details>  
 
-Since running data is always connected to using a lot of RAM, it's useful to have step by step code. Notebooks are ideal for such a task.
+Running data is always connected to using a lot of RAM, it's useful to have step by step code and Notebooks are ideal for such a task. It also makes the debugging process a lot easier and manageable.
 Depending on what you want to accomplish and how much memory you have on you own, there are two very good possibilities:
 
 Google Colab and Juypter Notebooks.
 
-Both are similar structured. There are two different 
+Both are similar structured, but there are small differences in handling data with them. For our use cases we decided to choose Google Colab.
 
-## Google Colab
+To get started with a Google Colab Notbeook, all you need is your browser. If you have a Google Drive account, you the notebooks will save automatically. Otherwise you will have to save changes manually, for example as a commit in Github. Information on that can be found [in this notebook](https://colab.research.google.com/github/googlecolab/colabtools/blob/master/notebooks/colab-github-demo.ipynb). 
 
-Um mit einem Notbeook von Google Colab loszulegen braucht man nichts weiter, als seinen Browser. Möchte man das Notebook speichern, ist es hilfreich einen Google Drive Account zu haben. Ansonsten ist es auch möglich die Notebooks in github [abzuspeichern](https://colab.research.google.com/github/googlecolab/colabtools/blob/master/notebooks/colab-github-demo.ipynb), hierbei muss man nur beachten, dass man Änderungen manuell als commit in Github speichern muss. 
+For further information check out the [Google Colab help notebooks](https://colab.research.google.com/notebooks/intro.ipynb).
 
+## 2. Cells
+A notebook consists of several parts, so-called 'cells'. These can either be in text or code format. The text format cells are useful for holding information and structuring the notebook. Text is formatted in markdown, so that you can use headlines to create a table of contents that is then displayed on the left.
 
-Weitere Informationen findet ihr bei [Google Colab](https://colab.research.google.com/notebooks/intro.ipynb).
+The code cells are compatible with several programming languages and require the same syntax as the language used. For Python you have to import needed libraries the same way you would normally. A cell only responses with an output if you either tell the cell to print something back or if there is an error. Otherwise everything went smoothly.
 
-### Install packages
-Eines der wichtigsten Dinge, die man wissen sollte, bevor man durchstarten kann, ist wie man packages installiert. 
-To install packages that aren't already installed on the Colab server, like for example the Python package for elasticsearch, simply run `!pip` followed by the package in one cell.
+The cells can be moved within the notebook at any time, but you should keep in mind, that some cells are dependent on others regarding variables or imports. Basically, you can execute the cells and thus the code snippets in any order as long as you keep track.
 
+### 3. Install packages
+Since Google Colab is hosted on Google's servers, you have to install the necessary packages and download data every time you reconnect the notebook.
 
-### Get Data
+To install packages that aren't already installed on the Colab server, like for example the Python package for elasticsearch, simply run `!pip` followed by the package you want to install:
+```python
+!pip install Elasticsearch -q
+```
 
+### 4. Get Data
 
-### Run Code
+As already mentioned, data must also be downloaded again with each new connection. Download and other commands follow the same syntax as using your terminal on Linux. You can find the downloaded files on the left when you click on the folder sign. 
+The files can be referenced like this:
 
+```python
+!wget http://ir.dcs.gla.ac.uk/resources/test_collections/cran/cran.tar.gz
+!tar -xf cran.tar.gz
 
-### Summary
+PATH_TO_CRAN_TXT = '/content/cran.all.1400'
+```
 
-- hat gehosteten Speicherplatz
-- man kann es über github pushen und andere können es local auf ihrem google bearbeiten ohne das endprodukt zu verändern
-- - man muss jedes Mal beim neu öffnen alles neu installieren ud downloaden
-- Laufzeitdauer ist nicht beeinflussbar, da nicht selbst gehosted
-- es ist egal wie wenig effizient etwas geschrieben ist,da man es nicht selber hostet
+### 5. Setup Elasticsearch instance
 
-## Jupyter
+If you don't want to host Elasticsearch on your own server, you can also initialize Elasticsearch in Google Colab.
+To do this, you first have to download Elasticsearch:
 
-Jupyter Notebooks sind interaktive, aus einer Mischung aus Text, Code und Diagrammen bestehende Web-Dokumente, in denen Sie die Präsenzaufgaben lösen, sich Notizen machen und bequem experimentieren können.
-Wollen Sie dieses Zusatzangebot nutzen, müssen Sie die Software zur Ausführung von Jupyter Notebooks installieren:
+```python
+# download elasticsearch
+!wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.9.1-linux-x86_64.tar.gz -q
+!tar -xzf elasticsearch-7.9.1-linux-x86_64.tar.gz
+!chown -R daemon:daemon elasticsearch-7.9.1
+``` 
 
-Anaconda bereits installiert Miniconda conda install jupyter
-pip pip3 install jupyter
-Auf der Kurs-Website finden Sie ein erstes Notebook zum Testen Ihrer Installation.
+Then you can start an Elasticsearch server locally and set up an instance:
 
-- man braucht einen Server oder genug speicherplatz
-- einmal installiert ist alles da 
-- Daten können im Hintergrund abgespeichert werden
-- Laufzeit kann deutlich beschleunigt werden
-- Notebooks können schlecht veröffentlicht werden, da sie jeder ändern kann, wenn er/sie zugriff hat
-- andere können dadurch zugriff auf deinen privaten PC/Server haben
+```python
+# start server
+import os
+from subprocess import Popen, PIPE, STDOUT
+es_server = Popen(['elasticsearch-7.9.1/bin/elasticsearch'], 
+                  stdout=PIPE, stderr=STDOUT,
+                  preexec_fn=lambda: os.setuid(1)
+                 )
+# wait a bit then test
+!curl -X GET "localhost:9200/"
 
-## Conclusion
+# client-side
+!pip install elasticsearch -q
+from elasticsearch import Elasticsearch
+from datetime import datetime
+es = Elasticsearch()
+es.ping()  # got True
+```
 
-|              | hosting | run time | memory | security | writeable | shareable | Time | NPL |
-|--------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| Google Colab |       0.081 |  0.123 | 0.12  |      |  0.027 |  0.214 |  0.251 | 0.225 |
-| Jupyter      |       0.082 |  0.141 | 0.101 |     0.032 |  0.034 |  0.257 |  0.255 | 0.271 |
+You can check whether everything worked with a short example search request. To do this, we create an index, add a document and search on it:
 
-Comparison of both in a table
+```python
+doc = {
+    'author': 'kimchy',
+    'text': 'Elasticsearch: cool. bonsai cool.',
+    'timestamp': datetime.now(),
+}
+res = es.index(index="test-index", id=1, body=doc)
 
-So depending on your need in evaluation you have to decide which solution works best with your project.
+response = es.cat.indices()
+print(response)
+
+res = es.get(index="test-index", id=1)
+print(res['_source'])
+
+es.indices.refresh(index="test-index")
+
+res = es.search(index="test-index", body={"query": {"match_all": {}}})
+```
+
+Our [Elasticsearch Setup Guide](../guides/elastic-setup.md) provides more details on how to set up Elasticsearch on your own server.
+
+### 6. Summary
+
+Now that you know how to download data, get a local Elasticsearch instance running and how you can work in Google Colab, you can start experimenting on your own. Therefore check out our [first experiment](../experiments/experiment1.mdx).
+
