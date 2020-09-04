@@ -1,7 +1,7 @@
 ---
 id: notebooks
 title: Working with Notebooks
-sidebar_label: Notebooks
+sidebar_label: Working with Notebooks
 ---
 ## 1. Google Colab
 

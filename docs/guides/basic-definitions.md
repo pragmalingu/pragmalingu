@@ -1,7 +1,7 @@
 ---
 id: basic-definitions
 title: Basic Terms
-sidebar_label: Definitions
+sidebar_label: Basic Definitions
 ---
 
 With this Guide we want to provide you some quick definitions on basic terms used in NLP. If there are terms you think should be explained as well please [let us know](../about/team.md).

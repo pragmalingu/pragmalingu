@@ -1,7 +1,7 @@
 ---
 id: elastic-setup
 title: How to setup an Elasticsearch Instance
-sidebar_label: Elasticsearch
+sidebar_label: Setup Elasticsearch
 ---
 
 ### 1 Elasticsearch Setup
