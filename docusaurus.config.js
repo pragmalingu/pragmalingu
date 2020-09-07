@@ -11,7 +11,7 @@
 // List of projects/orgs using your project for the users page.
 const allDocHomesPaths = [
   '/docs/about/',
-  '/docs/benchmarks/',
+  '/docs/comparisons/',
   '/docs/experiments/',
   '/docs/guides/',
 ];
@@ -27,9 +27,6 @@ module.exports = {
   organizationName: 'pragmalingu', // Usually your GitHub org/user name.
   projectName: 'pragmalingu', // Usually your repo name.
   themeConfig: {
-    prism: {
-      theme: require('prism-react-renderer/themes/dracula'),
-    },
     navbar: {
       title: '',
       logo: {
@@ -41,8 +38,18 @@ module.exports = {
       },
     links: [
         {
-          to: 'docs/benchmarks/intro', 
-          label: 'Benchmarks', 
+          to: 'docs/comparisons/intro', 
+          label: 'Comparisons', 
+          position: 'left'
+        },
+        {
+          to: 'docs/experiments/experiment1', 
+          label: 'Experiments', 
+          position: 'left'
+        },
+        {
+          to: 'docs/guides/basic-definitions', 
+          label: 'Guides', 
           position: 'left'
         },
         {
@@ -51,19 +58,9 @@ module.exports = {
           position: 'left'
         },
         {
-          href: 'https://github.com/',
+          href: 'https://github.com/pragmalingu',
           label: 'GitHub',
           position: 'right',
-        },
-        {
-          to: 'docs/guides/basic-definitions', 
-          label: 'Guides', 
-          position: 'left'
-        },
-        {
-          to: 'docs/experiments/experiment1', 
-          label: 'Experiments', 
-          position: 'left'
         },
       ],
     },
@@ -71,15 +68,19 @@ module.exports = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Content',
           items: [
             {
-              label: 'Getting Started',
+              label: 'Comparisons',
+              to: 'docs/comparisons/data-comparison',
+            },
+            {
+              label: 'Experiments',
               to: 'docs/experiments/experiment1',
             },
             {
               label: 'Guides',
-              to: 'docs/guides/basic-definitions',
+              to: 'docs/guides/elastic-setup',
             },
           ],
         },
@@ -92,11 +93,7 @@ module.exports = {
             },
             {
               label: 'Discord',
-              href: 'https://discordapp.com/invite/pragmalingu',
-            },
-            {
-              label: 'Twitter',
-              href: 'https://twitter.com/',
+              href: 'https://discord.gg/MSJT5EW',
             },
           ],
         },
@@ -104,12 +101,16 @@ module.exports = {
           title: 'More',
           items: [
             {
-              label: 'Impressum',
-              to: 'docs/impressum',
-            },
-            {
               label: 'GitHub',
               href: 'https://github.com/pragmalingu',
+            },
+            {
+              label: 'About',
+              href: 'docs/about/team',
+            },
+            {
+              label: 'Impressum',
+              to: 'docs/impressum',
             },
           ],
         },
