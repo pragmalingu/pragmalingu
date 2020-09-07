@@ -26,6 +26,17 @@
 
 /*customized parts*/
 
+/*link color*/
+@media only screen and (min-width: 1500px) {
+}
+a {
+  color: var(--ifm-color-primary-lighter);
+}
+/* mouse over link */
+a:hover {
+  color: var(--ifm-color-primary-darker);
+}
+
 /*Here can we change the color of the navigationbar*/
 .navbar {
   background-color: var(--ifm-color-primary-darkest);
@@ -92,7 +103,6 @@ body {
 }
 
 /*Hover definitions*/
-
 .hide {
   display: none;
 }
@@ -131,3 +141,15 @@ body {
     margin: 10px;
   }
 } 
+.menu__link--active:not(.menu__link--sublist) {
+  background: var(--ifm-menu-color-background-active);
+  color: var(--ifm-color-primary-lighter);
+}
+
+.table-of-contents__link:hover,
+    .table-of-contents__link:hover code,
+    .table-of-contents__link--active,
+    .table-of-contents__link--active code {
+      color: var(--ifm-color-primary-lighter);
+      text-decoration: none;
+    }
