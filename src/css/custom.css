@@ -131,3 +131,11 @@ body {
   background: var(--ifm-menu-color-background-active);
   color: var(--ifm-color-primary-lighter);
 }
+
+.table-of-contents__link:hover,
+    .table-of-contents__link:hover code,
+    .table-of-contents__link--active,
+    .table-of-contents__link--active code {
+      color: var(--ifm-color-primary-lighter);
+      text-decoration: none;
+    }
