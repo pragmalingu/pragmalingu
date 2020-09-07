@@ -9,7 +9,7 @@ module.exports = {
      'comparisons/embeddings'
   ],
   guides: [
-     'guides/guides-intro'
+     'guides/guides-intro',
      'guides/elastic-setup',
      'guides/basic-definitions',
      'guides/how-to-parse',
@@ -17,7 +17,7 @@ module.exports = {
      'guides/ranking-api'
   ],
   experiments: [
-     'experiments/experiments-intro'
+     'experiments/experiments-intro',
      'experiments/experiment1',
      'experiments/experiment2'
   ],

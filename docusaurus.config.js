@@ -38,17 +38,17 @@ module.exports = {
       },
     links: [
         {
-          to: 'docs/comparisons/intro', 
+          to: 'docs/comparisons/comparisons-intro', 
           label: 'Comparisons', 
           position: 'left'
         },
         {
-          to: 'docs/experiments/experiment1', 
+          to: 'docs/experiments/experiments-intro', 
           label: 'Experiments', 
           position: 'left'
         },
         {
-          to: 'docs/guides/basic-definitions', 
+          to: 'docs/guides/guides-intro', 
           label: 'Guides', 
           position: 'left'
         },
