@@ -9,7 +9,7 @@ import styles from './styles.module.css';
 const features = [
   {
     title: <>Comparisons</>,
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    imageUrl: 'img/Rikki_Comparison.png',
     description: (
       <>
         We provide an overview to all the possibilities on how 
