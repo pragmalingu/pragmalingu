@@ -31,7 +31,7 @@ module.exports = {
       title: '',
       logo: {
         alt: '',
-        src: 'img/Logo_orangenerHG.png',
+        src: 'img/kleines_Icon_2.png',
       },
       prism: {
         theme: require('prism-react-renderer/themes/github'),
