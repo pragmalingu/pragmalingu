@@ -1,7 +1,19 @@
 ---
 id: team
-title: Active Team
+title: About
 ---
+
+## Goals and Mission
+**The mission of PragmaLingu is:**
+
+1. To advance Search and NLP use-cases through the implementation of pragmatic concepts.
+
+2. To create simple, intuitive and open resources, to understand, validate and reproduce these implementations.
+
+*The main motivator for the participants is not monetization, but to foster learning and build expertise.*
+
+## Team
+
 <div className="row">
   <div className="col col--6 margin-bottom--lg">
     <div className="card card--full-height">
@@ -46,12 +58,13 @@ title: Active Team
       <div className="card__footer">
         <div className="button-group button-group--block">
           <a className="button button--secondary" href="https://github.com/MiriamPragmalingu">GitHub</a>
-          <a className="button button--secondary" href="miriam@pragmlingu.de">E-Mail</a>
+          <a className="button button--secondary" href="miriam@pragmalingu.de">E-Mail</a>
         </div>
       </div>
     </div>
   </div>
-  <div className="col col--6 margin-bottom--lg">
+
+<div className="col col--6 margin-bottom--lg">
     <div className="card card--full-height">
       <div className="card__header">
         <div className="avatar avatar--vertical">
@@ -75,4 +88,30 @@ title: Active Team
       </div>
     </div>
   </div>
-</div>
+  <div className="col col--6 margin-bottom--lg">
+    <div className="card card--full-height">
+      <div className="card__header">
+        <div className="avatar avatar--vertical">
+          <img
+            className="avatar__photo avatar__photo--xl"
+            src="/img/pavel.jpg"
+          />
+          <div className="avatar__intro">
+            <h3 className="avatar__name">Pavel Prokopev</h3>
+          </div>
+        </div>
+      </div>
+      <div className="card__body">
+      Pavel is an independent NLP Researcher from Saint-Petersburg, Russia. He works on solving business problems using scientific approach. In PragmaLingu his main role is consulting on using innovative solutions in solving natural language processing tasks.
+      </div>
+      <div className="card__footer">
+        <div className="button-group button-group--block">
+          <a className="button button--secondary" href="https://github.com/orgs/pragmalingu/people/polaser">GitHub</a>
+          <a className="button button--secondary" href="pavel@pragmalingu.de">E-Mail</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  ## Roadmap

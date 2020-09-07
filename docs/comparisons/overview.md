@@ -2,6 +2,7 @@
 
 id: overview
 title: Overview
+sidebar_label: Overview Table
 
 ---
 This table shows a short overview comparisson of all researched data sets:
