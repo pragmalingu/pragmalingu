@@ -1,6 +1,7 @@
 ---
 id: team
 title: About
+custom_edit_url: null
 ---
 
 ## Goals and Mission

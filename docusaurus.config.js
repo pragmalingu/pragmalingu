@@ -106,7 +106,7 @@ module.exports = {
             },
             {
               label: 'About',
-              href: 'docs/about/team',
+              to: 'docs/about/team',
             },
             {
               label: 'Impressum',
