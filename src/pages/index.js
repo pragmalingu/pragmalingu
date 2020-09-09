@@ -103,7 +103,7 @@ function Home() {
               'button button--primary button--lg',
               styles.getStarted,
             )}
-            to={useBaseUrl('docs/experiments/experiment1')}>
+            to={useBaseUrl('docs/getStarted')}>
             GET STARTED
             </Link>
         </div>
