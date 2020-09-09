@@ -13,8 +13,7 @@ const features = [
     imageUrl: 'img/Rikki_Comparison_dynamisch.png',
     description: (
       <>
-        We provide an overview to all the possibilities on how
-        pragmatic search can be implemented and used in Information Retrieval and beyond.
+        In order to provide an overview of the best solutions for Natural Language Processing, we're comparing a large number of already established methods.
       </>
     ),
   },
@@ -23,8 +22,7 @@ const features = [
     imageUrl: 'img/Rikki_Experiments_dynamisch.png',
     description: (
       <>
-        In researching the best solutions for the pragamtic search,
-        we tried out numerous ways to optimize the evaluation.
+        In order to create an opportunity to follow our procedures step by step, we experiment on methods by using easy to understand notebooks.
       </>
     ),
   },
@@ -33,8 +31,7 @@ const features = [
     imageUrl: 'img/Rikki_Guides_dynamisch.png',
     description: (
       <>
-        We want to make our information on this topic
-        available to everyone who is interested in optimizing search engines.
+        Everyone should be able to try our experiments and methods themselves, which is why we contribute Guides to reconstructed our experiments.
       </>
     ),
   },
