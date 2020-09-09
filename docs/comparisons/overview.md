@@ -2,13 +2,14 @@
 
 id: overview
 title: Overview
+sidebar_label: Overview Table
 
 ---
 This table shows a short overview comparisson of all researched data sets:
 
 
 
-| Corpus                   | Download | Documents | Queries | Relevance Assessments      | Notation                        |
+| Corpus                   | Download | Documents | Queries | Relevance Assessments     | Notation                        |
 |--------------------------|----------|-----------|---------|---------------------------|---------------------------------|
 | LISA                     | Free     | 6004      | 35      | one query all docs        | *, #                            |
 | NPL                      | Free     | 11,429    | 93      | one query all docs        | /                               |

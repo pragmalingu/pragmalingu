@@ -8,7 +8,7 @@ import styles from './styles.module.css';
 
 const features = [
   {
-    title: <>Benchmark on current systems</>,
+    title: <>Comparisons</>,
     imageUrl: 'img/undraw_docusaurus_mountain.svg',
     description: (
       <>
@@ -18,22 +18,22 @@ const features = [
     ),
   },
   {
+    title: <>Experiments</>,
+    imageUrl: 'img/undraw_docusaurus_react.svg',
+    description: (
+      <>
+        In researching the best solutions for the pragamtic search, 
+        we tried out numerous ways to optimize the evaluation. 
+      </>
+    ),
+  },
+  {
     title: <>Guides</>,
     imageUrl: 'img/undraw_docusaurus_tree.svg',
     description: (
       <>
         We want to make our information on this topic 
-        available to everyone who is interesed in optimizing search engines.
-      </>
-    ),
-  },
-  {
-    title: <>Try and Error</>,
-    imageUrl: 'img/undraw_docusaurus_react.svg',
-    description: (
-      <>
-        In researching the best solutions for the pragamtic search, 
-        we tried out numerous ways to optimize the evaulation. 
+        available to everyone who is interested in optimizing search engines.
       </>
     ),
   },
