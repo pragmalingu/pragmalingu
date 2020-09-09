@@ -1,6 +1,7 @@
 ---
 id: impressum
 title: Impressum
+custom_edit_url: null
 ---
 
 Angaben gemäß § 5 TMG

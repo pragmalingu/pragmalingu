@@ -1,0 +1,22 @@
+/*choose colors for buttons, also size*/
+:root {
+    --ifm-color-primary: #ffb900;
+    --ifm-color-primary-dark: #ffcc00;
+    --ifm-color-primary-darker: #8cab13;
+    --ifm-color-primary-darkest: #242526;
+    --ifm-color-primary-light: #cc0000;
+    --ifm-color-primary-lighter: #22ab82;
+    --ifm-color-primary-lightest: #ffffff;
+    --ifm-code-font-size: 95%;
+  }
+
+.buttons {
+    color: var(--ifm-color-primary-darkest);
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    margin:10px;
+    background:  var(--ifm-color-primary);
+  }

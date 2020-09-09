@@ -2,6 +2,7 @@
 id: elasticsearch-lucene-intro
 title: Introduction to Elasticsearch and Lucene
 sidebar_label: Elasticsearch and Lucene
+custom_edit_url: null
 ---
 
 Content will follow

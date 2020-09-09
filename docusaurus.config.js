@@ -31,24 +31,24 @@ module.exports = {
       title: '',
       logo: {
         alt: '',
-        src: 'img/Logo_orangenerHG.png',
+        src: 'img/kleines_Icon_2.png',
       },
       prism: {
         theme: require('prism-react-renderer/themes/github'),
       },
     links: [
         {
-          to: 'docs/comparisons/intro', 
+          to: 'docs/comparisons/comparisons-intro', 
           label: 'Comparisons', 
           position: 'left'
         },
         {
-          to: 'docs/experiments/experiment1', 
+          to: 'docs/experiments/experiments-intro', 
           label: 'Experiments', 
           position: 'left'
         },
         {
-          to: 'docs/guides/basic-definitions', 
+          to: 'docs/guides/guides-intro', 
           label: 'Guides', 
           position: 'left'
         },
@@ -106,7 +106,7 @@ module.exports = {
             },
             {
               label: 'About',
-              href: 'docs/about/team',
+              to: 'docs/about/team',
             },
             {
               label: 'Impressum',

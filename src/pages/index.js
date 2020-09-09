@@ -5,41 +5,39 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
+import Mailto from 'react-mailto.js';
 
 const features = [
   {
     title: <>Comparisons</>,
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    imageUrl: 'img/Rikki_Comparison_dynamisch.png',
     description: (
       <>
-        We provide an overview to all the possibilities on how 
-        pragmatic search can be implemented and used in Information Retrieval and beyond.
+        In order to provide an overview of the best solutions for Natural Language Processing, we're comparing a large number of already established methods.
       </>
     ),
   },
   {
     title: <>Experiments</>,
-    imageUrl: 'img/undraw_docusaurus_react.svg',
+    imageUrl: 'img/Rikki_Experiments_dynamisch.png',
     description: (
       <>
-        In researching the best solutions for the pragamtic search, 
-        we tried out numerous ways to optimize the evaluation. 
+        We experiment on methods by using easy to understand notebook, to create the opportunity that you can follow our procedures step by step.
       </>
     ),
   },
   {
     title: <>Guides</>,
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
+    imageUrl: 'img/Rikki_Guides_dynamisch.png',
     description: (
       <>
-        We want to make our information on this topic 
-        available to everyone who is interested in optimizing search engines.
+        Everyone should be able to try our experiments and methods themselves, which is why we contribute Guides to reconstructed our experiments.
       </>
     ),
   },
 ];
 
-function Feature({imageUrl, title, description}) {
+function Feature({ imageUrl, title, description }) {
   const imgUrl = useBaseUrl(imageUrl);
   return (
     <div className={clsx('col col--4', styles.feature)}>
@@ -64,7 +62,7 @@ function ProjectTitle() {
 
 
 function Home() {
-  useEffect (() => {
+  useEffect(() => {
     const scr = document.createElement('script');
     scr.innerHTML = `new Crate({
       server: '731151531818352770', // dima-no-dimo's server
@@ -77,7 +75,7 @@ function Home() {
   }, [])
 
   const context = useDocusaurusContext();
-  const {siteConfig = {}} = context;
+  const { siteConfig = {} } = context;
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
@@ -88,41 +86,43 @@ function Home() {
           <h1 className="hero__title">{siteConfig.title}</h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <div className={styles.buttons}>
-            <Link
+            <Mailto
               className={clsx(
                 'button button--primary button--lg',
                 styles.getStarted,
               )}
-              to={useBaseUrl('docs/about/team')}>
-              CONTACT US
+              to="info@pragmalingu.de"
+              subject="Feedback PragmaLingu"
+            >
+            CONTACT US
+            </Mailto>
+        </div>
+        <div className={styles.buttons}>
+          <Link
+            className={clsx(
+              'button button--primary button--lg',
+              styles.getStarted,
+            )}
+            to={useBaseUrl('docs/getStarted')}>
+            GET STARTED
             </Link>
-          </div>
-          <div className={styles.buttons}>
-            <Link
-              className={clsx(
-                'button button--primary button--lg',
-                styles.getStarted,
-              )}
-              to={useBaseUrl('docs/experiments/experiment1')}>
-              GET STARTED
-            </Link>
-          </div>
+        </div>
         </div>
       </header>
-      <main>
-        {features && features.length > 0 && (
-          <section className={styles.features}>
-            <div className="container">
-              <div className="row">
-                {features.map((props, idx) => (
-                  <Feature key={idx} {...props} />
-                ))}
-              </div>
+    <main>
+      {features && features.length > 0 && (
+        <section className={styles.features}>
+          <div className="container">
+            <div className="row">
+              {features.map((props, idx) => (
+                <Feature key={idx} {...props} />
+              ))}
             </div>
-          </section>
-        )}
-      </main>
-    </Layout>
+          </div>
+        </section>
+      )}
+    </main>
+    </Layout >
   );
 }
 
