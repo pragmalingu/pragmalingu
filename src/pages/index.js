@@ -10,7 +10,7 @@ import Mailto from 'react-mailto.js';
 const features = [
   {
     title: <>Comparisons</>,
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    imageUrl: 'img/Rikki_Comparison_dynamisch.png',
     description: (
       <>
         We provide an overview to all the possibilities on how
@@ -20,7 +20,7 @@ const features = [
   },
   {
     title: <>Experiments</>,
-    imageUrl: 'img/undraw_docusaurus_react.svg',
+    imageUrl: 'img/Rikki_Experiments_dynamisch.png',
     description: (
       <>
         In researching the best solutions for the pragamtic search,
@@ -30,7 +30,7 @@ const features = [
   },
   {
     title: <>Guides</>,
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
+    imageUrl: 'img/Rikki_Guides_dynamisch.png',
     description: (
       <>
         We want to make our information on this topic

@@ -61,6 +61,12 @@ a:hover {
   font-size: 16px;
 }
 
+/*Changes navigationbar Logo size*/
+.navbar__logo {
+  height: 200%;
+  margin-right: 0;
+  }
+
 /*color and thickness of border between navigation bar elements*/
 .navbar__item.navbar__link.navbar__link, li {
   border-right: 0px solid #ffffff;
@@ -127,6 +133,20 @@ body {
   cursor:pointer;
 }
 
+/*Images*/
+ /* For width smaller than 400px: */
+ .mascott {
+  width: 100%;
+}
+
+/* For width 400px and larger: */
+@media only screen and (min-width: 650px) {
+  .mascott {
+    width: 60%;
+    float: left;
+    margin: 10px;
+  }
+} 
 .menu__link--active:not(.menu__link--sublist) {
   background: var(--ifm-menu-color-background-active);
   color: var(--ifm-color-primary-lighter);
