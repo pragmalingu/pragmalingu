@@ -24,7 +24,7 @@ const features = [
     description: (
       <>
         You want to run your own evaluation from start to finish? How do you prepare the datasts, configure your search engine and run the evaluation?
-        You can follow our example experiments step by step and run the code with our provided [Google Colab](https://colab.research.google.com/notebooks/intro.ipynb#) notebooks.
+        You can follow our example experiments step by step and run the code with our provided <a href="https://colab.research.google.com/notebooks/intro.ipynb#">Google Colab notebooks</a>.
       </>
     ),
   },
@@ -34,7 +34,7 @@ const features = [
     description: (
       <>
         You want to dive deeper into the used datasets, algorithms and search engines? 
-        Here you can find in depth guides about the techniques and tools we use, as well as interesting topics and new developments.
+        Here you can find in-depth guides about the techniques and tools we use, as well as interesting topics and new developments.
       </>
     ),
   },
