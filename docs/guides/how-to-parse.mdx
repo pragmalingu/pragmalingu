@@ -14,7 +14,7 @@ Therefore you should start by answering the following three questions:
 2. How do we ** want ** the data to look?
 3. What kind of ** preprocessing  ** would we want to apply first?
 
-Since we are mainly working with Elasticsearch by trying to improve the search results, the third question is not as relevant for us. Most preprocessing such as tokenization, stemming, lemmatization, ignoring stop words, etc. will be applied to raw data. Since Elasticsearch includes automatic tokenization during indexing we won't cover it here. Preprocessing will be excluded for the time being. If you think it would be interesting to include it in our guide, please don't hesitate [to write us about it](../about/team.md).
+Since we are mainly working with Elasticsearch by trying to improve the search results, the third question is not as relevant for us. Most preprocessing such as tokenization, stemming, lemmatization, ignoring stop words, etc. will be applied to raw data. Since Elasticsearch includes automatic tokenization during indexing we won't cover it here. Preprocessing will be excluded for the time being. If you think it would be interesting to include it in our guide, please don't hesitate [to write us about it](../about/team.mdx).
 
 The code in the guide is programmed in Python3, since Python offers great tools for language processing.
 
@@ -67,12 +67,12 @@ example, during aerodynamic heating .
 
 In contrast to the text, the additional information can thus be identified clearly with the other markers provided.
 
-If you don't want to determine the markers on your own, we have already done all the work by analyzing every single [Data Set](../comparisons/data-comparison.md) and even wrote an [overview table](../comparisons/overview.md).
+If you don't want to determine the markers on your own, we have already done all the work by analyzing every single [Data Set](../comparisons/data-comparison.mdx) and even wrote an [Overview Table](../comparisons/overview.mdx).
 
 **How do we want the data to look?**
 After we analyzed our data properly, we can move on to the parsing part. Depending on how you want to use the data, you have to adapt your code for the right format output.
 
-To be able to work with Elasticsearch we first have to index all documents. You can read about what that exactly means and how to set up an Elasticsearch instance in our [Elasticsearch Guide](../guides/elastic-setup.md).
+To be able to work with Elasticsearch we first have to index all documents. You can read about what that exactly means and how to set up an Elasticsearch instance in our [Elasticsearch Guide](../guides/elastic-setup.mdx).
 
 The documents we want to index need the following format:
 
@@ -133,7 +133,7 @@ eval_body = {
 ## Parse Data
 
 Now that we've figured out what the data looks like and how we want it structured in the end, we can finally get started with parsing.
-Since it's easier to demonstrate parsing by using a practical example, we picked one of our [8 free available Data Sets](../comparisons/overview.md). 
+Since it's easier to demonstrate parsing by using a practical example, we picked one of our [8 free available Data Sets](../comparisons/overview.mdx). 
 We chose the [Cranfield Corpus](https://pragmalingu.de/docs/comparisons/data-comparison#cranfield). On the one hand because it uses the same notation as CACM, CISI and ADI, therefore the code can easily be adapted to parse the other corpora as well. 
 (That's the reason we also started parsing the Cranfield corpus for our experiments) 
 On the other hand, it contains a lot of additional information and didn't cause major problems while parsing. 
@@ -163,7 +163,7 @@ PATH_TO_CRAN_REL = '/content/cranqrel'
 
 To create an index in Elasticsearch for the Cranfield corpus we only need the documents file first. In our case, this is the file `cran.all.1400`.
 Conveniently, every new document begins with the ID marker '.I', directly followed by the ID. Therefore, we can start by splitting all entries at this marker.
-(Detailed definitions of all the markers can be found [here] (https://pragmalingu.de/docs/comparisons/data-comparison#cranfield))
+(Detailed definitions of all the markers can be found [here](https://pragmalingu.de/docs/comparisons/data-comparison#cranfield))
 
 We get a list of all the document entries:
 

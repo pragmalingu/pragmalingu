@@ -23,7 +23,7 @@ module.exports = {
   //'Explore pragmatic search possibilities',
   url: 'https://pragmalingu.github.io',
   baseUrl: '/',
-  favicon: '',
+  favicon: 'img/kleines_Icon_1.png',
   organizationName: 'pragmalingu', // Usually your GitHub org/user name.
   projectName: 'pragmalingu', // Usually your repo name.
   themeConfig: {

@@ -6,6 +6,7 @@ custom_edit_url: null
 ---
 
 import useBaseUrl from '@docusaurus/useBaseUrl'
+import styles from '../doc.css';
 
 For our first experiment we connected a Google Colab Notebook to our Elasticsearch instance and compared the standard Elasticsearch operator with two build-in stemming methods.
 
@@ -164,11 +165,13 @@ settings = {
     }
 ```
 These are the results of the *hunspell token filter*:
+
 | Hunspell        |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
 |-----------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
 | Recall          |       0.149 |  0.12  | 0.256 |     0.045 |  0.037 |  0.391 |  0.777 | 0.292 |
 | Precision       |       0.057 |  0.167 | 0.063 |     0.041 |  0.024 |  0.186 |  0.151 | 0.258 |
 | F1-Score        |       0.082 |  0.14  | 0.101 |     0.043 |  0.029 |  0.252 |  0.252 | 0.274 |
+
 The result weren't what we expected. We thought they would improve a little bit for every corpus, but as it turns out the performance varies a lot depending on the corpus. In some cases it was even worse than the standard operator of Elasticsearch.
 
 ## Results
@@ -211,3 +214,5 @@ The **medline** corpus only improved due to the *hunspell token filter*, which c
 On the **adi** corpus, there was even a significant deterioration in the results due to stemming. However, this can probably be connected to the small amount of data, since the **adi** corpus is the smallest with 84 documents.
 While looking more into the stemming approaches regarding the results. We discovered, that the *stemmer token filter* seems to have trouble with overstemming more often than the *hunspell token filter*. The *hunspell token filter* in the other hand doesn't always get one mapping per word, but sometimes multiple stems, which can lead to problems with ambiguous queries. 
 All in all, it can not be said that stemming generally improves search results. It seems to depend very much on the documents as well as on the stemming method to what extent an improvement is visible.
+
+<a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1?usp=sharing"><button class="buttons" >Google Colab Notebook</button></a>
