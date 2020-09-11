@@ -13,7 +13,8 @@ const features = [
     imageUrl: 'img/Rikki_Comparison_dynamisch.png',
     description: (
       <>
-        In order to provide an overview of the best solutions for Natural Language Processing, we're comparing a large number of already established methods.
+        How can you improve search relevance? Does a dictionary stemmer perform better than an algorithmic one? What about embeddings and deep learning models?
+        We try to answer these questions by measuring and comparing approaches with several evaluation datasets.
       </>
     ),
   },
@@ -22,7 +23,8 @@ const features = [
     imageUrl: 'img/Rikki_Experiments_dynamisch.png',
     description: (
       <>
-        We experiment on methods by using easy to understand notebook, to create the opportunity that you can follow our procedures step by step.
+        You want to run your own evaluation from start to finish? How do you prepare the datasts, configure your search engine and run the evaluation?
+        You can follow our example experiments step by step and run the code with our provided [Google Colab](https://colab.research.google.com/notebooks/intro.ipynb#) notebooks.
       </>
     ),
   },
@@ -31,7 +33,8 @@ const features = [
     imageUrl: 'img/Rikki_Guides_dynamisch.png',
     description: (
       <>
-        Everyone should be able to try our experiments and methods themselves, which is why we contribute Guides to reconstructed our experiments.
+        You want to dive deeper into the used datasets, algorithms and search engines? 
+        Here you can find in depth guides about the techniques and tools we use, as well as interesting topics and new developments.
       </>
     ),
   },
