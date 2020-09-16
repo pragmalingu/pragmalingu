@@ -96,6 +96,8 @@ stemming_analyser = {
     }
 }
 ```
+<a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=1rgB2Wm3YkrX&line=6&uniqifier=1"><button class="buttons" >Run it in Google Colab</button></a>
+<br/><br/>
 
 Afterwards we incorporated the `stemming_analyser` into the "settings", with which we indexed the documents of each corpus with it:
 
@@ -109,6 +111,8 @@ settings = {
 }
 stemming_prefix = "stemming-"
 ```
+<a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=1rgB2Wm3YkrX&line=6&uniqifier=1"><button class="buttons" >Run it in Google Colab</button></a>
+<br/><br/>
 
 These are the results with the *stemmer token filter* applied on:
 
@@ -154,6 +158,8 @@ dictionary_analyser = {
     }
 }
 ```
+<a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=-S1Zl9JLZZFP&line=14&uniqifier=1"><button class="buttons" >Run it in Google Colab</button></a>
+<br/><br/>
 Afterwards we embedded the analyzer into the settings to index our documents with it:
 
 ```python
@@ -164,6 +170,8 @@ settings = {
         "analysis": dictionary_analyser
     }
 ```
+<a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=-S1Zl9JLZZFP&line=14&uniqifier=1"><button class="buttons" >Run it in Google Colab</button></a>
+<br/><br/>
 These are the results of the *hunspell token filter*:
 
 | Hunspell        |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
@@ -185,6 +193,8 @@ For example: We search on 10 documents, 8 of them are relevant and 4 of the rele
 To measure the Recall it's necessary to have the relevant documents labeled. Recall only looks at the documents that could be retrieved and doesn't take in account, if many irrelevant documents are retrieved aside the relevant ones.
 </details>  
 <img alt="Recall" src={useBaseUrl('img/Recall.png')} />
+<a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=CemuLaUAMHKP"><button class="buttons" >Run it in Google Colab</button></a>
+<br/><br/>
 
 **Precision**
 <details>
@@ -194,7 +204,8 @@ For example: We retrieve 10 search results and only 5 are relevant for our searc
 To measure the Precision it's necessary to have the relevant documents labeled as such. Precision only looks at the documents that are retrieved and doesn't care about what more could've been retrieved.
 </details> 
 <img alt="Precision" src={useBaseUrl('img/Precision.png')} />
-
+<a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=kJbezFbtMVp3"><button class="buttons" >Run it in Google Colab</button></a>
+<br/><br/>
 **F1-Score**
 <details>
 <summary>What is "F1-Score"?</summary>  
@@ -203,6 +214,8 @@ The F1-Score measures a harmonic mean between Precision and Recall. Therefore we
 This is the most simple way to get a mediocre of Precision and Recall, there are also some other common options to weight them differently.
 </details> 
 <img alt="F1-Score" src={useBaseUrl('img/F1-Score.png')} />
+<a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=Gm1Aej_-T9e0"><button class="buttons" >Run it in Google Colab</button></a>
+<br/><br/>
 
 ## Conclusion
 Before we started experimenting on this basic approaches, we thought we can get big improvements for the search results by simply applying stemming methods.
@@ -215,4 +228,4 @@ On the **adi** corpus, there was even a significant deterioration in the results
 While looking more into the stemming approaches regarding the results. We discovered, that the *stemmer token filter* seems to have trouble with overstemming more often than the *hunspell token filter*. The *hunspell token filter* in the other hand doesn't always get one mapping per word, but sometimes multiple stems, which can lead to problems with ambiguous queries. 
 All in all, it can not be said that stemming generally improves search results. It seems to depend very much on the documents as well as on the stemming method to what extent an improvement is visible.
 
-<a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1?usp=sharing"><button class="buttons" >Google Colab Notebook</button></a>
+<a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1?usp=sharing"><button class="buttons" >Try it yourself!</button></a>

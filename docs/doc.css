@@ -13,12 +13,11 @@
 .buttons {
     color: var(--ifm-color-primary-darkest);
     border: none;
-    border-radius: 12px;
+    border-radius: 8px;
     text-align: center;
     display: inline-flex;
     align-items: center;
-    margin:10px;
+    margin:6px;
     background:  var(--ifm-color-primary);
     font-family : inherit;
-    font-size: 1em;
   }
