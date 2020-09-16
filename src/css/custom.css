@@ -144,7 +144,7 @@ body {
   .mascott {
     width: 60%;
     float: left;
-    margin: 10px;
+    margin: 18px;
   }
 } 
 .menu__link--active:not(.menu__link--sublist) {
@@ -163,4 +163,10 @@ body {
    /* For width smaller than 400px: */
  .landingpage {
   width: 70%;
+}
+
+/*no text wrap*/
+.contents {
+  white-space: pre;
+
 }
