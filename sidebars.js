@@ -3,14 +3,13 @@ module.exports = {
   ],
   comparisons: [
      'comparisons/comparisons-intro',
-     'comparisons/overview',
-     'comparisons/data-comparison',
      'comparisons/stemming',
      'comparisons/embeddings'
   ],
   guides: [
      'guides/guides-intro',
      'guides/basic-definitions',
+     'guides/data-comparison',
      'guides/elastic-setup',
      'guides/how-to-parse',
      'guides/notebooks',

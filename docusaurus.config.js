@@ -72,7 +72,7 @@ module.exports = {
           items: [
             {
               label: 'Comparisons',
-              to: 'docs/comparisons/data-comparison',
+              to: 'docs/comparisons/stemming',
             },
             {
               label: 'Experiments',
