@@ -82,7 +82,7 @@ function Home() {
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      description="Open-source project for learning about search and NLP. Tools, guides and resources to explore, measure and validate novel solutions for problems in search and NLP applications.">
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
           <ProjectTitle />

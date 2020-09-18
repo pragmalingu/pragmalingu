@@ -17,11 +17,9 @@ const allDocHomesPaths = [
 ];
 
 module.exports = {
-  title: '',
-  //'PragmaLingu',
-  tagline: '',
-  //'Explore pragmatic search possibilities',
-  url: 'https://pragmalingu.github.io',
+  title: 'PragmaLingu',
+  tagline: 'PragmaLingu - Semantic Search and NLP',
+  url: 'http://pragmalingu.de',
   baseUrl: '/',
   favicon: 'img/kleines_Icon_1.png',
   organizationName: 'pragmalingu', // Usually your GitHub org/user name.
