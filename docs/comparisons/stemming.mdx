@@ -38,14 +38,17 @@ To evaluate the results, we looked at the Precision, Recall and F-Score values. 
 
 
 ## Conclusion
-In the beginning we thought applying stemming would bring big improvements on the search results.
-But we discovered that the effect of stemming seems to vary a lot depending on the corpus.
-For the **cranfield** corpus, stemming, neither the algorithmic nor the dictionary approach, seem to have any significant influence on the results.
-The results on the **CACM** and **Time** corpus appear to have a slight improvement by the *stemmer token filter*, but hardly by the *hunspell token filter*.
-For the corpora **CISI**, **LISA** and **NPL** the improvement may be a bit clearer. But which stemmer - *hunspell token filter* or the *stemmer token filter* - showed better results, varied on the corpus.
-The **medline** corpus only seem to improve due to the *hunspell token filter*, which could be explained by the fact that the dictionary probably seems to cover many terms from the medical field.
-On the **adi** corpus, a significant deterioration in the results showed due to stemming. However, this can probably be connected to the small amount of data, since the **adi** corpus is the smallest with 84 documents.
-While looking more into the stemming approaches regarding the results. We discovered, that the *stemmer token filter* seems to have trouble with overstemming more often than the *hunspell token filter*. The *hunspell token filter* in the other hand doesn't always get one mapping per word, but sometimes multiple stems, which can lead to problems with ambiguous queries. 
-All in all, it can not be said that stemming generally seems to improve search results a little bit. But it seems to depend very much on the documents as well as on the stemming method, to what extent an improvement is visible.
+Before we started experimenting on these basic approaches, we thought we would be able to achieve a large improvement in the search results by simply applying stemming methods.
+However, we discovered that the effect of stemming varied greatly depending on the corpora.
+For the **Cranfield** corpus, stemming - neither the algorithmic nor the dictionary approach -  had any significant influence on the results.
+
+The results on the **CACM** and **Time** corpus showed a slight improvement from the *Stemmer Token Filter*, but hardly any from the *Hunspell Token Filter*. A clearer improvement could be seen for the corpora **CISI**, **LISA**, and **NPL**. The results for the *Hunspell Token Filter* or the *Stemmer Token Filter* again, depended on the corpus.
+
+The **Medline** corpus only improved with the *Hunspell Token Filter*, which could possibly be explained by the fact that the dictionary covers many terms from the medical field. On the **ADI** corpus there was actually a significant deterioration in the results due to stemming. However, this can probably be explained by the small amount of data, since the **ADI** corpus is the smallest with only 84 documents.
+
+While looking more into the stemming approaches regarding the results we discovered that the *Stemmer Token Filter* seems to have trouble with overstemming more often than the *Hunspell Token Filter*. The *Hunspell Token Filter*, on the other hand, does not always provide only one mapping per word, but sometimes multiple stems, which can lead to problems with ambiguous queries.
+
+Overall, it cannot be said that stemming generally improves search results. It seems to depend very much on the documents, as well as on the stemming method used, to what extent, if any, an improvement is visible.
+
 
 # Discussion
