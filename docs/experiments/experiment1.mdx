@@ -8,20 +8,18 @@ custom_edit_url: null
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from '../doc.css';
 
-For our first experiment we connected a Google Colab Notebook to our Elasticsearch instance and compared the standard Elasticsearch operator with two build-in stemming methods.
+For our first experiment we connected a Google Colab Notebook to our Elasticsearch instance and compared the standard Elasticsearch operator with two built-in stemming methods. To do this, we parsed [these 8 free available corpora](http://ir.dcs.gla.ac.uk/resources/test_collections/) hosted by the University of Glasgow and fed them into the Elasticsearch [Ranking Evaluation API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html). With [our Parsing Guide](https://pragmalingu.de/docs/guides/how-to-parse) you can try this yourself or take a look at our [Data Set Notebooks.](https://github.com/pragmalingu/experiments/tree/master/Data)
 
-Therefore, we parsed [these 8 free available corpora](http://ir.dcs.gla.ac.uk/resources/test_collections/) hosted by the University of Glasgow and feed them to the Elasticsearch [Ranking Evaluation API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html). With [our parsing guide](https://pragmalingu.de/docs/guides/how-to-parse) you can try this yourself or take a look at our [Data Set Notebooks.](https://github.com/pragmalingu/experiments/tree/master/Data)
+These are the two built-in methods that we compared to the [standard Elasticsearch analyser](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyser.html):
 
-These are the two built-in methods that we compared to the [standard Elasticsearch analyzer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html):
-
-* [Standard English Stemmer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html)
-* [Hunspell Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html)
+* [Standard English Stemmer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html) 
+* [Hunspell Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html) 
 
 ## Standard Elasticsearch
 
-At first we implemented our search with a standard Elasticsearch method, [multi match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html), which is a full-text search that comes with standard tokenization and an analyzer. It searches on the given fields of the documents, in our case the field 'text' and 'title'. We only looked at the first 20 retrieved documents for the measuring. 
+To begin, we implemented our search with a standard Elasticsearch method - [multi-match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) - which is a full-text search that comes with standard tokenization and an analyser. It searches only the given fields of the documents - in our case 'text' and 'title'. To gather our data, we looked only at the first 20 retrieved documents for any given search.
 
-Here you can see the metrics we choose and an example request of the adi corpus:
+Here you can see the metrics we chose and an example request of the ADI corpus:
 
 ```python
 {
@@ -38,7 +36,7 @@ Here you can see the metrics we choose and an example request of the adi corpus:
                             "title",
                             "text"
                         ],
-                        "query": " How can actually pertinent data, as opposed to references or entire articles  themselves, be retrieved automatically in response to information requests? "
+                        "query": " How can actually pertinent data, as opposed to references or entire articles themselves, be retrieved automatically in response to information requests? "
                     }
                 }
             }
@@ -47,7 +45,7 @@ Here you can see the metrics we choose and an example request of the adi corpus:
 }
 ```
 
-These are results without any further processing of the data using the multi match query of Elasticsearch:
+These were the results without any further processing of the data using the multi-match query of Elasticsearch:
 
 |  Standard Search |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
 |------------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
@@ -57,28 +55,22 @@ These are results without any further processing of the data using the multi mat
 
 ## Stemming
 
-To experiment with stemming, Elasticsearch provides two build-in stemming methods. 
-First of, is the algorithmic stemming. It applies a series of rules to each word to reduce them, it is called [stemmer token filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html) in Elasticsearch. 
-
-Second of, the dictionary stemming, which replaces unstemmed words with stemmed variants from a provided dictionary. The Elasticsearch build-in method is called [hunspell token filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html). 
+To experiment with stemming Elasticsearch provides two built-in stemming methods. 
+First, is the algorithmic stemmer; it applies a series of rules to each word to reduce them to their stems. In Elasticsearch this is called the [Stemmer Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html).  In addition, there is the dictionary stemmer, which replaces unstemmed words with stemmed variants from a provided dictionary. The Elasticsearch built-in method is called the [Hunspell Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html). 
 
 <details>
 <summary>What is "Stemming"?</summary>  
 
 The goal of stemming is to remove all morphological features from a word and create truncated, ambiguous **Stems**. Therefore it tries to strip off suffixes at the end of a word.<br></br>
 For example, `learning` changes to `learn` after stemming. <br></br>
-If the stemmer cuts off too much information, the word could become too short and loose semantic meaning. This is called overstemming.
+If the stemmer cuts off too much information, the word could become too short and lose semantic meaning; this is called overstemming.
 </details>  
 
 ### Stemmer Token Filter
 
-The *stemmer token filter* supports different languages, but since our corpora where all in English we used the English stemmer.
-Compared to the dictionary approach, the algorithmic stemming needs less memory and is way faster. That's why, in most cases, it's the better way to go with. The implementation in Elasticsearch is also not very complicated and can be done very quickly.
+The *Stemmer Token Filter* supports different languages, but since our corpora were all in English we used the English stemmer. Compared to the dictionary approach, algorithmic stemming needs less memory and is much faster. For this reason, it is usually better to use the *Stemmer Token Filter*. The implementation in Elasticsearch is not complicated and can be done quickly.
 
-Irregular words or names could cause strange forms that doesn't give any helpful information since it is only rule based.
-Yet we expected an improvement to the standard Elasticsearch operator.
-
-This is how we implemented the stemming analyzer for Elasticsearch:
+Irregular words or names can cause strange forms that don't give any helpful information since it is only rule based. In spite of this, we expected an improvement to the standard Elasticsearch operator. This is how we implemented the stemming analyser for Elasticsearch:
 
 ```python
 stemming_analyser = {
@@ -99,7 +91,7 @@ stemming_analyser = {
 <a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=1rgB2Wm3YkrX&line=6&uniqifier=1"><button class="buttons" >Run it in Google Colab</button></a>
 <br/><br/>
 
-Afterwards we incorporated the `stemming_analyser` into the "settings", with which we indexed the documents of each corpus with it:
+Afterwards, we incorporated the `stemming_analyser` into the "settings", with which we indexed the documents of each corpus:
 
 ```python
 settings = {
@@ -114,7 +106,7 @@ stemming_prefix = "stemming-"
 <a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=1rgB2Wm3YkrX&line=6&uniqifier=1"><button class="buttons" >Run it in Google Colab</button></a>
 <br/><br/>
 
-These are the results with the *stemmer token filter* applied on:
+These were the results with the *Stemmer Token Filter* applied:
 
 | Stemmer Token Filter |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
 |----------------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
@@ -122,23 +114,22 @@ These are the results with the *stemmer token filter* applied on:
 | Precision            |       0.057 |  0.169 | 0.063 |     0.031 |  0.028 |  0.191 |  0.152 | 0.258 |
 | F1-Score             |       0.082 |  0.141 | 0.101 |     0.032 |  0.034 |  0.257 |  0.255 | 0.271 |
 
-Surprisingly, the results are less different than expected.
+Surprisingly, this had less of an impact than we had expected.
 
 ### Hunspell Token Filter
 
-Although the *hunspell token filter* from Elasticsearch recognizes irregular words and should therefore preprocess them better, we must keep in mind that words that do not appear in the dictionary are not processed correctly. In addition, a large dictionary naturally also takes up significantly more time and memory.
-Since dictionaries can never be fully complete, we didn't expect a huge change in the results comparing to the *stemmer token filter*. 
+The *Hunspell Token Filter* from Elasticsearch recognizes irregular words and should, therefore, preprocess them better. However, we must keep in mind that words that do not appear in the dictionary are not processed correctly. In addition, a large dictionary will naturally require significantly more time and resources. Since dictionaries can never be fully complete, we didn't expect a significant change in the results compared to the *Stemmer Token Filter*. 
 
-The procedure of the *hunspell token filter* is similar to a lemmatization, but the words are not always reduced to the lemma with hunspell. So the meaning of the words is not sufficiently addressed every time.
+The procedure of the *Hunspell Token Filter* is similar to a lemmatization, but the words are not always reduced to the lemma with Hunspell. So the meaning of the words is not sufficiently addressed every time.
 
 <details>
 <summary>What is "Lemmatization"?</summary>  
 
-Lemmatization tries to connect words to their root form, their **Lemma**, by removing all morphological rules. It's similar to stemming, but it takes affixes and plural forms into account as well instead of just stripping suffixes away.<br></br>
-For example, `mice` would connect to `mouse` and `froze` & `frozen` to `freeze`. 
+Lemmatization tries to connect words to their root form - their **Lemma** - by removing all morphological rules. It's similar to stemming, but it takes affixes and plural forms into account as well, instead of simply stripping away suffixes.<br></br>
+For example, `mice` would connect to `mouse`, and `froze` & `frozen` to `freeze`. 
 </details>  
 
-The procedure is the same as with the *stemmer token filter*. We first of implemented the hunspell stemming analyzer:
+The procedure is the same as with the *Stemmer Token Filter*. We first implemented the Hunspell Stemming analyser:
 
 ```python
 #the order of filter and analyser is arbitrary
@@ -160,7 +151,7 @@ dictionary_analyser = {
 ```
 <a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=-S1Zl9JLZZFP&line=14&uniqifier=1"><button class="buttons" >Run it in Google Colab</button></a>
 <br/><br/>
-Afterwards we embedded the analyzer into the settings to index our documents with it:
+Afterwards, we embedded the analyser into the settings to index our documents with it:
 
 ```python
 settings = {
@@ -172,7 +163,7 @@ settings = {
 ```
 <a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=-S1Zl9JLZZFP&line=14&uniqifier=1"><button class="buttons" >Run it in Google Colab</button></a>
 <br/><br/>
-These are the results of the *hunspell token filter*:
+These were the results of the *Hunspell Token Filter*:
 
 | Hunspell        |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
 |-----------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
@@ -180,7 +171,7 @@ These are the results of the *hunspell token filter*:
 | Precision       |       0.057 |  0.167 | 0.063 |     0.041 |  0.024 |  0.186 |  0.151 | 0.258 |
 | F1-Score        |       0.082 |  0.14  | 0.101 |     0.043 |  0.029 |  0.252 |  0.252 | 0.274 |
 
-The result weren't what we expected. We thought they would improve a little bit for every corpus, but as it turns out the performance varies a lot depending on the corpus. In some cases it was even worse than the standard operator of Elasticsearch.
+The results were not what we had expected. We had thought that they would improve a little for every corpus, but as it turns out, the performance varies greatly from one to the next. In some cases it was even worse than the standard operator of Elasticsearch.
 
 ## Results
 To compare our results properly we measured Recall, Precision and F1-Score for every method on every corpus.
@@ -188,9 +179,10 @@ To compare our results properly we measured Recall, Precision and F1-Score for e
 **Recall**
 <details>
 <summary>What is "Recall"?</summary>  
-Recall measures the probability that relevant documents are retrieved. Therefore the number of all retrieved relevant documents is divided by the number all documents that are labeled as relevant.
-For example: We search on 10 documents, 8 of them are relevant and 4 of the relevant ones are retrieved. The Recall measure would be: 4/8 = 0.5
-To measure the Recall it's necessary to have the relevant documents labeled. Recall only looks at the documents that could be retrieved and doesn't take in account, if many irrelevant documents are retrieved aside the relevant ones.
+Recall measures the probability that relevant documents are retrieved. Therefore the number of all retrieved relevant documents is divided by the number of all documents that are labeled as relevant. For example, if we were to search 10 documents, 8 of which are relevant and 4 of these are retrieved, then the Recall measure would be 4/8 = 0.5.
+
+To measure the Recall it is necessary to have the relevant documents labeled. Recall only looks at the documents that could be retrieved and does not take into account any irrelevant documents which may have been retrieved.
+
 </details>  
 <img alt="Recall" src={useBaseUrl('img/Recall.png')} />
 <a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=CemuLaUAMHKP"><button class="buttons" >Run it in Google Colab</button></a>
@@ -199,9 +191,9 @@ To measure the Recall it's necessary to have the relevant documents labeled. Rec
 **Precision**
 <details>
 <summary>What is "Precision"?</summary>  
-Precision measures the probability that retrieved documents are relevant to the search query. Therefore the number of all retrieved relevant documents is divided by the number of all retrieved documents.
-For example: We retrieve 10 search results and only 5 are relevant for our search. The Precision measure would be: 5/10 = 0.5
-To measure the Precision it's necessary to have the relevant documents labeled as such. Precision only looks at the documents that are retrieved and doesn't care about what more could've been retrieved.
+Precision measures the probability that retrieved documents are relevant to the search query. Therefore, the number of all retrieved relevant documents is divided by the number of all retrieved documents.  For example if we retrieve 10 search results and only 5 are relevant for our search, the Precision measure would be: 5/10 = 0.5.
+
+To measure the Precision it is necessary to have the relevant documents labeled as such. Precision only looks at the documents that are retrieved and does not account for relevant documents which were not retrieved.
 </details> 
 <img alt="Precision" src={useBaseUrl('img/Precision.png')} />
 <a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=kJbezFbtMVp3"><button class="buttons" >Run it in Google Colab</button></a>
@@ -209,9 +201,9 @@ To measure the Precision it's necessary to have the relevant documents labeled a
 **F1-Score**
 <details>
 <summary>What is "F1-Score"?</summary>  
-The F1-Score measures a harmonic mean between Precision and Recall. Therefore we multiply Precision and Recall with 2 and divide it by the sum of Precision and Recall: <br />
+The F1-Score measures a harmonic mean between Precision and Recall. Therefore we multiply Precision and Recall by two and divide it by the sum of Precision and Recall: <br />
 `F1-Score=(2*Precision*Recall)/(Precision+Recall)`
-This is the most simple way to get a mediocre of Precision and Recall, there are also some other common options to weight them differently.
+This is the simplest way to balance both Precision and Recall, there are also other common options to weight them differently.
 </details> 
 <img alt="F1-Score" src={useBaseUrl('img/F1-Score.png')} />
 <a class="buttons" href="https://colab.research.google.com/drive/1MpbkFJpCvAaJ1Txcvh1EMGxAJ_60ccF1#scrollTo=Gm1Aej_-T9e0"><button class="buttons" >Run it in Google Colab</button></a>
