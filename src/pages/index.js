@@ -11,6 +11,7 @@ const features = [
   {
     title: <>Comparisons</>,
     imageUrl: 'img/Rikki_Comparison_dynamisch.png',
+    link:'https://pragmalingu.de/docs/comparisons/comparisons-intro',
     description: (
       <>
         How can you improve search relevance? Does a dictionary stemmer perform better than an algorithmic one? What about embeddings and deep learning models?
@@ -21,6 +22,7 @@ const features = [
   {
     title: <>Experiments</>,
     imageUrl: 'img/Rikki_Experiments_dynamisch.png',
+    link: 'https://pragmalingu.de/docs/experiments/experiments-intro',
     description: (
       <>
         You want to run your own evaluation from start to finish? How do you prepare the data sets, configure your search engine and run the evaluation?
@@ -31,6 +33,7 @@ const features = [
   {
     title: <>Guides</>,
     imageUrl: 'img/Rikki_Guides_dynamisch.png',
+    link: 'https://pragmalingu.de/docs/guides/guides-intro',
     description: (
       <>
         You want to dive deeper into the used datasets, algorithms and search engines? 
@@ -40,14 +43,14 @@ const features = [
   },
 ];
 
-function Feature({ imageUrl, title, description }) {
+function Feature({ imageUrl, title, description,link }) {
   const imgUrl = useBaseUrl(imageUrl);
   return (
     <div className={clsx('col col--4', styles.feature)}>
       {imgUrl && (
-        <div className="text--center">
+        <a href={link} className="text--center">
           <img className={styles.featureImage} src={imgUrl} alt={title} />
-        </div>
+        </a>
       )}
       <h3>{title}</h3>
       <p>{description}</p>
