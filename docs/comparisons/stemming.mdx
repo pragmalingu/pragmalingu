@@ -4,13 +4,28 @@ title: Simple Search vs. Stemming
 sidebar_label: Stemming
 custom_edit_url: null
 ---
-import useBaseUrl from '@docusaurus/useBaseUrl'
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import styles from '../doc.css'
 
 ## Abstract
-To find out whether stemming can have a positive effect on search results, we compared the standard Elasticsearch to two of the built-in stemming methods. We used [these free available corpora](http://ir.dcs.gla.ac.uk/resources/test_collections/) hosted by the University of Glasgow to work on. How we parsed and analyzed them in advance, can be found in our [Parsing Guide](../guides/how-to-parse.mdx) and in our [Data Set Guide](../guides/data-comparison.mdx). While experimenting we found out, that the stemming apparently only improved on some corpora and even seem to worsen some of the results. We have tried to analyze the possible reasons for this in this article. For a detailed description of all methods and data we used, take a look at our [Stemming Experiment](../experiments/experiment1.mdx).
+To find out whether stemming can have a positive effect on search results, we compared the standard Elasticsearch to two of the built-in stemming methods. We used [these free available corpora](http://ir.dcs.gla.ac.uk/resources/test_collections/) hosted by the University of Glasgow to work on. How we parsed and analyzed them in advance, can be found in our [parsing guide](../guides/how-to-parse.mdx) and in our [data set guide](../guides/data-comparison.mdx). While experimenting we found out, that the stemming apparently only improved on some corpora and even seem to worsen some of the results. We have tried to analyze the possible reasons for this in this article. For a detailed description of all methods and data we used, take a look at our [stemming experiment](../experiments/experiment1.mdx).
 
 ## Results
-To evaluate the results, we looked at the Precision, Recall and F-Score values. We visualized them as bar charts and as a table.
+To evaluate the results, we looked at the Precision, Recall and F1-Score values. We visualized them as bar charts and as a table. Check this results on your own by running it on our [Elasticsearch instance](https://colab.research.google.com/drive/1APrjSN-wpWy5xX31akjaWz2xul647rYJ#scrollTo=tApgxGG-lbTG).
+
+<details>
+<summary>You need a short reminder on "Precision", "Recall" and "F1-Score"?</summary>  
+
+**Recall** measures the probability that relevant documents are retrieved. <br />
+`Recall = retrieved & relevant documents / documents labeled as relevant`
+
+**Precision** measures the probability that retrieved documents are relevant to the search query. <br/>
+`Precision = retrieved & relevant documents / retrieved documents`
+
+**F1-Score** is a simple way to measure a middle score between Precision and Recall. <br />
+`F1-Score=(2*Precision*Recall)/(Precision+Recall)`
+
+</details>  
 
 <img alt="Recall" src={useBaseUrl('img/Recall.png')} />
 
@@ -36,8 +51,9 @@ To evaluate the results, we looked at the Precision, Recall and F-Score values. 
 | stemming  |       0.082 |  0.141 | 0.101 |     0.032 |  0.034 |  0.257 |  0.255 | 0.271 |
 | hunspell  |       0.082 |  0.14  | 0.101 |     0.043 |  0.029 |  0.252 |  0.252 | 0.274 |
 
+<a class="buttons" href="https://colab.research.google.com/drive/1APrjSN-wpWy5xX31akjaWz2xul647rYJ#scrollTo=zliqyx3u1qSw"><button class="buttons" >Try it yourself!</button></a>
 
-## Conclusion
+## Analysis
 Before we started experimenting on these basic approaches, we thought we would be able to achieve a large improvement in the search results by simply applying stemming methods.
 However, we discovered that the effect of stemming varied greatly depending on the corpora.
 For the **Cranfield** corpus, stemming - neither the algorithmic nor the dictionary approach -  had any significant influence on the results.
@@ -46,9 +62,8 @@ The results on the **CACM** and **Time** corpus showed a slight improvement from
 
 The **Medline** corpus only improved with the *Hunspell Token Filter*, which could possibly be explained by the fact that the dictionary covers many terms from the medical field. On the **ADI** corpus there was actually a significant deterioration in the results due to stemming. However, this can probably be explained by the small amount of data, since the **ADI** corpus is the smallest with only 84 documents.
 
+## Conclusion
+
 While looking more into the stemming approaches regarding the results we discovered that the *Stemmer Token Filter* seems to have trouble with overstemming more often than the *Hunspell Token Filter*. The *Hunspell Token Filter*, on the other hand, does not always provide only one mapping per word, but sometimes multiple stems, which can lead to problems with ambiguous queries.
 
 Overall, it cannot be said that stemming generally improves search results. It seems to depend very much on the documents, as well as on the stemming method used, to what extent, if any, an improvement is visible.
-
-
-# Discussion
