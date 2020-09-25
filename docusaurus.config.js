@@ -32,10 +32,7 @@ module.exports = {
         alt: '',
         src: 'img/kleines_Icon_2.png',
       },
-      prism: {
-        theme: require('prism-react-renderer/themes/github'),
-      },
-    links: [
+    items: [
         {
           to: 'docs/comparisons/comparisons-intro', 
           label: 'Comparisons', 
