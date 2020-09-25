@@ -4,6 +4,7 @@ title: How to Use the Elasticsearch Ranking Evaluation API
 sidebar_label: Ranking Evaluation API
 ---
 
+## 1. Introduction
 To evaluate our experiments we used the build-in [Ranking Evaluation API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html) by Elasticsearch.
 In order to adjust the Ranking Evaluation API to your needs, this guide will give you some short explainations of the operators and metrics we used during our experiments.
 
@@ -75,11 +76,11 @@ We specified on which index the Ranking Evaluation API should search. If you don
 
 You can find all this information about the Ranking Evaluation API also on the [Elasticsearch website](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html).
 
-## Query metrics
+## 2. Query metrics
 
 Depending on the data, it can help your search which query operator you choose. We will briefly explain the three operators that we tested by now.
 
-### Match query operator
+### 2.1. Match query operator
 
 The [match query operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html) is the standard search operator in Elasticsearch. It's a full-text search in the given fields of the documents that comes with standard tokenization and an analyzer.
 
@@ -114,7 +115,7 @@ Here is are some example queries:
 ```
 
 
-### Simple query string operator
+### 2.2. Simple query string operator
  
 The [simple query string](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) operator uses a parser with a limited error-tolerant syntax to search for the given query string in the given fields. It splits and analyzes the query terms separately for the search before returning the relevant documents. It ignores invalid parts of the query string. 
 
@@ -150,7 +151,7 @@ Here is an example request with the simple query string operator searching for t
 }
 ```
 
-### Multi-match query operator
+### 2.3. Multi-match query operator
 
 The [multi-match query operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#query-dsl-multi-match-query) builds on the match query operator and allows multi-line match while searching. It does work similar to the simple string query but it rates the documents a little bit different.
 
@@ -188,7 +189,7 @@ If no specific fields are provided it will search on all fields available. We ch
 
 This operator was also the one we chose for our standard search to stemming comparison, which you can read in our [First Experiment](../experiments/experiment1.mdx). 
 
-## Rating metric
+## 3. Rating metric
 
 With the rating metric we are able to provide better ratings for more relevant documents. For example if we search for `ice cream truck` we could rate documents with `ice cream truck` higher than documents with `ice cream` or `truck` and still label all those documents as relevant.
 A document rating is represented by an integer. The higher the number the more relevant the document. To use this scale in your search we also have to adjust the `relevant_rating_threshold` variable to the highest rated number. The default would be 1, which means the different rated documents would all be irrelevant.
@@ -235,11 +236,11 @@ This is an example with higher scaled ratings:
 ```
 Since the Cranfield corpus was the only one which provided scaled ratings, we only used the binary rating. We also didn't rate any documents with 0, since every document you don't rate gets the default value 0.
 
-## Evaluation metrics
+## 4. Evaluation metrics
 
 Aside from the metrics we can adjust by changing the request, there are some metrics that influence how the evaluation results will be computed.
 
-### Precision at k
+### 4.1. Precision at k
 With setting the metric to `precision` and defining `k`, we can measure how many relevant results are returned in the top k results. 
 
 Since the user only looks at the first few results of a search query, it doesn't make sense to set `k` higher than 20. Reducing the number of top results to 10 or 5 could give an even better idea of the performance.
@@ -277,7 +278,7 @@ To measure the Precision it's necessary to have the relevant documents labeled a
 Precision only looks at the documents that are retrieved and doesn't care about what more could've been retrieved.
 </details> 
 
-### Recall at k
+### 4.2. Recall at k
 
 The metric `recall` works very similar to the `precision` metric. `k` defines how many relevant results are returned in the top k results and taken into measurement. 
 This metric also has difficulties, if documents aren't labeled.

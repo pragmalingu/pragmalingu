@@ -17,6 +17,7 @@ const allDocHomesPaths = [
 ];
 
 module.exports = {
+  themes: ['@docusaurus/theme-live-codeblock'],
   title: 'PragmaLingu',
   tagline: 'PragmaLingu - Semantic Search and NLP',
   url: 'http://pragmalingu.de',
