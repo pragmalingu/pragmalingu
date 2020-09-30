@@ -25,6 +25,9 @@ function About() {
                         search and try to convey all knowledge and techniques from a problem-solving viewpoint because we believe
                         that this pragmatic perspective is intuitive and makes learning fun.
           </p>
+                    <div className={styles.coverContainer}>
+                        <img src="img/Rikki_About.jpg" className={styles.cover} />
+                    </div>
                 </div>
             </header>
             <main>
@@ -50,7 +53,8 @@ function About() {
                       <div class="entry-content">
                             <ul>
                                 <li> Ask questions on our public Discord server if you don’t understand something or if some of our articles and explanations are not clear.</li>
-                                <li>Create pull requests for improvements or fixes on [GitHub](https://github.com/pragmalingu/experiments).</li>
+                                <li>Create pull requests for improvements or fixes on <a href='https://github.com/pragmalingu/experiments'> GitHub </a>
+                                </li>
                                 <li> Send us your feedback or suggest interesting datasets or projects.</li>
                                 <li> Become a sponsor if you value our work and have expendable funds.</li>
                             </ul>
