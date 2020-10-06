@@ -49,9 +49,9 @@ These were the results without any further processing of the data using the mult
 
 |  Standard Search |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
 |------------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| Recall           |        0.15 |  0.103 | 0.328 |     0.032 |  0.034 |  0.337 |  0.772 | 0.233 |
-| Precision        |       0.056 |  0.154 | 0.074 |     0.031 |  0.022 |  0.157 |  0.15  | 0.217 |
-| F1-Score         |       0.081 |  0.123 | 0.12  |     0.032 |  0.027 |  0.214 |  0.251 | 0.225 |
+| Recall           |        0.15 |  0.103 | 0.328 |     0.032 |  0.034 |  0.338 |  0.772 | 0.233 |
+| Precision        |       0.056 |  0.154 | 0.074 |     0.031 |  0.022 |  0.159 |  0.15  | 0.217 |
+| F1-Score         |       0.081 |  0.123 | 0.12  |     0.032 |  0.027 |  0.216 |  0.251 | 0.225 |
 
 ## 2. Stemming
 
@@ -110,9 +110,9 @@ These were the results with the *Stemmer Token Filter* applied:
 
 | Stemmer Token Filter |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
 |----------------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| Recall               |        0.15 |  0.121 | 0.254 |     0.032 |  0.044 |  0.393 |  0.78  | 0.285 |
-| Precision            |       0.057 |  0.169 | 0.063 |     0.031 |  0.028 |  0.191 |  0.152 | 0.258 |
-| F1-Score             |       0.082 |  0.141 | 0.101 |     0.032 |  0.034 |  0.257 |  0.255 | 0.271 |
+| Recall               |        0.15 |  0.121 | 0.254 |     0.032 |  0.044 |  0.394 |  0.78  | 0.285 |
+| Precision            |       0.057 |  0.169 | 0.063 |     0.031 |  0.028 |  0.193 |  0.152 | 0.258 |
+| F1-Score             |       0.082 |  0.141 | 0.101 |     0.032 |  0.034 |  0.259 |  0.255 | 0.271 |
 
 Surprisingly, this had less of an impact than we had expected.
 
@@ -167,9 +167,9 @@ These were the results of the *Hunspell Token Filter*:
 
 | Hunspell        |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
 |-----------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| Recall          |       0.149 |  0.12  | 0.256 |     0.045 |  0.037 |  0.391 |  0.777 | 0.292 |
-| Precision       |       0.057 |  0.167 | 0.063 |     0.041 |  0.024 |  0.186 |  0.151 | 0.258 |
-| F1-Score        |       0.082 |  0.14  | 0.101 |     0.043 |  0.029 |  0.252 |  0.252 | 0.274 |
+| Recall          |       0.149 |  0.12  | 0.256 |     0.045 |  0.037 |  0.392 |  0.777 | 0.292 |
+| Precision       |       0.057 |  0.167 | 0.063 |     0.041 |  0.024 |  0.187 |  0.151 | 0.258 |
+| F1-Score        |       0.082 |  0.14  | 0.101 |     0.043 |  0.029 |  0.253 |  0.252 | 0.274 |
 
 The results were not what we had expected. We had thought that they would improve a little for every corpus, but as it turns out, the performance varies greatly from one to the next. In some cases it was even worse than the standard operator of Elasticsearch.
 
