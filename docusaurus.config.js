@@ -49,7 +49,7 @@ module.exports = {
           position: 'left'
         },
         {
-          to: 'about', 
+          to: 'docs/about/team', 
           label: 'About', 
           position: 'left'
         },
@@ -102,7 +102,7 @@ module.exports = {
             },
             {
               label: 'About',
-              to: 'about',
+              to: 'docs/about/team',
             },
             {
               label: 'Impressum',

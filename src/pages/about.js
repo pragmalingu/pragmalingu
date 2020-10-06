@@ -26,7 +26,7 @@ function About() {
                         that this pragmatic perspective is intuitive and makes learning fun.
           </p>
                     <div className={styles.coverContainer}>
-                        <img src="img/Rikki_About.jpg" className={styles.cover} />
+                        <img src="img/Rikki_About_smaller.jpg" className={styles.cover} />
                     </div>
                 </div>
             </header>
