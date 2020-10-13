@@ -34,7 +34,7 @@ The code cells are compatible with several programming languages and require the
 
 The cells can be moved within the notebook at any time, but you should keep in mind, that some cells are dependent on others regarding variables or imports. Basically, you can execute the cells and thus the code snippets in any order as long as you keep track.
 
-### 3. Install packages
+## 3. Install packages
 Since Google Colab is hosted on Google's servers, you have to install the necessary packages and download data every time you reconnect the notebook.
 
 To install packages that aren't already installed on the Colab server, like for example the Python package for elasticsearch, simply run `!pip` followed by the package you want to install:
@@ -42,7 +42,7 @@ To install packages that aren't already installed on the Colab server, like for 
 !pip install Elasticsearch -q
 ```
 
-### 4. Get Data
+## 4. Get Data
 
 As already mentioned, data must also be downloaded again with each new connection. Download and other commands follow the same syntax as using your terminal on Linux. You can find the downloaded files on the left when you click on the folder sign. 
 The files can be referenced like this:
@@ -54,7 +54,7 @@ The files can be referenced like this:
 PATH_TO_CRAN_TXT = '/content/cran.all.1400'
 ```
 
-### 5. Setup Elasticsearch instance
+## 5. Setup Elasticsearch instance
 
 If you don't want to host Elasticsearch on your own server, you can also initialize Elasticsearch in Google Colab.
 To do this, you first have to download Elasticsearch:
@@ -110,6 +110,6 @@ res = es.search(index="test-index", body={"query": {"match_all": {}}})
 
 Our [Elasticsearch Setup Guide](../guides/elastic-setup.mdx) provides more details on how to set up Elasticsearch on your own server.
 
-### 6. Summary
+## 6. Summary
 
 Now that you know how to download data, get a local Elasticsearch instance running and how you can work in Google Colab, you can start experimenting on your own. Therefore check out our [First Experiment](../experiments/experiment1.mdx).
