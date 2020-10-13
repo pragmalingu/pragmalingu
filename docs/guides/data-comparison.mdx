@@ -7,6 +7,19 @@ custom_edit_url: null
 
 With this guide we will give you a detailed overview over all the free accessible data sets we have analyzed until now.
 
+This table shows you a quick overview of all the free data sets we looked at:
+
+| Corpus                   | Download | Documents | Queries | Notation                        |
+|--------------------------|----------|-----------|---------|---------------------------------|
+| ADI                      | Free     | 83        | 35      | .I, .T, .W, .A                  |
+| CACM                     | Free     | 3,204     | 64      |  .I, .T, .W, .B, .A, .N, .X     |
+| CISI                     | Free     | 1,460     | 112     |  .I, .T, .W, .B, .A, .X         |
+| Cranfield                | Free     | 1,400     | 225     | .I, .T, .W, .B, .A              |
+| LISA                     | Free     | 6004      | 35      | *, #                            |
+| Medline                  | Free     | 1,033     | 30      | .I, .W                          |
+| NPL                      | Free     | 11,429    | 93      |  /                              |
+| Time                     | Free     | 423       | 83      | \*TEXT,\*FIND                   |
+
 ## ADI
 
 **Use Cases:**<br />
@@ -573,9 +586,67 @@ COMMON MARKET .
 
 **Source:**http://ir.dcs.gla.ac.uk/resources/test_collections/time/
 
-# Other Data Sets
+## Other Data Sets
 
-## Reuters 21578
+### Europarl Parallel Corpus
+
+**Use Cases:**<br />Word Sense Disambiguation, Anaphora Resolution, Information Extraction
+
+**Description:**<br /> Starting in 2001, the corpus collected texts with up to 60 Million words per language. From the proceedings of the European Parliament were texts extracted for these 21 European languages: <br />
+Romanic (French, Italian, Spanish, Portuguese, Romanian), Germanic (English, Dutch, German, Danish, Swedish), Slavik (Bulgarian, Czech, Polish, Slovak, Slovene), Finni-Ugric (Finnish, Hungarian, Estonian), Baltic (Latvian, Lithuanian), and Greek.
+
+**Documents:**<br />Every file has the same structure. There are sections separated with the tag `<CHAPTER ID=?>` which are followed by the title of the chapter. The `<SPEAKER ID =??>` is a unique ID which marks the spoken part. 
+
+*Example from the English Corpus:*
+```
+<CHAPTER ID=6>
+Social and economic situation and development of the regions of the Union
+<SPEAKER ID=80 NAME="President">
+The next item is the debate on the report (A5-0107/1999) by Mr Berend, on behalf of the Committee on Regional Policy, Transport and Tourism, on the sixth periodic report on the social and economic situation and development of the regions of the European Union [SEC(99)0066 - C5-0120/99 - 1999/2123(COS)].
+```
+
+**Queries:** -
+
+**Relevance assessments:** -
+
+**Other files:** -
+
+**Source:**http://www.statmt.org/europarl/
+
+### OHSUMED
+
+**Use Cases:**<br /> SVM, Clustering, Semantic Search
+
+**Description:**<br /> This collection, originally created by William Hersh, as a new large medical test collection for experiments on the SMART retrieval system. It was divided into a Training and a Test set later. <br />
+The split documents contain 20.000 abstracts, the unsplit 50.216. Both collections are sorted into 23 medical categories. Since the official source doesn't seem to be online right now, we will refer to the download files by Alessandro Moschitti.
+
+**Documents:**<br />`Cardiovascular diseases abstract` contains 20.000 documents divided into Training and Test set directories. Inside those directories there are 23 folders which represent the 23 categories the abstracts are assigned to. Every document is written in a file without special notation.
+
+*Example:*
+```
+Haemophilus influenzae meningitis with prolonged hospital course.
+ A retrospective evaluation of Haemophilus influenzae type b meningitis observed over a 2-year period documented 86 cases.
+ Eight of these patients demonstrated an unusual clinical course characterized by persistent fever (duration: greater than 10 days), cerebrospinal fluid pleocytosis, profound meningeal enhancement on computed tomography, significant morbidity, and a prolonged hospital course.
+ The mean age of these 8 patients was 6 months, in contrast to a mean age of 14 months for the entire group.
+ Two patients had clinical evidence of relapse.
+ Four of the 8 patients tested for latex particle agglutination in the cerebrospinal fluid remained positive after 10 days.
+ All patients received antimicrobial therapy until they were afebrile for a minimum of 5 days.
+ Subsequent neurologic examination revealed a persistent seizure disorder in 5 patients (62.5%), moderate-to-profound hearing loss in 2 (25%), mild ataxia in 1 (12.5%), and developmental delay with hydrocephalus which required shunting in 1 (12.5%).
+ One patient had no sequelae.
+```
+
+The download link `All Cardiovascular diseases abstracts` contain 50.216 abstracts which are just sorted by the 23 category folders.
+
+**Queries:** -
+
+**Relevance assessments:** -
+
+**Other files:**`Category Description` - Defines the 23 categories
+
+**Source:**ftp://medir.ohsu.edu/pub/ohsumed <br />
+(if the original source isn't available on the website of Alessandro Moschitti at University of Trento are download links for OHSUMED and Reuters http://disi.unitn.eu/moschitti/corpora.htm)
+
+### Reuters 21578
 
 **Use Cases:**<br />Document Similarity, Document Clustering, Word Sense Disambiguation
 
@@ -733,40 +804,8 @@ Greek Drachma (DRACHMA)
 **Source:**http://www.daviddlewis.com/resources/testcollections/reuters21578/<br />
 (if the original source isn't available on the website of Alessandro Moschitti at University of Trento are download links for OHSUMED and Reuters http://disi.unitn.eu/moschitti/corpora.htm)
 
-## OHSUMED
 
-**Use Cases:**<br /> SVM, Clustering, Semantic Search
-
-**Description:**<br /> This collection, originally created by William Hersh, as a new large medical test collection for experiments on the SMART retrieval system. It was divided into a Training and a Test set later. <br />
-The split documents contain 20.000 abstracts, the unsplit 50.216. Both collections are sorted into 23 medical categories. Since the official source doesn't seem to be online right now, we will refer to the download files by Alessandro Moschitti.
-
-**Documents:**<br />`Cardiovascular diseases abstract` contains 20.000 documents divided into Training and Test set directories. Inside those directories there are 23 folders which represent the 23 categories the abstracts are assigned to. Every document is written in a file without special notation.
-
-*Example:*
-```
-Haemophilus influenzae meningitis with prolonged hospital course.
- A retrospective evaluation of Haemophilus influenzae type b meningitis observed over a 2-year period documented 86 cases.
- Eight of these patients demonstrated an unusual clinical course characterized by persistent fever (duration: greater than 10 days), cerebrospinal fluid pleocytosis, profound meningeal enhancement on computed tomography, significant morbidity, and a prolonged hospital course.
- The mean age of these 8 patients was 6 months, in contrast to a mean age of 14 months for the entire group.
- Two patients had clinical evidence of relapse.
- Four of the 8 patients tested for latex particle agglutination in the cerebrospinal fluid remained positive after 10 days.
- All patients received antimicrobial therapy until they were afebrile for a minimum of 5 days.
- Subsequent neurologic examination revealed a persistent seizure disorder in 5 patients (62.5%), moderate-to-profound hearing loss in 2 (25%), mild ataxia in 1 (12.5%), and developmental delay with hydrocephalus which required shunting in 1 (12.5%).
- One patient had no sequelae.
-```
-
-The download link `All Cardiovascular diseases abstracts` contain 50.216 abstracts which are just sorted by the 23 category folders.
-
-**Queries:** -
-
-**Relevance assessments:** -
-
-**Other files:**`Category Description` - Defines the 23 categories
-
-**Source:**ftp://medir.ohsu.edu/pub/ohsumed <br />
-(if the original source isn't available on the website of Alessandro Moschitti at University of Trento are download links for OHSUMED and Reuters http://disi.unitn.eu/moschitti/corpora.htm)
-
-## TREC
+### TREC
 
 **Use Cases:**<br />
 
@@ -790,28 +829,3 @@ Since there are many different data sets, we provide no examples given for this 
 **Other files:** -
 
 **Source:**https://trec.nist.gov/
-
-## Europarl Parallel Corpus
-
-**Use Cases:**<br />Word Sense Disambiguation, Anaphora Resolution, Information Extraction
-
-**Description:**<br /> Starting in 2001, the corpus collected texts with up to 60 Million words per language. From the proceedings of the European Parliament were texts extracted for these 21 European languages: <br />
-Romanic (French, Italian, Spanish, Portuguese, Romanian), Germanic (English, Dutch, German, Danish, Swedish), Slavik (Bulgarian, Czech, Polish, Slovak, Slovene), Finni-Ugric (Finnish, Hungarian, Estonian), Baltic (Latvian, Lithuanian), and Greek.
-
-**Documents:**<br />Every file has the same structure. There are sections separated with the tag `<CHAPTER ID=?>` which are followed by the title of the chapter. The `<SPEAKER ID =??>` is a unique ID which marks the spoken part. 
-
-*Example from the English Corpus:*
-```
-<CHAPTER ID=6>
-Social and economic situation and development of the regions of the Union
-<SPEAKER ID=80 NAME="President">
-The next item is the debate on the report (A5-0107/1999) by Mr Berend, on behalf of the Committee on Regional Policy, Transport and Tourism, on the sixth periodic report on the social and economic situation and development of the regions of the European Union [SEC(99)0066 - C5-0120/99 - 1999/2123(COS)].
-```
-
-**Queries:** -
-
-**Relevance assessments:** -
-
-**Other files:** -
-
-**Source:**http://www.statmt.org/europarl/
