@@ -5,17 +5,27 @@ sidebar_label: Sentence Embeddings
 custom_edit_url: null
 ---
 
-For our second experiment we connected a Google Colab Notebook to our Elasticsearch instance and compared results from the standard Elasticsearch operator with search results we can get by using a simple Sentence Embedding 
+For our second experiment we connect the Notebook to an Elasticsearch instance and compare the standard Elasticsearch operator with Embeddings we get from BERT (Bi-Directional Encoder Representation from Transformer).
+We described how the standard Elasticsearch operator works and how we implemented it in our first experiment.
 
-## 1. Was ist BERT
+<details>
+<summary>Need a short summary?</summary>  
+
+We implemented our search with a standard Elasticsearch method - [multi-match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) - which is a full-text search that comes with standard tokenization and an analyser. It searches only the given fields of the documents - in our case 'text' and 'title'. To gather our data, we looked only at the first 20 retrieved documents for any given search.
+
+</details>  
 
 
-## 2. Was haben wir getestet?
+### 1. What is BERT and how does it work?
 
 
-### 2.1. Text suche
+### 2. Experimenting with BERT
 
 
-### 2.2. Titel suche
+#### 2.1. Searching on the text field
 
-## 3. Results
+
+#### 2.2. Searching on the title field
+
+
+### 3. Results
