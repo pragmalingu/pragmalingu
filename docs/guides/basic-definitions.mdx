@@ -3,15 +3,15 @@ id: basic-definitions
 title: Basic Terms
 sidebar_label: Basic Definitions
 ---
- 
-With this Guide, we want to provide you with some quick definitions on the basic Natural Language Processing (NLP) terms used in our experiments. If there are terms that you think should be explained as well, please [let us know](../about/team.md).
 
-# NLP - Natural Language Processing
+With this Guide, we want to provide you with some quick definitions on the basic Natural Language Processing (NLP) terms used in our experiments. If there are terms that you think should be explained as well, please [let us know](../about/team.mdx).
+
+## NLP - Natural Language Processing
 
 First, let's clarify what NLP is. NLP stands for “Natural Language Processing” and is a sub-field of Computer Science, which works with natural language. Natural language (for example English, German, Japanese) is a language that was naturally created by people to communicate and has evolved throughout use and repetition. Differently from artificial languages or computer code, there is not so much planning or optimization involved when the rules of a natural language somehow change.
 Since Natural Language sometimes appears arbitrary (in comparison with artificial languages) and does not always follow strict rules, it is very hard to process it automatically. Therefore, NLP began to get more important in the 1950s as an intersection of artificial intelligence and linguistics. Nowadays it is a separate research branch.
 
-# Tokens vs. Types
+## Tokens vs. Types
  
 The definition of “word” is not very clear in Linguistics. For our purposes, we need a better and more specific definition.
 When we automatically process language and talk about “words”, we usually distinguish between **Types** and **Tokens**. 
@@ -30,7 +30,7 @@ Sentence 2: `A rose is a roses`
 Now we have 4 distinct **Types** (`a`,`rose`,`is`,`roses`) and still 5 **Tokens** (`a`,`rose`,`is`,`a`,`roses`).
 Note that even if the word is the same, but has a different ending (for example `roses` is the Plural of `rose`), it counts as a separate **Type**.
 
-# Tokenization
+## Tokenization
  
 Tokenization is the process of splitting a long sequence of symbols (like a sentence or a text) into **Tokens**. **Tokens** are defined in the `# Tokens vs.Types` paragraph above. In many languages, words are separated by whitespaces and punctuation signs. Therefore, many tokenizers split sentences into words at these markers. <br></br>
 For example, the sentence `A rose is a rose.` can be split into `A`, `rose`, `is`, `a`, `rose`, `.`.
@@ -40,7 +40,7 @@ But some cases make it difficult (or wrong) to tokenize like this. Some symbol s
 For example, proper names like `U.K.`, `San Francisco`, or splitting at apostrophe, like in the case of `s'more`. <br></br>
 That's why a tokenizer often needs information about the language to split the sentence in a way that makes sense. For other languages such as Japanese or Chinese, you can't split at whitespace at all.
 
-# Lemmatization
+## Lemmatization
  
 With lemmatization, we try to connect the words in the text to their basic form, their **Lemma**. The **Lemma** is the root or the dictionary form of a word. Lemmatization is done by removing all prefixes and suffixes, according to the morphological rules of the language.
 In this way, we reduce the number of **Tokens** of a text and get more **Types**. A lemmatizer would map all the words to their common lemma.<br></br>
@@ -50,7 +50,7 @@ There are some languages like Arabic which can't be processed properly without l
 But since a lemmatizer needs a lot of information about the morphology of a language, this usually slows down the search process a lot and leads to an enormous amount of data.
 However, if lemmatization is well adapted to the data, it can significantly improve the search results.
  
-# Stemming
+## Stemming
  
 Stemming is a simpler version of lemmatization, which does not rely on full morphological analysis. Depending on the method used it mainly strips off prefixes or suffixes (from lists of such) from the beginning or the end of a word to reduce it to its **Stem**. 
 In English, most of the time the **Stem** is the part of the word that doesn't change when you apply grammatical rules. Stemming is one of the most commonly used methods when dealing with search engines since it's easier than lemmatization.
@@ -61,7 +61,7 @@ In most cases, the search query is only improved by a stemmer if the query is no
 But if there are short queries, stemming can be very helpful, since small grammatical deviations can be included in the search. However, you have to be careful with too much stemming. Sometimes Stemming may produce a part of the word, which is not linguistically valid. If the stemmer cuts off too much information, the word could become too short and lose semantic meaning. This is called overstemming. This occurs, for example, when the stemmer reduces `saw` to `s`.
 Always keep in mind that the quality of a stemmer varies greatly from language to language because some languages have more morphological derivations than others.
  
-# Stop words
+## Stop words
  
 In most languages, the most frequent words are also those that do not carry much (or any) meaning. In English such words are `is`, `a`, `and`, or `the`. To only get relevant search queries, we try to remove those words. These words are called **stop words** since they don't retrieve any useful information but are being processed. Ignoring stop words is a way to make the search more efficient and to get more relevant data.
 To ignore or remove them we can simply consider most of the 10-100 most frequent words as **stop words** or use some of the already existing **stop word** lists depending on the language we want to search on.

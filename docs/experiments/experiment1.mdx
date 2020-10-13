@@ -1,6 +1,6 @@
 ---
 id: experiment1
-title: First Experiment
+title: Stemming Experiment
 sidebar_label: Stemming
 custom_edit_url: null
 ---
@@ -15,7 +15,7 @@ These are the two built-in methods that we compared to the [standard Elasticsear
 * [Standard English Stemmer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html) 
 * [Hunspell Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html) 
 
-## Standard Elasticsearch
+### 1. Standard Elasticsearch
 
 To begin, we implemented our search with a standard Elasticsearch method - [multi-match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) - which is a full-text search that comes with standard tokenization and an analyser. It searches only the given fields of the documents - in our case 'text' and 'title'. To gather our data, we looked only at the first 20 retrieved documents for any given search.
 
@@ -30,15 +30,13 @@ Here you can see the metrics we chose and an example request of the ADI corpus:
         }
     },
     "request": {
-                "query": {
-                    "multi_match": {
-                        "fields": [
-                            "title",
-                            "text"
-                        ],
-                        "query": " How can actually pertinent data, as opposed to references or entire articles themselves, be retrieved automatically in response to information requests? "
-                    }
-                }
+        "query": {
+            "multi_match": {
+                "fields": [
+                    "title",
+                    "text"
+                ],
+                "query": " How can actually pertinent data, as opposed to references or entire articles themselves, be retrieved automatically in response to information requests? "
             }
         }
     }
@@ -49,11 +47,11 @@ These were the results without any further processing of the data using the mult
 
 |  Standard Search |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
 |------------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| Recall           |        0.15 |  0.103 | 0.328 |     0.032 |  0.034 |  0.337 |  0.772 | 0.233 |
-| Precision        |       0.056 |  0.154 | 0.074 |     0.031 |  0.022 |  0.157 |  0.15  | 0.217 |
-| F1-Score         |       0.081 |  0.123 | 0.12  |     0.032 |  0.027 |  0.214 |  0.251 | 0.225 |
+| Recall           |        0.15 |  0.103 | 0.328 |     0.032 |  0.034 |  0.354 |  0.772 | 0.233 |
+| Precision        |       0.056 |  0.154 | 0.074 |     0.031 |  0.022 |  0.193 |  0.15  | 0.217 |
+| F1-Score         |       0.081 |  0.123 | 0.12  |     0.032 |  0.027 |  0.25  |  0.251 | 0.225 |
 
-## Stemming
+### 2. Stemming
 
 To experiment with stemming Elasticsearch provides two built-in stemming methods. 
 First, is the algorithmic stemmer; it applies a series of rules to each word to reduce them to their stems. In Elasticsearch this is called the [Stemmer Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html).  In addition, there is the dictionary stemmer, which replaces unstemmed words with stemmed variants from a provided dictionary. The Elasticsearch built-in method is called the [Hunspell Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html). 
@@ -66,7 +64,7 @@ For example, `learning` changes to `learn` after stemming. <br></br>
 If the stemmer cuts off too much information, the word could become too short and lose semantic meaning; this is called overstemming.
 </details>  
 
-### Stemmer Token Filter
+#### 2.1. Stemmer Token Filter
 
 The *Stemmer Token Filter* supports different languages, but since our corpora were all in English we used the English stemmer. Compared to the dictionary approach, algorithmic stemming needs less memory and is much faster. For this reason, it is usually better to use the *Stemmer Token Filter*. The implementation in Elasticsearch is not complicated and can be done quickly.
 
@@ -110,13 +108,13 @@ These were the results with the *Stemmer Token Filter* applied:
 
 | Stemmer Token Filter |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
 |----------------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| Recall               |        0.15 |  0.121 | 0.254 |     0.032 |  0.044 |  0.393 |  0.78  | 0.285 |
-| Precision            |       0.057 |  0.169 | 0.063 |     0.031 |  0.028 |  0.191 |  0.152 | 0.258 |
-| F1-Score             |       0.082 |  0.141 | 0.101 |     0.032 |  0.034 |  0.257 |  0.255 | 0.271 |
+| Recall               |        0.15 |  0.121 | 0.254 |     0.032 |  0.044 |  0.394 |  0.78  | 0.285 |
+| Precision            |       0.057 |  0.169 | 0.063 |     0.031 |  0.028 |  0.193 |  0.152 | 0.258 |
+| F1-Score             |       0.082 |  0.141 | 0.101 |     0.032 |  0.034 |  0.259 |  0.255 | 0.271 |
 
 Surprisingly, this had less of an impact than we had expected.
 
-### Hunspell Token Filter
+#### 2.2. Hunspell Token Filter
 
 The *Hunspell Token Filter* from Elasticsearch recognizes irregular words and should, therefore, preprocess them better. However, we must keep in mind that words that do not appear in the dictionary are not processed correctly. In addition, a large dictionary will naturally require significantly more time and resources. Since dictionaries can never be fully complete, we didn't expect a significant change in the results compared to the *Stemmer Token Filter*. 
 
@@ -168,12 +166,12 @@ These were the results of the *Hunspell Token Filter*:
 | Hunspell        |   Cranfield |   CISI |   ADI |   Medline |   CACM |   LISA |   Time |   NPL |
 |-----------------|-------------|--------|-------|-----------|--------|--------|--------|-------|
 | Recall          |       0.149 |  0.12  | 0.256 |     0.045 |  0.037 |  0.391 |  0.777 | 0.292 |
-| Precision       |       0.057 |  0.167 | 0.063 |     0.041 |  0.024 |  0.186 |  0.151 | 0.258 |
-| F1-Score        |       0.082 |  0.14  | 0.101 |     0.043 |  0.029 |  0.252 |  0.252 | 0.274 |
+| Precision       |       0.057 |  0.167 | 0.063 |     0.041 |  0.024 |  0.183 |  0.151 | 0.258 |
+| F1-Score        |       0.082 |  0.14  | 0.101 |     0.043 |  0.029 |  0.249 |  0.252 | 0.274 |
 
 The results were not what we had expected. We had thought that they would improve a little for every corpus, but as it turns out, the performance varies greatly from one to the next. In some cases it was even worse than the standard operator of Elasticsearch.
 
-## Results
+### 3. Results
 To compare our results properly we measured Recall, Precision and F1-Score for every method on every corpus.
 
 **Recall**

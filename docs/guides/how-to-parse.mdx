@@ -1,11 +1,11 @@
 ---
 id: how-to-parse
 title: How to Parse Data
-sidebar_label: How to Parse for Elasticsearch
+sidebar_label: Data Parsing for Elasticsearch
 custom_edit_url: null
 ---
 
-## Let's Start
+### 1. Let's Start
 
 To start experimenting and evaluating different Natural Language Processing (NLP) methods, it is necessary to bring the data you want to use into a suitable form.
 
@@ -40,7 +40,7 @@ A `Lemma` is similar to the `Stem`, since it also doesn't have any grammatical r
 You can find more about lemmatization on our [definition page](https://pragmalingu.de/docs/guides/basic-definitions#lemmatization).
 </details> 
 
-## Analyze Data 
+### 2. Analyze Data 
 
 **What does the Data look like?**
 Before you can start parsing, you have to take a closer look at the data you want to parse.
@@ -130,7 +130,7 @@ eval_body = {
    }
 ```
 
-## Parse Data
+### 3. Parse Data
 
 Now that we've figured out what the data looks like and how we want it structured in the end, we can finally get started with parsing.
 Since it's easier to demonstrate parsing by using a practical example, we picked one of our [8 free available Data Sets](../comparisons/overview.mdx). 
@@ -141,7 +141,7 @@ So it seems to be a perfect example to show you our approach step by step.
 In the last section, we will also talk about some problems we had while parsing the other corpora.
 So let's just dive into it!
 
-#### Cranfield Corpus
+#### 3.1. Cranfield Corpus
 
 You can get the corpus from [this link](http://ir.dcs.gla.ac.uk/resources/test_collections/cran/).
 For detailed information about the format of the files, see the PragmaLingu [Comparisons](https://pragmalingu.de/docs/comparisons/overview).
@@ -159,7 +159,7 @@ PATH_TO_CRAN_QRY = '/content/cran.qry'
 PATH_TO_CRAN_REL = '/content/cranqrel'
 ```
 
-### Parse for Indexing
+#### 3.2. Parse for Indexing
 
 To create an index in Elasticsearch for the Cranfield corpus we only need the documents file first. In our case, this is the file `cran.all.1400`.
 Conveniently, every new document begins with the ID marker '.I', directly followed by the ID. Therefore, we can start by splitting all entries at this marker.
@@ -223,7 +223,7 @@ for ID, doc_data in txt_data.items():
 
 Now that the index is set we can start parsing the evaluation body for the Ranking API.
 
-### Parse for Evaluation Body
+#### 3.3. Parse for Evaluation Body
 
 **Queries**
 Since we already split the queries into a list while preparing the documents, we can continue with using the qry_list.
@@ -315,11 +315,11 @@ print(json.dumps(cran_res, indent=4, sort_keys=True))
 
 And that was about it. As already mentioned, it is not always that easy with every corpus. Therefore, in the next section, we will introduce you to a few problems that we have encountered and that can save you a lot of time if you know them in advance.
 
-## Problems
+### 4. Problems
 
 Hereafter we will briefly present some of the most noticeable problems from the 8 parsed corpora. Those can become problems while parsing other corpora. It will show you how important it is to analyze the data beforehand.
 
-### Split Files
+#### 4.1. Split Files
 
 Sometimes not all the data is collected in one file. For us, the only corpus in which this was the case, was LISA and it was solved quickly. But split documents can lead to additional work and therefore should be viewed beforehand. Otherwise, it can happen that not all data is processed while parsing.
 The LISA corpus is split into 14 different files which contain the 6004 document entries.
@@ -335,7 +335,7 @@ for name in lisa_files:
   lisa_txt_list.extend(get_data(PATH_TO_LISA_TXT+name, txt_entry_marker))
 ```
 
-### Information Inconsistencies
+#### 4.2. Information Inconsistencies
 
 While parsing the ADI, CACM and CISI corpora another common problem showed. Although they have notations very similar to Cranfield, unfortunately some inconsistencies caused problems during parsing. Since the data is annotated manually it can happen that for some entries the annotator just skipped the information tag if there wasn't any information to write. This caused code errors especially while parsing the document files.
 After initially assuming that we have a certain amount of information for each entry, we quickly discovered that sometimes there was for example no author tag and other times more than one.
@@ -535,7 +535,7 @@ for line in cisi_txt_list:
 
 These examples show you how important it is to know your data when parsing and to be prepared for any irregularities, especially when it comes to manually annotated data.
 
-### Unexpected Text Separators
+#### 4.3. Unexpected Text Separators
 
 In addition to the missing information, an irregularity in the distance markers can also lead to a lot of frustration while parsing. The document and the query files of LISA and NPL where a bit inconsistent with spaces around the entry markers.
 
@@ -631,7 +631,7 @@ for entry in npl_txt_list:
   npl_txt_data[ID]['text'] = text
 ```
 
-### Number Seperators 
+#### 4.5. Number Seperators 
 
 Some relevance assessment files were difficult to parse, especially with the Time and LISA corpus.
 
@@ -697,7 +697,7 @@ with open (PATH_TO_TIME_REL,'r') as f:
       time_rel[int(line[0])].extend(line[1:])
 ```
 
-## Conclusion
+### 5. Conclusion
 
 Regardless of which text you are parsing and for which project, it is always important to look at your data and analyze it well. Our guide shows you examples on how you can access such data.
 You can find our already parsed data [here](../guides/data-comparison).

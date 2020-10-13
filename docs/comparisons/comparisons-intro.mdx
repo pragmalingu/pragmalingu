@@ -1,6 +1,6 @@
 ---
 id: comparisons-intro
-title: Let's compare...
+title: Let's compare!
 sidebar_label: Introduction
 custom_edit_url: null
 ---
@@ -12,30 +12,41 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
   class= "mascott"
 />
 
-Welcome to our Benchmark section.
+Welcome to our comparison section! Here you can find the evaluation results of different approaches for better search relevancy or other use-cases.
 
-Since there are many approaches for Natural Language Processing it's helpful to be aware of some already established basics before getting started.
-To make things easier for you, we have collected some already established benchmarks and helpful concepts, ready to be used, in this section.
+Here, we discuss and present the results of our in-depth experiments so that the usefulness of these approaches can be assessed quickly.
+
+For our first comparison we looked at stemming algorithms; a standard approach that has been used in search engines for decades. We used the available stemmer 
+token filters in Elasticsearch and compared them to the default search setup without any stemming.
+You can read more about what stemming is and how useful it is for search in our [stemming comparison](../comparisons/stemming.mdx).
+
+Our second comparison focuses on embeddings and the emerging vector search capabilities in search engines. 
+Embeddings are currently a rather hot topic and part of several state-of-the-art deep learning language models which have achieved record benchmark scores in 
+Natural Language Processing (NLP) tasks. You can read more about embeddings and the current state-of-the-art in language modeling in our [Guides Section](http://pragmalingu.de/docs/guides/wordembeddings-intro). Alternatively, you can check out
+how a simple approach to using embeddings in search compares to the default search in Elasticsearch in our [Embeddings Comparison](http://pragmalingu.de/docs/comparisons/embeddings).
 
 <br clear="all"/>
 
-We collected some free available data sets to test these methods on. 
-This table shows a short overview comparison of all researched data sets so far:
+The evaluations are based on several publically available [datasets](http://ir.dcs.gla.ac.uk/resources/test_collections/) collected by the University of Glasgow. We also provide code that makes it easy to use these datasets for your own experiments. 
+This table shows a short overview comparison of all researched data sets to date:
 
-| Corpus                   | Download | Documents | Queries | Notation                        |
-|--------------------------|----------|-----------|---------|---------------------------------|
-| ADI                      | Free     | 83        | 35      | .I, .T, .W, .A                  |
-| CACM                     | Free     | 3,204     | 64      |  .I, .T, .W, .B, .A, .N, .X     |
-| CISI                     | Free     | 1,460     | 112     |  .I, .T, .W, .B, .A, .X         |
-| Cranfield                | Free     | 1,400     | 225     | .I, .T, .W, .B, .A              |
-| LISA                     | Free     | 6004      | 35      | *, #                            |
-| Medline                  | Free     | 1,033     | 30      | .I, .W                          |
-| NPL                      | Free     | 11,429    | 93      |  /                              |
-| Time                     | Free     | 423       | 83      | \*TEXT,\*FIND                   |
+| Corpus                                                           | Documents | Queries | Relevant Use-Cases              |
+|------------------------------------------------------------------|-----------|---------|---------------------------------|
+| [ADI](http://ir.dcs.gla.ac.uk/resources/test_collections/)       | 83        | 35      | Q&A, (Search, too small) |
+| [CACM](http://ir.dcs.gla.ac.uk/resources/test_collections/)      | 3,204     | 64      | Search |
+| [CISI](http://ir.dcs.gla.ac.uk/resources/test_collections/)      | 1,460     | 112     | Q&A, Search, (includes ADI queries) |
+| [Cranfield](http://ir.dcs.gla.ac.uk/resources/test_collections/) | 1,400     | 225     | Q&A, Search |
+| [LISA](http://ir.dcs.gla.ac.uk/resources/test_collections/)      | 6004      | 35      | Search |
+| [Medline](http://ir.dcs.gla.ac.uk/resources/test_collections/)   | 1,033     | 30      | Search |
+| [NPL](http://ir.dcs.gla.ac.uk/resources/test_collections/)       | 11,429    | 93      | Search |
+| [Time](http://ir.dcs.gla.ac.uk/resources/test_collections/)      | 423       | 83      | Search |
 
 Which data set is best for evaluation depends strongly on the use case.
-To get a better understanding of what the data sets look like, check out our [Data Set Comparison](./guides/data-comparison.mdx).
+To get a better understanding of what the data sets look like, check out our [Data Sets Guide](./guides/data-comparison.mdx).
 
-Feel free to browse through our Comparisons:
-* [Stemming](#./stemming.mdx)
-* [Embeddings](#./embeddings.mdx) 
+Feel free to browse through our comparisons:
+* [Stemming](./stemming.mdx)
+* [Embeddings](./embeddings.mdx) 
+
+Stay tuned for upcoming evaluations and subscribe to our newsletter so you don't miss any updates.
+

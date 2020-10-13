@@ -32,10 +32,7 @@ module.exports = {
         alt: '',
         src: 'img/kleines_Icon_2.png',
       },
-      prism: {
-        theme: require('prism-react-renderer/themes/github'),
-      },
-    links: [
+    items: [
         {
           to: 'docs/comparisons/comparisons-intro', 
           label: 'Comparisons', 
@@ -94,6 +91,10 @@ module.exports = {
               label: 'Discord',
               href: 'https://discord.gg/uzXWeKQ',
             },
+            {
+              label: 'Newsletter',
+              href: 'http://eepurl.com/heTv2X',
+            },
           ],
         },
         {
@@ -123,7 +124,7 @@ module.exports = {
       {
         docs: {
           // It is recommended to set document id as docs home page (`docs/` path).
-          homePageId: 'docs/about',
+          homePageId: 'docs/getStarted',
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
