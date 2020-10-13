@@ -91,6 +91,10 @@ module.exports = {
               label: 'Discord',
               href: 'https://discord.gg/uzXWeKQ',
             },
+            {
+              label: 'Newsletter',
+              href: 'http://eepurl.com/heTv2X',
+            },
           ],
         },
         {
