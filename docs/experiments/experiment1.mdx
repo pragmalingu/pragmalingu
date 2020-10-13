@@ -1,6 +1,6 @@
 ---
 id: experiment1
-title: First Experiment
+title: Stemming Experiment
 sidebar_label: Stemming
 custom_edit_url: null
 ---
@@ -30,15 +30,13 @@ Here you can see the metrics we chose and an example request of the ADI corpus:
         }
     },
     "request": {
-                "query": {
-                    "multi_match": {
-                        "fields": [
-                            "title",
-                            "text"
-                        ],
-                        "query": " How can actually pertinent data, as opposed to references or entire articles themselves, be retrieved automatically in response to information requests? "
-                    }
-                }
+        "query": {
+            "multi_match": {
+                "fields": [
+                    "title",
+                    "text"
+                ],
+                "query": " How can actually pertinent data, as opposed to references or entire articles themselves, be retrieved automatically in response to information requests? "
             }
         }
     }

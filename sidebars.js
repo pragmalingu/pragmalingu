@@ -10,8 +10,8 @@ module.exports = {
      'guides/guides-intro',
      'guides/basic-definitions',
      'guides/data-comparison',
-     'guides/elastic-setup',
      'guides/how-to-parse',
+     'guides/elastic-setup',
      'guides/notebooks',
      'guides/ranking-api'
   ],
