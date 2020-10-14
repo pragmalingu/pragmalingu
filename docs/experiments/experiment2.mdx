@@ -28,3 +28,44 @@ We implemented our search with a standard Elasticsearch method - [multi-match qu
 
 
 ### 3. Results
+
+o compare our results properly we measured Recall, Precision and F1-Score for every method on every corpus.
+
+**Recall**
+<details>
+<summary>What is "Recall"?</summary>  
+Recall measures the probability that relevant documents are retrieved. Therefore the number of all retrieved relevant documents is divided by the number of all documents that are labeled as relevant. For example, if we were to search 10 documents, 8 of which are relevant and 4 of these are retrieved, then the Recall measure would be 4/8 = 0.5.
+
+To measure the Recall it is necessary to have the relevant documents labeled. Recall only looks at the documents that could be retrieved and does not take into account any irrelevant documents which may have been retrieved.
+
+</details>  
+<img alt="Recall" src={useBaseUrl('img/EXP2_Recall.png')} />
+<a class="buttons" href="https://colab.research.google.com/drive/1UW6YZUYIYHBWUweTxghk9eCXWp4GbObl#scrollTo=CemuLaUAMHKP"><button class="buttons" >Run this in Google Colab</button></a>
+<br/><br/>
+
+**Precision**
+<details>
+<summary>What is "Precision"?</summary>  
+Precision measures the probability that retrieved documents are relevant to the search query. Therefore, the number of all retrieved relevant documents is divided by the number of all retrieved documents.  For example if we retrieve 10 search results and only 5 are relevant for our search, the Precision measure would be: 5/10 = 0.5.
+
+To measure the Precision it is necessary to have the relevant documents labeled as such. Precision only looks at the documents that are retrieved and does not account for relevant documents which were not retrieved.
+</details> 
+<img alt="Precision" src={useBaseUrl('img/EXP2_Precision.png')} />
+<a class="buttons" href="https://colab.research.google.com/drive/1UW6YZUYIYHBWUweTxghk9eCXWp4GbObl#scrollTo=kuHz0wJvFBzW"><button class="buttons" >Run this in Google Colab</button></a>
+<br/><br/>
+**F1-Score**
+<details>
+<summary>What is "F1-Score"?</summary>  
+The F1-Score measures a harmonic mean between Precision and Recall. Therefore we multiply Precision and Recall by two and divide it by the sum of Precision and Recall: <br />
+`F1-Score=(2*Precision*Recall)/(Precision+Recall)`
+This is the simplest way to balance both Precision and Recall, there are also other common options to weight them differently.
+</details> 
+<img alt="F1-Score" src={useBaseUrl('EXP2_F1-Score.png')} />
+<a class="buttons" href="https://colab.research.google.com/drive/1UW6YZUYIYHBWUweTxghk9eCXWp4GbObl#scrollTo=Gm1Aej_-T9e0"><button class="buttons" >Run this in Google Colab</button></a>
+<br/><br/>
+
+Before we started experimenting on this basic approaches, we thought we can get big improvements for the search results by simply applying stemming methods.
+However, we discovered that the effect of stemming seems to vary a lot depending on the corpus.
+For a more detailed analysis check out our [Simple Search vs. Stemming Comparison](./comparisons/stemming.mdx).
+
+<a class="buttons" href="https://colab.research.google.com/drive/1UW6YZUYIYHBWUweTxghk9eCXWp4GbObl#scrollTo=gpKrbKC7TDxu"><button class="buttons" >Try it yourself!</button></a>
