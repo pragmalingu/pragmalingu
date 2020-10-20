@@ -5,7 +5,9 @@ sidebar_label: Sentence Embeddings
 custom_edit_url: null
 ---
 
-For our second experiment we connect the Notebook to an Elasticsearch instance and compare the standard Elasticsearch operator with Embeddings we get from BERT (Bi-Directional Encoder Representation from Transformer).
+For our second experiment we connect the Notebook to an Elasticsearch instance and compare a standard Elasticsearch operator with our BERT approach. Therefore we got the vector representations for the documents from BERT and indexed them using an Elasticsearch built-in knn algorithm. 
+We tried this approach in the whole document texts as well as on the document titles.
+
 We described how the standard Elasticsearch operator works and how we implemented it in our first experiment.
 
 <details>
@@ -17,9 +19,17 @@ We implemented our search with a standard Elasticsearch method - [multi-match qu
 
 ### 1. What is BERT and how does it work?
 
+Bi-Directional Encoder Representation from Transformer (BERT) is an approach of using large pre-trained neural networks with some exceptional solutions to get the vectors from texts, which we can use with some similarity metrics like cosine similarity to compare meaning of these texts.
 
-### 2. Experimenting with BERT
+(By the way these networks are frequently used as a backbone or part of ensemble of models to solve some NLP tasks like Question Answering, Ranking, Named Entity Recognition, etc.)
 
+["I'm brave enough to read the paper on BERT"](https://arxiv.org/abs/1810.04805)
+
+We also try to explain BERT in our [guide on Transformer and Embeddings.](./guides/embeddings-transformers.mdx)
+
+### 2. Experimenting with Sentence Embeddings from BERT 
+
+We tried to transform our corpus texts into 
 
 #### 2.1. Searching on the text field
 
@@ -52,7 +62,8 @@ To measure the Precision it is necessary to have the relevant documents labeled 
 </details> 
 <img alt="Precision" src={useBaseUrl('img/EXP2_Precision.png')} />
 <a class="buttons" href="https://colab.research.google.com/drive/1UW6YZUYIYHBWUweTxghk9eCXWp4GbObl#scrollTo=kuHz0wJvFBzW"><button class="buttons" >Run this in Google Colab</button></a>
-<br/><br/>
+<br /><br />
+
 **F1-Score**
 <details>
 <summary>What is "F1-Score"?</summary>  
