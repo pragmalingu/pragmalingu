@@ -4,6 +4,8 @@ title: Sentence Embeddings Experiment
 sidebar_label: Sentence Embeddings
 custom_edit_url: null
 ---
+import useBaseUrl from '@docusaurus/useBaseUrl'
+import styles from '../doc.css';
 
 For our second experiment we connect the Notebook to an Elasticsearch instance and compared a standard Elasticsearch operator with our BERT approach. Therefore we got the vector representations for the documents from BERT and indexed them using an Elasticsearch built-in knn algorithm. 
 We tried this approach in the whole document texts as well as on the document titles.
@@ -188,7 +190,7 @@ To measure the Recall it is necessary to have the relevant documents labeled. Re
 
 </details>  
 <img alt="Recall" src={useBaseUrl('img/EXP2_Recall.png')} />
-<a class="buttons" href="https://colab.research.google.com/drive/1UW6YZUYIYHBWUweTxghk9eCXWp4GbObl#scrollTo=CemuLaUAMHKP"><button class="buttons" >Run this in Google Colab</button></a>
+<a class="buttons" href=""><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 **Precision**
@@ -199,7 +201,7 @@ Precision measures the probability that retrieved documents are relevant to the 
 To measure the Precision it is necessary to have the relevant documents labeled as such. Precision only looks at the documents that are retrieved and does not account for relevant documents which were not retrieved.
 </details> 
 <img alt="Precision" src={useBaseUrl('img/EXP2_Precision.png')} />
-<a class="buttons" href="https://colab.research.google.com/drive/1UW6YZUYIYHBWUweTxghk9eCXWp4GbObl#scrollTo=kuHz0wJvFBzW"><button class="buttons" >Run this in Google Colab</button></a>
+<a class="buttons" href=""><button class="buttons" >Run this in Google Colab</button></a>
 <br /><br />
 
 **F1-Score**
@@ -209,12 +211,12 @@ The F1-Score measures a harmonic mean between Precision and Recall. Therefore we
 `F1-Score=(2*Precision*Recall)/(Precision+Recall)`
 This is the simplest way to balance both Precision and Recall, there are also other common options to weight them differently.
 </details> 
-<img alt="F1-Score" src={useBaseUrl('EXP2_F1-Score.png')} />
-<a class="buttons" href="https://colab.research.google.com/drive/1UW6YZUYIYHBWUweTxghk9eCXWp4GbObl#scrollTo=Gm1Aej_-T9e0"><button class="buttons" >Run this in Google Colab</button></a>
+<img alt="F1-Score" src={useBaseUrl('img/EXP2_F1-Score.png')} />
+<a class="buttons" href=""><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 Before we started experimenting on this basic approaches, we thought we can get big improvements for the search results by simply applying stemming methods.
 However, we discovered that the effect of stemming seems to vary a lot depending on the corpus.
 For a more detailed analysis check out our [Simple Search vs. Stemming Comparison](./comparisons/stemming.mdx).
 
-<a class="buttons" href="https://colab.research.google.com/drive/1UW6YZUYIYHBWUweTxghk9eCXWp4GbObl#scrollTo=gpKrbKC7TDxu"><button class="buttons" >Try it yourself!</button></a>
+<a class="buttons" href=""><button class="buttons" >Try it yourself!</button></a>
