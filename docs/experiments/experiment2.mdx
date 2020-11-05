@@ -5,10 +5,10 @@ sidebar_label: Sentence Embeddings
 custom_edit_url: null
 ---
 
-For our second experiment we connect the Notebook to an Elasticsearch instance and compare a standard Elasticsearch operator with our BERT approach. Therefore we got the vector representations for the documents from BERT and indexed them using an Elasticsearch built-in knn algorithm. 
+For our second experiment we connect the Notebook to an Elasticsearch instance and compared a standard Elasticsearch operator with our BERT approach. Therefore we got the vector representations for the documents from BERT and indexed them using an Elasticsearch built-in knn algorithm. 
 We tried this approach in the whole document texts as well as on the document titles.
 
-We described how the standard Elasticsearch operator works and how we implemented it in our first experiment.
+We described how the standard Elasticsearch operator works and how we implemented it in [our first experiment](./experiment1.mdx).
 
 <details>
 <summary>Need a short summary?</summary>  
@@ -27,19 +27,157 @@ Bi-Directional Encoder Representation from Transformer (BERT) is an approach of 
 
 We also try to explain BERT in our [guide on Transformer and Embeddings.](./guides/embeddings-transformers.mdx)
 
-### 2. Experimenting with Sentence Embeddings from BERT 
+### 2. Experimenting With Sentence Embeddings From BERT 
 
-We tried to transform our corpus texts into 
+Für unser Experiment haben wir uns mittels der [huggingface](https://huggingface.co/) website für ein BERT model entschieden, um damit erste Experimente laufen zu lassen. Das ausgewählte pre-trained BERT model haben wir  benutzt, um die gewünschten Suchfelder, sowie die Suchanfrage in Embeddings umzuwandeln. Die Suchanfragen haben wir anhand der Cosinusähnlichkeit gerankt und so versucht bessere Ergebnisse als in der normalen Multi Match Query zu erzielen.
 
-#### 2.1. Searching on the text field
+#### 2.1. Intializie Pretrained BERT Model
+Bevor wir anfangen konnten zu experimentieren mussten wir uns zunächst ein pretrained model aus der BERT library aussuchen, dieses herunterladen und intialisieren. Wir haben uns hierbei erstmal für das BERT-model 'bert-base-nli-mean-tokens' entschieden. Dieses Model stammt aus dem [sentence-transformers-repository](https://github.com/UKPLab/sentence-transformers) und wurde entwickelt um damit sentence embeddings zu generieren. 
+(For more information on this model you can read the paper [Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks](https://arxiv.org/abs/1908.10084))
+ 
+```python
+pip install -U sentence-transformers
+
+from sentence_transformers import SentenceTransformer
+import torch
+from tqdm import tqdm_notebook
+
+model = SentenceTransformer('bert-base-nli-mean-tokens')
+
+# using gpu to boost inference if it's possible
+if torch.cuda.is_available():
+  model.to('cuda')
+
+```
+
+#### 2.2. Preparing The Title Field
+
+```json
+# Settings for BERT title search
+settings_title = {
+  "mappings": {
+      "properties": {
+          "title": {
+              "type": "text"
+              },
+          "title_vector": {
+           "type": "dense_vector",
+           "dims": 768
+            }
+    }
+  }
+}
+```
+
+```python
+# index for BERT title search
+    es.index(
+      index=adi_index_title, 
+      id=ID, 
+      body={
+          'title_vector': model.encode(adi_txt_data[ID]['title']),
+          'title': adi_txt_data[ID]['title'],
+          }
+    )
+```
 
 
-#### 2.2. Searching on the title field
 
+#### 2.3. Preparing The Text Field
 
-### 3. Results
+```python
+import nltk
+from nltk import tokenize
+from nltk.tokenize import sent_tokenize
+nltk.download('punkt')
 
-o compare our results properly we measured Recall, Precision and F1-Score for every method on every corpus.
+def text_to_sentences(string):
+  sentences = tokenize.sent_tokenize(string)
+  return sentences
+
+for ID, doc in cacm_txt_data.items():
+  if 'text' in cacm_txt_data[str(ID)]:
+    text = cacm_txt_data[ID]['text']
+    cacm_txt_data[ID]['sentences'] = text_to_sentences(text)
+```
+
+```json
+# Settings for BERT text search
+settings_text = {
+  "mappings": {
+    "properties": {
+      "text_vector": {
+        "type": "nested",
+        "properties": {
+          "vector": {
+            "type": "dense_vector",
+            "dims": 768 
+          }
+        }
+      },
+     "text": {
+        "type": "keyword"
+    },
+    }
+  }
+}
+```
+
+```python
+# index for BERT text search
+    text_list = []
+    for text in adi_txt_data[ID]['sentences']:
+      text_list.append({"vector": model.encode(text)})
+    es.index(
+      index=adi_index_text, 
+      id=ID, 
+      body={
+          'text_vector': text_list,
+          'text': adi_txt_data[ID]['text']
+          }
+    )
+```
+
+### 3. Search With Cosine Similarity
+
+```python
+"query" : {
+  "script_score": {
+    "query": {"match_all": {}},
+    "script": {
+      "source": "cosineSimilarity(params.query_vector, doc['title_vector']) + 1.0",
+      "params": {"query_vector": list(model.encode(query_txt['question']).astype(float))}
+    }
+  }
+  }
+    }
+```
+
+nested query for the sentences search
+
+```python
+"query": {
+            "nested": {
+                "path": "text_vector",
+                "score_mode": "min", 
+                "query": {
+                    "function_score": {
+                        "script_score": {
+                            "script": {
+                                "source": "1.0 + cosineSimilarity(params.query_vector, 'text_vector.vector')",
+                                "params": {"query_vector": list(model.encode(query_txt['question']).astype(float))}
+                                }
+                                }
+                                }
+                          }
+                       }
+                  }
+                  }
+```
+
+### 4. Results
+
+To compare our results properly we measured Recall, Precision and F1-Score for every method on every corpus.
 
 **Recall**
 <details>
