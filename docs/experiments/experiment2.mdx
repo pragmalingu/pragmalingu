@@ -7,52 +7,67 @@ custom_edit_url: null
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from '../doc.css';
 
-For our second experiment we connect the Notebook to an Elasticsearch instance and compared a standard Elasticsearch operator with our BERT approach. Therefore we got the vector representations for the documents from BERT and indexed them using an Elasticsearch built-in knn algorithm. 
-We tried this approach in the whole document texts as well as on the document titles.
+For our second experiment we connect a Colab Notebook to an Elasticsearch instance and compared the standard Elasticsearch operator with our first embedding approach. Therefore, we transformed the documents into vector representations by using a BERT model and indexed them. Afterwards we searched in the transformed documents with a vector representation of the query.
+Since the BERT model is implemented to work on sentences, we compared a search just on the document titles as well as on the whole text of the documents.
 
-We described how the standard Elasticsearch operator works and how we implemented it in [our first experiment](./experiment1.mdx).
+We already described how the standard Elasticsearch operator works and how we implemented it in [our first experiment](./experiment1.mdx).
 
 <details>
-<summary>Need a short summary?</summary>  
+<summary>Need a short summary of the Multi-Match Query?</summary>  
 
-We implemented our search with a standard Elasticsearch method - [multi-match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) - which is a full-text search that comes with standard tokenization and an analyser. It searches only the given fields of the documents - in our case 'text' and 'title'. To gather our data, we looked only at the first 20 retrieved documents for any given search.
+The standard Elasticsearch method - [Multi-Match Query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) - is a full-text search that comes with standard tokenization and an analyzer. It searches only the given fields of the documents - in our case 'text' and 'title'. To gather our data, we looked only at the first 20 retrieved documents for any given search.
 
 </details>  
 
-### 1. What is BERT and how does it work?
+### 1. What Is BERT?
 
-Bi-Directional Encoder Representation from Transformer (BERT) is an approach of using large pre-trained neural networks with some exceptional solutions to get the vectors from texts, which we can use with some similarity metrics like cosine similarity to compare meaning of these texts.
+BERT is short for Bi-Directional Encoder Representation from Transformer and is an approach of using large pre-trained neural networks with some exceptional solutions to get vector representations - embeddings - from texts. With those embeddings we can measure some similarity metrics like cosine similarity to compare the meaning of these texts.
 
-(By the way these networks are frequently used as a backbone or part of ensemble of models to solve some NLP tasks like Question Answering, Ranking, Named Entity Recognition, etc.)
+(By the way these networks are frequently used as a backbone or part of models to solve some NLP tasks like Question Answering, Ranking, Named Entity Recognition, etc.)
 
 ["I'm brave enough to read the paper on BERT"](https://arxiv.org/abs/1810.04805)
 
-We also try to explain BERT in our [guide on Transformer and Embeddings.](./guides/embeddings-transformers.mdx)
+We also try to explain BERT in our [Guide about Transformer and Embeddings.](./guides/embeddings-transformers.mdx)
 
-### 2. Experimenting With Sentence Embeddings From BERT 
+### 2. Preparing The BERT Model 
 
-Für unser Experiment haben wir uns mittels der [huggingface](https://huggingface.co/) website für ein BERT model entschieden, um damit erste Experimente laufen zu lassen. Das ausgewählte pre-trained BERT model haben wir  benutzt, um die gewünschten Suchfelder, sowie die Suchanfrage in Embeddings umzuwandeln. Die Suchanfragen haben wir anhand der Cosinusähnlichkeit gerankt und so versucht bessere Ergebnisse als in der normalen Multi Match Query zu erzielen.
+For our experiment, we decided on a BERT model for sentence embeddings via the [huggingface](https://huggingface.co/) website. The selected pre-trained BERT model was then used to convert the desired search fields from the documents and the search query into embeddings. To get comparable values we ranked the search results based on the cosine similarity between the sentence embeddings and query embeddings.
 
-#### 2.1. Intializie Pretrained BERT Model
-Bevor wir anfangen konnten zu experimentieren mussten wir uns zunächst ein pretrained model aus der BERT library aussuchen, dieses herunterladen und intialisieren. Wir haben uns hierbei erstmal für das BERT-model 'bert-base-nli-mean-tokens' entschieden. Dieses Model stammt aus dem [sentence-transformers-repository](https://github.com/UKPLab/sentence-transformers) und wurde entwickelt um damit sentence embeddings zu generieren. 
+<details>
+<summary>What is cosine similarity?</summary>  
+
+The cosine similarity is used to measure the difference between two vectors irrespective of their size. In NLP they often represent words, sentences or even whole documents. To get the cosine similarity the angle between two vectors - which are projected in a multi-dimensional space - is calculated. The smaller the angle, the higher the cosine similarity. Therefore, if the cosine similarity is 1, the vectors are identical. 
+
+</details> 
+
+<br></br>
+
+**Initialize A Pre-trained BERT Model**
+
+Before we could start experimenting, we first had to choose a pre-trained model from the BERT library, download and initialize it. As a first try we chose the BERT model ["bert-base-nli-mean-tokens"](https://www.sbert.net/docs/pretrained_models.html#semantic-textual-similarity). This model can also be found in the [sentence-transformers-repository](https://github.com/UKPLab/sentence-transformers), it was developed to generate sentence embeddings.
 (For more information on this model you can read the paper [Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks](https://arxiv.org/abs/1908.10084))
+
+For initializing the model we run this code:
  
 ```python
 pip install -U sentence-transformers
 
 from sentence_transformers import SentenceTransformer
-import torch
-from tqdm import tqdm_notebook
 
 model = SentenceTransformer('bert-base-nli-mean-tokens')
 
-# using gpu to boost inference if it's possible
-if torch.cuda.is_available():
-  model.to('cuda')
-
 ```
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/BERT_Embeddings_example.ipynb"><button class="buttons" >Run BERT model in Colab</button></a>
 
-#### 2.2. Preparing The Title Field
+### 3. Experimenting With Sentence Embeddings From BERT 
+After initializing the BERT model, we converted the documents and the search queries into sentence embeddings. Then - same as in our last experiment - we calculated comparable values using the [Ranking Evaluation API](../guides/ranking-api.mdx).
+
+#### 3.1. Preparing The Documents
+Now that the model was integrated in our Notebook, we could start transforming our texts with BERT. To be able to compare the documents and the search query using cosine similarity, we first had to convert the desired search fields into embeddings and feed them into Elasticsearch.
+Since we worked with the Elasticsearch param `dense_vector`, it is not possible to recreate this experiment on Open Distro for Elasticsearch, you have to use the standard Elasticsearch installation instead.
+
+**Title Embeddings**<br></br>
+As a first approach, we tried to calculate the similarity between the search queries and the titles of the documents. For this purpose, we set `title_vector` as a container for the computed BERT embedding in addition to the field `title`, which should be the container for the text of the title:
 
 ```json
 # Settings for BERT title search
@@ -71,7 +86,10 @@ settings_title = {
 }
 ```
 
+While indexing, the code iterates over the preprocessed corpus and encodes the title for each document using the BERT model:
+
 ```python
+for ID, doc_data in adi_txt_data.items():
 # index for BERT title search
     es.index(
       index=adi_index_title, 
@@ -82,12 +100,22 @@ settings_title = {
           }
     )
 ```
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=ZaxpCqSDShgg&line=1&uniqifier=1"><button class="buttons" >Run this in Colab</button></a>
 
+*Note*: Not every corpus has titles, that is why we excluded the `Medline`, `NPL` and `Time` corpus for the title search.
 
+| BERT on title field  |   ADI |   CACM |   CISI |   Cranfield |   LISA |   Medline |   NPL |   Time |
+|----------------------|-------|--------|--------|-------------|--------|-----------|-------|--------|
+| Recall               | 0.227 |  0.007 |  0.038 |       0.071 |  0.139 |     0     | 0     |  0     |
+| Precision            | 0.227 |  0.006 |  0.088 |       0.028 |  0.056 |     0     | 0     |  0     |
+| F-1-Score            | 0.227 |  0.006 |  0.054 |       0.04  |  0.08  |     0     | 0     |  0     |
 
-#### 2.3. Preparing The Text Field
+**Text Embeddings**<br></br>
+The procedure for the whole text was a bit more complicated. We first had to split the text into sentences, otherwise the embeddings would have been far too long or  even cut of some of the text. Therefore, we created a new category inside the corpus dictionaries to store the split sentences for easy access:
 
 ```python
+# transform text to sentences for BERT text search
+
 import nltk
 from nltk import tokenize
 from nltk.tokenize import sent_tokenize
@@ -97,11 +125,12 @@ def text_to_sentences(string):
   sentences = tokenize.sent_tokenize(string)
   return sentences
 
-for ID, doc in cacm_txt_data.items():
-  if 'text' in cacm_txt_data[str(ID)]:
-    text = cacm_txt_data[ID]['text']
-    cacm_txt_data[ID]['sentences'] = text_to_sentences(text)
+for ID, doc in adi_txt_data.items():
+  text = adi_txt_data[ID]['text']
+  adi_txt_data[ID]['sentences'] = text_to_sentences(text)
 ```
+
+Since a text is represented by more than one sentence, we needed to create a container to store all the sentence embeddings. Therefore we initialized `text_vector` as seen below, which is a nested container. The the whole unsplit text is stored in the container `text`:
 
 ```json
 # Settings for BERT text search
@@ -125,22 +154,33 @@ settings_text = {
 }
 ```
 
+To keep the syntax of Elasticsearch intact, it was necessary to store the sentence embeddings into a list before giving it to the index field:
+
 ```python
+for ID, doc_data in adi_txt_data.items():
 # index for BERT text search
-    text_list = []
-    for text in adi_txt_data[ID]['sentences']:
-      text_list.append({"vector": model.encode(text)})
-    es.index(
+     es.index(
       index=adi_index_text, 
       id=ID, 
       body={
-          'text_vector': text_list,
+          'text_vector': [{"vector": model.encode(text)} for text in adi_txt_data[ID]['sentences']],
           'text': adi_txt_data[ID]['text']
           }
     )
 ```
 
-### 3. Search With Cosine Similarity
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=ZaxpCqSDShgg&line=1&uniqifier=1"><button class="buttons" >Run this in Colab</button></a>
+
+*Note*: Not every document has text, so for some corpora we needed to check that while indexing, e.g. the `CACM` corpus. 
+
+| BERT on text field   |   ADI |   CACM |   CISI |   Cranfield |   LISA |   Medline |   NPL |   Time |
+|----------------------|-------|--------|--------|-------------|--------|-----------|-------|--------|
+| Recall               | 0.204 |  0.018 |  0.024 |       0.039 |  0.055 |     0.027 | 0.099 |  0.156 |
+| Precision            | 0.059 |  0.012 |  0.053 |       0.012 |  0.031 |     0.031 | 0.089 |  0.019 |
+| F-1-Score            | 0.091 |  0.014 |  0.033 |       0.019 |  0.04  |     0.029 | 0.094 |  0.034 |
+
+#### 3.2 Search With Cosine Similarity
+Now that we prepared all the documents, we only had to compute the search queries before we could pass them to the Ranking Evaluation API. For the search on the title fields a `script_score` request for each query was enough to get some results. Our `script_score` calculates the cosine similarity between each document title and the search query before returning the top 20 results:
 
 ```python
 "query" : {
@@ -154,8 +194,7 @@ settings_text = {
   }
     }
 ```
-
-nested query for the sentences search
+For the search on the `text_vector` embeddings it was a bit more complicated. Since the embeddings were saved as a list, we had to create a nested query which calculates the cosine similarity between each sentence and the query. The best cosine similarity value becomes the value for the entire document:
 
 ```python
 "query": {
@@ -179,7 +218,8 @@ nested query for the sentences search
 
 ### 4. Results
 
-To compare our results properly we measured Recall, Precision and F1-Score for every method on every corpus.
+In order to get suitable comparison values, we decided to carry out the multi-match query in the same way as the BERT search on the title or text field. Since the data sets `Medline`,` NPL` and `Time` do not have any titles, the title search was left out for these corpora.
+Same procedure as in the last experiment: To compare our results properly we measured Recall, Precision and F1-Score for every method on every corpus.
 
 **Recall**
 <details>
@@ -215,8 +255,7 @@ This is the simplest way to balance both Precision and Recall, there are also ot
 <a class="buttons" href=""><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
-Before we started experimenting on this basic approaches, we thought we can get big improvements for the search results by simply applying stemming methods.
-However, we discovered that the effect of stemming seems to vary a lot depending on the corpus.
-For a more detailed analysis check out our [Simple Search vs. Stemming Comparison](./comparisons/stemming.mdx).
+
+For a more detailed analysis check out our [Embedding Comparison](./comparisons/embeddings.mdx).
 
 <a class="buttons" href=""><button class="buttons" >Try it yourself!</button></a>
