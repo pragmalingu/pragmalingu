@@ -2,23 +2,25 @@
 id: ranking-api
 title: How to Use the Elasticsearch Ranking Evaluation API
 sidebar_label: Ranking Evaluation API
+custom_edit_url: null
 ---
 
 ### 1. Introduction
-To evaluate our experiments we used the build-in [Ranking Evaluation API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html) by Elasticsearch.
-In order to adjust the Ranking Evaluation API to your needs, this guide will give you some short explainations of the operators and metrics we used during our experiments.
-
-Before we start, the Ranking Evaluation API needs three ingredients to give us results back:
-
-* Some documents you want to evaluate
-* A few typical queries for those documents
+To evaluate our experiments we used the built-in [Ranking Evaluation API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html) by Elasticsearch.
+In order to adjust the Ranking Evaluation API to your needs this guide will give you some short explanations of the operators and metrics we used during our experiments.
+ 
+Before we start, the Ranking Evaluation API requires three inputs in order to provide accurate results:
+ 
+* Document(s) to be evaluated
+* A few typical queries for said document(s)
 * Relevance assessments that represent document ratings regarding the queries
-
-At first we have to save the documents you want to search on to an Elasticsearch index. Detailed instructions on how to do that can be found in our [Elasticsearch Setup Guide](../guides/elastic-setup.mdx).
-
-Next you need the search queries correctly formatted for the Ranking Evaluation API to read. We wrote down how you can achieve this from raw data in our [Parsing Guide](../guides/how-to-parse.mdx).
-
+ 
+First, we need to save the desired document(s) to an Elasticsearch index. Detailed instructions on how to do this can be found in our [Elasticsearch Setup Guide](../guides/elastic-setup.mdx).
+ 
+Next, you will need to ensure that the search queries are properly formatted for use with the Ranking Evaluation API. Please see our [Parsing Guide](../guides/how-to-parse.mdx) for detailed instructions on formatting raw data
+ 
 After parsing the queries, they should have the following format:
+
 
 ```json
 {
@@ -55,8 +57,8 @@ After parsing the queries, they should have the following format:
 }
 ```
 
-On the [Python API Documentation website](https://elasticsearch-py.readthedocs.io/en/master/api.html) for the Ranking Evaluation API this is called the `body`so we will keep referring to it as the evaluation body.
-After saving the body to a variable called `eval_body` we send it to the Ranking Evaluation API using json:
+According to the  [Python API Documentation website](https://elasticsearch-py.readthedocs.io/en/master/api.html) for the Ranking Evaluation API this is called the “body” so from here we will refer to this as the “evaluation body”.
+After saving the body as a variable called `eval_body` we send it to the Ranking Evaluation API using json:
 
 ```python
 eval_body = json.dumps(create_function)
@@ -69,23 +71,24 @@ print(json.dumps(result, indent=4, sort_keys=True))
 <details>
 <summary>What is "create_function"?</summary>  
 
-The argument `create_function` is a function we wrote to parse our preprocessed data into the evaluation body format. You can find details in our [Parsing Guide](https://pragmalingu.de/docs/guides/how-to-parse#parse-for-evaluation-body). 
+The argument `create_function` is a function we wrote to parse our preprocessed data into the evaluation body format. You can find details in our [Parsing Guide](https://pragmalingu.de/docs/guides/how-to-parse#parse-for-evaluation-body).
 </details> 
 
-We specified on which index the Ranking Evaluation API should search. If you don't be aware that it will search on all indexes in your instance.
+It is important to specify which index you would like the Ranking Evaluation API to search, otherwise it will search all available indexes.
+ 
+You can find further information about the Ranking Evaluation API on the [Elasticsearch website](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html).
+ 
+### 2. Query Metrics
+ 
+Which query operator you choose to use will depend on the type of data you wish to process.  Below we will provide a brief overview of the three operators we have tested thus far.
+ 
+#### 2.1. Match Query Operator
+ 
+The [Match Query operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html) is the standard search operator in Elasticsearch. It provides a full-text search of the given fields of the document(s) and includes standard tokenization and an analyzer.
+ 
+To use the Match Query operator in the Ranking Evaluation API we first need to add it to every query request in the field `"query":` and also add the query text to the field `"text":`. The operator tries to match the string given in `"text":` with the documents in the given index.
+Here are some example queries:
 
-You can find all this information about the Ranking Evaluation API also on the [Elasticsearch website](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html).
-
-### 2. Query metrics
-
-Depending on the data, it can help your search which query operator you choose. We will briefly explain the three operators that we tested by now.
-
-#### 2.1. Match query operator
-
-The [match query operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-query.html) is the standard search operator in Elasticsearch. It's a full-text search in the given fields of the documents that comes with standard tokenization and an analyzer.
-
-To use the match operator in the Ranking Evaluation API we need to add it to every query request in the field `"query":` and also add the query text to the field `"text":`. The operator tries to match the string given in `text:` on the documents in the given index.
-Here is are some example queries:
 
 ```json
 {
@@ -114,11 +117,10 @@ Here is are some example queries:
 }
 ```
 
-
-#### 2.2. Simple query string operator
+#### 2.2. Simple Query String Operator
  
-The [simple query string](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) operator uses a parser with a limited error-tolerant syntax to search for the given query string in the given fields. It splits and analyzes the query terms separately for the search before returning the relevant documents. It ignores invalid parts of the query string. 
-
+The [Simple Query String operator ](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) uses a parser with a limited error-tolerant syntax to search for the given query string in the given fields. It splits and analyzes the query terms separately for the search before returning the relevant documents. It ignores invalid parts of the query string.
+ 
 Here is an example request with the simple query string operator searching for the query in the 'text' and 'title' fields:
 
 ```json
@@ -151,11 +153,11 @@ Here is an example request with the simple query string operator searching for t
 }
 ```
 
-#### 2.3. Multi-match query operator
-
-The [multi-match query operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#query-dsl-multi-match-query) builds on the match query operator and allows multi-line match while searching. It does work similar to the simple string query but it rates the documents a little bit different.
-
-If no specific fields are provided it will search on all fields available. We chose "title" and "text" since they have the most information:
+#### 2.3. Multi-Match Query Operator
+ 
+The [Multi-Match Query operator](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#query-dsl-multi-match-query) builds on the match query operator and allows multi-line matches while searching. While it does work similarly to the simple string query it rates the documents a bit differently.
+ 
+If no specific fields are provided it will search all available fields. We chose "title" and "text" since they contain the most information:
 
 ```json
 {
@@ -187,17 +189,17 @@ If no specific fields are provided it will search on all fields available. We ch
 }
 ```
 
-This operator was also the one we chose for our standard search to stemming comparison, which you can read in our [First Experiment](../experiments/experiment1.mdx). 
-
-### 3. Rating metric
-
-With the rating metric we are able to provide better ratings for more relevant documents. For example if we search for `ice cream truck` we could rate documents with `ice cream truck` higher than documents with `ice cream` or `truck` and still label all those documents as relevant.
-A document rating is represented by an integer. The higher the number the more relevant the document. To use this scale in your search we also have to adjust the `relevant_rating_threshold` variable to the highest rated number. The default would be 1, which means the different rated documents would all be irrelevant.
-
-We can only make this adjustment if we have annotated data that provides the right metrics or if we are willing to rate the relevant documents manually. 
-
-So if we don't have more than the information that a document is relevant or irrelevant, we can just use the binary scale. 0 is irrelevant and 1 is relevant. 
-
+This was also the operator  we chose for our Standard Search to Stemming Comparison, which you can read in our [First Experiment](../experiments/experiment1.mdx).
+ 
+### 3. Rating Metric
+ 
+With our rating metric we are able to rank more relevant documents higher than less relevant ones:for example, if we search for `ice cream truck` we could rate documents with `ice cream truck` higher than documents with `ice cream` or `truck` while still labeling all of those documents as relevant.
+A document’s rating is represented by an integer; the higher the number the more relevant the document. To use this scale in your search you must first adjust the `relevant_rating_threshold` variable to the highest rated number. The default would be 1, which means the different rated documents would all be irrelevant.
+ 
+We can only make this adjustment if we have annotated data that provides the right metrics or if we are willing to rate the relevant documents manually.
+ 
+Therefore, if we do not have any information other than that a document is relevant or irrelevant, we can just use the binary scale; 0 is irrelevant and 1 is relevant.
+ 
 This is an example with higher scaled ratings:
 
 ```json
@@ -234,22 +236,22 @@ This is an example with higher scaled ratings:
   }
 }
 ```
-Since the Cranfield corpus was the only one which provided scaled ratings, we only used the binary rating. We also didn't rate any documents with 0, since every document you don't rate gets the default value 0.
-
-### 4. Evaluation metrics
-
-Aside from the metrics we can adjust by changing the request, there are some metrics that influence how the evaluation results will be computed.
-
+Since the Cranfield corpus was the only one which provided scaled ratings we only used the binary rating. We also didn't rate any documents with 0, since any unrated document receives a 0 by default.
+ 
+### 4. Evaluation Metrics
+ 
+In addition to the metrics we can adjust by changing the request, there are some metrics that influence how the evaluation results will be computed.
+ 
 #### 4.1. Precision at k
-With setting the metric to `precision` and defining `k`, we can measure how many relevant results are returned in the top k results. 
-
-Since the user only looks at the first few results of a search query, it doesn't make sense to set `k` higher than 20. Reducing the number of top results to 10 or 5 could give an even better idea of the performance.
-
-But this metric only recognizes documents as relevant, if they are labeled. So it is possible that documents that would be relevant, but aren't labeled, would actually worsen the results on this.
-Also the position isn't taken in account either. Documents on position 1 and position 10 are considered as equally important.
-
-We already explained the `relevant_rating_threshold` parameter above. With the `ignore_unlabeled` parameter you are able to take the unlabeled documents into account. The default value is `false`, which treats unlabeled documents as irrelevant. But if set to `true`, those documents won't count at all.
-
+By setting the metric to `precision` and defining `k`, we can measure how many relevant results are returned in the top k results.
+ 
+Since a user typically only looks at the first few results of a search query, it is not necessary to set `k` higher than 20. Reducing the number of top results to 10 or 5 could give an even better idea of the performance.
+ 
+But this metric only recognizes documents as relevant if they are labeled so it is possible that documents that would be relevant, but aren't labeled, would actually worsen the results..
+Also, the position is not taken in account either. Documents in position 1 and position 10 are considered as equally important.
+ 
+We have already explained the `relevant_rating_threshold` parameter above. With the `ignore_unlabeled` parameter you are able to take the unlabeled documents into account. The default value is `false`, which treats unlabeled documents as irrelevant. But if set to `true`, those documents will not be counted.
+ 
 An example for the Precision metric:
 
 ```json
@@ -272,20 +274,20 @@ An example for the Precision metric:
 <summary>What is "Precision"?</summary>  
 
 Precision measures the probability that retrieved documents are relevant to the search query. Therefore the number of all retrieved relevant documents is divided by the number of all retrieved documents. <br />
-For example: We retrieve 10 search results and only 5 are relevant for our search. 
+For example: We retrieve 10 search results and only 5 are relevant for our search.
 The Precision measure would be: `5/10 = 0.5` <br />
-To measure the Precision it's necessary to have the relevant documents labeled as such. 
-Precision only looks at the documents that are retrieved and doesn't care about what more could've been retrieved.
+To measure the Precision it is necessary to have the relevant documents labeled as such.
+Precision only looks at the documents that are retrieved and does not take into account any documents which could have been retrieved.
 </details> 
 
 #### 4.2. Recall at k
-
-The metric `recall` works very similar to the `precision` metric. `k` defines how many relevant results are returned in the top k results and taken into measurement. 
-This metric also has difficulties, if documents aren't labeled.
-The position isn't taken in account either. Which can be problematic since the Recall measure doesn't care about the retrieved irrelevant documents.
-
-The `relevant_rating_threshold` parameter is explained above. 
-
+ 
+The metric `recall` works very similarly to the `precision` metric. `k` defines how many relevant results are returned in the top k results and taken into account.
+This metric has its own problems, though, if documents are not labeled.
+The position is not taken into account either, which can be problematic since the Recall metric does not account for any retrieved irrelevant documents.
+ 
+The `relevant_rating_threshold` parameter is explained above.
+ 
 An example for the Recall metric:
 
 ```json
@@ -306,11 +308,11 @@ An example for the Recall metric:
 <details>
 <summary>What is "Recall"?</summary>  
 
-Recall measures the probability that relevant documents are retrieved. 
-Therefore the number of all retrieved relevant documents is divided by the number all documents that are labeled as relevant. <br />
-For example: We search on 10 documents, 8 of them are relevant and 4 of the relevant ones are retrieved. 
+Recall measures the probability that relevant documents are retrieved.
+Therefore the number of all retrieved relevant documents is divided by the number of all documents that are labeled as relevant. <br />
+For example: We search 10 documents, 8 of them are relevant and 4 of the relevant ones are retrieved.
 The Recall measure would be: `4/8 = 0.5` <br />
-To measure the Recall it's necessary to have the relevant documents labeled.
-Recall only looks at the documents that could be retrieved and doesn't take in account, if many irrelevant documents are retrieved aside the relevant ones.
+To measure the Recall it is necessary to have the relevant documents labeled.
+Recall only looks at the documents that could be retrieved and does not take into account if any irrelevant documents are retrieved aside from the relevant ones.
 </details> 
 
