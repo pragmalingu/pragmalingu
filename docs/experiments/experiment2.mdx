@@ -7,36 +7,38 @@ custom_edit_url: null
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from '../doc.css';
 
-For our second experiment we connect a Colab Notebook to an Elasticsearch instance and compared the standard Elasticsearch operator with our first embedding approach. Therefore, we transformed the documents into vector representations by using a BERT model and indexed them. Afterwards we searched in the transformed documents with a vector representation of the query.
-Since the BERT model is implemented to work on sentences, we compared a search just on the document titles as well as on the whole text of the documents.
+For our second experiment we connected a Colab Notebook to an Elasticsearch instance and compared the standard Elasticsearch operator with our first embedding approach. To do this,  we first transformed the documents into vector representations by using a BERT model and indexed them. Next, we searched in the transformed documents with a vector representation of the query.
+Since the BERT model is designed to work on sentences, we searched both the document titles, as well as the entire text, and compared the results.
+ 
+We have already described how the standard Elasticsearch operator works and how we implemented it in [our first experiment](./experiment1.mdx).
 
-We already described how the standard Elasticsearch operator works and how we implemented it in [our first experiment](./experiment1.mdx).
 
 <details>
 <summary>Need a short summary of the Multi-Match Query?</summary>  
 
-The standard Elasticsearch method - [Multi-Match Query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) - is a full-text search that comes with standard tokenization and an analyzer. It searches only the given fields of the documents - in our case 'text' and 'title'. To gather our data, we looked only at the first 20 retrieved documents for any given search.
+The standard Elasticsearch method - [Multi-Match Query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html) - is a full-text search which includes standard tokenization as well as an analyzer. It searches only the given fields of the documents; in our case 'text' and 'title'. To gather our data, we only looked at the first 20 retrieved documents for any given search.
 
 </details>  
 
 ### 1. What Is BERT?
 
-BERT is short for Bi-Directional Encoder Representation from Transformer and is an approach of using large pre-trained neural networks with some exceptional solutions to get vector representations - embeddings - from texts. With those embeddings we can measure some similarity metrics like cosine similarity to compare the meaning of these texts.
-
-(By the way these networks are frequently used as a backbone or part of models to solve some NLP tasks like Question Answering, Ranking, Named Entity Recognition, etc.)
-
+BERT is short for Bi-directional Encoder Representation from Transformer and is an approach which uses large, pre-trained, neural networks with some exceptional solutions to get vector representations (embeddings) from texts. Using these embeddings we can use similarity metrics - such as cosine similarity - to compare the meaning of the texts.
+ 
+(By the way, these networks are frequently used as a backbone or part of models to solve some NLP tasks like Question Answering, Ranking, Named Entity Recognition, etc.)
+ 
 ["I'm brave enough to read the paper on BERT"](https://arxiv.org/abs/1810.04805)
+ 
+We also try to explain BERT in our [Guide About Transformers and Embeddings.](./guides/embeddings-transformers.mdx)
 
-We also try to explain BERT in our [Guide about Transformer and Embeddings.](./guides/embeddings-transformers.mdx)
 
 ### 2. Preparing The BERT Model 
 
-For our experiment, we decided on a BERT model for sentence embeddings via the [huggingface](https://huggingface.co/) website. The selected pre-trained BERT model was then used to convert the desired search fields from the documents and the search query into embeddings. To get comparable values we ranked the search results based on the cosine similarity between the sentence embeddings and query embeddings.
+For our experiment, we decided on a BERT model for sentence embeddings via the [Hugging Face](https://huggingface.co/) website. The selected pre-trained BERT model was then used to convert the desired search fields from the documents and the search query into embeddings. To get comparable values we ranked the search results based on the cosine similarity between the sentence embeddings and query embeddings.
 
 <details>
 <summary>What is cosine similarity?</summary>  
 
-The cosine similarity is used to measure the difference between two vectors irrespective of their size. In NLP they often represent words, sentences or even whole documents. To get the cosine similarity the angle between two vectors - which are projected in a multi-dimensional space - is calculated. The smaller the angle, the higher the cosine similarity. Therefore, if the cosine similarity is 1, the vectors are identical. 
+The cosine similarity is used to measure the difference between two vectors irrespective of their size. In NLP they often represent words, sentences, or even whole documents. To get the cosine similarity the angle between two vectors - which are projected in a multi-dimensional space - is calculated. The smaller the angle, the higher the cosine similarity. Therefore, if the cosine similarity is 1, the vectors are identical. 
 
 </details> 
 
@@ -44,10 +46,10 @@ The cosine similarity is used to measure the difference between two vectors irre
 
 **Initialize A Pre-trained BERT Model**
 
-Before we could start experimenting, we first had to choose a pre-trained model from the BERT library, download and initialize it. As a first try we chose the BERT model ["bert-base-nli-mean-tokens"](https://www.sbert.net/docs/pretrained_models.html#semantic-textual-similarity). This model can also be found in the [sentence-transformers-repository](https://github.com/UKPLab/sentence-transformers), it was developed to generate sentence embeddings.
+Before we could start experimenting, we first had to choose a pre-trained model from the BERT library, download it, and initialize it. Our first choice was the BERT model ["bert-base-nli-mean-tokens"](https://www.sbert.net/docs/pretrained_models.html#semantic-textual-similarity). This model can also be found in the [sentence-transformers-repository](https://github.com/UKPLab/sentence-transformers), it was developed to generate sentence embeddings.
 (For more information on this model you can read the paper [Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks](https://arxiv.org/abs/1908.10084))
 
-For initializing the model we run this code:
+To initialize the model we ran the following code:
  
 ```python
 pip install -U sentence-transformers
@@ -60,14 +62,14 @@ model = SentenceTransformer('bert-base-nli-mean-tokens')
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/BERT_Embeddings_example.ipynb"><button class="buttons" >Run BERT model in Colab</button></a>
 
 ### 3. Experimenting With Sentence Embeddings From BERT 
-After initializing the BERT model, we converted the documents and the search queries into sentence embeddings. Then - same as in our last experiment - we calculated comparable values using the [Ranking Evaluation API](../guides/ranking-api.mdx).
+After initializing the BERT model, we converted the documents and the search queries into sentence embeddings. Then - similarly to our last experiment - we calculated comparable values using the [Ranking Evaluation API](../guides/ranking-api.mdx).
 
 #### 3.1. Preparing The Documents
-Now that the model was integrated in our Notebook, we could start transforming our texts with BERT. To be able to compare the documents and the search query using cosine similarity, we first had to convert the desired search fields into embeddings and feed them into Elasticsearch.
-Since we worked with the Elasticsearch param `dense_vector`, it is not possible to recreate this experiment on Open Distro for Elasticsearch, you have to use the standard Elasticsearch installation instead.
+Now that the model had been integrated into our Notebook, we could start transforming our texts with BERT. To be able to compare the documents and the search query using cosine similarity, we first had to convert the desired search fields into embeddings and feed them into Elasticsearch.
+Since we worked with the Elasticsearch param `dense_vector`, it is not possible to recreate this experiment on Open Distro for Elasticsearch, it is necessary to use the standard Elasticsearch installation instead.
 
 **Title Embeddings**<br></br>
-As a first approach, we tried to calculate the similarity between the search queries and the titles of the documents. For this purpose, we set `title_vector` as a container for the computed BERT embedding in addition to the field `title`, which should be the container for the text of the title:
+For our first approach, we tried to calculate the similarity between the search queries and the titles of the documents. To do this, we set `title_vector` as a container for the computed BERT embedding in addition to the field `title`, which should be the container for the text of the title:
 
 ```json
 # Settings for BERT title search
@@ -111,7 +113,7 @@ for ID, doc_data in adi_txt_data.items():
 | F-1-Score            | 0.227 |  0.006 |  0.054 |       0.04  |  0.08  |     0     | 0     |  0     |
 
 **Text Embeddings**<br></br>
-The procedure for the whole text was a bit more complicated. We first had to split the text into sentences, otherwise the embeddings would have been far too long or  even cut of some of the text. Therefore, we created a new category inside the corpus dictionaries to store the split sentences for easy access:
+The procedure for working with the whole text was a bit more complicated as we first had to split the text into sentences. Otherwise the embeddings would have been far too long or  even cut off. Therefore, we created a new category inside the corpus dictionaries to store the split sentences for easy access:
 
 ```python
 # transform text to sentences for BERT text search
@@ -130,7 +132,7 @@ for ID, doc in adi_txt_data.items():
   adi_txt_data[ID]['sentences'] = text_to_sentences(text)
 ```
 
-Since a text is represented by more than one sentence, we needed to create a container to store all the sentence embeddings. Therefore we initialized `text_vector` as seen below, which is a nested container. The the whole unsplit text is stored in the container `text`:
+Since a text is represented by more than one sentence, we needed to create a container to store all of the sentence embeddings. Therefore, we initialized `text_vector` as seen below, which is a nested container. The whole, unsplit text is stored in the container `text`:
 
 ```json
 # Settings for BERT text search
@@ -171,7 +173,7 @@ for ID, doc_data in adi_txt_data.items():
 
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=ZaxpCqSDShgg&line=1&uniqifier=1"><button class="buttons" >Run this in Colab</button></a>
 
-*Note*: Not every document has text, so for some corpora we needed to check that while indexing, e.g. the `CACM` corpus. 
+*Note*: Not every document has text, so for some corpora we needed to check that while indexing, e.g. the `CACM` corpus.
 
 | BERT on text field   |   ADI |   CACM |   CISI |   Cranfield |   LISA |   Medline |   NPL |   Time |
 |----------------------|-------|--------|--------|-------------|--------|-----------|-------|--------|
@@ -180,7 +182,7 @@ for ID, doc_data in adi_txt_data.items():
 | F-1-Score            | 0.091 |  0.014 |  0.033 |       0.019 |  0.04  |     0.029 | 0.094 |  0.034 |
 
 #### 3.2 Search With Cosine Similarity
-Now that we prepared all the documents, we only had to compute the search queries before we could pass them to the Ranking Evaluation API. For the search on the title fields a `script_score` request for each query was enough to get some results. Our `script_score` calculates the cosine similarity between each document title and the search query before returning the top 20 results:
+Once we had prepared all of the documents, the only thing left was  to compute the search queries before we could pass them to the Ranking Evaluation API. For the search on the title fields a `script_score` request for each query was enough to get results. Our `script_score` calculates the cosine similarity between each document title and the search query before returning the top 20 results:
 
 ```python
 "query" : {
@@ -218,14 +220,13 @@ For the search on the `text_vector` embeddings it was a bit more complicated. Si
 
 ### 4. Results
 
-In order to get suitable comparison values, we decided to carry out the multi-match query in the same way as the BERT search on the title or text field. Since the data sets `Medline`,` NPL` and `Time` do not have any titles, the title search was left out for these corpora.
-Same procedure as in the last experiment: To compare our results properly we measured Recall, Precision and F1-Score for every method on every corpus.
+In order to get suitable comparison values, we decided to carry out the multi-match query in the same way as the BERT search on the title or text field. Since the data sets `Medline`,` NPL` and `Time` do not have any titles, the title search was left out for these corpora as with the last experiment. To compare our results properly we measured Recall, Precision and F1-Score for every method on every corpus.
 
 **Recall**
 <details>
 <summary>What is "Recall"?</summary>  
-Recall measures the probability that relevant documents are retrieved. Therefore the number of all retrieved relevant documents is divided by the number of all documents that are labeled as relevant. For example, if we were to search 10 documents, 8 of which are relevant and 4 of these are retrieved, then the Recall measure would be 4/8 = 0.5.
-
+Recall measures the probability that relevant documents are retrieved. Therefore, the number of all retrieved relevant documents is divided by the number of all documents that are labeled as relevant. For example, if we were to search 10 documents, 8 of which are relevant and 4 of these are retrieved, then the Recall measure would be 4/8 = 0.5.
+ 
 To measure the Recall it is necessary to have the relevant documents labeled. Recall only looks at the documents that could be retrieved and does not take into account any irrelevant documents which may have been retrieved.
 
 </details>  
@@ -236,8 +237,8 @@ To measure the Recall it is necessary to have the relevant documents labeled. Re
 **Precision**
 <details>
 <summary>What is "Precision"?</summary>  
-Precision measures the probability that retrieved documents are relevant to the search query. Therefore, the number of all retrieved relevant documents is divided by the number of all retrieved documents.  For example if we retrieve 10 search results and only 5 are relevant for our search, the Precision measure would be: 5/10 = 0.5.
-
+Precision measures the probability that retrieved documents are relevant to the search query. Therefore, the number of all retrieved relevant documents is divided by the number of all retrieved documents.  For example, if we retrieve 10 search results and only 5 are relevant for our search, then the Precision measure would be: 5/10 = 0.5.
+ 
 To measure the Precision it is necessary to have the relevant documents labeled as such. Precision only looks at the documents that are retrieved and does not account for relevant documents which were not retrieved.
 </details> 
 <img alt="Precision" src={useBaseUrl('img/EXP2_Precision.png')} />
@@ -247,7 +248,7 @@ To measure the Precision it is necessary to have the relevant documents labeled 
 **F1-Score**
 <details>
 <summary>What is "F1-Score"?</summary>  
-The F1-Score measures a harmonic mean between Precision and Recall. Therefore we multiply Precision and Recall by two and divide it by the sum of Precision and Recall: <br />
+The F1-Score measures a harmonic mean between Precision and Recall. Therefore, we multiply Precision and Recall by two and divide it by the sum of Precision and Recall: <br />
 `F1-Score=(2*Precision*Recall)/(Precision+Recall)`
 This is the simplest way to balance both Precision and Recall, there are also other common options to weight them differently.
 </details> 
