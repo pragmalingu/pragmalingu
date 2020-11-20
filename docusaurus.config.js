@@ -68,15 +68,15 @@ module.exports = {
           items: [
             {
               label: 'Comparisons',
-              to: 'docs/comparisons/stemming',
+              to: 'docs/comparisons/comparisons-intro',
             },
             {
               label: 'Experiments',
-              to: 'docs/experiments/experiment1',
+              to: 'docs/experiments/experiments-intro',
             },
             {
               label: 'Guides',
-              to: 'docs/guides/elastic-setup',
+              to: 'docs/guides/guides-intro',
             },
           ],
         },
