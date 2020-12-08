@@ -72,3 +72,7 @@ Always keep in mind that the quality of a stemmer varies greatly from language t
 In most languages, the most frequent words are also those that do not carry much (or any) meaning. In English such words are `is`, `a`, `and`, or `the`. To only get relevant search queries, we try to remove those words. These words are called **stop words** since they don't retrieve any useful information but are being processed. Ignoring stop words is a way to make the search more efficient and to get more relevant data.
 To ignore or remove them we can simply consider most of the 10-100 most frequent words as **stop words** or use some of the already existing **stop word** lists depending on the language we want to search on.
 
+## Cosine Similarity
+
+In NLP language can be represented as a vector of features, so called embeddings. Those can represent words, sentences and even whole documents. To use those embeddings for example in Information Retrieval, it is necessary to have a way of computing the similarity between them. The most common way is to measure the difference between those vectors. This can be achieved by computing the cosine similarity. Hereby the angle between two vectors is calculated. This is irrespective of their size, which makes it perfect for NLP tasks, since in language embeddings rarely have the same size.
+The smaller the angle between the vectors, the more similar they are. Which means if the angle is 0, the vectors are identical, therefore the cosine similarity is 1.
