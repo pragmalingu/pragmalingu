@@ -44,6 +44,8 @@ The cosine similarity is used to measure the difference between two vectors irre
 
 <br></br>
 
+We then tried to improve the results by re-ranking the top 100 results of a normal multi-match query using the cosine similarity.
+
 **Initialize A Pre-trained BERT Model**
 
 Before we could start experimenting, we first had to choose a pre-trained model from the BERT library, download it, and initialize it. Our first choice was the BERT model ["bert-base-nli-mean-tokens"](https://www.sbert.net/docs/pretrained_models.html#semantic-textual-similarity). This model can also be found in the [sentence-transformers-repository](https://github.com/UKPLab/sentence-transformers), it was developed to generate sentence embeddings.
@@ -218,11 +220,125 @@ For the search on the `text_vector` embeddings it was a bit more complicated. Si
                   }
 ```
 
+#### 3.3. Search with Re-ranking 
+Since the text embeddings doesn't seem to be working as good as the standard Elasticsearch operator, we decided to try a re-ranking on the documents. Re-ranking is the act of ranking something differently. In Elasticsearch the operator to achieve this is called [Rescoring'](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/search-request-rescore.html). 
+
+Therefore, we run a normal multi-match query on the given field ("title" or "text") and rescore the top 100 results from that query with our cosine similarity BERT search.
+
+In this example we use our search on the "text"-field and the cosine similarity search on the sentence embeddings:
+```python
+{
+  "query": {
+    "multi_match" : {
+                  "query" : query_txt['question'],
+                  "fields" : ['text']
+            }
+  },
+  "rescore" : {
+      "window_size" : 100,
+      "query": {
+          "rescore_query" : {
+            "nested": {
+                "path": "text_vector",
+                "score_mode": "min", 
+                "query": {
+                    "function_score": {
+                        "script_score": {
+                            "script": {
+                                "source": "1.0 + cosineSimilarity(params.query_vector, 'text_vector.vector')",
+                                "params": {"query_vector": list(model.encode(query_txt['question']).astype(float))}
+                                }
+                                }
+                                }
+                          }
+                       }
+            }
+                  }
+}
+    }
+```
+
+
+| Re-Ranking on title field |   ADI |   CACM |   CISI | Cranfield |  LISA |
+|---------------------------|-------|--------|--------|-----------|-------|
+| Recall                    | 0.266 |  0.029 |  0.059 |     0.118 | 0.293 |
+| Precision                 | 0.059 |  0.017 |  0.094 |     0.044 | 0.141 |
+| F1-Score                  | 0.096 |  0.022 |  0.072 |     0.064 | 0.191 |
+
+
+| Re-ranking on text field |   ADI |   CACM |   CISI | Cranfield |  LISA |   Medline |   NPL |   Time |
+|--------------------------|-------|--------|--------|-----------|-------|-----------|-------|--------|
+| Recall                   | 0.303 |  0.035 |  0.103 |     0.156 | 0.313 |     0.032 | 0.233 |  0.772 |
+| Precision                | 0.075 |  0.023 |  0.154 |     0.058 | 0.14  |     0.031 | 0.218 |  0.15  |
+| F1-Score                 | 0.12  |  0.028 |  0.124 |     0.085 | 0.193 |     0.032 | 0.225 |  0.251 |
+
+
+#### 3.4. Combining those Approaches
+To get even better results we then tried to combine all the previous approaches into a more complex Elasticsearch query.
+Therefore, we searched on both - "title" and "text"-field - and reranked afterwards using the cosine similarity of the title embedding and the sentence embeddings of the text. Since it's more likely so have a meaningful title we boosted the value of the cosine similarity for the title embeddings. The boosting can be adjusted by changing the values of the variables 'query_weight' and 'rescore_query_weight' using a float().
+
+This is the code we used:
+```python
+{
+  "query": {
+    "multi_match" : {
+                  "query" : query_txt['question'],
+                  "fields" : ['text','title']
+            }
+  },
+  "rescore" :  [
+                {
+      "window_size" : 100,
+      "query" : {
+         "rescore_query" : {
+              "script_score": {
+    "query": {"match_all": {}},
+    "script": {
+      "source": "cosineSimilarity(params.query_vector, doc['title_vector']) + 1.0",
+      "params": {"query_vector": list(model.encode(query_txt['question']).astype(float))}
+    }
+            }
+      },
+         "query_weight" : query_weight,
+         "rescore_query_weight" : rescore_query_weight
+   }
+},
+                {
+      "window_size" : 100,
+      "query": {
+          "rescore_query" : {
+            "nested": {
+                "path": "text_vector",
+                "score_mode": "min", 
+                "query": {
+                    "function_score": {
+                        "script_score": {
+                            "script": {
+                                "source": "1.0 + cosineSimilarity(params.query_vector, 'text_vector.vector')",
+                                "params": {"query_vector": list(model.encode(query_txt['question']).astype(float))}
+                                }
+                                }
+                                }
+                          }
+                       }
+            }
+                  }
+}  
+  ]}
+```
+
+| Complex re-ranking query |   ADI |   CACM |   CISI | Cranfield |  LISA |
+|--------------------------|-------|--------|--------|-----------|-------|
+| Recall                   | 0.288 |  0.035 |  0.105 |     0.159 | 0.37  |
+| Precision                | 0.065 |  0.023 |  0.158 |     0.058 | 0.167 |
+| F1-Score                 | 0.106 |  0.028 |  0.126 |     0.085 | 0.23  |
+
+
 ### 4. Results
 
-In order to get suitable comparison values, we decided to carry out the multi-match query in the same way as the BERT search on the title or text field. Since the data sets `Medline`,` NPL` and `Time` do not have any titles, the title search was left out for these corpora as with the last experiment. To compare our results properly we measured Recall, Precision and F1-Score for every method on every corpus.
+In order to get suitable comparison values, we decided to carry out the multi-match query in the same way as the BERT search on the title or text field. In addition to that we tried out how effective re-ranking can be on the BERT results and also build a more complex query for Elasticsearch to combine everything we evaluated before.
+To compare our results properly we measured Recall, Precision and F1-Score for every method on every corpus. We divided the results into the search on "title"-field,  on "text"-field and with our more complex query, to avoid confusion.
 
-**Recall**
 <details>
 <summary>What is "Recall"?</summary>  
 Recall measures the probability that relevant documents are retrieved. Therefore, the number of all retrieved relevant documents is divided by the number of all documents that are labeled as relevant. For example, if we were to search 10 documents, 8 of which are relevant and 4 of these are retrieved, then the Recall measure would be 4/8 = 0.5.
@@ -230,33 +346,77 @@ Recall measures the probability that relevant documents are retrieved. Therefore
 To measure the Recall it is necessary to have the relevant documents labeled. Recall only looks at the documents that could be retrieved and does not take into account any irrelevant documents which may have been retrieved.
 
 </details>  
-<img alt="Recall" src={useBaseUrl('img/EXP2_Recall.png')} />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=BXibzPzmf_KK&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
-<br/><br/>
 
-**Precision**
 <details>
 <summary>What is "Precision"?</summary>  
 Precision measures the probability that retrieved documents are relevant to the search query. Therefore, the number of all retrieved relevant documents is divided by the number of all retrieved documents.  For example, if we retrieve 10 search results and only 5 are relevant for our search, then the Precision measure would be: 5/10 = 0.5.
  
 To measure the Precision it is necessary to have the relevant documents labeled as such. Precision only looks at the documents that are retrieved and does not account for relevant documents which were not retrieved.
 </details> 
-<img alt="Precision" src={useBaseUrl('img/EXP2_Precision.png')} />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=tRF25Yq3G0QU&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
-<br /><br />
 
-**F1-Score**
 <details>
 <summary>What is "F1-Score"?</summary>  
 The F1-Score measures a harmonic mean between Precision and Recall. Therefore, we multiply Precision and Recall by two and divide it by the sum of Precision and Recall: <br />
 `F1-Score=(2*Precision*Recall)/(Precision+Recall)`
 This is the simplest way to balance both Precision and Recall, there are also other common options to weight them differently.
 </details> 
-<img alt="F1-Score" src={useBaseUrl('img/EXP2_F1-Score.png')} />
-<a class="buttons" href=""><button class="buttons" >Run this in Google Colab</button></a>
+
+#### 4.1. Search on the title field
+These are the results for the search on the "title"-field  which compare the multi-match query, a BERT search and a re-ranking on the top 100 results using BERT. Since the data sets `Medline`,` NPL` and `Time` do not have any titles, the title search was left out for these corpora as with the last experiment.
+
+**Recall**
+<img alt="Recall on title field" src={useBaseUrl('img/EXP2_Recall_title.png')} />
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=crBSdbZMPAH9&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<br/><br/>
+
+**Precision**
+<img alt="Precision on title" src={useBaseUrl('img/EXP2_Precision_title.png')} />
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=Bp4g4N7TUpXB&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<br /><br />
+
+**F1-Score**
+<img alt="F1-Score on title field" src={useBaseUrl('img/EXP2_FScore_title.png')} />
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=mYfPAzYTVwRQ&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<br/><br/>
+
+
+#### 4.2. Search on the text field
+These are the results for the search on the "text"-field which compare the multi-match query, a BERT search and a re-ranking on the top 100 results using BERT.
+
+**Recall**
+<img alt="Recall on text field" src={useBaseUrl('img/EXP2_Recall_text.png')} />
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=BXibzPzmf_KK&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<br/><br/>
+
+**Precision**
+<img alt="Precision on text" src={useBaseUrl('img/EXP2_Precision_text.png')} />
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=tRF25Yq3G0QU&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<br /><br />
+
+**F1-Score**
+<img alt="F1-Score on text field" src={useBaseUrl('img/EXP2_FScore_text.png')} />
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=QA8CpbbRQtIH&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<br/><br/>
+
+#### 4.3. Search with a complex re-ranking query
+These are the results for the search with a more complex query which searches on both fields "title" and "text" and reranks these results afterwards with BERT on the title and on the text. The title field is boosted while reranking. To see the difference these results are compared with the multi-match query on the "title"- and "text"-field, as with the BERT search on "title" and "text".
+
+**Recall**
+<img alt="Recall on complex re-ranking query" src={useBaseUrl('img/EXP2_Recall_complex.png')} />
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=tJBsXlxhmgPV&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<br/><br/>
+
+**Precision**
+<img alt="Precision on complex re-ranking query" src={useBaseUrl('img/EXP2_Precision_complex.png')} />
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=N41wwBZA1Z3v&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<br /><br />
+
+**F1-Score**
+<img alt="F1-Score on complex re-ranking query" src={useBaseUrl('img/EXP2_FScore_complex.png')} />
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=hO3oqgZE2ys2&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 
 For a more detailed analysis check out our [Embedding Comparison](./comparisons/embeddings.mdx).
 
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=QA8CpbbRQtIH&line=1&uniqifier=1"><button class="buttons" >Try it yourself!</button></a>
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipyn"><button class="buttons" >Try it yourself!</button></a>
