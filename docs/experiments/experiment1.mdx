@@ -8,11 +8,11 @@ custom_edit_url: null
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from '../doc.css';
 
-For our first experiment we created a Google Colab Notebook that runs an Elasticsearch instance and compared the standard Elasticsearch analyzer with two built-in stemming methods. 
-To do this, we parsed and indexed [these 8 publically available datasets](http://ir.dcs.gla.ac.uk/resources/test_collections/) provided by the University of Glasgow with the different analyzers 
+For our first experiment, we created a Google Colab Notebook that runs an Elasticsearch instance and compared the standard Elasticsearch analyzer with two built-in stemming methods. 
+To do this, we parsed and indexed [these 8 publically available datasets](http://ir.dcs.gla.ac.uk/resources/test_collections/), provided by the University of Glasgow, with the different analyzers 
 and evaluated them with the Elasticsearch [Ranking Evaluation API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html).  
 [Our Parsing Guide](https://pragmalingu.de/docs/guides/how-to-parse) shows you how these datasets are structured and how we preprocessed them for indexing.
-The complete code and workflow to arrive at the results presented here is available in our [Experiment Notebook](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb) where you can reproduce this experiment step by step.
+The complete code - and workflow to arrive at the results presented here - is available in our [Experiment Notebook](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb) where you can reproduce this experiment step by step.
 
 These are the two built-in methods that we compared to the [standard Elasticsearch analyzer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyser.html):
 
@@ -21,10 +21,10 @@ These are the two built-in methods that we compared to the [standard Elasticsear
 
 ### 1. Standard Elasticsearch Analyzer
 
-We ran our searches witht the [multi-match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html). 
-It searches on multiple fields of the documents - in our case 'text' and 'title' and by default uses the highest matching score from one field to rank the document.
+We ran our searches with the [multi-match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html). 
+It searches multiple fields of the documents - in our case 'text' and 'title' - and by default uses the highest matching score from one field to rank the document.
 
-We evaluated the ranking on the first 20 highest ranked documents returned by each query.
+We evaluated the ranking on the 20 highest ranked documents returned by each query.
 
 The following is an example request against the Ranking Evaluation API to evaluate a query on the ADI Corpus:
 
@@ -66,11 +66,11 @@ The following is an example request against the Ranking Evaluation API to evalua
 }
 ```
 
-For our experiment we evaluated with [Precision and Recall](https://en.wikipedia.org/wiki/Precision_and_recall) at K. These are metrics provided by the Ranking Evluation API of Elasticsearch.
-The Elasticsearch documentation of the Ranking Evaluation API gives an [overview over all available metrics](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html#_available_evaluation_metrics).
-We chose precision and recall and calculated the f1-score with them, wich is a often used for [measuring search performance](https://en.wikipedia.org/wiki/F-score#Applications).
+For our experiment we evaluated the [Precision and Recall](https://en.wikipedia.org/wiki/Precision_and_recall) at K. These are metrics provided by the Ranking Evaluation API of Elasticsearch.
+The Elasticsearch documentation of the Ranking Evaluation API gives an [overview of all available metrics](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html#_available_evaluation_metrics).
+We chose precision and recall and calculated the F1-score , which is often used for [measuring search performance](https://en.wikipedia.org/wiki/F-score#Applications) , with them.
 
-These were the results without any further processing of the data using the multi-match query of Elasticsearch:
+These were the results without any further processing of the data, using the multi-match query of Elasticsearch:
 
 |  Standard Search |   ADI |   CACM |   CISI |   Cranfield |   LISA |   Medline |   NPL |   Time |
 |------------------|-------|--------|--------|-------------|--------|-----------|-------|--------|
@@ -81,27 +81,27 @@ These were the results without any further processing of the data using the mult
 
 ### 2. Stemming
 
-To experiment with stemming Elasticsearch provides two built-in stemming methods. 
-First, is the algorithmic stemmer; it applies a series of rules to each word to reduce them to their stems. 
+To experiment with stemming, Elasticsearch provides two built-in stemming methods. 
+First is the algorithmic stemmer; it applies a series of rules to each word to reduce them to their stems. 
 In Elasticsearch this is called the [Stemmer Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html). 
-In addition, there is the dictionary stemmer, which replaces unstemmed words with stemmed variants from a provided dictionary. 
+In addition, there is the dictionary stemmer which replaces unstemmed words with stemmed variants from a provided dictionary. 
 The Elasticsearch built-in method is called the [Hunspell Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html). 
 
 <details>
 <summary>What is "Stemming"?</summary>  
 
-The goal of stemming is to remove all morphological features from a word and create truncated, ambiguous **Stems**. Therefore it tries to strip off suffixes at the end of a word.<br></br>
+The goal of stemming is to remove all morphological features from a word and create truncated, ambiguous **Stems**. Therefore, it tries to strip off suffixes at the end of a word.<br></br>
 For example, `learning` changes to `learn` after stemming. <br></br>
-If the stemmer cuts off too much information, the word could become too short and lose semantic meaning; this is called overstemming.
+If the stemmer cuts off too much information the word could become too short and lose semantic meaning; this is called overstemming.
 </details>  
 
 #### 2.1. Stemmer Token Filter
 
 The *Stemmer Token Filter* supports different languages, but since our corpora were all in English we used the English stemmer. 
-Compared to the dictionary approach, algorithmic stemming needs less memory and is much faster. 
+Compared to the dictionary approach, algorithmic stemming requires less memory and is significantly faster. 
 For this reason, it is usually better to use the *Stemmer Token Filter*. The configuration in Elasticsearch is not complicated and can be done quickly.
 
-Irregular words or names can cause strange forms that don't give any helpful information since it is only rule based. 
+Irregular words or names can cause strange forms that don't give any helpful information since the filter is only rules-based. 
 In spite of this, we expected an improvement to the standard Elasticsearch operator. This is how we configured the stemming analyser in Elasticsearch:
 
 ```python
@@ -123,7 +123,7 @@ stemming_analyser = {
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Q9EMclEPLvMS"><button class="buttons" >Run it in Google Colab</button></a>
 <br/><br/>
 
-Afterwards, we incorporated the `stemming_analyser` into the index settings, with which we indexed the documents of each corpus:
+Afterwards, we incorporated the `stemming_analyser` into the index settings, which we then used to index the documents of each corpus:
 
 ```python
 settings = {
@@ -161,7 +161,7 @@ Lemmatization tries to connect words to their root form - their **Lemma** - by r
 For example, `mice` would connect to `mouse`, and `froze` & `frozen` to `freeze`. 
 </details>  
 <br/><br/>  
-The procedure is the same as with the *Stemmer Token Filter*. We first configured the Hunspell Stemming analyser:
+The procedure is the same as with the *Stemmer Token Filter*. First, we configured the Hunspell Stemming analyser:
 
 ```python
 #the order of filter and analyser is arbitrary
@@ -205,12 +205,12 @@ These were the results of the *Hunspell Token Filter*:
 
 
 ### 3. Results
-To compare our results properly we plotted Recall, Precision and F1-Score for every method on every corpus.
+To compare our results properly we plotted Recall, Precision, and F1-Score for every method on every corpus.
 
 **Recall**
 <details>
 <summary>What is "Recall"?</summary>  
-Recall measures the probability that relevant documents are retrieved. Therefore the number of all retrieved relevant documents is divided by the number of all documents that are labeled as relevant. For example, if we were to return 10 documents, 
+Recall measures the probability that relevant documents are retrieved. Therefore, the number of all retrieved relevant documents is divided by the number of all documents that are labeled as relevant. For example, if we were to return 10 documents, 
 8 of which are relevant to our search and 4 of these are retrieved, then the Recall measure would be 4/8 = 0.5.
 
 To measure Recall it is necessary to have the relevant documents labeled. Recall only looks at relevant documents that were retrieved and does not take into account any irrelevant documents which may have been retrieved.
@@ -243,7 +243,8 @@ This is the simplest way to balance both Precision and Recall, there are also ot
 <br/><br/>
 
 
-It is apperent that the algorithmic stemmer offers some improvements over no stemming. The dictionary based hunspell stemming seems to perform better and worse depending on the corpora.
+It is apparent that the algorithmic stemmer offers some improvements over no stemming. The dictionary based hunspell stemming seems to perform either better or worse depending on the corpora.
 For a more detailed analysis check out our [Simple Search vs. Stemming Comparison](./comparisons/stemming.mdx).
 
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb"><button class="buttons" >Try it yourself!</button></a>
+
