@@ -5,9 +5,9 @@ sidebar_label: Data Sets
 custom_edit_url: null
 ---
 
-With this guide we will give you a detailed overview over all the free accessible data sets we have analyzed until now.
-
-This table shows you a quick overview of all the free data sets we looked at:
+In this guide we will provide you with a detailed overview of all of the freely accessible data sets we have analyzed thus far.
+ 
+This table shows a quick overview of all the free data sets we’ve looked at:
 
 | Corpus                   | Download | Documents | Queries | Notation                              |
 |--------------------------|----------|-----------|---------|---------------------------------------|
@@ -26,7 +26,7 @@ This table shows you a quick overview of all the free data sets we looked at:
 
 ## ADI
  
-**Description:**<br />An extremely small data set containing fewer than 100 examples. It does not  offer many prospects beyond experimenting with machine learning on small data sets.
+**Description:**<br />An extremely small data set containing fewer than 100 examples. It does not offer many prospects beyond experimenting with machine learning on small data sets.
  
 **Documents:**<br />The file `ADI.ALL` contains eighty-three (83) documents with the same notation as `Cranfield`.
  
@@ -57,7 +57,7 @@ information specialists or more proficient users of
 What is information science?  Give definitions where possible.
 ```
  
-**Relevance assessments:**<br />The relevance assessments, given in `ADI.REL`, are in the same format as `CISI` & `CACM`. Query-ID followed by relevant document- ID followed by `0` and `0.0`. Could be used to create trainable vectors.
+**Relevance Assessments:**<br />The relevance assessments given in `ADI.REL` are in the same format as `CISI` & `CACM`. Query-ID, followed by relevant document-ID, followed by `0` and `0.0`. Possibility to be used to create trainable vectors.
  
 *Example:*
 ```
@@ -72,7 +72,7 @@ What is information science?  Give definitions where possible.
  
 **Other files:**<br />`ADI.BLN` - List of boolean queries
  
-**Parsing problems**:<br />
+**Parsing Problems**:<br />
 * Documents - Not every entry has information on the author. Tags will not be present if there is no information available.
  
 **Source:** http://ir.dcs.gla.ac.uk/resources/test_collections/adi/
@@ -80,7 +80,7 @@ What is information science?  Give definitions where possible.
 ## CACM
  
 **Description:**<br />CACM is a collection of article abstracts, published in ACM journal between 1958 and 1979.
-It is often claimed that it is too small to observe real impact.
+It is often claimed that it is too small to observe any real impact.
  
 **Documents:**<br />In `cacm.all` contains 3,204 labeled entries. Each label is marked specifically with a `.` followed by a letter. They appear in an entry in the following order:<br />
 (.I) ID <br />
@@ -105,7 +105,7 @@ and in programming systems.  Minimum requirements
 for successful concurrent execution of several independent
 problem programs are discussed.  These requirements
 are met in the STRETCH system by a carefully balanced
-combination of built-in and programmed logic. 
+combination of built-in and programmed logic.
 Techniques are described which place the burden of the
 programmed logic on system programs (supervisory
 program and compiler) rather than on problem programs.
@@ -125,7 +125,7 @@ CA591102 JB March 22, 1978  3:57 PM
 168      6          46
 ```
  
-The list of cross-references shows the reference ID followed by `4`, `5` or `6` and marked with the doc-ID at the end. The three numbers define the references more precisely:
+The list of cross-references shows the reference ID followed by `4`, `5`, or `6` and marked with the document-ID at the end. The three numbers define the references more precisely:
  
 ```
 4: "bibliographic coupling" - if document id Y appears in the bibliographic
@@ -140,7 +140,7 @@ The list of cross-references shows the reference ID followed by `4`, `5` or `6` 
     of documents that cite X.
 ```
  
-**Queries:**<br /> The file `query.text` contains sixty-four (64) query sentences, which also use the same markers as the text.
+**Queries:**<br /> The file `query.text` contains sixty-four (64) query sentences which also use the same markers as the text.
  
 *Example:*
 ```
@@ -151,7 +151,7 @@ The list of cross-references shows the reference ID followed by `4`, `5` or `6` 
  10. Alec Grimison, Comp Serv, Uris Hall (parallel lang)
 ```
  
-**Relevance assessments:**<br />In `qrels.text` query ID is followed by doc-ID followed by 0 int and 0.0 float. Every doc has it's own row and can be used as a trainable vector.
+**Relevance Assessments:**<br />In `qrels.text` query-ID is followed by document-ID followed by 0 int and 0.0 float. Every document has its own row and can be used as a trainable vector.
  
 *Example:*
 ```
@@ -167,13 +167,13 @@ The list of cross-references shows the reference ID followed by `4`, `5` or `6` 
 10 1601  0 0
 ```
  
-**Other files:**
+**Other Files:**
 * `cite.info` - Key to citation info
 * `common_words` - Stop words used by smart
 * `qrels.text` - List of relevance judgments
  
-**Parsing problems**:<br />
-* Documents - Not all entries contain information on author and text. Those tags Will not be present if there is no information available.
+**Parsing Problems**:<br />
+* Documents - Not all entries contain information on author and text. Those tags will not be present if there is no information available.
  
 **Source:** http://ir.dcs.gla.ac.uk/resources/test_collections/cacm/
 
@@ -193,7 +193,7 @@ Borko, H.
 .W
      Graduate library school study of abstracting should be more than a
 how-to-do-it course.
-It should include general material on the characteristcs and types of abstracts,
+It should include general material on the characteristics and types of abstracts,
 the historical development of abstracting publications, the abstract-publishing
 industry (especially in the United States), and the need for standards in the
 preparation and evaluation of the product.
@@ -237,7 +237,7 @@ One chapter is devoted to career opportunities for abstractors.
 The need to provide personnel for the information field.
 ```
  
-**Relevance assessments:**<br />In `CISI.REL` query ID is followed by doc-ID followed by 0 int and 0.0 float. Every document has its own row and can be used as a trainable vector.
+**Relevance Assessments:**<br />In `CISI.REL` query-ID is followed by document-ID followed by 0 int and 0.0 float. Every document has its own row and can be used as a trainable vector.
  
 *Example:*
 ```
@@ -254,17 +254,17 @@ The need to provide personnel for the information field.
     21    400 0 0.000000
 ```
  
-**Other files:**<br />`CISI.BLN` - List of boolean queries
+**Other Files:**<br />`CISI.BLN` - List of boolean queries
  
-**Parsing problems**:<br />
+**Parsing Problems**:<br />
 * Documents - Some entries contain more than one author, presenting us with more than one author tag.
 * Documents - Not every entry has information on the publication date, those tags will not be present if there is no information available.
  
 **Source:** http://ir.dcs.gla.ac.uk/resources/test_collections/cisi/
-
+ 
 ## Cranfield
  
-**Description:**<br />Cranfield uses the same notation as `CACM` and `CISI`, but the relevance evaluations are more detailed and more specific to the query tasks. To use this collection it is important to note that the ID of the queries, e.g. `.I 002`, is not the same query-ID used in the relevance assessments. It seems that the query-IDs come from the order in the file. It may be helpful to update the IDs before working with them to avoid confusion.
+**Description:**<br />Cranfield uses the same notation as `CACM` and `CISI`, but the relevance evaluations are more detailed and more specific to the query tasks. While using this collection, it is important to note that the ID of the queries, e.g. `.I 002`, is not the same query-ID used in the relevance assessments. It seems that the query-IDs come from the order in the file. It may be helpful to update the IDs before working with them to avoid confusion.
  
 **Documents:**<br />The File `cran.all` holds 1,400 documents, for detailed notation see the `CACM`section. In contrast to `CACM` and `CISI` there are no cross-references to other documents listed.
  
@@ -289,7 +289,7 @@ triangular heat rate .  this type of heating rate may occur, for
 example, during aerodynamic heating .
 ```
  
-**Queries:**<br />The File `cran.qury` contains 225 queries; mostly questions, with some queries being term searches. The ID at the beginning of every query is not the reference-ID which is used in `cranqrel`.
+**Queries:**<br />The File `cran.qury` contains 225 queries; mostly questions, with some queries being term searches. The ID at the beginning of every query is not the reference-ID used in `cranqrel`.
  
 *Example:*
 ```
@@ -299,7 +299,7 @@ what problems of heat conduction in composite slabs have been solved so
 far .
 ```
  
-**Relevance assessments:**<br />Every row in `cranqrel` holds a query-ID, relevant document-ID and the relevancy code (1,2,3,4 or 5). Every document has its own row. The relevancy codes are defined as follows:
+**Relevance Assessments:**<br />Each row in `cranqrel` holds a query-ID, relevant document-ID, and the relevancy code (1, 2, 3, 4, or 5). Every document has its own row. The relevancy codes are defined as follows:
  
 1: References which are a complete answer to the question.<br />
 2: References of a high degree of relevance, the lack of which either would have made the research impracticable or would have resulted in a considerable amount of extra work.<br />
@@ -320,23 +320,23 @@ far .
 3 485 -1
 ```
  
-**Other files:** -
+**Other Files:** -
  
 **Source:** http://ir.dcs.gla.ac.uk/resources/test_collections/cran/
-
+ 
 ## LISA
  
 **Description:**<br /> The LISA collection, contributed in 1982 by Peter Willett of Sheffield University, is being provided to support research investigations.
 It is punctuated by clear stop marks making the data structure easy to understand. The queries appear to be very specific and quite long.
  
-**Documents:**<br />There are a total of 6,004 labeled abstracts stored in files `LISA0.001` to `LISA5.850`. The beginning of every entry is marked by an unique ID followed by the title. Some title line entries also display information about the author, time, and place. A row of 44  `*`s separates the entries.
-
+**Documents:**<br />There are a total of 6,004 labeled abstracts stored in files `LISA0.001` to `LISA5.850`. The beginning of every entry is marked by a unique ID followed by the title. Some title line entries also display information about the author, time, and place. A row of 44  `*`s separates the entries.
+ 
 *Example:*
 ```
 Document 5640
 NORDINFO COURSE IN BIBLIOMETRICS, 1981-10-26-29, HANASSARI, HELSINKI,
 SWEDISH-FINNISH CULTURAL CENTRE (IN SWEDISH).
-
+ 
 DESCRIBES THE DISCIPLINE OF BIBLIOMETRICS WITH REFERENCE TO A NORDINFO COURSE
 ATTENDED IN HELSINKI. DEFINES BIBLIOMETRICS AS QUANTITATIVE MEASUREMENT OF
 LIBRARY TECHNIQUES. BIBLIOMETRIC METHODS CAN BE USED ON A GLOBAL SCALE, BUT
@@ -351,9 +351,9 @@ USEFUL IN ACQUISITION, PLANNING OF SPACE ALLOCATION, WITHDRAWALS, LIBRARY USE,
 AND OTHER AREAS OF LIBRARY ADMINISTRATION.
 ********************************************
 ```
-
-**Queries:**<br />Thirty-five (35) queries are stored in file `LISA.QUE`. The query-ID is followed by several long sentences, all of which are written from a first person perspective, expressing interest in certain topics. The entries are separated by `#`.
-
+ 
+**Queries:**<br />Thirty-five (35) queries are stored in file `LISA.QUE`. The query-ID is followed by several long sentences, all of which are written from a first person perspective, expressing interest in certain topics. The entries are separated by a `#`.
+ 
 *Example:*
 ```
 24
@@ -366,9 +366,9 @@ CLASSIFICATIONS, THEIR APPLICATION IN RETRIEVAL, INTER-TERM SIMILARITIES
 ETC. AUTOMATIC DOCUMENT CLASSIFICATION, CLUSTERS, CLUSTERING, TERM
 CLASSIFICATIONS. #
 ```
-
-**Relevance assessments:**<br />Relevance assessments, represented by unique IDs, are stored in `LISARJ.NUM`.  Every query-ID (first column) is followed by the number of relevant document-IDs.. Depending on the program used to open or parse the file, the relevant document-IDs could continue into the next line. Since there is no end marker it would be best to parse the lines depending on the query-ID and number of relevant document-IDs.
-
+ 
+**Relevance Assessments:**<br />Relevance assessments, represented by unique IDs, are stored in `LISARJ.NUM`.  Every query-ID (first column) is followed by the number of relevant document-IDs.. Depending on the program used to open or parse the file, the relevant document-IDs could continue into the next line. Since there is no end marker it would be best to parse the lines depending on the query-ID and number of relevant document-IDs.
+ 
 *Example:*
 ```
            1           2        3392        3396                                
@@ -377,49 +377,49 @@ CLASSIFICATIONS. #
         3796                                                                    
            4           7         604        3527        4644        5087        
         5112        5113        5295                                            
-           5           1        3401  
+           5           1        3401 
 ```
-
-**Other files:**<br />The `LISA.REL` file is an old version of the relevance assessments which helps in understanding the new version, but provides no further meaningful information.
  
-**Parsing problems**:<br />
+**Other Files:**<br />The `LISA.REL` file is an old version of the relevance assessments which helps in understanding the new version, but provides no further meaningful information.
+ 
+**Parsing Problems**:<br />
 * Documents - All documents are stored in separate files with only the newline marking the separate ID, title, and text. This has presented unique problems.
 * Relevance Assessments -  These are not parseable line by line, the number of relevant documents should be used to parse.
  
 **Source:** http://ir.dcs.gla.ac.uk/resources/test_collections/lisa/
-
+ 
 ## MS MARCO Document Ranking
 **Description:**<br /> MS MARCO stands for "Microsoft Machine Reading Comprehension" and is a large scale dataset which can be used on machine reading comprehension, question answering, passage ranking, Keyphrase Extraction, and Conversational Search Studies. It holds over 3 million (3,213,835) documents and more than one million (1,010,916) unique queries, that were extracted from anonymized Bing usage logs.
-
+ 
 For our case we focused on the MS MARCO Document Ranking corpus which is available through [github](https://github.com/microsoft/MSMARCO-Document-Ranking).
-
-**Documents:**<br /> The documents are downloadable as tsv-file (msmarco-docs.tsv), which makes them easy to parse. There are over 3 million (3,213,835) documents with assigned ID, title and website link (where the document was extracted from). ID, title and document text are separated by tabs and every new entry starts with a newline. If there is no title available there a "." instead of it.
-
+ 
+**Documents:**<br /> The documents are downloadable as a tsv-file (msmarco-docs.tsv), which makes them easy to parse. There are over 3 million (3,213,835) documents with assigned ID, title and website link (where the document was extracted from). ID, title, and document text are separated by tabs and every new entry starts with a newline. If there is no title available there a "." instead of it.
+ 
 *Example:*
 ```
-D1555982	https://answers.yahoo.com/question/index?qid=20071007114826AAwCFvR	The hot glowing surfaces of stars emit energy in the form of electromagnetic radiation.?	Science & Mathematics Physics The hot glowing surfaces of stars emit energy in the form of electromagnetic radiation.? It is a good approximation to assume that the emissivity e is equal to 1 for these surfaces. Find the radius of the star Rigel, the bright blue star in the constellation Orion that radiates energy at a rate of 2.7 x 10^32 W and has a surface temperature of 11,000 K. Assume that the star is spherical. Use σ =... show more Follow 3 answers Answers Relevance Rating Newest Oldest Best Answer: Stefan-Boltzmann law states that the energy flux by radiation is proportional to the forth power of the temperature: q = ε · σ · T^4 The total energy flux at a spherical surface of Radius R is Q = q·π·R² = ε·σ·T^4·π·R² Hence the radius is R = √ ( Q / (ε·σ·T^4·π) ) = √ ( 2.7x10+32 W / (1 · 5.67x10-8W/m²K^4 · (1100K)^4 · π) ) = 3.22x10+13 m Source (s):http://en.wikipedia.org/wiki/Stefan_bolt...schmiso · 1 decade ago0 18 Comment Schmiso, you forgot a 4 in your answer. Your link even says it: L = 4pi (R^2)sigma (T^4). Using L, luminosity, as the energy in this problem, you can find the radius R by doing sqrt (L/ (4pisigma (T^4)). Hope this helps everyone. Caroline · 4 years ago4 1 Comment (Stefan-Boltzmann law) L = 4pi*R^2*sigma*T^4 Solving for R we get: => R = (1/ (2T^2)) * sqrt (L/ (pi*sigma)) Plugging in your values you should get: => R = (1/ (2 (11,000K)^2)) *sqrt ( (2.7*10^32W)/ (pi * (5.67*10^-8 W/m^2K^4))) R = 1.609 * 10^11 m? · 3 years ago0 1 Comment Maybe you would like to learn more about one of these? Want to build a free website? Interested in dating sites? Need a Home Security Safe? How to order contacts online? 
+D1555982       https://answers.yahoo.com/question/index?qid=20071007114826AAwCFvR      The hot glowing surfaces of stars emit energy in the form of electromagnetic radiation.?      Science & Mathematics Physics The hot glowing surfaces of stars emit energy in the form of electromagnetic radiation.? It is a good approximation to assume that the emissivity e is equal to 1 for these surfaces. Find the radius of the star Rigel, the bright blue star in the constellation Orion that radiates energy at a rate of 2.7 x 10^32 W and has a surface temperature of 11,000 K. Assume that the star is spherical. Use σ =... show more Follow 3 answers Answers Relevance Rating Newest Oldest Best Answer: Stefan-Boltzmann law states that the energy flux by radiation is proportional to the forth power of the temperature: q = ε · σ · T^4 The total energy flux at a spherical surface of Radius R is Q = q·π·R² = ε·σ·T^4·π·R² Hence the radius is R = √ ( Q / (ε·σ·T^4·π) ) = √ ( 2.7x10+32 W / (1 · 5.67x10-8W/m²K^4 · (1100K)^4 · π) ) = 3.22x10+13 m Source (s):http://en.wikipedia.org/wiki/Stefan_bolt...schmiso · 1 decade ago0 18 Comment Schmiso, you forgot a 4 in your answer. Your link even says it: L = 4pi (R^2)sigma (T^4). Using L, luminosity, as the energy in this problem, you can find the radius R by doing sqrt (L/ (4pisigma (T^4)). Hope this helps everyone. Caroline · 4 years ago4 1 Comment (Stefan-Boltzmann law) L = 4pi*R^2*sigma*T^4 Solving for R we get: => R = (1/ (2T^2)) * sqrt (L/ (pi*sigma)) Plugging in your values you should get: => R = (1/ (2 (11,000K)^2)) *sqrt ( (2.7*10^32W)/ (pi * (5.67*10^-8 W/m^2K^4))) R = 1.609 * 10^11 m? · 3 years ago0 1 Comment Maybe you would like to learn more about one of these? Want to build a free website? Interested in dating sites? Need a Home Security Safe? How to order contacts online?
 ```
-**Queries:**<br /> There are over one million (1,010,916) unique real queries which are assigned to an unique ID. The queries can all be found in the Q&A corpus, for the Documents Ranking corpus there were only 1/8 of the queries used. Those were split into train, development and test set. We used the development set for our experiments because for using the Ranking Evaluation API of Elasticsearch you need relevance assessments. Those were only provided by the development set.
-The development queries (5,193) are stored in the file `msmarco-docdev-queries.tsv`. Every row of the file holds the query and it's ID separated by one tab. 
-
+**Queries:**<br /> There are over one million (1,010,916) unique, real queries which are assigned to a unique ID. The queries can all be found in the Q&A corpus; for the Documents Ranking corpus only ⅛ of the queries were used. Those were split into train, development, and test sets. We used the development set for our experiments because in order to use the Ranking Evaluation API of Elasticsearch you need relevance assessments. Those were only provided by the development set.
+The development queries (5,193) are stored in the file `msmarco-docdev-queries.tsv`. Each row of the file holds the query and its ID separated by one tab.
+ 
 *Example:*
 ```
-121352	define extreme
-634306	what does chattel mean on credit history
-920825	what was the great leap forward brainly
-510633	tattoo fixers how much does it cost
-737889	what is decentralization process.
-278900	how many cars enter the la jolla concours d' elegance?
-674172	what is a bank transit number
-303205	how much can i contribute to nondeductible ira
-570009	what are the four major groups of elements
-492875	sanitizer temperature
+121352           define extreme
+634306           what does chattel mean on credit history
+920825           what was the great leap forward brainly
+510633           tattoo fixers how much does it cost
+737889           what is decentralization process.
+278900           how many cars enter the la jolla concours d' elegance?
+674172           what is a bank transit number
+303205           how much can i contribute to nondeductible ira
+570009           what are the four major groups of elements
+492875           sanitizer temperature
 ```
-
-
-**Relevance assessments:**<br />
-The relevance assessments can be found in the `msmarco-docdev-qrels.tsv` file. Each row holds the query ID, a `0`, the document ID and a `1`, all separated by a space.
-
+ 
+ 
+**Relevance Assessments:**<br />
+The relevance assessments can be found in the `msmarco-docdev-qrels.tsv` file. Each row holds the query ID, a `0`, the document-ID and a `1`; all separated by a space.
+ 
 *Example:*
 ```
 2 0 D1650436 1
@@ -430,18 +430,18 @@ The relevance assessments can be found in the `msmarco-docdev-qrels.tsv` file. E
 2798 0 D2830290 1
 2962 0 D125453 1
 ```
-
-**Other files:** <br />
+ 
+**Other Files:** <br />
 `msmarco-docs-lookup.tsv` <br />
 `msmarco-doctrain-queries.tsv` <br />
 `msmarco-docdev-top100` <br />
 `docleaderboard-queries.tsv`<br />
 `docleaderboard-top100` <br />
-
+ 
 **Parsing Problems:** -<br />
-
+ 
 **Source:** https://github.com/microsoft/MSMARCO-Document-Ranking
-
+ 
 ## Medline
  
 **Description:**<br />A document collection of short medical articles with very specific queries.
@@ -453,10 +453,10 @@ The relevance assessments can be found in the `msmarco-docdev-qrels.tsv` file. E
 .I 1
 .W
 correlation between maternal and fetal plasma levels of glucose and free
-fatty acids .                                                          
-  correlation coefficients have been determined between the levels of  
+fatty acids .                                                         
+  correlation coefficients have been determined between the levels of 
 glucose and ffa in maternal and fetal plasma collected at delivery .    
-significant correlations were obtained between the maternal and fetal  
+significant correlations were obtained between the maternal and fetal 
 glucose levels and the maternal and fetal ffa levels . from the size of
 the correlation coefficients and the slopes of regression lines it      
 appears that the fetal plasma glucose level at delivery is very strongly
@@ -474,7 +474,7 @@ delivery is only slightly dependent upon the maternal level .
 fatty acid levels in placenta and fetus.
 ```
  
-**Relevance assessments:**<br /> For every row of `MED.REL` the query ID is followed by a `0` which separates it from the relevant doc ID. At the end of every row is a `1`. There is a row for every query ID, in combination with the relevant doc ID.
+**Relevance Assessments:**<br /> For each row of `MED.REL` the query-ID is followed by a `0` which separates it from the relevant document-ID. At the end of each row is a `1`. There is a row for each query-ID, in combination with the relevant document-ID.
  
 *Example:*
 ```
@@ -491,10 +491,10 @@ fatty acid levels in placenta and fetus.
 5 0 12 1
 ```
  
-**Other files:**<br />`MED.REL.OLD` - An older version of relevance assessments. Here the IDs are followed by `0`and `0.000000` and can be used as trainable embeddings.
+**Other Files:**<br />`MED.REL.OLD` - An older version of relevance assessments. Here the IDs are followed by `0`and `0.000000` and can be used as trainable embeddings.
  
 **Source:** http://ir.dcs.gla.ac.uk/resources/test_collections/medl/
-
+ 
 ## NPL
  
 **Description:**<br />This collection was contributed by Vaswani and Cameron at the  National Physical Laboratory in the UK in 1970.
@@ -520,7 +520,7 @@ is presented
   534   582   597   626  1215 /
 ```
  
-**Queries:**<br /> Ninety-three (93) queries are stored in `query-text` & `query-vecs` as both text and vector representation. The ID is followed by the query, and the entry is finished with a `/` mark.
+**Queries:**<br /> Ninety-three (93) queries are stored in `query-text` & `query-vecs` as both text and vector representation. The ID is followed by the query, and the entry is finished with a `/`.
  
 *Example:*
 ```
@@ -547,21 +547,21 @@ USE OF DIGITAL COMPUTERS IN THE DESIGN OF BAND PASS FILTERS HAVING GIVEN PHASE A
    /
 ```
  
-**Other files:**
-* `term-vocab` contains vocabulary stems with representative IDs. The end marker is `/`
-* `term-vecs` contains the occurrences of search terms in the docs. The first ID is always the vocab ID, followed by all of the document IDs in which the terms occurred. The end marker is `/`
-* `term-mst` contains word IDs, followed by context-word IDs, followed by co-occurrences and mutual similarity values. This is only available for words which occured in at least 2 documents
+**Other Files:**
+* `term-vocab` contains vocabulary stems with representative IDs. The end marker is `/`.
+* `term-vecs` contains the occurrences of search terms in the documents. The first ID is always the vocab ID, followed by all of the document IDs in which the terms occurred. The end marker is `/`.
+* `term-mst` contains word IDs, followed by context-word IDs, followed by co-occurrences and mutual similarity values. This is only available for words which occured in at least 2 documents.
  
-**Parsing problems**:<br />
+**Parsing Problems**:<br />
 * The number of spaces between the separator `/` and the entries are different between documents, queries, and relevance assessments.
 * Relevance Assessments: there are many spaces and newlines to remove before getting the raw numbers.
  
 **Source:** http://ir.dcs.gla.ac.uk/resources/test_collections/npl/
-
-
+ 
+ 
 ## Time
  
-**Description:**<br /> This collection contains 423 articles from TIME Magazines of the 1960's. With only 423 documents it is a rather small data set. Problems with the labeling are once again present. The IDs used in the relevance assessments do not correlate with the unique text numbers that mark the start of a document.
+**Description:**<br /> This collection contains 423 articles from issues of TIME Magazine from the 1960's. With only 423 documents it is a rather small data set. Problems with the labeling are once again present. The IDs used in the relevance assessments do not correlate with the unique text numbers that mark the start of a document.
  
 **Documents:**<br />The file `TIME.ALL` stores 423 documents, the first of which is labeled as `*TEXT 017` and the last one `*TEXT 563`. Every document starts with a line that specifies text, date, and page number. The lines are followed by sentences of unlabeled text. The example is shortened as the articles are quite long.
  
@@ -600,7 +600,7 @@ DEC . 28) . THE ONE ALLIED LEADER WHO UNRESERVEDLY WELCOMED THE POLARIS
 COMMON MARKET .
 ```
  
-**Relevance assessments:**<br />Every row of `TIME.REL` shows the query-ID, followed by relevant document-IDs. The doc-IDs are not the same as the text numbers, instead the IDs are representative of the order they appear in the `TIME.ALL` file.
+**Relevance Assessments:**<br />Every row of `TIME.REL` shows the query-ID, followed by relevant document-IDs. The document-IDs are not the same as the text numbers, instead the IDs are representative of the order they appear in the `TIME.ALL` file.
  
 *Example:*
 ```
@@ -615,19 +615,19 @@ COMMON MARKET .
 50 157
 ```
  
-**Other files:**<br />`TIME.STP` - List of stop words
+**Other Files:**<br />`TIME.STP` - List of stop words
  
-**Parsing problems**:<br />
+**Parsing Problems**:<br />
 * Relevance Assessments - Spaces between the ID and the first document ID vary greatly.
  
  
 **Source:** http://ir.dcs.gla.ac.uk/resources/test_collections/time/
-
+ 
 ## Other Data Sets
-
+ 
 ### Europarl Parallel Corpus
  
-**Description:**<br /> Starting in 2001, the corpus collected texts with up to 60 million words per language. Texts were extracted from the proceedings of the European Parliament for these 21 European languages: <br />
+**Description:**<br /> Starting in 2001, the corpus has collected texts with up to 60 million words per language. Texts were extracted from the proceedings of the European Parliament for these 21 European languages: <br />
 Romanic (French, Italian, Spanish, Portuguese, Romanian), Germanic (English, Dutch, German, Danish, Swedish), Slavik (Bulgarian, Czech, Polish, Slovak, Slovene), Finni-Ugric (Finnish, Hungarian, Estonian), Baltic (Latvian, Lithuanian), and Greek.
  
 **Documents:**<br />Every file has the same structure; there are sections separated with the tag `<CHAPTER ID=?>` which are followed by the title of the chapter. The `<SPEAKER ID =??>` is a unique ID which marks the spoken part.
@@ -642,18 +642,18 @@ The next item is the debate on the report (A5-0107/1999) by Mr Berend, on behalf
  
 **Queries:** -
  
-**Relevance assessments:** -
+**Relevance Assessments:** -
  
-**Other files:** -
+**Other Files:** -
  
 **Source:** http://www.statmt.org/europarl/
-
+ 
 ### OHSUMED
  
-**Description:**<br /> This collection was originally created by William Hersh as a new large medical test collection for experiments on the SMART retrieval system. It was later divided intoTraining andTest sets. <br />
+**Description:**<br />This collection was originally created by William Hersh as a new large medical test collection for experiments on the SMART retrieval system. It was later divided into Training and Test sets. <br />
 The split documents contain 20,000 abstracts, while the unsplit documents contain 50,216; both collections are sorted into 23 medical categories. Since the official source is no longer available online, we will refer to the download files by Alessandro Moschitti.
  
-**Documents:**<br />The file `Cardiovascular Diseases Abstract` contains 20,000 documents divided into Training and Test set directories. Inside those directories are 23 folders which represent each of the 23 categories the abstracts are assigned to. Every document is written in a file without special notation.
+**Documents:**<br />The file `Cardiovascular Diseases Abstract` contains 20,000 documents divided into Training and Test set directories. Inside those directories are 23 folders which represent each of the 23 categories the abstracts are assigned to. Each document is written in a file without special notation.
  
 *Example:*
 ```
@@ -668,27 +668,26 @@ Haemophilus influenzae meningitis with prolonged hospital course.
  One patient had no sequelae.
 ```
  
-The download link `All Cardiovascular Diseases Abstracts` contain 50,216 abstracts which are sorted only by the 23 category folders.
+The download link `All Cardiovascular Diseases Abstracts` contain 50,216 abstracts which are only sorted by the 23 category folders.
  
 **Queries:** -
  
-**Relevance assessments:** -
+**Relevance Assessments:** -
  
-**Other files:**`Category Description` - Defines the 23 categories
+**Other Files:**`Category Description` - Defines the 23 categories
  
 **Source:** ftp://medir.ohsu.edu/pub/ohsumed <br />
-(If the original source is no longer available online, please consult the website of Alessandro Moschitti at University of Trento where you will find download links for OHSUMED and Reuters http://disi.unitn.eu/moschitti/corpora.htm)
-
+(If the original source is no longer available online, please consult the website of Alessandro Moschitti at the University of Trento where you will find download links for OHSUMED and Reuters http://disi.unitn.eu/moschitti/corpora.htm)
+ 
 ### Reuters 21578
  
-**Description:**<br /> This collection was originally gathered and labeled by Carnegie Group, Inc. and Reuters, Ltd. Further information is available in the `README.txt` document. <br />
-The files are in SGML format, therefore it is important to understand that particular markup language first. 
-It is already split into `Training` and `Test` sets by the tag `LEWISSPLIT`. Topics and relations between them are well documented, which makes this collection a very useful one for pragmatic search development. However, it must be noted that only half of the documents were manually assigned to topics, so there are unlabeled documents which are marked by `LEWISSPLIT="NOT-USED"`.<br />
-The collection is a multi-labeled one, as such one document can be assigned to more than one topic.
+**Description:**<br />This collection was originally gathered and labeled by Carnegie Group, Inc. and Reuters, Ltd. Further information is available in the `README.txt` document. <br />
+The files are in SGML format, therefore it is important to understand that particular markup language first.
+It is already split into `Training` and `Test` sets by the tag `LEWISSPLIT`. Topics and relations between them are well documented, which makes this collection a very useful one for pragmatic search development. However, it must be noted that only half of the documents were manually assigned to topics, so there are unlabeled documents which are marked by `LEWISSPLIT="NOT-USED".<br />
+The collection is a multi-labeled one; as such, one document can be assigned to more than one topic.
  
 **Documents:**<br />
-The files `reut2-000.sgm` to `reut2-021.sgm` contain 21,578 documents that are in SGML format. The start of every document is marked with
-```<!DOCTYPE lewis SYSTEM "lewis.dtd">```
+The files `reut2-000.sgm` to `reut2-021.sgm` contain 21,578 documents that are in SGML format. The start of every document is marked with the following string: ```<!DOCTYPE lewis SYSTEM "lewis.dtd">```
 The entries are clearly distinguishable by their notation.
  
 *Example:*
@@ -739,10 +738,10 @@ documents, and have the following meanings:
                         Although this shouldn't be used for Topic search because there could be topics even if there is a NO, or likewise, there could be be no topics even if there is a YES.
  
     2. LEWISSPLIT : The possible values are TRAINING, TEST, and
-                        NOT-USED. 
+                        NOT-USED.
         a. TRAINING indicates that it was used in training sets in the
                         experiments reported in LEWIS91d (Chapters 9 and 10), LEWIS92b,
-                        LEWIS92e, and LEWIS94b. 
+                        LEWIS92e, and LEWIS94b.
         b. TEST indicates it was used in the test set
                         for those experiments.
         c. NOT-USED means it was not used in those
@@ -760,7 +759,7 @@ documents, and have the following meanings:
                         Reuters-21578, Distribution 1.0 collection. These IDs are assigned to
                         the stories in chronological order.
 ```
-For more detailed descriptions see the `VI. Formatting ` section of the `README.txt`.
+For more detailed descriptions see the `VI. Formatting` section of the `README.txt`.
  
 **Queries:**<br />There are no queries, but there are several files which contain the topics, places, people, etc. as strings. See `Other Files`.
  
@@ -832,10 +831,10 @@ Greek Drachma (DRACHMA)
  
 ```
  
-**Source:** http://www.daviddlewis.com/resources/testcollections/reuters21578/<br />
+**Source:** http://www.daviddlewis.com/resources/testcollections/reuters21578/<br/>
 (If the original source is not available, please consult the website of Alessandro Moschitti at University of Trento where you will find download links for OHSUMED and Reuters http://disi.unitn.eu/moschitti/corpora.htm)
-
-
+ 
+ 
 ### TREC
  
 **Description:**<br />TREC (the TExt REtrieval Conference) is not just one collection, but is instead a conference which has been held regularly since 1992. The TREC workshop series - among other goals - tries to encourage research in IR, based on large test collections, and increase the communication amid IR research and development.<br />
@@ -850,8 +849,8 @@ Since there are many different data sets, we provide no examples given for this 
  
 **Queries:** -
  
-**Relevance assessments:** -
+**Relevance Assessments:** -
  
-**Other files:** -
+**Other Files:** -
  
 **Source:** https://trec.nist.gov/
