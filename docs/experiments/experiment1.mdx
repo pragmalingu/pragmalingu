@@ -1,12 +1,16 @@
 ---
 id: experiment1
 title: Stemming Experiment
+showAuthor: true
+author: Samy Ateia and Miriam Rupprecht
+date: September 2020
 sidebar_label: Stemming
 custom_edit_url: null
 ---
 
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from '../doc.css';
+
 
 For our first experiment, we created a Google Colab Notebook that runs an Elasticsearch instance and compared the standard Elasticsearch analyzer with two built-in stemming methods. 
 To do this, we parsed and indexed [these 8 publically available datasets](http://ir.dcs.gla.ac.uk/resources/test_collections/), provided by the University of Glasgow, with the different analyzers 
@@ -248,3 +252,17 @@ For a more detailed analysis check out our [Simple Search vs. Stemming Compariso
 
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb"><button class="buttons" >Try it yourself!</button></a>
 
+<br/>
+<br/>
+
+
+**Acknowledgements:**<br/>
+Thanks to Dario Alves for implementing the Stemmers inside of Google Colab for Elasticsearch and Kenny Hall for proofreading this article.
+
+<div className="col text--right">
+    <em>
+        <small>
+            Written by <strong>Samy Atei</strong> and <strong>Miriam Rupprecht</strong>,  September 2020
+        </small>
+    </em>
+</div>
