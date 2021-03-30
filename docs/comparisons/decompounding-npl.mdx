@@ -1,0 +1,151 @@
+---
+id: decompounding-npl
+title: German Decompounding
+sidebar_label: Decompounding - Good Examples
+custom_edit_url: null
+---
+
+## German Analyzer vs. Brute Force Decompounding
+
+*Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
+
+There are **20 relevant documents** for this Query here are the true positives, false positives and false negatives distributions:
+
+|                     |          | true positives | false positives | false negatives |
+|---------------------|----------|----------------|-----------------|-----------------|
+| **German Analyzer** | total    |     2          | 18              | 18              |
+|                     | disjoint |     0          | 12              | 6               |
+| **Decompounding**   | total    |     8          | 12              | 12              |
+|                     | disjoint |     6          | 6               | 0               |
+
+We chose a found document that appears only in **decompounding** true positives, `81`. 
+
+**German Analyzer**
+"position": out of k, "score": 3.3543134
+```json
+{
+        "_id" : "81",
+        "_score" : 3.3543134,
+        "_source" : {
+          "text_german" : "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von beobachtungen der flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im bereich"
+        },
+        "highlight" : {
+          "text_german" : [
+            "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von <em>beobachtungen</em>"
+          ]
+        }
+```
+
+*Explain*
+
+Searched terms: beobachtung
+
+```json
+{
+    "score": 3.3543134,
+    "text_german": {
+        "total_value": 3.3543134,
+        "details": [
+            {
+                "function": {
+                    "value": 3.3543134,
+                    "description": "weight(text_german:beobachtung in 76) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 640,
+                    "freq, occurrences of term within document": 1.0
+                }
+            }
+        ]
+    }
+}
+}
+```
+
+**Decompounding**
+"position": 1, "score": 27.676197
+```json
+{
+  "doc": {
+    "id": 81,
+    "text_german": "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von beobachtungen der flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im bereich"
+  },
+  "highlight": {
+    "text_german": [
+      "<em>finsternisbeobachtungen</em> von <em>mikrowellenradioquellen</em> auf der <em>sonnenscheibe</em> im april ergebnisse von <em>beobachtungen</em>",
+      "der flussdichtepolarisation und <em>helligkeitsverteilung</em>, die in japan <em>gemacht</em> wurden, sind vier frequenzen",
+      "im <em>bereich</em>"
+    ]
+  },
+  "position": 1,
+  "score": 27.676197
+```
+
+*Explain*
+
+Searched terms: acht, bach, beobachtung, sonn, finsternis, finsterniss, teil, verteilung, eib, scheib, bereich, eich, ell, mikro, mikrowellenbereich, reich, well
+
+```json
+{
+    "score": 27.676197,
+    "text_german": {
+        "total_value": 3.2879257,
+        "details": [
+            {
+                "function": {
+                    "value": 3.2879257,
+                    "description": "weight(Synonym(text_german:acht text_german:bach text_german:beobachtung) in 76) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 2217,
+                    "freq, occurrences of term within document": 0.0
+                }
+            },
+            {
+                "function": {
+                    "value": 3.8396258,
+                    "description": "weight(text_german:sonn in 76) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 721,
+                    "freq, occurrences of term within document": 1.0
+                }
+            },
+            {
+                "function": {
+                    "value": 6.9045744,
+                    "description": "weight(Synonym(text_german:finsternis text_german:finsterniss text_german:stern) in 76) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 198,
+                    "freq, occurrences of term within document": 0.0
+                }
+            },
+            {
+                "function": {
+                    "value": 2.650443,
+                    "description": "weight(Synonym(text_german:teil text_german:verteilung) in 76) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 1697,
+                    "freq, occurrences of term within document": 0.0
+                }
+            },
+            {
+                "function": {
+                    "value": 2.0891752,
+                    "description": "weight(Synonym(text_german:ell text_german:quell) in 76) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 3352,
+                    "freq, occurrences of term within document": 0.0
+                }
+            },
+            {
+                "function": {
+                    "value": 6.57054,
+                    "description": "weight(Synonym(text_german:eib text_german:scheib) in 76) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 241,
+                    "freq, occurrences of term within document": 0.0
+                }
+            },
+            {
+                "function": {
+                    "value": 2.3339138,
+                    "description": "weight(Synonym(text_german:bereich text_german:eich text_german:ell text_german:mikro text_german:mikrowellenbereich text_german:reich text_german:well) in 76) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 3568,
+                    "freq, occurrences of term within document": 0.0
+                }
+            }
+        ]
+    }
+}
+```
