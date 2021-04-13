@@ -20,7 +20,7 @@ module.exports = {
   themes: ['@docusaurus/theme-live-codeblock'],
   title: 'PragmaLingu',
   tagline: 'PragmaLingu - Semantic Search and NLP',
-  url: 'http://pragmalingu.de',
+  url: 'http://www.pragmalingu.de',
   baseUrl: '/',
   favicon: 'img/kleines_Icon_1.png',
   organizationName: 'pragmalingu', // Usually your GitHub org/user name.
@@ -123,8 +123,6 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
-          // It is recommended to set document id as docs home page (`docs/` path).
-          homePageId: 'docs/getStarted',
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
