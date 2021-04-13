@@ -20,7 +20,7 @@ module.exports = {
   themes: ['@docusaurus/theme-live-codeblock'],
   title: 'PragmaLingu',
   tagline: 'PragmaLingu - Semantic Search and NLP',
-  url: 'http://pragmalingu.de',
+  url: 'http://www.pragmalingu.de',
   baseUrl: '/',
   favicon: 'img/kleines_Icon_1.png',
   organizationName: 'pragmalingu', // Usually your GitHub org/user name.

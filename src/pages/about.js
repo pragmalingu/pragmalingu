@@ -1,9 +1,7 @@
 import React from 'react';
 
 import styles from './styles.module.css';
-import classnames from 'classnames';
 import Layout from '@theme/Layout';
-import Link from '@docusaurus/Link';
 import Mailto from 'react-mailto.js';
 
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
@@ -24,7 +22,7 @@ function About() {
                         therefore touching the area of Pragmatics in Linguistics. We are focusing on actual applications such as
                         search and try to convey all knowledge and techniques from a problem-solving viewpoint because we believe
                         that this pragmatic perspective is intuitive and makes learning fun.
-          </p>
+                    </p>
                     <div className={styles.coverContainer}>
                         <img src="img/Rikki_About_smaller.jpg" className={styles.cover} />
                     </div>
@@ -80,7 +78,7 @@ function About() {
                             </div>
                             <div className="card__body">
                                 Samy is a software engineer focusing on search and NLP web applications. He worked in big and small enterprise projects and co founded a startup for news aggregation. He started pragmalingu in 2020 to explore modern NLP approaches for search applications and create a guide for interested developers.
-      </div>
+                            </div>
                             <div className="card__footer">
                                 <div className="button-group button-group--block">
                                         <a className="button button--secondary" href="https://github.com/orgs/pragmalingu/people/SamyAteia">GitHub</a>
@@ -108,7 +106,7 @@ function About() {
                             </div>
                             <div className="card__body">
                                 Miriam is a Computer Linguistic student at the Ludwig-Maximilian-University in Munich. Before starting her studies in Munich she got her Bachelor’s degree in Theater, Film and Media Science in Vienna. Her role in PragmaLingu is to research and write topics around NLP.
-      </div>
+                            </div>
                             <div className="card__footer">
                                 <div className="button-group button-group--block">
                                     <a className="button button--secondary" href="https://github.com/MiriamPragmalingu">GitHub</a>
@@ -165,7 +163,7 @@ function About() {
                             </div>
                             <div className="card__body">
                                 Pavel is an independent NLP Researcher from Saint-Petersburg, Russia. He works on solving business problems using scientific approach. In PragmaLingu his main role is consulting on using innovative solutions in solving natural language processing tasks.
-      </div>
+                            </div>
                             <div className="card__footer">
                                 <div className="button-group button-group--block">
                                     <a className="button button--secondary" href="https://github.com/orgs/pragmalingu/people/polaser">GitHub</a>
@@ -195,7 +193,7 @@ function About() {
                         </div>
                         <div className="card__body text--center">
                             Rikki is our hard-working mascot.
-      </div>
+                        </div>
                         <div className="card__footer">
                         </div>
                     </div>
