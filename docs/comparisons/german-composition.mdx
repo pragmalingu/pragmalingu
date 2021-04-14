@@ -1,0 +1,40 @@
+---
+id: german-composition
+title: What is Composition?
+sidebar_label: German Composition
+custom_edit_url: null
+---
+
+## German Analyzer vs. Brute Force Decomposition
+
+**What: Composition what is it?**
+
+In German, as in some other languages (e.g. Finnish, Dutch), it is possible to create a new word from two or more independent words by means of composition. Here, two or more words are combined into one word by so-called fugue elements (e.g.: -(e)s-, -e-, -(e)n-, -er-) to form a coherent word. English does not have this kind of composition, mostly such word contexts are separated with spaces.
+
+Examples of this would be:
+
+* "Kapitän" + "Mütze" => "Kapitänsmütze" (captain's cap)
+* "Apfel" + "Baum" => "Apfelbaum" (apple tree)
+* "Blumen" + "Topf" => "Blumentopf" (flower pot)
+
+
+With this technique an infinite number of words can be strung together. A classic example would be the "Donaudampfschifffahrtskapitänsmütze" (Donau steamboat captain's cap). The last word is always the carrier of meaning and determines both the grammatical gender and the primary meaning of the word. 
+
+Composition must be distinguished from derivation. In a derivation, a root word is changed in its part of speech by a grammatical affix. In a composition, the original part of speech of the meaning-bearing second word is retained.  
+
+
+**Why: What is the benefit of Decomposition?**
+
+Composition in languages with a rich morphology like German makes it possible to expand the vocabulary to an infinite level. This can cause problems in information retrieval. 
+
+For example, if you search for "Atomkraftwerk" (atomic power plant), you will also be interested in articles that deal with the more general topic of "Atomkraft" (atomic power). If you do not break down this composite in a search, it can quickly happen that relevant results are not found. On the other hand, too much decomposition can also result in too much irrelevant information being returned. In this example, articles that are only about "Kraft" (power) would be too allegorical in most cases and would not lead to the desired search result.
+
+To improve the IR performance it is widely recognized to use linguistically motivated decomposition of compounded words. Other than in German, compounds in English are typically written as separate words and can therefore easily be found. 
+
+We tried to compare two different approaches on using decompounding in Elasticsearch: **Brute Force 
+The first approach uses a dictionary to look up useful decompositions and check if decompounding would make sense in the specific case.
+
+Formulate Hypothesis:
+- Decomposition while using a dictionary should improve the search for retrieved documents including relevant documents, it could be that more irrelevant documents are found too
+- Hyphenation should improve the decompounding approaches
+

@@ -1,24 +1,43 @@
 ---
 id: decompounding-npl
 title: German Decompounding
-sidebar_label: Decompounding - Good Examples
+sidebar_label: Decompounder - Good Examples
 custom_edit_url: null
 ---
 
-## German Analyzer vs. Brute Force Decompounding
+import useBaseUrl from '@docusaurus/useBaseUrl'
+import styles from '../doc.css';
+
+**Examples why Decomposition works better than the Standard German Analyzer**
+
+To compare the approaches with the **Standard German Analyzer**, the **Dictionary Decompounder** and the **Hyphenation Decompounder** we chose one query, that as an example.
 
 *Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
 
-There are **20 relevant documents** for this Query here are the true positives, false positives and false negatives distributions:
+There are **20 relevant documents** for this query and the top 20 results are returned.
+These are the true positives, false positives and false negatives distributions in comparison for each approach:
 
-|                     |          | true positives | false positives | false negatives |
-|---------------------|----------|----------------|-----------------|-----------------|
-| **German Analyzer** | total    |     2          | 18              | 18              |
-|                     | disjoint |     0          | 12              | 6               |
-| **Decompounding**   | total    |     8          | 12              | 12              |
-|                     | disjoint |     6          | 6               | 0               |
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_npl_decomposition_tp_fp_fn.png')}
+  class= "contents"
+/>
 
-We chose a found document that appears only in **decompounding** true positives, `81`. 
+As an example document to compare the scores and searched terms in detail we chose the document `81` because the **Hyphenation Decompounder** scored it rightfully as top document.
+
+## German Analyzer vs. Hyphenation Decompounder
+
+First of we compared the **Standard German Analyzer** with the **Hyphenation Decompounder**. 
+Below you can compare how many of the tp, fn and fp are overlapping:
+
+|                                |          | true positives | false positives | false negatives |
+|--------------------------------|----------|----------------|-----------------|-----------------|
+| **German Analyzer**            | total    |     2          | 18              | 18              |
+|                                | disjoint |     0          | 13              | 5               |
+| **Hyphenation Decompounder**  | total    |     7          | 13              | 13              |
+|                                | disjoint |     5          | 8               | 0               |
+
+When we try to explain why the **German Analyzer** works better than the **Hyphenation Decompounder** we have to look at the search results in detail.
 
 **German Analyzer**
 "position": out of k, "score": 3.3543134
@@ -36,31 +55,75 @@ We chose a found document that appears only in **decompounding** true positives,
         }
 ```
 
-*Explain*
 
-Searched terms: beobachtung
-
+**Hyphenation Decompounder**
+"position": 0, "score": 28.156767
 ```json
 {
-    "score": 3.3543134,
-    "text_german": {
-        "total_value": 3.3543134,
-        "details": [
-            {
-                "function": {
-                    "value": 3.3543134,
-                    "description": "weight(text_german:beobachtung in 76) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 640,
-                    "freq, occurrences of term within document": 1.0
-                }
-            }
-        ]
-    }
-}
+  "doc": {
+    "id": 81,
+    "text_german": "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von beobachtungen der flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im bereich"
+  },
+  "highlight": {
+    "text_german": [
+      "<em>finsternisbeobachtungen</em> von <em>mikrowellenradioquellen</em> auf der <em>sonnenscheibe</em> im april ergebnisse von <em>beobachtungen</em>",
+      "flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im <em>bereich</em>"
+    ]
+  }
 }
 ```
 
-**Decompounding**
+As we can see in this table the searched terms and therefore the scores diverge widely:
+
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_npl_hyph_anal_terms.png')}
+  class= "contents"
+/>
+
+
+|                           | searched terms                                          | term score | term frequency per document | document frequency |
+|---------------------------|---------------------------------------------------------|------------|-----------------------------|--------------------|
+| **German Analyzer**           | "beobachtung"                                           | 3.3543134  | 1                           | 640                |
+|                           |                                                         |            |                             |                    |
+| **Hyphenation Decompounder** | "beobachtung"                                           | 3.7740674  | 1                           | 688                |
+|                           | "sonn"                                                  | 3.7111723  | 1                           | 721                |
+|                           | "finsternis","finsterniss"                              | 6.5301027  | 1                           | 88                 |
+|                           | "quell"                                                 | 4.5086575  | 1                           | 398                |
+|                           | "scheib"                                                | 6.0824246  | 1                           | 123                |
+|                           | "bereich","mikro", "mikrowellenbereich", "reich","well" | 3.550342   | 4                           | 1759               |
+
+*Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
+
+Text highlighted with *Standard German Analyzer*:<br></br>
+    "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von <em>`beobachtungen`</em>"
+
+Text highlighted with *Hyphenation Decompounder*:<br></br>
+      "<em>`finsternisbeobachtungen`</em> von <em>`mikrowellenradioquellen`</em> auf der <em>`sonnenscheibe`</em> im april ergebnisse von <em>`beobachtungen`</em>"<br></br>
+      "flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im <em>`bereich`</em>"
+
+We can clearly see that the term `FINSTERNISSEN` doesn't match within the document while using the **German Analyzer**. It gets stemmed by Elasticsearch to the term `finsternis` but since the searched text isn't decompounded with this approach, it won't return `finsternisbeobachtungen` as relevant for the query. Same goes for the term `MIKROWELLENBEREICH` which is only found by the **Hyphenation Decompounder** within the composition `mikrowellenradioquellen`.
+
+The **Standard German Analyzer** seems to find way less than the **Hyphenation Decompounder**. Even though some of the terms the **Hyphenation** approach extracts are quite unusefull for this query, like `well` and `reich`, it still finds enough relevant terms that weren't found by only using the standard approach.
+
+This shows that the **Decompounder** approach does improve the search results.
+
+## Dictionary Decompounder vs. Hyphenation Decompounder
+
+Second we compared the **Dictionary Decompounder** with the **Hyphenation Decompounder** to see how much the improvement between a dictionary and a hyphenation approach weights. 
+Below you can compare how many of the true positives, false negatives and false positives are overlapping between the two approaches:
+
+|                     |          | true positives | false positives | false negatives |
+|---------------------|----------|----------------|-----------------|-----------------|
+| **Dictionary Decompounder** | total    |     2          | 18              | 18              |
+|                     | disjoint |     0          | 12              | 6               |
+| **Hyphenation Decompounder**   | total    |     8          | 12              | 12              |
+|                     | disjoint |     6          | 6               | 0               |
+
+Once again it is helpful to look at one relevant document from the query more closely. The document with the id `81`, which we chose as a an example, does get ranked very high on both approaches. But it's only on the second position with the dictionary approach and on the top position with the hyphenation approach. 
+
+**Dictionary Decompounder**
 "position": 1, "score": 27.676197
 ```json
 {
@@ -74,78 +137,59 @@ Searched terms: beobachtung
       "der flussdichtepolarisation und <em>helligkeitsverteilung</em>, die in japan <em>gemacht</em> wurden, sind vier frequenzen",
       "im <em>bereich</em>"
     ]
-  },
-  "position": 1,
-  "score": 27.676197
+  }
 ```
 
-*Explain*
-
-Searched terms: acht, bach, beobachtung, sonn, finsternis, finsterniss, teil, verteilung, eib, scheib, bereich, eich, ell, mikro, mikrowellenbereich, reich, well
-
+**Hyphenation Decompounder**
+"position": 0, "score": 28.156767
 ```json
 {
-    "score": 27.676197,
-    "text_german": {
-        "total_value": 3.2879257,
-        "details": [
-            {
-                "function": {
-                    "value": 3.2879257,
-                    "description": "weight(Synonym(text_german:acht text_german:bach text_german:beobachtung) in 76) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 2217,
-                    "freq, occurrences of term within document": 6.0
-                }
-            },
-            {
-                "function": {
-                    "value": 3.8396258,
-                    "description": "weight(text_german:sonn in 76) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 721,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 6.9045744,
-                    "description": "weight(Synonym(text_german:finsternis text_german:finsterniss text_german:stern) in 76) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 198,
-                    "freq, occurrences of term within document": 2.0
-                }
-            },
-            {
-                "function": {
-                    "value": 2.650443,
-                    "description": "weight(Synonym(text_german:teil text_german:verteilung) in 76) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 1697,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 2.0891752,
-                    "description": "weight(Synonym(text_german:ell text_german:quell) in 76) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 3352,
-                    "freq, occurrences of term within document": 2.0
-                }
-            },
-            {
-                "function": {
-                    "value": 6.57054,
-                    "description": "weight(Synonym(text_german:eib text_german:scheib) in 76) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 241,
-                    "freq, occurrences of term within document": 2.0
-                }
-            },
-            {
-                "function": {
-                    "value": 2.3339138,
-                    "description": "weight(Synonym(text_german:bereich text_german:eich text_german:ell text_german:mikro text_german:mikrowellenbereich text_german:reich text_german:well) in 76) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 3568,
-                    "freq, occurrences of term within document": 6.0
-                }
-            }
-        ]
-    }
+  "doc": {
+    "id": 81,
+    "text_german": "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von beobachtungen der flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im bereich"
+  },
+  "highlight": {
+    "text_german": [
+      "<em>finsternisbeobachtungen</em> von <em>mikrowellenradioquellen</em> auf der <em>sonnenscheibe</em> im april ergebnisse von <em>beobachtungen</em>",
+      "flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im <em>bereich</em>"
+    ]
+  }
 }
 ```
+
+To analyze why this document is rated slightly different, we have to look at the searched terms once again:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_npl_hyph_dict_terms.png')}
+  class= "contents"
+/>
+
+
+|                           | searched terms                                                           | term score | term frequency per document | document frequency |
+|---------------------------|--------------------------------------------------------------------------|------------|-----------------------------|--------------------|
+| **Dictionary Decompounder** | "beobachtung", "acht", "bach"                                            | 3.2879257  | 6                           | 2217               |
+|                           | "sonn"                                                                   | 3.8396258  | 1                           | 721                |
+|                           | "finsternis", "finsterniss", "stern"                                     | 6.9045744  | 2                           | 198                |
+|                           | "teil", "verteilung"                                                     | 2.650443   | 1                           | 1679               |
+|                           | "quell", "ell"                                                           | 2.0891752  | 2                           | 3352               |
+|                           | "scheib", "eib"                                                          | 6.57054    | 2                           | 241                |
+|                           | "bereich", "eich", "ell", "mikro", "mikrowellenbereich", "reich", "well" | 2.3339138  | 6                           | 3568               |
+|                           |                                                                          |            |                             |                    |
+| **Hyphenation Decompounder** | "beobachtung"                                                            | 3.7740674  | 1                           | 688                |
+|                           | "sonn"                                                                   | 3.7111723  | 1                           | 721                |
+|                           | "finsternis","finsterniss"                                               | 6.5301027  | 1                           | 88                 |
+|                           | "quell"                                                                  | 4.5086575  | 1                           | 398                |
+|                           | "scheib"                                                                 | 6.0824246  | 1                           | 123                |
+|                           | "bereich","mikro", "mikrowellenbereich", "reich","well"                  | 3.550342   | 4                           | 1759               |
+
+*Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
+
+Text highlighted with *Dictionary Decompounder*:<br></br>
+      "<em>`finsternisbeobachtungen`</em> von <em>`mikrowellenradioquellen`</em> auf der <em>`sonnenscheibe`</em> im april ergebnisse von <em>beobachtungen</em>"<br></br>
+      "der flussdichtepolarisation und <em>`helligkeitsverteilung`</em>, die in japan <em>`gemacht`</em> wurden, sind vier frequenzen"<br></br>
+      "im <em>`bereich`</em>"
+
+Text highlighted with *Hyphenation Decompounder*:<br></br>
+      "<em>`finsternisbeobachtungen`</em> von <em>`mikrowellenradioquellen`</em> auf der <em>`sonnenscheibe`</em> im april ergebnisse von <em>`beobachtungen`</em>"<br></br>
+      "flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im <em>`bereich`</em>"
