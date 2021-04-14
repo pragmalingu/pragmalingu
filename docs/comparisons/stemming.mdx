@@ -9,43 +9,40 @@ What is stemming?
 What did we compare?
 How did we compare it?
 
+What are our hypothesis, expectations?
+
 ### 2. Results
 What are the results?
 
-### 3. Discussion
-
-### 4. Conclusion
 
 
-
-# Discussion
+### Discussion
 What are the biggest differences in precision and recall between our approaches and how can we explain them?
 
-Looking at the f1 score fom our approaches we can see that both stemming approaches perform better and worse that the standard baseline on different datasets. Hunspell stemming performse worse that both standard search and algorithmic stemming on the cacm, LISA and Time corpus and better on NPL and Medline. Algorithmic stemming performs best on CISI and LISA while being worse than standard Search on the ADI corpus.
+Looking at the f1 score fom our approaches we can see that both stemming approaches perform better than the standard baseline on most datasets.
+Algorithmic stemming performs better than the standard analyzer on all datasets, it has the biggest gain on the LISA and NPL datasets.
+Hunspell stemming performs worse than algorithmic stemming on most datasets except NPL where it performs slighlty better.
+Hunspell stemming performs worse than the standard analyzer on the medline dataset.
 
 The are a list of interesting questions that we can ask by just looking at these results:
 
+1.   Why is algorithmic stemming performing better than the standard analyzer?
+2.   Why is algorithmic stemming performing better that hunspell stemming?
+3.   Why is hunspell stemming performing worse that the standard analyzer on the Medline dataset?
+4.   Why is hunspell stemming performing better that the algorithmic stemmer on the NPL dataset?
 
-1.   Why is standard search performing better that both stemming approaches on the ADI corpus?
-2.   Why is hunspell stemming performing worse than standard search on the Time, LISA and cacm datasets?
-3.   What makes both stemming approaches perform well on the NPL corpus?
-4.   Why is the algorithmic stemmer the best approach for the CISI and LISA corpus?
-
-To break down these results on the individual querys and finnally word matches and to analze under and over stemming that leads to these results, we need to first look at the precision and recall scores individually and then extract the false positives and negatives that lead to these results and analyse them.
-
-## Precision
-When we look at the [precision score](https://en.wikipedia.org/wiki/Precision_and_recall) we see that the approaches perform identically on most of the datasets. But hunspell stemming performce slightly worse on CACM, CICI, LISA and Time. That means hunspell stemming must be producing more false positives that the other approaches on these datasets. 
-
-The algorithmic stemmer performs worse that hunspell and the standard analyzer on the medline corpus but is on par with the standard analyzer on all other datasets.
-
-We therefore should analyze the false positives produces by the following approach dataset combinations:
+To break down these results on the individual querys and finnally word matches and to analze under and over stemming that leads to these results, 
+we need to first look at the precision and recall scores individually and then extract the false positives and negatives that lead to these results and analyse them.
 
 
-1.   Algorithmic stemmer & medline
-2.   Hunspell stemming & CACM
-3.   Hunspell stemming & CICI
-3.   Hunspell stemming & LISA
-3.   Hunspell stemming & Time
+#### 1. Algorithmic stemming improvements 
 
-## Recall
-The recall score results are more disparate than the precision score results. We can look at nearly every dataset and approach and find differences. A clear difference that shoul be worth analyzing is appearing on the ADI corpus. 
+Stemmer 
+(NPL both improvements)
+Why is hunspell stemming performing better on the NPL dataset
+
+#### 2. Algorithmic stemming vs dictionary stemming
+
+#### 3. Dictionary stemming errors
+
+#### 4. Conclusion
