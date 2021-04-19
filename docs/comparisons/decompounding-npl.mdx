@@ -83,16 +83,17 @@ As we can see in this table the searched terms and therefore the scores diverge 
 />
 
 
-|                           | searched terms                                          | term score | term frequency per document | document frequency |
-|---------------------------|---------------------------------------------------------|------------|-----------------------------|--------------------|
-| **German Analyzer**           | "beobachtung"                                           | 3.3543134  | 1                           | 640                |
-|                           |                                                         |            |                             |                    |
-| **Hyphenation Decompounder** | "beobachtung"                                           | 3.7740674  | 1                           | 688                |
-|                           | "sonn"                                                  | 3.7111723  | 1                           | 721                |
-|                           | "finsternis","finsterniss"                              | 6.5301027  | 1                           | 88                 |
-|                           | "quell"                                                 | 4.5086575  | 1                           | 398                |
-|                           | "scheib"                                                | 6.0824246  | 1                           | 123                |
-|                           | "bereich","mikro", "mikrowellenbereich", "reich","well" | 3.550342   | 4                           | 1759               |
+Here you can find a list of all the searched terms for each approach and their frequencies per document as well as in how many documents they were found:
+
+| **German Analyzer** |              |                |            |                 **Hyphenation Decompounder**                |              |                |            |
+|-------------------|--------------|----------------|------------|:---------------------------------------------------------:|--------------|----------------|------------|
+|                   | term   score | term   per doc | doc   freq |                                                           | term   score | term   per doc | doc   freq |
+| "beobachtung"     | 3,35         | 1              | 640        | "beobachtung"                                             | 3,77         | 1              | 688        |
+| -                 | -            | -              | -          | "sonn"                                                    | 3,71         | 1              | 721        |
+| -                 | -            | -              | -          | "finsternis","finsterniss"                                | 6,53         | 1              | 88         |
+| -                 | -            | -              | -          | "quell"                                                   | 4,51         | 1              | 398        |
+| -                 | -            | -              | -          | "scheib"                                                  | 6,08         | 1              | 123        |
+| -                 | -            | -              | -          | "bereich","mikro",   "mikrowellenbereich", "reich","well" | 3,55         | 4              | 1759       |
 
 *Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
 
@@ -121,7 +122,7 @@ Below you can compare how many of the true positives, false negatives and false 
 | **Hyphenation Decompounder**   | total    |     8          | 12              | 12              |
 |                     | disjoint |     6          | 6               | 0               |
 
-Once again it is helpful to look at one relevant document from the query more closely. The document with the id `81`, which we chose as a an example, does get ranked very high on both approaches. But it's only on the second position with the dictionary approach and on the top position with the hyphenation approach. 
+Once again it is helpful to look at one relevant document from the query more closely. The document with the id `81`, which we chose as a an example, does get ranked very high on both approaches. But it's only on the second position with the **dictionary** approach and on the top position with the **hyphenation** approach. 
 
 **Dictionary Decompounder**
 "position": 1, "score": 27.676197
@@ -165,23 +166,19 @@ To analyze why this document is rated slightly different, we have to look at the
   class= "contents"
 />
 
+Here you can find a list of all the searched terms for each approach and their frequencies per document as well as in how many documents they were found:
 
-|                           | searched terms                                                           | term score | term frequency per document | document frequency |
-|---------------------------|--------------------------------------------------------------------------|------------|-----------------------------|--------------------|
-| **Dictionary Decompounder** | "beobachtung", "acht", "bach"                                            | 3.2879257  | 6                           | 2217               |
-|                           | "sonn"                                                                   | 3.8396258  | 1                           | 721                |
-|                           | "finsternis", "finsterniss", "stern"                                     | 6.9045744  | 2                           | 198                |
-|                           | "teil", "verteilung"                                                     | 2.650443   | 1                           | 1679               |
-|                           | "quell", "ell"                                                           | 2.0891752  | 2                           | 3352               |
-|                           | "scheib", "eib"                                                          | 6.57054    | 2                           | 241                |
-|                           | "bereich", "eich", "ell", "mikro", "mikrowellenbereich", "reich", "well" | 2.3339138  | 6                           | 3568               |
-|                           |                                                                          |            |                             |                    |
-| **Hyphenation Decompounder** | "beobachtung"                                                            | 3.7740674  | 1                           | 688                |
-|                           | "sonn"                                                                   | 3.7111723  | 1                           | 721                |
-|                           | "finsternis","finsterniss"                                               | 6.5301027  | 1                           | 88                 |
-|                           | "quell"                                                                  | 4.5086575  | 1                           | 398                |
-|                           | "scheib"                                                                 | 6.0824246  | 1                           | 123                |
-|                           | "bereich","mikro", "mikrowellenbereich", "reich","well"                  | 3.550342   | 4                           | 1759               |
+|                           **Dictionary Decompounder**                          |              |                     |  |  **Hyphenation Decompounder**                                                         |              |                     |            |
+|:----------------------------------------------------------------------------:|--------------|---------------------|:--------------------------:|-----------------------------------------------------------|--------------|---------------------|------------|
+|                                                                              | term   score | term per doc | doc   freq                 |                                                           | term   score | term per doc | doc   freq |
+| "beobachtung",   "acht", "bach"                                              | 3,29         | 6                   | 2217                       | "beobachtung"                                             | 3,77         | 1                   | 688        |
+| "sonn"                                                                       | 3,84         | 1                   | 721                        | "sonn"                                                    | 3,71         | 1                   | 721        |
+| "finsternis",   "finsterniss", "stern"                                       | 6,9          | 2                   | 198                        | "finsternis","finsterniss"                                | 6,53         | 1                   | 88         |
+| "teil",   "verteilung"                                                       | 2,65         | 1                   | 1679                       | -                                                         | -            | -                   | -          |
+| "quell",   "ell"                                                             | 2,09         | 2                   | 3352                       | "quell"                                                   | 4,51         | 1                   | 398        |
+| "scheib",   "eib"                                                            | 6,57         | 2                   | 241                        | "scheib"                                                  | 6,08         | 1                   | 123        |
+| "bereich",   "eich", "ell", "mikro",   "mikrowellenbereich", "reich", "well" | 2,33         | 6                   | 3568                       | "bereich","mikro",   "mikrowellenbereich", "reich","well" | 3,55         | 4                   | 1759       |
+
 
 *Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
 
@@ -193,3 +190,11 @@ Text highlighted with *Dictionary Decompounder*:<br></br>
 Text highlighted with *Hyphenation Decompounder*:<br></br>
       "<em>`finsternisbeobachtungen`</em> von <em>`mikrowellenradioquellen`</em> auf der <em>`sonnenscheibe`</em> im april ergebnisse von <em>`beobachtungen`</em>"<br></br>
       "flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im <em>`bereich`</em>"
+
+This example shows that the **Dictionary Decompounder** extracts significantly more search terms within a term group from the query than the **Hyphenation Decompounder**. However, this depresses the tf-idf value, which is included in the calculation of the total term score, because with more documents found the term loses relevance.
+
+The **Hyphenation Decompounder** searches for subwords within the query terms according to certain patterns. If these subwords are not considered relevant because they do not appear in a specified word list, they are not searched for. 
+
+This can be seen especially with the word group `quell`. The **Dictionary Decompounder** additionally includes `ell`, which brings the score to `2.09`. The **Hyphenation Decompounder** has excluded the term `ell` and thus achieves a higher score of `4.51`.
+
+So we can see that more search terms don't necessarily lead to better results, wherefore the **Hyphenation Decompounder** does improve the results of the **Dictionary Decompounder**.
