@@ -20,7 +20,6 @@
     "react-dom": "^17.0.2",
     "react-mailto": "^0.4.0",
     "react-mailto.js": "^2.2.2",
-    "react-native-autolink": "^4.0.0",
     "react-protected-mailto": "^1.0.3"
   },
   "browserslist": {
