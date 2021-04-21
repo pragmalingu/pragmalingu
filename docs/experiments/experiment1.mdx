@@ -12,7 +12,7 @@ import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from '../doc.css';
 
 
-For our first experiment, we created a Google Colab Notebook that runs an Elasticsearch instance and compared the standard Elasticsearch analyzer with two built-in stemming methods. 
+For our first experiment, we created a Google Colab Notebook that runs an Elasticsearch instance and compared the [standard Elasticsearch analyzer](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyser.html) with two built-in stemming methods. 
 To do this, we parsed and indexed [these 8 publically available datasets](http://ir.dcs.gla.ac.uk/resources/test_collections/), provided by the University of Glasgow, with the different analyzers 
 and evaluated them with the Elasticsearch [Ranking Evaluation API](https://www.elastic.co/guide/en/elasticsearch/reference/current/search-rank-eval.html).  
 [Our Parsing Guide](https://pragmalingu.de/docs/guides/how-to-parse) shows you how these datasets are structured and how we preprocessed them for indexing.
@@ -25,7 +25,7 @@ These are the two built-in methods that we compared to the [standard Elasticsear
 
 ### 1. Standard Elasticsearch Analyzer
 
-We ran our searches with the [multi-match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html). 
+We ran our searches with the [multi-match query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html) and used the default standard analyzer. 
 It searches multiple fields of the documents - in our case 'text' and 'title' - and by default uses the highest matching score from one field to rank the document.
 
 We evaluated the ranking on the 20 highest ranked documents returned by each query.
@@ -76,16 +76,16 @@ We chose precision and recall and calculated the F1-score , which is often used 
 
 These were the results without any further processing of the data, using the multi-match query of Elasticsearch:
 
-|  Standard Search |   ADI |   CACM |   CISI |   Cranfield |   LISA |   Medline |   NPL |   Time |
-|------------------|-------|--------|--------|-------------|--------|-----------|-------|--------|
-| Recall           | 0.54  |  0.313 |  0.103 |       0.506 |  0.368 |     0.332 | 0.233 |  0.772 |
-| Precision        | 0.121 |  0.157 |  0.154 |       0.18  |  0.163 |     0.376 | 0.217 |  0.15  |
-| F1-Score         | 0.198 |  0.209 |  0.123 |       0.265 |  0.226 |     0.353 | 0.225 |  0.251 |
+|  Standard Analyzer |   ADI |   CACM |   CISI |   Cranfield |   LISA |   Medline |   NPL |   Time |
+|--------------------|-------|--------|--------|-------------|--------|-----------|-------|--------|
+| Recall             | 0.54  |  0.313 |  0.103 |       0.506 |  0.368 |     0.332 | 0.233 |  0.772 |
+| Precision          | 0.121 |  0.157 |  0.154 |       0.18  |  0.163 |     0.376 | 0.217 |  0.15  |
+| F1-Score           | 0.198 |  0.209 |  0.123 |       0.265 |  0.226 |     0.353 | 0.225 |  0.251 |
 
 
 ### 2. Stemming
 
-To experiment with stemming, Elasticsearch provides two built-in stemming methods. 
+To experiment with stemming, Elasticsearch provides several built-in stemming methods. We evaluated two of them.
 First is the algorithmic stemmer; it applies a series of rules to each word to reduce them to their stems. 
 In Elasticsearch this is called the [Stemmer Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html). 
 In addition, there is the dictionary stemmer which replaces unstemmed words with stemmed variants from a provided dictionary. 
