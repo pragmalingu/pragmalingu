@@ -10,7 +10,7 @@ import styles from '../doc.css';
 
 **Examples why Decomposition works better than the Standard German Analyzer**
 
-To compare the approaches with the **Standard German Analyzer**, the **Dictionary Decompounder** and the **Hyphenation Decompounder** we chose one query, that as an example.
+To compare the approaches with the **Standard German Analyzer**, the **Dictionary Decompounder** and the **Hyphenation Decompounder** we chose one query from the [NPL corpus](../guides/data-comparison#npl), that as an example.
 
 *Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
 
@@ -117,7 +117,7 @@ Below you can compare how many of the true positives, false negatives and false 
 
 |                     |          | true positives | false positives | false negatives |
 |---------------------|----------|----------------|-----------------|-----------------|
-| **Dictionary Decompounder** | total    |     2          | 18              | 18              |
+| **Dictionary Decompounder** | total    |     8          | 18              | 18              |
 |                     | disjoint |     0          | 12              | 6               |
 | **Hyphenation Decompounder**   | total    |     8          | 12              | 12              |
 |                     | disjoint |     6          | 6               | 0               |

@@ -1,17 +1,26 @@
 ---
 id: decompounding-cranfield-lisa
 title: German Decompounding
-sidebar_label: Decompounding - German Analyzer vs. Brute Force
+sidebar_label: Decompounding - German Analyzer vs. Dictionary Decompounder
 custom_edit_url: null
 ---
 
-## German Analyzer vs. Brute Force Decompounding
+import useBaseUrl from '@docusaurus/useBaseUrl'
+import styles from '../doc.css';
 
-**Why does German Analyzer work better than Brute Force Decompounding on Cranfield, LISA and Time ?**
+## German Analyzer vs. Dictionary Decompounder
 
-Hypothesis: Der Brute Force Decompounder 
+**Why does German Analyzer work better than Dictionary Decompounder on Cranfield, LISA and Time ?**
+
+Hypothesis: **Dictionary Decompounder** 
 
 ### Cranfield
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_cran_decomposition_tp_fp_fn.png')}
+  class= "contents"
+/>
 
 *Example Query 3:* " welche Probleme der Wärmeleitung in Verbundplatten bisher gelöst worden sind ."
 
@@ -19,7 +28,7 @@ There are **9 relevant documents** for this Query here are the true positives, f
 
 |                     |          | true positives | false positives | false negatives |
 |---------------------|----------|----------------|-----------------|-----------------|
-| **Decompounding**   | total    | 1              | 19              | 8               |
+| **Dictionary Decompounder**   | total    | 1              | 19              | 8               |
 |                     | disjoint | 0              | 13              | 6               |
 | **German Analyzer** | total    | 7              | 13              | 2               |
 |                     | disjoint | 6              | 7               | 0               |
@@ -30,7 +39,7 @@ There are **9 relevant documents** for this Query here are the true positives, f
 We chose a found document that appears in both approaches' true positives, `181`. 
 We can see by the scores and positions, that apparently the decompounding matches way more documents before matching 181 although the score isn't that different from the German Analyzer score:
 
-|                        | **German Analyzer**    | **Decompounding**                                   |
+|                        | **German Analyzer**    | **Dictionary Decompounder**                                  |
 |------------------------|------------------------|-----------------------------------------------------|
 | position               | 3                      | 12                                                  |
 | score                  | 11.539416              | 10.477009                                           |
@@ -79,7 +88,7 @@ Searched terms: problem, warmeleitung
     }
 ```
 
-**Decompounding:**<br></br>	
+**Dictionary Decompounder:**<br></br>	
 ```json
 {"doc": {"id": 181,
     "text_german": 
@@ -133,7 +142,7 @@ The scores for terms like "warmeleitung" will be combined with the scores of the
 
 #### Example:  Disjoint result
 
-To show how different documents can be rated we also chose an example out of the disjoint results. Document `485` was found with the German Analyzer but not while using Decompunding.
+To show how different documents can be rated we also chose an example out of the disjoint results. Document `485` was found with the **German Analyzer** but not while using the **Dictionary Decompounder**.
 
 **German Analyzer:**
 "position": 0, "score": 15.4079075
@@ -189,7 +198,7 @@ Searched terms: Verbundplatte, Wärmeleitung
 ```
 
 
-**Decompunding:**
+**Dictionary Decompounder:**
 "position": not in k=20, "score": 7.976826
 
 ```json
@@ -262,7 +271,7 @@ warmeleitung, verbundplatt
 "weight(text_german:verbundplatt in 123) [PerFieldSimilarity], result of:"
 ```
 
-*Explain zu Decompounding:*
+*Explain zu **Dictionary Decompounder**:*
 
 Es wird das Maximum genommen, entweder von der Summe der Häufigkeiten der gefundenen Begriffe (hier Wärmeleitung und Verbundplatte) im Text oder im Titel Es wurde der Wert des Textes genommen
 
@@ -277,13 +286,19 @@ Es wurden zu viele unwichtige Begriffe gematcht
 
 ### LISA
 
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_lisa_decomposition_tp_fp_fn.png')}
+  class= "contents"
+/>
+
 *Example Query 10:* "ICH INTERESSIERE MICH FÜR INFORMATIONEN ÜBER DIE BEREITSTELLUNG AKTUELLER AWARENESS BULLETINS, INSBESONDERE SDI-DIENSTE IN BELIEBIGEN INSTITUTIONEN, Z.B. IN WISSENSCHAFTLICHEN BIBLIOTHEKEN, IN DER INDUSTRIE UND IN BELIEBIGEN THEMENBEREICHEN.  SDI, SELEKTIVE INFORMATIONSVERBREITUNG, CURRENT AWARENESS BULLETINS, INFORMATION BULLETINS."
 
 There are **14 relevant documents** for this Query here are the true positives, false positives and false negatives distributions:
 
 |                     |          | true positives | false positives | false negatives |
 |---------------------|----------|----------------|-----------------|-----------------|
-| **Decompounding**   | total    | 5              | 15              | 9               |
+| **Dictionary Decompounder**  | total    | 5              | 15              | 9               |
 |                     | disjoint | 0              | 7               | 5               |
 | **German Analyzer** | total    | 10             | 10              | 4               |
 |                     | disjoint | 5              | 2               | 0               |
@@ -293,7 +308,7 @@ There are **14 relevant documents** for this Query here are the true positives, 
 
 The chosen document for comparing decompounding and german analyzer on LISA corpus is `5801`. This example does appear in both results and isn't matched that differently: 
 
-|                        | **German Analyzer**                                        | **Decompounding**                                                       |
+|                        | **German Analyzer**                                        | **Dictionary Decompounder**                                                      |
 |------------------------|------------------------------------------------------------|-------------------------------------------------------------------------|
 | position               | 2                                                          | 10                                                                      |
 | score                  | 39.544914                                                  | 40.788223                                                               |
@@ -381,7 +396,7 @@ Searched terms: aktull, current, selektiv, wissenschaftlich, bibliothek, awarene
 }
 ```
 
-**Decompounding:**<br></br>
+**Dictionary Decompounder:**<br></br>
 ```json
 {"doc": {"id": 5801,
    "text_german": "PRÄSENTIERT EINEN HISTORISCHEN RÜCKBLICK AUF DIE SELEKTIVE VERBREITUNG VON INFORMATIONEN ALS EIN AKTUELLES BEWUSSTSEINS-SYSTEM, DIE NOTWENDIGKEIT DAFÜR UND EINIGE PRAKTISCHE VORSCHLÄGE FÜR SEINE EINFÜHRUNG. BEISPIELE WERDEN SOWOHL AUS SPEZIAL- ALS AUCH AUS WISSENSCHAFTLICHEN BIBLIOTHEKEN HERANGEZOGEN.VERSUCHE, ENTWÜRFE FÜR EINEN CURRENT-AWARENESS-SERVICE IN DER KASHIMIBRAHIM-BIBLIOTHEK, AHMADU-BELLO-UNIVERSITÄT, ZU ERSTELLEN.",
@@ -518,7 +533,7 @@ Searched terms: breit, formation, information, informationsverbreitung, reit, ve
    "score": 29.713594}
 ```
 
-**Decompounding:**
+**Dictionary Decompounder:**
 "position": -1, "score": 1.8253653
 ```json
 {"doc": {"id": 770}, 
@@ -532,5 +547,5 @@ Searched terms: breit, formation, information, informationsverbreitung, reit, ve
 
 *Explain zu German Analyzer:*
 
-*Explain zu Decompounding:*
+*Explain zu **Dictionary Decompounder**:*
 
