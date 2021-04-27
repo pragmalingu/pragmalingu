@@ -11,15 +11,17 @@ import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from '../doc.css';
 
 ## 1. What is Stemming?
-Stemming is the process of removing the alternating endings from words. The words **fish**, **fishing**, **fished** would all be recuded to their common word stem **fish**. 
+Stemming is the process of removing the alternating endings from words.  
+The words **fish**, **fishing**, **fished** would all be reduced to their common word stem **fish**. 
 This stem is then stored in the inverted index of the search engine instead of the original word at that position. 
-When you search with either of the original words, your query is also stemmed and the search engine can find all documents that contain any of the documents containing words with the same stem.  
+When you search with either of the original words, your query is also stemmed and the search engine can find all documents that contain words with the same stem.  
 
 There are two common approaches to implement stemming in search engines.  
 
 
 ### Algorithmic Stemming
-The [Porter stemming alogrithm](https://snowballstem.org/algorithms/porter/stemmer.html) create by [Martin Porter](https://en.wikipedia.org/wiki/Martin_Porter) is one of the most popular algorithmic stemmers and used by default in the built in [language analyzers](https://www.elastic.co/guide/en/elasticsearch/reference/7.12/analysis-stemmer-tokenfilter.html) in Elasticsearch.
+The [Porter stemming alogrithm](https://snowballstem.org/algorithms/porter/stemmer.html) created by [Martin Porter](https://en.wikipedia.org/wiki/Martin_Porter) is one of the most popular algorithmic stemmers 
+and used by default in the built in [language analyzers](https://www.elastic.co/guide/en/elasticsearch/reference/7.12/analysis-stemmer-tokenfilter.html) in Elasticsearch.
 Algorithmic stemmers are very fast and don't need alot of memory, because they only apply a set of rules, that represent the common rules how words are [inflected](https://en.wikipedia.org/wiki/Inflection) in a specific language.  
 Because there are always exeptions to a rule, an algorithmic stemmer might produce the same stem for words that have different meanings.
 This error is called **overstemming**. 
@@ -27,16 +29,16 @@ Another error that can happen is called **understemming** and happens when two i
 
 ### Dictionary Based Stemming
 The second common approach to stemming is [dictionary based stemming](https://www.elastic.co/guide/en/elasticsearch/reference/current/stemming.html#dictionary-stemmers).
-Dictionary stemmers look up words in a dictionary before removing their inflected endings and reducing them to their stem.
+Dictionary stemmers look up words in a dictionary before they remove their inflected endings and reduce them to their stem.
 Dictionary stemmers should work better on iregular words or words that are similar but have different meanings.
-In theory dictionary stemmers should be able to reduce over and understemming and lead to better results that algorithmic stemmers.
-In practice they often perform worse that algorithmic stemmers, because the freely available dictionaries are missing important words or are outdated.
+They also should be able to reduce over and understemming and lead to better results than algorithmic stemmers.
+In practice they often perform worse than algorithmic stemmers, because the freely available dictionaries are missing important words or are outdated.
 Dictionary stemmers also have the draw back that their are slower and require more memory because they have to lookup all words in their dictionary.
 
 ### Comparison
 In this comparison we are answering the following questions:
 - How much does the relevancy of search results improve by using a stemmer?
-- How good is the hunspell stemmer include in Elasticsearch performing with a free dictionary?
+- How good is the in Elasticsearch included hunspell stemmer performing with a free dictionary?
 
 ## 2. Results
 The following are the results from our [first Experiment](/docs/experiments/experiment1). You can reproduce these results yourself if you follow the instructions on our [experiment section](/docs/experiments/).
@@ -50,15 +52,28 @@ This is the simplest way to balance both Precision and Recall, there are also ot
 </details> 
 <img alt="F1-Score" src={useBaseUrl('img/EXP1_F1-Score.png')} />
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Gm1Aej_-T9e0"><button class="buttons" >Run it in Google Colab</button></a>
+<br />
+<br />
+
 
 On all evaluation datasets except NPL, the algorithmic stemmer outperformed the standard analyzer as well as the hunspell token filter.
+The achieved F1-Score gains over the standard analyzer in percentage points can be seen here:
 
+<img alt="F1-Score Gains" src={useBaseUrl('img/EXP1_F1-Score_Gains.png')} />
+<br /><br />
+Depending on the use-case algorithmic stemming can lead to a 20% improvement in search result relevancy.
+Hunspell stemming performs worse than algorithmic stemming on nearly all datasets and can even lead to worse results than no stemming.
+
+The average F1-Score gains over all datasets are:
+
+<img alt="F1-Score Gains" src={useBaseUrl('img/EXP1_F1-Score_Avg_Gains.png')} />
+
+Using the stemmer token filter on english documents can therefore improve the f1 score by 10% on average.
 
 ### Discussion
-What are the biggest differences in precision and recall between our approaches and how can we explain them?
 
 Looking at the f1 score fom our approaches we can see that both stemming approaches perform better than the standard baseline on most datasets.
-Algorithmic stemming performs better than the standard analyzer on all datasets, it has the biggest gain on the LISA and NPL datasets.
+Algorithmic stemming performs better than the standard analyzer on all datasets, it has the biggest gains on the CACM and NPL datasets.
 Hunspell stemming performs worse than algorithmic stemming on most datasets except NPL where it performs slighlty better.
 Hunspell stemming performs worse than the standard analyzer on the medline dataset.
 
@@ -69,15 +84,12 @@ The are a list of interesting questions that we can ask by just looking at these
 3.   Why is hunspell stemming performing worse that the standard analyzer on the Medline dataset?
 4.   Why is hunspell stemming performing better that the algorithmic stemmer on the NPL dataset?
 
-To break down these results on the individual querys and finnally word matches and to analze under and over stemming that leads to these results, 
-we need to first look at the precision and recall scores individually and then extract the false positives and negatives that lead to these results and analyse them.
+We will try to answer these questions by breaking down the results on the individual query and word matches.
 
+#### Algorithmic stemming improvements
 
-#### 1. Algorithmic stemming improvements 
+We first use our search analysis tool to figure out the queries that demonstrate the biggest f1-score gains with the stemmer token filter.
 
-Stemmer 
-(NPL both improvements)
-Why is hunspell stemming performing better on the NPL dataset
 
 ##### Example 1:
 Query: FAST TRANSISTOR COUNTERS
