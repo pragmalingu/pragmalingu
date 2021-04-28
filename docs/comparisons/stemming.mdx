@@ -89,89 +89,48 @@ We will try to answer these questions by breaking down the results on the indivi
 #### Algorithmic stemming improvements
 
 We first use our search analysis tool to figure out the queries that demonstrate the biggest f1-score gains with the stemmer token filter.
+The three queries with the biggest fscore difference are 62, 73 and 52. We are will be looking at query 62:
 
 
-##### Example 1:
-Query: FAST TRANSISTOR COUNTERS
+Query: *FAST TRANSISTOR COUNTERS*
 
-Text of relevant document: 
-'nonsaturating pulse circuits using two junction transistors  
-junction transistors are found to be fast enough for pulse applications if the collector voltage is prevented from reaching zero 
-switching times can be achieved with available types  
-the required limiting action is effected by introducing diodes which terminate the switching transients by their breakdown  
-a two transistor binary counter is described'
+We first look at the disjoint true positives sets of the query results for both the algorithmic stemmer and standard analyzer. 
+The highest ranked document for the algorithmic stemmer that is not present in the top k (20) result set of the standard analyzer is document nr. 8341.
 
-Stemming Hits: 
-'nonsaturating pulse circuits using two junction <em>transistors</em>  junction <em>transistors</em> are found to be <em>fast</em> (...)  a two <em>transistor</em> binary <em>counter</em> is described'
-Score: 12.49
-Position: 2
-```
-{
-    "score": 12.492224,
-    "text": {
-        "total_value": 4.3146806,
-        "details": [
-            {
-                "function": {
-                    "value": 4.3146806,
-                    "description": "weight(text:fast in 8393) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 84,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 4.224553,
-                    "description": "weight(text:transistor in 8393) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 640,
-                    "freq, occurrences of term within document": 3.0
-                }
-            },
-            {
-                "function": {
-                    "value": 3.9529896,
-                    "description": "weight(text:counter in 8393) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 127,
-                    "freq, occurrences of term within document": 1.0
-                }
-            }
-        ]
-    }
-}
-```
+The text of relevant document is: 
+> nonsaturating pulse circuits using two junction transistors junction transistors are found to be fast enough for pulse applications if the collector voltage is 
+> prevented from reaching zero switching times can be achieved with available types the required limiting action is effected by introducing diodes which terminate 
+> the switching transients by their breakdown a two transistor binary counter is described
+
+For the **algorithmic stemmer** the document is at position **2** and returns the following highlighted text:
+> nonsaturating pulse circuits using two junction **transistors**  junction **transistors** are found to be **fast** (...)  a two **transistor** binary **counter** is described
+
+The overall document score of **12.49** is the some of these individual word scores:
+
+|Word   | Score   | Term Frequency   | Document Frequency |
+|-------|---------|------------------|--------------------|
+|fast   | 4.31    | 1                | 84                 |
+|transistor | 4.22| 3                | 640                |
+|counter   | 3.95 | 1                | 127                |
 
 
 
-Normal Hits: 
-'nonsaturating pulse circuits using two junction transistors  junction transistors are found to be <em>fast</em> is effected by introducing diodes which terminate the switching transients by their breakdown  a two <em>transistor</em>'
-Score: 7.10
-Position: 33
-```
-{
-    "score": 7.102995,
-    "text": {
-        "total_value": 4.3146806,
-        "details": [
-            {
-                "function": {
-                    "value": 4.3146806,
-                    "description": "weight(text:fast in 8305) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 84,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 2.7883143,
-                    "description": "weight(text:transistor in 8305) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 479,
-                    "freq, occurrences of term within document": 1.0
-                }
-            }
-        ]
-    }
-}
-```
+
+For the **standard analyzer** the same document is at position **33** and returns the following highlighted text:
+> nonsaturating pulse circuits using two junction transistors  junction transistors are found to be **fast** is effected by introducing diodes which terminate the switching transients by their breakdown  a two **transistor**
+
+The overall document score of **7.10** is the sum of these individual word scores:
+
+|Word   | Score   | Term Frequency   | Document Frequency |
+|-------|---------|------------------|--------------------|
+|fast   | 4.31    | 1                | 84                 |
+|transistor | 2.78| 1                | 479                |
+
+We can see that for the standard analyzer the inflected word **counters** is not matched with the word **counter** in the document. 
+The occurences of the word **transistors** is also not matched with the stem **transistor** used in the query and therefore the term frequency and score of the word is lower.
+The document frequency is also lower, which normally leads to higher score, but cannot make up for the lower term frequency in this instance.
+<img alt="F1-Score Gains" src={useBaseUrl('img/EXP1_Query_62_explain.svg')} />
+
 
 ##### Example 2:
 Query: I WISH TO HAVE DATA ABOUT THE DESIGN OF MECHANICAL BAND PASS FILTERS FOR GOOD PASS CHARACTERISTICS
