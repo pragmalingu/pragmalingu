@@ -11,16 +11,15 @@
     "clear": "docusaurus clear"
   },
   "dependencies": {
-    "@docusaurus/core": "^2.0.0-alpha.71",
-    "@docusaurus/preset-classic": "^2.0.0-alpha.71",
-    "@docusaurus/theme-live-codeblock": "^2.0.0-alpha.71",
+    "@docusaurus/core": "^2.0.0-alpha.73",
+    "@docusaurus/preset-classic": "^2.0.0-alpha.73",
+    "@docusaurus/theme-live-codeblock": "^2.0.0-alpha.73",
     "clsx": "^1.1.1",
     "prism-react-renderer": "^1.2.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-mailto": "^0.4.0",
     "react-mailto.js": "^2.2.2",
-    "react-native-autolink": "^3.0.0",
     "react-protected-mailto": "^1.0.3"
   },
   "browserslist": {
