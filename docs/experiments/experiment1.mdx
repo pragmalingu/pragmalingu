@@ -218,8 +218,12 @@ Recall measures the probability that relevant documents are retrieved. Therefore
 8 of which are relevant to our search and 4 of these are retrieved, then the Recall measure would be 4/8 = 0.5.
 
 To measure Recall it is necessary to have the relevant documents labeled. Recall only looks at relevant documents that were retrieved and does not take into account any irrelevant documents which may have been retrieved.
-</details>  
-<img alt="Recall" src={useBaseUrl('img/EXP1_Recall.png')} />
+</details> 
+<img
+  alt="Recall"
+  src={useBaseUrl('img/EXP1_Recall.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=CemuLaUAMHKP"><button class="buttons" >Run it in Google Colab</button></a>
 <br/><br/>
 
@@ -231,7 +235,11 @@ For example if we retrieve 10 search results and only 5 are relevant for our sea
 
 To measure the Precision it is necessary to have the relevant documents labeled as such. Precision only looks at the documents that are retrieved and does not account for relevant documents which were not retrieved.
 </details> 
-<img alt="Precision" src={useBaseUrl('img/EXP1_Precision.png')} />
+<img
+  alt="Recall"
+  src={useBaseUrl('img/EXP1_Precision.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=kJbezFbtMVp3"><button class="buttons" >Run it in Google Colab</button></a>
 <br/><br/>  
 
@@ -242,7 +250,11 @@ The F1-Score measures a harmonic mean between Precision and Recall. Therefore we
 `F1-Score=(2*Precision*Recall)/(Precision+Recall)`
 This is the simplest way to balance both Precision and Recall, there are also other common options to weight them differently.
 </details> 
-<img alt="F1-Score" src={useBaseUrl('img/EXP1_F1-Score.png')} />
+<img
+  alt="Recall"
+  src={useBaseUrl('img/EXP1_FScore.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Gm1Aej_-T9e0"><button class="buttons" >Run it in Google Colab</button></a>
 <br/><br/>
 
