@@ -1,0 +1,39 @@
+---
+id: decompounding-adi
+title: German Decompounding
+sidebar_label: Decompounder - Standard vs. German Analyzer
+custom_edit_url: null
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl'
+import styles from '../doc.css';
+
+- Beispiel **Query 21** F-Score diff 0,416
+- gleiche tp beide 4 von 4
+- wobei standard noch 12 unrelevante findet, insgesamt 19
+- german Analyzer findet nur 7 insgesamt davon 4 relevant
+- Reihenfolge ist auch interessant, standard hat 1,2,3,4,7 und german 1,2,3,4,6 also ein irrelevantes weniger zwsichen den relevanten ergebnissen
+- vermutung: es liegt an der stopword liste
+- im standard werden zb 'die' sehr viel gemacht und gescored, im german werden stopwörter ignoriert
+- bsp doc id 3 hier wird der score allerdings beim standard höher berechnet, allgemein sind die scores beim standard höher was wahrscheinlich auch zu mehr noise führt
+
+- weiteres Beispiel **Query 20** Fscore diff 0,309
+- hier wird ein tp mehr gefunden
+- standard 1 von 3
+- german 2 von 3
+- beispiel doc 80 haben beide gefunden
+- standard hat es auf pos 3 und german auf pos 1 aber score ist tatsächlich wieder höher beim standard 
+=> german Analyzer scheint tatsächlich alle dokumente schlechter zu scoren => findet aber dadurch bessere ergebnisse
+beispiel doc 65 wird nur vom german analyzer gefunden, score ist auch 10mal höher, standard scheint durch fehlendes tokenizieren 'tests' nicht zu finden von 'testen' findet nur das Wort 'von' im titel
+
+CACM
+
+- hier ist das noch extremer 
+- **Query 10**
+- standard 1 von 35
+- german 15 von 35
+- überschneidendes doc 2851 standard po 9 german pos 14
+- ABER german scored es höher als der standard
+- 1262 ist bei german an pos 1
+- bei standard deutlich niedriger gescored und nur 'parallel' und 'für' gefunden
+- bei german 'parallel' und 'sprach'
