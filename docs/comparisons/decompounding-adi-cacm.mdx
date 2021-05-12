@@ -1,5 +1,5 @@
 ---
-id: decompounding-adi
+id: decompounding-adi-cacm
 title: German Decompounding
 sidebar_label: Decompounder - Standard vs. German Analyzer
 custom_edit_url: null
@@ -8,32 +8,215 @@ custom_edit_url: null
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from '../doc.css';
 
-- Beispiel **Query 21** F-Score diff 0,416
-- gleiche tp beide 4 von 4
-- wobei standard noch 12 unrelevante findet, insgesamt 19
-- german Analyzer findet nur 7 insgesamt davon 4 relevant
-- Reihenfolge ist auch interessant, standard hat 1,2,3,4,7 und german 1,2,3,4,6 also ein irrelevantes weniger zwsichen den relevanten ergebnissen
-- vermutung: es liegt an der stopword liste
-- im standard werden zb 'die' sehr viel gemacht und gescored, im german werden stopwörter ignoriert
-- bsp doc id 3 hier wird der score allerdings beim standard höher berechnet, allgemein sind die scores beim standard höher was wahrscheinlich auch zu mehr noise führt
+## Why is the German Analyzer significantly better than the Standard Analyzer?
 
-- weiteres Beispiel **Query 20** Fscore diff 0,309
-- hier wird ein tp mehr gefunden
-- standard 1 von 3
-- german 2 von 3
-- beispiel doc 80 haben beide gefunden
-- standard hat es auf pos 3 und german auf pos 1 aber score ist tatsächlich wieder höher beim standard 
-=> german Analyzer scheint tatsächlich alle dokumente schlechter zu scoren => findet aber dadurch bessere ergebnisse
-beispiel doc 65 wird nur vom german analyzer gefunden, score ist auch 10mal höher, standard scheint durch fehlendes tokenizieren 'tests' nicht zu finden von 'testen' findet nur das Wort 'von' im titel
+While experimenting the scores for the **Standard Analyzer** always exceeded the scores of the **German Analyzer** and on some, like CACM or LISA, there was a increase of nearly 50%, even around 80% with the ADI:
 
-CACM
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_Gains.svg')}
+  class= "contents"
+/>
 
-- hier ist das noch extremer 
-- **Query 10**
-- standard 1 von 35
-- german 15 von 35
-- überschneidendes doc 2851 standard po 9 german pos 14
-- ABER german scored es höher als der standard
-- 1262 ist bei german an pos 1
-- bei standard deutlich niedriger gescored und nur 'parallel' und 'für' gefunden
-- bei german 'parallel' und 'sprach'
+At first this seemed a bit odd, so we looked a bit more into it. While analyzing especially the ADI and the CACM we discovered that the [**Standard Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html) finds more documents that the [**German Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#german-analyzer) which increases the document frequency and therefore returns way more irrelevant documents. 
+The reason here fore is the stop word list that is used. The **Standard Analyzer** doesn't consider any german stop words, while the **German Analyzer** works with a very [rich stop word list.](https://github.com/apache/lucene/blob/main/lucene/analysis/common/src/resources/org/apache/lucene/analysis/snowball/german_stop.txt) Below you can find two more detailed examples, one from the ADI and one from the CACM, that illustrate this phenomenon 
+
+**Example ADI**
+
+As a good example for the decrease in irrelevant retrieval in the ADI corpus would be **Query 21**, the F1-Score difference between the **Standard Analyzer** and the **German Analyzer** is `0,416`.
+
+*Example Query 21:* " Die Notwendigkeit, Personal für den Informationsbereich bereitzustellen."
+
+It's a relatively short query which has only 5 relevant documents, which are found by both approaches. The main difference can be seen while looking at the false positives:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_ADI_distributions_21.svg')}
+  class= "contents"
+/>
+
+As an example document to compare the scores in detail we chose the document `21` because the **Standard Analyzer** ranked it lower than the **German Analyzer** even though the scores were nearly the same.
+
+|                                |  score       | position |
+|--------------------------------|--------------|----------|
+| **Standard Analyzer**          | 2.9156718    |     6    |
+| **German Analyzer**            | 2.9190629    |     7    |
+
+It seems that other documents like `38` where scored higher because there were matching stop words like `die` and `für`in it:
+
+```json
+[
+  {
+    "doc": {
+      "id": 38,
+      "text_german": " Mikrodruck hat sich in einem Experiment der Wildlife Disease Association als akzeptables Publikationsmedium erwiesen . mit Autorenkomposition kostet etwas mehr als sieben Cent pro 3 x 5-Zoll-Karte, bis zu 47 Seiten . die Notwendigkeit für die Entwicklung von Standards und die Verbesserung von Zubehör-Abrufgeräten wird erkannt.",
+      "title_german": " Mikrodruck hat sich in einem Experiment der Wildlife Disease Association als akzeptables Publikationsmedium erwiesen . mit Autorenkomposition kostet etwas mehr als sieben Cent pro 3 x 5-Zoll-Karte, bis zu 47 Seiten . die Notwendigkeit für die Entwicklung von Standards und die Verbesserung von Zubehör-Abrufgeräten wird erkannt."
+    },
+    "highlight": {
+      "text_german": [
+        ". mit Autorenkomposition kostet etwas mehr als sieben Cent pro 3 x 5-Zoll-Karte, bis zu 47 Seiten . <em>die</em>",
+        "<em>Notwendigkeit</em> <em>für</em> <em>die</em> Entwicklung von Standards und <em>die</em> Verbesserung von Zubehör-Abrufgeräten wird erkannt"
+      ],
+      "title_german": [
+        ". mit Autorenkomposition kostet etwas mehr als sieben Cent pro 3 x 5-Zoll-Karte, bis zu 47 Seiten . <em>die</em>",
+        "<em>Notwendigkeit</em> <em>für</em> <em>die</em> Entwicklung von Standards und <em>die</em> Verbesserung von Zubehör-Abrufgeräten wird erkannt"
+      ]
+    },
+    "position": 5,
+    "score": 3.8836367
+  }
+```
+The average scores returned from the **Standard Analyzer** are higher than the scores returned by the **German Analyzer** but since the **Standard Analyzer** always returns a lot of noise with it, it gets worse results when you look at the average scores over all queries.
+
+But the **Standard Analyzer** isn't always better at scoring. Since it only searches on the given terms without tokenization, it sometimes scores significantly worse.
+A good example for that can be found in **Query 20** - "Testen von automatisierten Informationssystemen.":
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_ADI_distributions_20.svg')}
+  class= "contents"
+/>
+
+There are 3 relevant documents, only 1 is found by the **Standard Analyzer** and 2 are found by the **German Analyzer**. And since the false positive rate is also higher with the first approach, this weights even more.
+
+If you look at document `65`, which is only matched by the **German Analyzer**, you can see that it is scored 10 times by the second approach than by the **Standard Analyzer**:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_ADI_20_65.svg')}
+  class= "contents"
+/>
+
+Query: "Testen von automatisierten Informationssystemen."
+
+That is because it finds words while tokenizing which can't be found otherwise.
+**Explaination of Standard Analyzer match**:
+```json
+{
+    "score": 0.3869483,
+    "text_german": {
+        "total_value": 0.3869483,
+        "details": [
+            {
+                "function": {
+                    "value": 0.3869483,
+                    "description": "weight(text_german:von in 21) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 57,
+                    "freq, occurrences of term within document": 1.0
+                }
+            }
+        ]
+    },
+    "title_german": {
+        "total_value": 0.3869483,
+        "details": [
+            {
+                "function": {
+                    "value": 0.3869483,
+                    "description": "weight(title_german:von in 21) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 57,
+                    "freq, occurrences of term within document": 1.0
+                }
+            }
+        ]
+    }}
+```
+
+**Explaination of German Analyzer match**:
+```json
+{
+    "score": 3.3748484,
+    "text_german": {
+        "total_value": 3.3748484,
+        "details": [
+            {
+                "function": {
+                    "value": 3.3748484,
+                    "description": "weight(text_german:test in 21) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 3,
+                    "freq, occurrences of term within document": 1.0
+                }
+            }
+        ]
+    },
+    "title_german": {
+        "total_value": 3.3748484,
+        "details": [
+            {
+                "function": {
+                    "value": 3.3748484,
+                    "description": "weight(title_german:test in 21) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 3,
+                    "freq, occurrences of term within document": 1.0
+                }
+            }
+        ]
+    }
+}
+```
+
+With this example we can see, that the **Standard Analyzer** only matches `von` which is filtered by the stop word list in the second approach and doesn't match `test` because the word `Testen` isn't tokenized. 
+It seems like the effect of tokenization and stop words are extremely relevant in german information retrieval.
+
+**Example CACM**
+
+To undermine this conclusion let's look at one more example from the CACM. 
+*Example Query 10*:
+Overall we can see that the **German Analyzer** does find significantly more true positives than the **Standard Analyzer**:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_CACM_distributions_10.svg')}
+  class= "contents"
+/>
+
+The first approach only returns 1 out of 35 relevant documents while the second approach returns 15.
+When we look more detailed on search terms of the one document `2851` that was found in both approaches, then wie can see, that once again tokenization does do the trick:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_cacm_10_2851.svg')}
+  class= "contents"
+/>
+
+Although the scoring of the **German Analyzer** is higher than the scoring of the **Standard Analyzer**, it has a lower position in the ranking. This is because there were other relevant documents in the second approach that had an even better term scoring. For example document `1262` which was on position 1 with the second approach, but only at the 65 position with the first:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_cacm_10_1262.svg')}
+  class= "contents"
+/>
+
+When we look at the highlights of both approaches and which terms are matches, we can see that the main different between them is, that the second approach matches `sprach` instead of `für`. Since `für` is a very common stop word in german the documents frequency of this term decreases the score a lot. 
+
+**Standard Analyzer**
+```json
+{"_id": "1262",
+ "_index": "pragmalingu-cacm-german-corpus",
+ "_score": 7.32441,
+ "_source": {"text_german": "Es werden zwei Anweisungen vorgeschlagen, die es einem Programmierer erlauben der in einer prozedurorientierten Sprache schreibt Programmabschnitte anzugeben, die parallel ausgeführt werden sollen. parallel ausgeführt werden sollen.  Die Anweisungen sind DO TOGETHER und HOLD.  Sie dienen einerseits als Klammern zur Festlegung einen Bereich für den Parallelbetrieb festzulegen und teilweise jeden parallelen Pfad innerhalb dieses Bereichs zu definieren.  DO TOGETHERs können verschachtelt werden.  Die Anweisungen sollten besonders besonders effektiv für die Verwendung mit Rechengeräten sein, die in der Lage sind, ein gewisses Maß an Überlappung von Rechenoperationen zu erreichen. ",
+  "title_german": "Prozedur-orientierte Sprachanweisungen zur Erleichterung der Parallelverarbeitung"},
+ "_type": "_doc",
+ "highlight": {"text_german": ["Programmierer erlauben der in einer prozedurorientierten Sprache schreibt Programmabschnitte anzugeben, die <em>parallel</em>",
+   "ausgeführt werden sollen. <em>parallel</em> ausgeführt werden sollen.",
+   "Sie dienen einerseits als Klammern zur Festlegung einen Bereich <em>für</em> den Parallelbetrieb festzulegen und",
+   "Die Anweisungen sollten besonders besonders effektiv <em>für</em> die Verwendung mit Rechengeräten sein, die in"]}}
+```
+
+**German Analyzer**
+```json
+{"question": " Parallele Sprachen; Sprachen für paralleles Rechnen .N  10. Alec Grimison, Comp Serv, Uris Hall (parallel lang)   ",
+ "true_positives": [{"doc": {"id": 1262,
+    "text_german": "Es werden zwei Anweisungen vorgeschlagen, die es einem Programmierer erlauben der in einer prozedurorientierten Sprache schreibt Programmabschnitte anzugeben, die parallel ausgeführt werden sollen. parallel ausgeführt werden sollen.  Die Anweisungen sind DO TOGETHER und HOLD.  Sie dienen einerseits als Klammern zur Festlegung einen Bereich für den Parallelbetrieb festzulegen und teilweise jeden parallelen Pfad innerhalb dieses Bereichs zu definieren.  DO TOGETHERs können verschachtelt werden.  Die Anweisungen sollten besonders besonders effektiv für die Verwendung mit Rechengeräten sein, die in der Lage sind, ein gewisses Maß an Überlappung von Rechenoperationen zu erreichen. ",
+    "title_german": "Prozedur-orientierte Sprachanweisungen zur Erleichterung der Parallelverarbeitung"},
+   "highlight": {"text_german": ["zwei Anweisungen vorgeschlagen, die es einem Programmierer erlauben der in einer prozedurorientierten <em>Sprache</em>",
+     "schreibt Programmabschnitte anzugeben, die <em>parallel</em> ausgeführt werden sollen. <em>parallel</em> ausgeführt werden",
+     "einerseits als Klammern zur Festlegung einen Bereich für den Parallelbetrieb festzulegen und teilweise jeden <em>parallelen</em>"]},
+   "position": 1,
+   "score": 22.625546}]}
+```
+
+**Conclusion**
+
+Since German contains significantly more semantically empty words that do not contribute any content value to the search, it is very important to include stop words in the search parameters, especially in German.
+This way, you can avoid too many irrelevant documents getting returned that might suppress relevant search results.
