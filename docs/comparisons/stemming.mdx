@@ -69,7 +69,7 @@ The average F1-Score gains over all datasets are:
 
 Using the stemmer token filter on english documents can therefore improve the f1 score by 10% on average.
 
-### Discussion
+## 3. Discussion
 
 Looking at the f1 score fom our approaches we can see that both stemming approaches perform better than the standard baseline on most datasets.
 Algorithmic stemming performs better than the standard analyzer on all datasets, it has the biggest gains on the CACM and NPL datasets.
@@ -79,19 +79,22 @@ Hunspell stemming performs worse than the standard analyzer on the medline datas
 The are a list of interesting questions that we can ask by just looking at these results:
 
 1.   Why is algorithmic stemming performing better than the standard analyzer?
-2.   Why is algorithmic stemming performing better that hunspell stemming?
+2.   Why is algorithmic stemming performing better than hunspell stemming?
 3.   Why is hunspell stemming performing worse that the standard analyzer on the Medline dataset?
 4.   Why is hunspell stemming performing better that the algorithmic stemmer on the NPL dataset?
 
 We will try to answer these questions by breaking down the results on the individual query and word matches.
 
-#### Algorithmic stemming improvements
+### Algorithmic stemming vs standard analyzer
+We see from the gains figure that algorithmic stemming performs better than the standard analyzer on all testet datasets.
+But how does the algorithmic stemmer achieve these results in practice?
 
 We first use our search analysis tool to figure out the queries that demonstrate the biggest f1-score gains with the stemmer token filter.
-The three queries with the biggest fscore difference are 62, 73 and 52. We are will be looking at query 62:
+The three queries with the biggest fscore difference are 62, 73 and 52. We will be looking at query 62:
 
 
-Query: *FAST TRANSISTOR COUNTERS*
+
+Query 62: *FAST TRANSISTOR COUNTERS*
 
 We first look at the disjoint true positives sets of the query results for both the algorithmic stemmer and standard analyzer. 
 The highest ranked document for the algorithmic stemmer that is not present in the top k (20) result set of the standard analyzer is document nr. 8341.
@@ -131,7 +134,10 @@ The document frequency is also lower, which normally leads to higher score, but 
 <img alt="F1-Score Gains" src={useBaseUrl('img/EXP1_Query_62_explain.svg')} />
 
 
-##### Example 2:
+### Algorithmic vs Hunspell stemming:
+
+
+
 Query: I WISH TO HAVE DATA ABOUT THE DESIGN OF MECHANICAL BAND PASS FILTERS FOR GOOD PASS CHARACTERISTICS
 
 Text: electromechanical quadripoles as coupling filters  
