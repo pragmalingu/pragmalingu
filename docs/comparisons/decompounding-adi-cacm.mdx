@@ -10,7 +10,7 @@ import styles from '../doc.css';
 
 ## Why is the German Analyzer significantly better than the Standard Analyzer?
 
-While experimenting the scores for the **Standard Analyzer** always exceeded the scores of the **German Analyzer** and on some, like CACM or LISA, there was a increase of nearly 50%, even around 80% with the ADI:
+While experimenting the scores for the **German Analyzer** always exceeded the scores of the **Standard Analyzer** and on some, like CACM or LISA, there was a increase of nearly 50%, even around 80% with the ADI:
 
 <img
   alt=""
@@ -68,7 +68,7 @@ It seems that other documents like `38` where scored higher because there were m
 ```
 The average scores returned from the **Standard Analyzer** are higher than the scores returned by the **German Analyzer** but since the **Standard Analyzer** always returns a lot of noise with it, it gets worse results when you look at the average scores over all queries.
 
-But the **Standard Analyzer** isn't always better at scoring. Since it only searches on the given terms without tokenization, it sometimes scores significantly worse.
+But the **Standard Analyzer** isn't always better at scoring. Since it only searches on the given terms without stemming, it sometimes scores significantly worse.
 A good example for that can be found in **Query 20** - "Testen von automatisierten Informationssystemen.":
 
 <img
@@ -89,7 +89,7 @@ If you look at document `65`, which is only matched by the **German Analyzer**, 
 
 Query: "Testen von automatisierten Informationssystemen."
 
-That is because it finds words while tokenizing which can't be found otherwise.
+That is because it finds words while stemming which can't be found otherwise.
 **Explaination of Standard Analyzer match**:
 ```json
 {
@@ -155,12 +155,12 @@ That is because it finds words while tokenizing which can't be found otherwise.
 }
 ```
 
-With this example we can see, that the **Standard Analyzer** only matches `von` which is filtered by the stop word list in the second approach and doesn't match `test` because the word `Testen` isn't tokenized. 
-It seems like the effect of tokenization and stop words are extremely relevant in german information retrieval.
+With this example we can see, that the **Standard Analyzer** only matches `von` which is filtered by the stop word list in the second approach and doesn't match `test` because the word `Testen` isn't stemmed. 
+It seems like the effect of stemming and stop words are very relevant in german information retrieval.
 
 **Example CACM**
 
-To undermine this conclusion let's look at one more example from the CACM. 
+To support this conclusion let's look at one more example from the CACM. 
 *Example Query 10*:
 Overall we can see that the **German Analyzer** does find significantly more true positives than the **Standard Analyzer**:
 
@@ -171,7 +171,7 @@ Overall we can see that the **German Analyzer** does find significantly more tru
 />
 
 The first approach only returns 1 out of 35 relevant documents while the second approach returns 15.
-When we look more detailed on search terms of the one document `2851` that was found in both approaches, then wie can see, that once again tokenization does do the trick:
+When we look more detailed on search terms of the one document `2851` that was found in both approaches, then wie can see, that once again stemming does do the trick:
 
 <img
   alt=""
@@ -218,5 +218,5 @@ When we look at the highlights of both approaches and which terms are matches, w
 
 **Conclusion**
 
-Since German contains significantly more semantically empty words that do not contribute any content value to the search, it is very important to include stop words in the search parameters, especially in German.
-This way, you can avoid too many irrelevant documents getting returned that might suppress relevant search results.
+Our results suggest that since German contains significantly more semantically empty words that do not contribute any content value to the search, it might be very important to include stop words into the search parameters, especially in German.
+This way, you might avoid too many irrelevant documents getting returned that can suppress relevant search results.
