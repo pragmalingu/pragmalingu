@@ -1,0 +1,1073 @@
+---
+id: german-decomposition
+title: German Decomposition
+sidebar_label: Decomposition
+custom_edit_url: null
+---
+import useBaseUrl from '@docusaurus/useBaseUrl'
+import styles from '../doc.css';
+
+## 1. Introduction
+**Experiments on a german documents**
+
+Since German has some specific language features which English doesn't provide and that we believe could make a difference in the search result if taken into account, we decided to to work on german texts for this experiment. In order to keep the same corpora we used the [DeepL API](https://www.deepl.com/pro#developer) to translate all our documents and queries into german. For our first comparison on the german corpus we looked into splitting compound words using decomposition.
+
+**What is Composition?**
+
+In German, as in some other languages (e.g. Finnish, Dutch), it is possible to create a new word from two or more independent words by means of composition. Thereby, two or more words are combined into one word by so-called fugue elements (e.g.: -(e)s-, -e-, -(e)n-, -er-) to form a coherent word. English does not have this kind of composition, in most cases such word combinations are separated with a space or hyphen.
+
+Examples of composition in German would be:
+
+* "Kapitän" + "Mütze" => "Kapitänsmütze" (captain's cap)
+* "Apfel" + "Baum" => "Apfelbaum" (apple tree)
+* "Blumen" + "Topf" => "Blumentopf" (flower pot)
+
+
+With this technique an infinite number of words can be strung together. A classic example would be the "Donaudampfschifffahrtskapitänsmütze" (Danube steamboat captain's cap). The last word is always the carrier of meaning and determines both the grammatical gender and the primary meaning of the word. 
+
+Composition must be distinguished from derivation. In a derivation, a root word is changed in its part of speech by a grammatical affix (e.g. "Licht-ung"). In a composition, the original part of speech of the meaning-bearing second word is retained.  
+
+
+**What is the benefit of Decomposition?**
+
+Composition in languages with a rich morphology like German makes it possible to expand the vocabulary to an infinite level. This can cause problems in information retrieval. 
+
+For example, if you search for "Atomkraftwerk" (atomic power plant), you will also be interested in articles that deal with the more general topic of "Atomkraft" (atomic power). If you do not break down this composite in a search, it can quickly happen that relevant results are not found. On the other hand, too much decomposition can also result in too much irrelevant information being returned. In this example, articles that are only about "Kraft" (power) would be too allegorical in most cases and would not lead to the desired search result.
+
+To improve the IR performance it can be helpful to use linguistically motivated decomposition of compounded words. Other than in German, compounds in English are typically written as separate words and can therefore easily be found. 
+
+## 2. Approaches and Hypothesis
+
+We tried to compare two different decomposition approaches in Elasticsearch: 
+ * [**Dictionary Decompounder Token Filter**](https://www.elastic.co/guide/en/elasticsearch//reference/master/analysis-dict-decomp-tokenfilter.html): <br></br>
+ This approach uses dictionary to find subwords in compound words. If subwords are found those are included in the scoring of the documents. For example: If our dictionary includes "Donau" and "Dampfschiff" the search for "Donaudampfschiff" would search for "Donaudampfschiff", "Donau" and "dampfschiff". This should in theory perform better than a search only using the **Standard Analyzer**.
+
+* [**Hyphenation Decompounder Token Filter**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hyp-decomp-tokenfilter.html): <br></br> This approach uses XML-based hyphenation patterns to search for subwords in compound words and checks them against a specified dictionary to see if they are valid words. With that the search should get faster and more efficient than the Dictionary Decompounder, at least that's our theory.<br></br>
+
+
+To get a baseline to compare the results to we evaluated, we also searched with two more basic approaches:
+
+* [**Standard Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html):<br></br>
+This approach only provides grammar based tokenization while searching.
+
+* [**German Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#german-analyzer):<br></br> This approach performs basic stemming while searching and also excludes language specific stop words from the search.
+
+**Hypothesis:** Decomposition while using a dictionary, to look up possible compound words, should improve the search for retrieved documents including relevant documents, but it could be that more irrelevant documents are found too. The **Hyphenation Decompounder** should improve the **Dictionary Decompounder**.
+
+## 3. Results
+
+To compare our results properly we plotted Recall, Precision, and F1-Score for every method on every corpus.
+
+**Recall**
+<details>
+<summary>What is "Recall"?</summary>  
+Recall measures the probability that relevant documents are retrieved. Therefore, the number of all retrieved relevant documents is divided by the number of all documents that are labeled as relevant. For example, if we were to return 10 documents, 
+8 of which are relevant to our search and 4 of these are retrieved, then the Recall measure would be 4/8 = 0.5.
+
+To measure Recall it is necessary to have the relevant documents labeled. Recall only looks at relevant documents that were retrieved and does not take into account any irrelevant documents which may have been retrieved.
+</details>  
+<img
+  alt="Recall"
+  src={useBaseUrl('img/EXP3_Recall.svg')}
+  class= "contents"
+/>
+
+**Precision**
+<details>
+<summary>What is "Precision"?</summary>  
+Precision measures the probability that retrieved documents are relevant to the search query. Therefore, the number of all retrieved relevant documents is divided by the number of all retrieved documents.  
+For example if we retrieve 10 search results and only 5 are relevant for our search, the Precision measure would be: 5/10 = 0.5.
+
+To measure the Precision it is necessary to have the relevant documents labeled as such. Precision only looks at the documents that are retrieved and does not account for relevant documents which were not retrieved.
+</details> 
+<img
+  alt="Precision"
+  src={useBaseUrl('img/EXP3_Precision.svg')}
+  class= "contents"
+/>
+
+**F1-Score**
+<details>
+<summary>What is "F1-Score"?</summary>  
+The F1-Score measures a harmonic mean between Precision and Recall. Therefore we multiply Precision and Recall by two and divide it by the sum of Precision and Recall: <br />
+`F1-Score=(2*Precision*Recall)/(Precision+Recall)`
+This is the simplest way to balance both Precision and Recall, there are also other common options to weight them differently.
+</details> 
+<img
+  alt="F1-Score"
+  src={useBaseUrl('img/EXP3_Fscore.svg')}
+  class= "contents"
+/>
+
+For a better overview on how much each approach increased we also measured the gains using the **Standard Analyzer** values as a baseline:
+
+<img
+  alt="Gains"
+  src={useBaseUrl('img/EXP3_Gains.svg')}
+  class= "contents"
+/>
+
+## 4. Discussion
+
+### 4.1. German Analyzer vs. Dictionary & Hyphentation Decompounder
+
+**Examples why Decomposition works better than the German Analyzer**
+
+To compare the approaches with the **Standard German Analyzer**, the **Dictionary Decompounder** and the **Hyphenation Decompounder** we chose one query from the [NPL corpus](../guides/data-comparison#npl), that as an example.
+
+*Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
+
+There are **20 relevant documents** for this query and the top 20 results are returned.
+These are the true positives, false positives and false negatives distributions in comparison for each approach:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_npl_decomposition_tp_fp_fn.png')}
+  class= "contents"
+/>
+
+As an example document to compare the scores and searched terms in detail we chose the document `81` because the **Hyphenation Decompounder** scored it rightfully as top document.
+
+German Analyzer vs. Hyphenation Decompounder
+=============
+
+First of we compared the **Standard German Analyzer** with the **Hyphenation Decompounder**. 
+Below you can compare how many of the tp, fn and fp are overlapping:
+
+|                                |          | true positives | false positives | false negatives |
+|--------------------------------|----------|----------------|-----------------|-----------------|
+| **German Analyzer**            | total    |     2          | 18              | 18              |
+|                                | disjoint |     0          | 13              | 5               |
+| **Hyphenation Decompounder**  | total    |     7          | 13              | 13              |
+|                                | disjoint |     5          | 8               | 0               |
+
+When we try to explain why the **German Analyzer** works better than the **Hyphenation Decompounder** we have to look at the search results in detail.
+
+**German Analyzer**
+"position": out of k, "score": 3.3543134
+```json
+{
+        "_id" : "81",
+        "_score" : 3.3543134,
+        "_source" : {
+          "text_german" : "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von beobachtungen der flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im bereich"
+        },
+        "highlight" : {
+          "text_german" : [
+            "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von <em>beobachtungen</em>"
+          ]
+        }
+```
+
+
+**Hyphenation Decompounder**
+"position": 0, "score": 28.156767
+```json
+{
+  "doc": {
+    "id": 81,
+    "text_german": "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von beobachtungen der flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im bereich"
+  },
+  "highlight": {
+    "text_german": [
+      "<em>finsternisbeobachtungen</em> von <em>mikrowellenradioquellen</em> auf der <em>sonnenscheibe</em> im april ergebnisse von <em>beobachtungen</em>",
+      "flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im <em>bereich</em>"
+    ]
+  }
+}
+```
+
+As we can see in this table the searched terms and therefore the scores diverge widely:
+
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_npl_hyph_anal_terms.png')}
+  class= "contents"
+/>
+
+
+Here you can find a list of all the searched terms for each approach and their frequencies per document as well as in how many documents they were found:
+
+| **German Analyzer** |              |                |            |                 **Hyphenation Decompounder**                |              |                |            |
+|-------------------|--------------|----------------|------------|:---------------------------------------------------------:|--------------|----------------|------------|
+|                   | term   score | term   per doc | doc   freq |                                                           | term   score | term   per doc | doc   freq |
+| "beobachtung"     | 3,35         | 1              | 640        | "beobachtung"                                             | 3,77         | 1              | 688        |
+| -                 | -            | -              | -          | "sonn"                                                    | 3,71         | 1              | 721        |
+| -                 | -            | -              | -          | "finsternis","finsterniss"                                | 6,53         | 1              | 88         |
+| -                 | -            | -              | -          | "quell"                                                   | 4,51         | 1              | 398        |
+| -                 | -            | -              | -          | "scheib"                                                  | 6,08         | 1              | 123        |
+| -                 | -            | -              | -          | "bereich","mikro",   "mikrowellenbereich", "reich","well" | 3,55         | 4              | 1759       |
+
+*Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
+
+Text highlighted with *Standard German Analyzer*:<br></br>
+    "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von <em>`beobachtungen`</em>"
+
+Text highlighted with *Hyphenation Decompounder*:<br></br>
+      "<em>`finsternisbeobachtungen`</em> von <em>`mikrowellenradioquellen`</em> auf der <em>`sonnenscheibe`</em> im april ergebnisse von <em>`beobachtungen`</em>"<br></br>
+      "flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im <em>`bereich`</em>"
+
+We can clearly see that the term `FINSTERNISSEN` doesn't match within the document while using the **German Analyzer**. It gets stemmed by Elasticsearch to the term `finsternis` but since the searched text isn't decompounded with this approach, it won't return `finsternisbeobachtungen` as relevant for the query. Same goes for the term `MIKROWELLENBEREICH` which is only found by the **Hyphenation Decompounder** within the composition `mikrowellenradioquellen`.
+
+The **Standard German Analyzer** seems to find way less than the **Hyphenation Decompounder**. Even though some of the terms the **Hyphenation** approach extracts are quite unusefull for this query, like `well` and `reich`, it still finds enough relevant terms that weren't found by only using the standard approach.
+
+This shows that the **Decompounder** approach does improve the search results.
+
+Dictionary Decompounder vs. Hyphenation Decompounder
+=============
+
+Second we compared the **Dictionary Decompounder** with the **Hyphenation Decompounder** to see how much the improvement between a dictionary and a hyphenation approach weights. 
+Below you can compare how many of the true positives, false negatives and false positives are overlapping between the two approaches:
+
+|                     |          | true positives | false positives | false negatives |
+|---------------------|----------|----------------|-----------------|-----------------|
+| **Dictionary Decompounder** | total    |     8          | 18              | 18              |
+|                     | disjoint |     0          | 12              | 6               |
+| **Hyphenation Decompounder**   | total    |     8          | 12              | 12              |
+|                     | disjoint |     6          | 6               | 0               |
+
+Once again it is helpful to look at one relevant document from the query more closely. The document with the id `81`, which we chose as a an example, does get ranked very high on both approaches. But it's only on the second position with the **dictionary** approach and on the top position with the **hyphenation** approach. 
+
+**Dictionary Decompounder**
+"position": 1, "score": 27.676197
+```json
+{
+  "doc": {
+    "id": 81,
+    "text_german": "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von beobachtungen der flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im bereich"
+  },
+  "highlight": {
+    "text_german": [
+      "<em>finsternisbeobachtungen</em> von <em>mikrowellenradioquellen</em> auf der <em>sonnenscheibe</em> im april ergebnisse von <em>beobachtungen</em>",
+      "der flussdichtepolarisation und <em>helligkeitsverteilung</em>, die in japan <em>gemacht</em> wurden, sind vier frequenzen",
+      "im <em>bereich</em>"
+    ]
+  }
+```
+
+**Hyphenation Decompounder**
+"position": 0, "score": 28.156767
+```json
+{
+  "doc": {
+    "id": 81,
+    "text_german": "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von beobachtungen der flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im bereich"
+  },
+  "highlight": {
+    "text_german": [
+      "<em>finsternisbeobachtungen</em> von <em>mikrowellenradioquellen</em> auf der <em>sonnenscheibe</em> im april ergebnisse von <em>beobachtungen</em>",
+      "flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im <em>bereich</em>"
+    ]
+  }
+}
+```
+
+To analyze why this document is rated slightly different, we have to look at the searched terms once again:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_npl_hyph_dict_terms.png')}
+  class= "contents"
+/>
+
+Here you can find a list of all the searched terms for each approach and their frequencies per document as well as in how many documents they were found:
+
+|                           **Dictionary Decompounder**                          |              |                     |  |  **Hyphenation Decompounder**                                                         |              |                     |            |
+|:----------------------------------------------------------------------------:|--------------|---------------------|:--------------------------:|-----------------------------------------------------------|--------------|---------------------|------------|
+|                                                                              | term   score | term per doc | doc   freq                 |                                                           | term   score | term per doc | doc   freq |
+| "beobachtung",   "acht", "bach"                                              | 3,29         | 6                   | 2217                       | "beobachtung"                                             | 3,77         | 1                   | 688        |
+| "sonn"                                                                       | 3,84         | 1                   | 721                        | "sonn"                                                    | 3,71         | 1                   | 721        |
+| "finsternis",   "finsterniss", "stern"                                       | 6,9          | 2                   | 198                        | "finsternis","finsterniss"                                | 6,53         | 1                   | 88         |
+| "teil",   "verteilung"                                                       | 2,65         | 1                   | 1679                       | -                                                         | -            | -                   | -          |
+| "quell",   "ell"                                                             | 2,09         | 2                   | 3352                       | "quell"                                                   | 4,51         | 1                   | 398        |
+| "scheib",   "eib"                                                            | 6,57         | 2                   | 241                        | "scheib"                                                  | 6,08         | 1                   | 123        |
+| "bereich",   "eich", "ell", "mikro",   "mikrowellenbereich", "reich", "well" | 2,33         | 6                   | 3568                       | "bereich","mikro",   "mikrowellenbereich", "reich","well" | 3,55         | 4                   | 1759       |
+
+
+*Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
+
+Text highlighted with *Dictionary Decompounder*:<br></br>
+      "<em>`finsternisbeobachtungen`</em> von <em>`mikrowellenradioquellen`</em> auf der <em>`sonnenscheibe`</em> im april ergebnisse von <em>beobachtungen</em>"<br></br>
+      "der flussdichtepolarisation und <em>`helligkeitsverteilung`</em>, die in japan <em>`gemacht`</em> wurden, sind vier frequenzen"<br></br>
+      "im <em>`bereich`</em>"
+
+Text highlighted with *Hyphenation Decompounder*:<br></br>
+      "<em>`finsternisbeobachtungen`</em> von <em>`mikrowellenradioquellen`</em> auf der <em>`sonnenscheibe`</em> im april ergebnisse von <em>`beobachtungen`</em>"<br></br>
+      "flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im <em>`bereich`</em>"
+
+This example shows that the **Dictionary Decompounder** extracts significantly more search terms within a term group from the query than the **Hyphenation Decompounder**. However, this depresses the tf-idf value, which is included in the calculation of the total term score, because with more documents found the term loses relevance.
+
+The **Hyphenation Decompounder** searches for subwords within the query terms according to certain patterns. If these subwords are not considered relevant because they do not appear in a specified word list, they are not searched for. 
+
+This can be seen especially with the word group `quell`. The **Dictionary Decompounder** additionally includes `ell`, which brings the score to `2.09`. The **Hyphenation Decompounder** has excluded the term `ell` and thus achieves a higher score of `4.51`.
+
+So we can see that more search terms don't necessarily lead to better results, wherefore the **Hyphenation Decompounder** does improve the results of the **Dictionary Decompounder**.
+
+### 4.2. Why is the German Analyzer significantly better than the Standard Analyzer?
+
+While experimenting the scores for the **German Analyzer** always exceeded the scores of the **Standard Analyzer** and on some, like CACM or LISA, there was a increase of nearly 50%, even around 80% with the ADI:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_Gains.svg')}
+  class= "contents"
+/>
+
+At first this seemed a bit odd, so we looked a bit more into it. While analyzing especially the ADI and the CACM we discovered that the [**Standard Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html) finds more documents that the [**German Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#german-analyzer) which increases the document frequency and therefore returns way more irrelevant documents. 
+The reason here fore is the stop word list that is used. The **Standard Analyzer** doesn't consider any german stop words, while the **German Analyzer** works with a very [rich stop word list.](https://github.com/apache/lucene/blob/main/lucene/analysis/common/src/resources/org/apache/lucene/analysis/snowball/german_stop.txt) Below you can find two more detailed examples, one from the ADI and one from the CACM, that illustrate this phenomenon 
+
+ADI
+======
+
+As a good example for the decrease in irrelevant retrieval in the ADI corpus would be **Query 21**, the F1-Score difference between the **Standard Analyzer** and the **German Analyzer** is `0,416`.
+
+*Example Query 21:* " Die Notwendigkeit, Personal für den Informationsbereich bereitzustellen."
+
+It's a relatively short query which has only 5 relevant documents, which are found by both approaches. The main difference can be seen while looking at the false positives:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_ADI_distributions_21.svg')}
+  class= "contents"
+/>
+
+As an example document to compare the scores in detail we chose the document `21` because the **Standard Analyzer** ranked it lower than the **German Analyzer** even though the scores were nearly the same.
+
+|                                |  score       | position |
+|--------------------------------|--------------|----------|
+| **Standard Analyzer**          | 2.9156718    |     6    |
+| **German Analyzer**            | 2.9190629    |     7    |
+
+It seems that other documents like `38` where scored higher because there were matching stop words like `die` and `für`in it:
+
+```json
+[
+  {
+    "doc": {
+      "id": 38,
+      "text_german": " Mikrodruck hat sich in einem Experiment der Wildlife Disease Association als akzeptables Publikationsmedium erwiesen . mit Autorenkomposition kostet etwas mehr als sieben Cent pro 3 x 5-Zoll-Karte, bis zu 47 Seiten . die Notwendigkeit für die Entwicklung von Standards und die Verbesserung von Zubehör-Abrufgeräten wird erkannt.",
+      "title_german": " Mikrodruck hat sich in einem Experiment der Wildlife Disease Association als akzeptables Publikationsmedium erwiesen . mit Autorenkomposition kostet etwas mehr als sieben Cent pro 3 x 5-Zoll-Karte, bis zu 47 Seiten . die Notwendigkeit für die Entwicklung von Standards und die Verbesserung von Zubehör-Abrufgeräten wird erkannt."
+    },
+    "highlight": {
+      "text_german": [
+        ". mit Autorenkomposition kostet etwas mehr als sieben Cent pro 3 x 5-Zoll-Karte, bis zu 47 Seiten . <em>die</em>",
+        "<em>Notwendigkeit</em> <em>für</em> <em>die</em> Entwicklung von Standards und <em>die</em> Verbesserung von Zubehör-Abrufgeräten wird erkannt"
+      ],
+      "title_german": [
+        ". mit Autorenkomposition kostet etwas mehr als sieben Cent pro 3 x 5-Zoll-Karte, bis zu 47 Seiten . <em>die</em>",
+        "<em>Notwendigkeit</em> <em>für</em> <em>die</em> Entwicklung von Standards und <em>die</em> Verbesserung von Zubehör-Abrufgeräten wird erkannt"
+      ]
+    },
+    "position": 5,
+    "score": 3.8836367
+  }
+```
+The average scores returned from the **Standard Analyzer** are higher than the scores returned by the **German Analyzer** but since the **Standard Analyzer** always returns a lot of noise with it, it gets worse results when you look at the average scores over all queries.
+
+But the **Standard Analyzer** isn't always better at scoring. Since it only searches on the given terms without stemming, it sometimes scores significantly worse.
+A good example for that can be found in **Query 20** - "Testen von automatisierten Informationssystemen.":
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_ADI_distributions_20.svg')}
+  class= "contents"
+/>
+
+There are 3 relevant documents, only 1 is found by the **Standard Analyzer** and 2 are found by the **German Analyzer**. And since the false positive rate is also higher with the first approach, this weights even more.
+
+If you look at document `65`, which is only matched by the **German Analyzer**, you can see that it is scored 10 times by the second approach than by the **Standard Analyzer**:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_ADI_20_65.svg')}
+  class= "contents"
+/>
+
+Query: "Testen von automatisierten Informationssystemen."
+
+That is because it finds words while stemming which can't be found otherwise.
+**Explaination of Standard Analyzer match**:
+```json
+{
+    "score": 0.3869483,
+    "text_german": {
+        "total_value": 0.3869483,
+        "details": [
+            {
+                "function": {
+                    "value": 0.3869483,
+                    "description": "weight(text_german:von in 21) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 57,
+                    "freq, occurrences of term within document": 1.0
+                }
+            }
+        ]
+    },
+    "title_german": {
+        "total_value": 0.3869483,
+        "details": [
+            {
+                "function": {
+                    "value": 0.3869483,
+                    "description": "weight(title_german:von in 21) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 57,
+                    "freq, occurrences of term within document": 1.0
+                }
+            }
+        ]
+    }}
+```
+
+**Explaination of German Analyzer match**:
+```json
+{
+    "score": 3.3748484,
+    "text_german": {
+        "total_value": 3.3748484,
+        "details": [
+            {
+                "function": {
+                    "value": 3.3748484,
+                    "description": "weight(text_german:test in 21) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 3,
+                    "freq, occurrences of term within document": 1.0
+                }
+            }
+        ]
+    },
+    "title_german": {
+        "total_value": 3.3748484,
+        "details": [
+            {
+                "function": {
+                    "value": 3.3748484,
+                    "description": "weight(title_german:test in 21) [PerFieldSimilarity], result of:",
+                    "n, number of documents containing term": 3,
+                    "freq, occurrences of term within document": 1.0
+                }
+            }
+        ]
+    }
+}
+```
+
+With this example we can see, that the **Standard Analyzer** only matches `von` which is filtered by the stop word list in the second approach and doesn't match `test` because the word `Testen` isn't stemmed. 
+It seems like the effect of stemming and stop words are very relevant in german information retrieval.
+
+CACM
+======
+
+To support this conclusion let's look at one more example from the CACM. 
+*Example Query 10*:
+Overall we can see that the **German Analyzer** does find significantly more true positives than the **Standard Analyzer**:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_CACM_distributions_10.svg')}
+  class= "contents"
+/>
+
+The first approach only returns 1 out of 35 relevant documents while the second approach returns 15.
+When we look more detailed on search terms of the one document `2851` that was found in both approaches, then wie can see, that once again stemming does do the trick:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_cacm_10_2851.svg')}
+  class= "contents"
+/>
+
+Although the scoring of the **German Analyzer** is higher than the scoring of the **Standard Analyzer**, it has a lower position in the ranking. This is because there were other relevant documents in the second approach that had an even better term scoring. For example document `1262` which was on position 1 with the second approach, but only at the 65 position with the first:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_cacm_10_1262.svg')}
+  class= "contents"
+/>
+
+When we look at the highlights of both approaches and which terms are matches, we can see that the main difference between them is, that the second approach matches `sprach` instead of `für`. Since `für` is a very common stop word in german the documents frequency of this term decreases the score a lot. 
+
+**Standard Analyzer**
+```json
+{"_id": "1262",
+ "_index": "pragmalingu-cacm-german-corpus",
+ "_score": 7.32441,
+ "_source": {"text_german": "Es werden zwei Anweisungen vorgeschlagen, die es einem Programmierer erlauben der in einer prozedurorientierten Sprache schreibt Programmabschnitte anzugeben, die parallel ausgeführt werden sollen. parallel ausgeführt werden sollen.  Die Anweisungen sind DO TOGETHER und HOLD.  Sie dienen einerseits als Klammern zur Festlegung einen Bereich für den Parallelbetrieb festzulegen und teilweise jeden parallelen Pfad innerhalb dieses Bereichs zu definieren.  DO TOGETHERs können verschachtelt werden.  Die Anweisungen sollten besonders besonders effektiv für die Verwendung mit Rechengeräten sein, die in der Lage sind, ein gewisses Maß an Überlappung von Rechenoperationen zu erreichen. ",
+  "title_german": "Prozedur-orientierte Sprachanweisungen zur Erleichterung der Parallelverarbeitung"},
+ "_type": "_doc",
+ "highlight": {"text_german": ["Programmierer erlauben der in einer prozedurorientierten Sprache schreibt Programmabschnitte anzugeben, die <em>parallel</em>",
+   "ausgeführt werden sollen. <em>parallel</em> ausgeführt werden sollen.",
+   "Sie dienen einerseits als Klammern zur Festlegung einen Bereich <em>für</em> den Parallelbetrieb festzulegen und",
+   "Die Anweisungen sollten besonders besonders effektiv <em>für</em> die Verwendung mit Rechengeräten sein, die in"]}}
+```
+
+**German Analyzer**
+```json
+{"question": " Parallele Sprachen; Sprachen für paralleles Rechnen .N  10. Alec Grimison, Comp Serv, Uris Hall (parallel lang)   ",
+ "true_positives": [{"doc": {"id": 1262,
+    "text_german": "Es werden zwei Anweisungen vorgeschlagen, die es einem Programmierer erlauben der in einer prozedurorientierten Sprache schreibt Programmabschnitte anzugeben, die parallel ausgeführt werden sollen. parallel ausgeführt werden sollen.  Die Anweisungen sind DO TOGETHER und HOLD.  Sie dienen einerseits als Klammern zur Festlegung einen Bereich für den Parallelbetrieb festzulegen und teilweise jeden parallelen Pfad innerhalb dieses Bereichs zu definieren.  DO TOGETHERs können verschachtelt werden.  Die Anweisungen sollten besonders besonders effektiv für die Verwendung mit Rechengeräten sein, die in der Lage sind, ein gewisses Maß an Überlappung von Rechenoperationen zu erreichen. ",
+    "title_german": "Prozedur-orientierte Sprachanweisungen zur Erleichterung der Parallelverarbeitung"},
+   "highlight": {"text_german": ["zwei Anweisungen vorgeschlagen, die es einem Programmierer erlauben der in einer prozedurorientierten <em>Sprache</em>",
+     "schreibt Programmabschnitte anzugeben, die <em>parallel</em> ausgeführt werden sollen. <em>parallel</em> ausgeführt werden",
+     "einerseits als Klammern zur Festlegung einen Bereich für den Parallelbetrieb festzulegen und teilweise jeden <em>parallelen</em>"]},
+   "position": 1,
+   "score": 22.625546}]}
+```
+
+**Conclusion**
+
+Our results suggest that since German contains significantly more semantically empty words that do not contribute any content value to the search, it might be very important to include stop words into the search parameters, especially in German.
+This way, you might avoid too many irrelevant documents getting returned that can suppress relevant search results.
+
+### 4.3. Why does German Analyzer work better than Dictionary Decompounder?
+
+Cranfield
+======
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_cran_decomposition_tp_fp_fn.png')}
+  class= "contents"
+/>
+
+*Example Query 3:* " welche Probleme der Wärmeleitung in Verbundplatten bisher gelöst worden sind ."
+
+There are **9 relevant documents** for this Query here are the true positives, false positives and false negatives distributions:
+
+|                     |          | true positives | false positives | false negatives |
+|---------------------|----------|----------------|-----------------|-----------------|
+| **Dictionary Decompounder**   | total    | 1              | 19              | 8               |
+|                     | disjoint | 0              | 13              | 6               |
+| **German Analyzer** | total    | 7              | 13              | 2               |
+|                     | disjoint | 6              | 7               | 0               |
+
+
+#### Example: Same true positive
+
+We chose a found document that appears in both approaches' true positives, `181`. 
+We can see by the scores and positions, that apparently the decompounding matches way more documents before matching 181 although the score isn't that different from the German Analyzer score:
+
+|                        | **German Analyzer**    | **Dictionary Decompounder**                                  |
+|------------------------|------------------------|-----------------------------------------------------|
+| position               | 3                      | 12                                                  |
+| score                  | 11.539416              | 10.477009                                           |
+| matched terms in title | Probleme, Wärmeleitung | Probleme, Wärmeleitung                              | 
+| matched terms in text  | Probleme, Wärmeleitung | Probleme, Wärmeleitung, Verbundkörpern, Ableitungen |
+
+Although the decompounding matches way more terms inside the documents `text_german` field, both approaches chose the `title_german` field score because it was higher.
+
+**German Analyzer:**<br></br>
+```json
+{"doc": {"id": 181,
+    "text_german": " Einige Probleme zur Wärmeleitung in schichtförmigen Körpern.  Probleme zur Wärmeleitung in mehrschichtigen Körpern führen meist zu komplizierten Berechnungen. Die vorliegende Arbeit gibt einen Einblick in die besonderen Schwierigkeiten, die bei unendlichen Verbundkörpern auftreten, wobei allgemeine Ableitungen auf eine spezielle Klasse von Fragen angewendet werden.",
+    "title_german": " Einige Probleme zur Wärmeleitung in schichtförmigen Körpern."},
+   "highlight": {"text_german": ["Einige <em>Probleme</em> zur <em>Wärmeleitung</em> in schichtförmigen Körpern.",
+     "<em>Probleme</em> zur <em>Wärmeleitung</em> in mehrschichtigen Körpern führen meist zu komplizierten Berechnungen."],
+    "title_german": ["Einige <em>Probleme</em> zur <em>Wärmeleitung</em> in schichtförmigen Körpern."]},
+}
+```
+*Explain:*<br></br>
+Searched terms: problem, warmeleitung
+
+```json
+{ "score" : 15.4079075,
+  "text_german":{
+  "total_value" : 15.4079075,
+  "details": [
+    "function" : {
+         "value" : 5.766884,
+         "description" : "weight(text_german:warmeleitung in 123) [PerFieldSimilarity], result of:",
+         "n, number of documents containing term" : 25,
+         "freq, occurrences of term within document" : 2.0
+    },
+    "function" : {
+         "value" : 9.641024,
+         "description" : "weight(text_german:verbundplatt in 123) [PerFieldSimilarity], result of:",
+         "n, number of documents containing term" : 5,
+         "freq, occurrences of term within document" : 2.0}]},
+  "title_german":{
+    "total_value" : 7.009698,
+    "details": [
+   "function" : {
+       "value" : 7.009698,
+       "description" : "weight(title_german:verbundplatt in 123) [PerFieldSimilarity], result of:",
+       "n, number of documents containing term" : 5,
+       "freq, occurrences of term within document" : 1.0}]}
+    }
+```
+
+**Dictionary Decompounder:**<br></br>	
+```json
+{"doc": {"id": 181,
+    "text_german": 
+    " Einige Probleme zur Wärmeleitung in schichtförmigen Körpern.  \n    Probleme zur Wärmeleitung in mehrschichtigen Körpern führen meist zu komplizierten Berechnungen. \n    Die vorliegende Arbeit gibt einen Einblick in die besonderen Schwierigkeiten, die bei unendlichen Verbundkörpern auftreten, \n    wobei allgemeine Ableitungen auf eine spezielle Klasse von Fragen angewendet werden.",
+    "title_german": " Einige Probleme zur Wärmeleitung in schichtförmigen Körpern."},
+   "highlight": {"text_german": ["Einige <em>Probleme</em> zur <em>Wärmeleitung</em> in schichtförmigen Körpern.",
+     "<em>Probleme</em> zur <em>Wärmeleitung</em> in mehrschichtigen Körpern führen meist zu komplizierten Berechnungen.",
+     "Die vorliegende Arbeit gibt einen Einblick in die besonderen Schwierigkeiten, die bei unendlichen <em>Verbundkörpern</em>",
+     "auftreten, wobei allgemeine <em>Ableitungen</em> auf eine spezielle Klasse von Fragen angewendet werden."],
+    "title_german": ["Einige <em>Probleme</em> zur <em>Wärmeleitung</em> in schichtförmigen Körpern."]}
+}
+```
+*Explain:*<br></br>
+Searched terms: problem, probl, armel, leit, warm, warmeleitung
+
+```json
+
+{ "score" : 7.976826,
+  "text_german":{
+  "total_value" : 6.094157,
+  "details": [
+    "function" : {
+         "value" : 2.9138002,
+         "description" : "weight(Synonym(text_german:armel text_german:leit text_german:warm text_german:warmeleitung) in 123) [PerFieldSimilarity], result of:",
+         "n, number of documents containing term" : 333,
+         "freq, occurrences of term within document" : 5.0},
+    "function" : {
+         "value" : 3.1803567,
+         "description" : "weight(Synonym(text_german:bund text_german:latt text_german:platt text_german:verbund text_german:verbundplatt) in 123) [PerFieldSimilarity], result of:",
+          "n, number of documents containing term" : 310,
+          "freq, occurrences of term within document" : 10.0}]},
+  "title_german":{
+    "total_value" :  7.976826,
+    "details": [
+    "function" : {
+         "value" : 3.523491,
+         "description" : "weight(Synonym(title_german:armel title_german:leit title_german:warm title_german:warmeleitung) in 123) [PerFieldSimilarity], result of:",
+         "n, number of documents containing term" : 128,
+         "freq, occurrences of term within document" : 1.0},
+    "function" : {
+         "value" : 4.4533353,
+         "description" : "weight(Synonym(title_german:bund title_german:latt title_german:platt title_german:verbund title_german:verbundplatt) in 123) [PerFieldSimilarity], result of:",
+         "n, number of documents containing term" : 151,
+         "freq, occurrences of term within document" : 5.0}]}
+    }
+```
+
+**Conclusion:**<br></br>
+Due to decompounding more documents are found, which decreases the idf and machtes more irrelevant documents. 
+The scores for terms like "warmeleitung" will be combined with the scores of the sub-concept "warm". That generalizes the term "warmeleitung" too much.
+
+**Example:  Disjoint result**
+
+To show how different documents can be rated we also chose an example out of the disjoint results. Document `485` was found with the **German Analyzer** but not while using the **Dictionary Decompounder**.
+
+**German Analyzer:**
+"position": 0, "score": 15.4079075
+
+Searched terms: Verbundplatte, Wärmeleitung
+
+```json
+{
+        "doc": {
+          "id": 485,
+          "text_german": " Linearer Wärmestrom in einer Verbundplatte.  Die Temperatur wird als Funktion von Ort und Zeit bei linearer Wärmeleitung in einer Verbundplatte aus durchgehendem Material bestimmt, wobei die beiden äußeren Oberflächentemperaturen als vorgegebene Funktionen betrachtet werden.",
+          "title_german": " Linearer Wärmefluss in einer Verbundplatte."
+        },
+        "highlight": {
+          "text_german": [
+            "Linearer Wärmestrom in einer <em>Verbundplatte</em>.",
+            "Die Temperatur wird als Funktion von Ort und Zeit bei linearer <em>Wärmeleitung</em> in einer <em>Verbundplatte</em> aus"
+          ],
+          "title_german": [
+            "Linearer Wärmefluss in einer <em>Verbundplatte</em>."
+          ]
+        }
+      }
+```
+*Explain*
+
+Searched terms: Verbundplatte, Wärmeleitung
+
+```json
+{"score": 15.4079075,
+  "text_german": {
+  "total_value": 5.766884,
+  "details": [
+    "function": {
+        "value": 5.766884,
+        "description": "weight(text_german:warmeleitung in 123) [PerFieldSimilarity], result of:",
+        "n, number of documents containing term": 25,
+        "freq, occurrences of term within document": 1.0},
+    "function": {
+        "value": 9.641024,
+        "description": "weight(text_german:verbundplatt in 123) [PerFieldSimilarity], result of:",
+        "n, number of documents containing term": 5,
+        "freq, occurrences of term within document": 2.0}]},
+  "title_german": {
+  "total_value": 7.009698,
+  "details": [
+    "function": {
+        "value": 7.009698,
+        "description": "weight(title_german:verbundplatt in 123) [PerFieldSimilarity], result of:",
+        "n, number of documents containing term": 5,
+        "freq, occurrences of term within document": 1.0}]}
+}
+```
+
+
+**Dictionary Decompounder:**
+"position": not in k=20, "score": 7.976826
+
+```json
+     {
+        "_index" : "pragmalingu-cranfield-german-decompounding",
+        "_type" : "_doc",
+        "_id" : "485",
+        "_score" : 7.976826,
+        "_source" : {
+          "text_german" : " Linearer Wärmestrom in einer Verbundplatte.  Die Temperatur wird als Funktion von Ort und Zeit bei linearer Wärmeleitung in einer Verbundplatte aus durchgehendem Material bestimmt, wobei die beiden äußeren Oberflächentemperaturen als vorgegebene Funktionen betrachtet werden.",
+          "title_german" : " Linearer Wärmefluss in einer Verbundplatte."
+        },
+        "highlight" : {
+          "text_german" : [
+            "Linearer <em>Wärmestrom</em> in einer <em>Verbundplatte</em>.",
+            "Die Temperatur wird als Funktion von Ort und Zeit bei linearer <em>Wärmeleitung</em> in einer <em>Verbundplatte</em> aus"
+          ],
+          "title_german" : [
+            "Linearer <em>Wärmefluss</em> in einer <em>Verbundplatte</em>."
+          ]
+        }
+      }
+```
+
+*Explain*
+
+Searched terms: armel, leit, warm, warmeleitung, bund, latt, platt, verbund, verbundplatt
+
+```json
+{"score": 7.976826,
+    "text_german": {
+    "total_value": 2.9138002,
+    "details": [
+        "function": {
+            "value": 2.9138002,
+            "description": "weight(Synonym(text_german:armel text_german:leit text_german:warm text_german:warmeleitung) in 123) [PerFieldSimilarity], result of:",
+            "n, number of documents containing term": 333,
+            "freq, occurrences of term within document": 0.0},
+        "function": {
+            "value": 3.1803567,
+            "description": "weight(Synonym(text_german:bund text_german:latt text_german:platt text_german:verbund text_german:verbundplatt) in 123) [PerFieldSimilarity], result of:",
+            "n, number of documents containing term": 310,
+            "freq, occurrences of term within document": 0.0}]},
+  "title_german": {
+  "total_value": 3.523491,
+  "details": [
+        "function": {
+            "value": 3.523491,
+            "description": "weight(Synonym(title_german:armel title_german:leit title_german:warm title_german:warmeleitung) in 123) [PerFieldSimilarity], result of:",
+            "n, number of documents containing term": 128,
+            "freq, occurrences of term within document": 0.0},
+        "function": {
+            "value": 4.4533353,
+            "description": "weight(Synonym(title_german:bund title_german:latt title_german:platt title_german:verbund title_german:verbundplatt) in 123) [PerFieldSimilarity], result of:",
+            "n, number of documents containing term": 151,
+            "freq, occurrences of term within document": 0.0}]}
+}
+```
+
+This example shows that the decomposition of the physical term "warmeleitung" into "armel, leit, warm" leads to too many other documents being classified as relevant. Again, the scores of too many sub-concepts are combined, resulting in a lower idf. Thus, the relevant document show up much later in the hit list.
+
+*Explain zu German Analyzer:*
+
+Es wird das Maximum genommen, entweder von der Summe der Häufigkeiten der gefundenen Begriffe (hier Wärmeleitung und Verbundplatte) im Text oder im Titel Es wurde der Wert des Textes genommen
+
+warmeleitung, verbundplatt
+
+```
+"weight(text_german:warmeleitung in 123) [PerFieldSimilarity], result of:"
+"weight(text_german:verbundplatt in 123) [PerFieldSimilarity], result of:"
+```
+
+*Explain zu **Dictionary Decompounder**:*
+
+Es wird das Maximum genommen, entweder von der Summe der Häufigkeiten der gefundenen Begriffe (hier Wärmeleitung und Verbundplatte) im Text oder im Titel Es wurde der Wert des Textes genommen
+
+armel, leit, warm, warmeleitung, bund, latt, platt, verbund, verbundplatt
+
+```
+"weight(Synonym(title_german:armel title_german:leit title_german:warm title_german:warmeleitung) in 123) [PerFieldSimilarity], result of:"
+"weight(Synonym(title_german:bund title_german:latt title_german:platt title_german:verbund title_german:verbundplatt) in 123) [PerFieldSimilarity], result of:"
+```
+
+Es wurden zu viele unwichtige Begriffe gematcht
+
+LISA
+======
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_lisa_decomposition_tp_fp_fn.png')}
+  class= "contents"
+/>
+
+*Example Query 10:* "ICH INTERESSIERE MICH FÜR INFORMATIONEN ÜBER DIE BEREITSTELLUNG AKTUELLER AWARENESS BULLETINS, INSBESONDERE SDI-DIENSTE IN BELIEBIGEN INSTITUTIONEN, Z.B. IN WISSENSCHAFTLICHEN BIBLIOTHEKEN, IN DER INDUSTRIE UND IN BELIEBIGEN THEMENBEREICHEN.  SDI, SELEKTIVE INFORMATIONSVERBREITUNG, CURRENT AWARENESS BULLETINS, INFORMATION BULLETINS."
+
+There are **14 relevant documents** for this Query here are the true positives, false positives and false negatives distributions:
+
+|                     |          | true positives | false positives | false negatives |
+|---------------------|----------|----------------|-----------------|-----------------|
+| **Dictionary Decompounder**  | total    | 5              | 15              | 9               |
+|                     | disjoint | 0              | 7               | 5               |
+| **German Analyzer** | total    | 10             | 10              | 4               |
+|                     | disjoint | 5              | 2               | 0               |
+
+
+**Example: Same true positive**
+
+The chosen document for comparing decompounding and german analyzer on LISA corpus is `5801`. This example does appear in both results and isn't matched that differently: 
+
+|                        | **German Analyzer**                                        | **Dictionary Decompounder**                                                      |
+|------------------------|------------------------------------------------------------|-------------------------------------------------------------------------|
+| position               | 2                                                          | 10                                                                      |
+| score                  | 39.544914                                                  | 40.788223                                                               |
+| matched terms in title | SELEKTIVE, INFORMATIONEN, WISSENSCHAFTLICHEN, BIBLIOTHEKEN | SELEKTIVE, VERBREITUNG, INFORMATIONEN, WISSENSCHAFTLICHEN, BIBLIOTHEKEN | 
+| matched terms in text  | SELEKTIVE, INFORMATIONEN, AKTUELLES                        | SELEKTIVE, VERBREITUNG, INFORMATIONEN, AKTUELLES, WISSENSCHAFTLICHEN, BIBLIOTHEKEN, CURRENT, AWARENESS, BIBLIOTHEK,ERSTELLEN |
+
+**German Analyzer:**<br></br>
+```json
+{"doc": {"id": 5801,
+   "text_german": "PRÄSENTIERT EINEN HISTORISCHEN RÜCKBLICK AUF DIE SELEKTIVE VERBREITUNG VON INFORMATIONEN ALS EIN AKTUELLES BEWUSSTSEINS-SYSTEM, DIE NOTWENDIGKEIT DAFÜR UND EINIGE PRAKTISCHE VORSCHLÄGE FÜR SEINE EINFÜHRUNG. BEISPIELE WERDEN SOWOHL AUS SPEZIAL- ALS AUCH AUS WISSENSCHAFTLICHEN BIBLIOTHEKEN HERANGEZOGEN.VERSUCHE, ENTWÜRFE FÜR EINEN CURRENT-AWARENESS-SERVICE IN DER KASHIMIBRAHIM-BIBLIOTHEK, AHMADU-BELLO-UNIVERSITÄT, ZU ERSTELLEN.",
+   "title_german": "SELEKTIVE VERBREITUNG VON INFORMATIONEN IN WISSENSCHAFTLICHEN BIBLIOTHEKEN."},
+  "highlight": {"text_german": ["PRÄSENTIERT EINEN HISTORISCHEN RÜCKBLICK AUF DIE <em>SELEKTIVE</em> VERBREITUNG VON <em>INFORMATIONEN</em> ALS EIN <em>AKTUELLES</em>",
+    "BEISPIELE WERDEN SOWOHL AUS SPEZIAL- ALS AUCH AUS <em>WISSENSCHAFTLICHEN</em> <em>BIBLIOTHEKEN</em> HERANGEZOGEN.VERSUCHE",
+    ", ENTWÜRFE FÜR EINEN <em>CURRENT</em>-<em>AWARENESS</em>-SERVICE IN DER KASHIMIBRAHIM-<em>BIBLIOTHEK</em>, AHMADU-BELLO-UNIVERSITÄT"],
+   "title_german": ["<em>SELEKTIVE</em> VERBREITUNG VON <em>INFORMATIONEN</em> IN <em>WISSENSCHAFTLICHEN</em> <em>BIBLIOTHEKEN</em>."]},
+  "position": 2,
+  "score": 39.544914}
+```
+*Explain:*<br></br>
+Searched terms: aktull, current, selektiv, wissenschaftlich, bibliothek, awareness, information
+```json
+{"score": 39.544914,
+  "text_german": {
+  "total_value": 3.2314806,
+  "details": [
+   "function": {
+    "value": 3.2314806,
+    "description": "weight(text_german:aktull in 3793) [PerFieldSimilarity], result of:",
+    "n, number of documents containing term": 353,
+    "freq, occurrences of term within document": 1.0},
+    "function": {
+        "value": 7.0453506,
+        "description": "weight(text_german:current in 3793) [PerFieldSimilarity], result of:",
+        "n, number of documents containing term": 12,
+        "freq, occurrences of term within document": 1.0
+          },
+    "function": {
+        "value": 6.1456094,
+        "description": "weight(text_german:selektiv in 3793) [PerFieldSimilarity], result of:",
+        "n, number of documents containing term": 27,
+        "freq, occurrences of term within document": 1.0},
+    "function": {
+        "value": 2.8812149,
+        "description": "weight(text_german:wissenschaftlich in 3793) [PerFieldSimilarity], result of:",
+        "n, number of documents containing term": 480,
+        "freq, occurrences of term within document": 1.0},
+    "function": {
+        "value": 1.4586127,
+        "description": "weight(text_german:bibliothek in 3793) [PerFieldSimilarity], result of:",
+        "n, number of documents containing term": 2273,
+        "freq, occurrences of term within document": 2.0},
+    "function": {
+        "value": 14.970892,
+        "description": "weight(text_german:awareness in 3793) [PerFieldSimilarity], result of:",
+        "n, number of documents containing term": 8,
+        "freq, occurrences of term within document": 1.0},
+    "function": {
+        "value": 3.8117561,
+        "description": "weight(text_german:information in 3793) [PerFieldSimilarity], result of:",
+        "n, number of documents containing term": 1129,
+        "freq, occurrences of term within document": 1.0}]},
+  "title_german": {
+      "total_value": 3.467606,
+      "details": [
+      "function": {
+          "value": 3.467606,
+          "description": "weight(title_german:wissenschaftlich in 3793) [PerFieldSimilarity], result of:",
+          "n, number of documents containing term": 199,
+          "freq, occurrences of term within document": 1.0},
+      "function": {
+          "value": 5.7296386,
+          "description": "weight(title_german:information in 3793) [PerFieldSimilarity], result of:",
+          "n, number of documents containing term": 360,
+          "freq, occurrences of term within document": 1.0},
+      "function": {
+          "value": 6.8101172,
+          "description": "weight(title_german:selektiv in 3793) [PerFieldSimilarity], result of:",
+          "n, number of documents containing term": 7,
+          "freq, occurrences of term within document": 1.0},
+      "function": {
+          "value": 1.8868132,
+          "description": "weight(title_german:bibliothek in 3793) [PerFieldSimilarity], result of:",
+          "n, number of documents containing term": 941,
+          "freq, occurrences of term within document": 1.0}]}
+}
+```
+
+**Dictionary Decompounder:**<br></br>
+```json
+{"doc": {"id": 5801,
+   "text_german": "PRÄSENTIERT EINEN HISTORISCHEN RÜCKBLICK AUF DIE SELEKTIVE VERBREITUNG VON INFORMATIONEN ALS EIN AKTUELLES BEWUSSTSEINS-SYSTEM, DIE NOTWENDIGKEIT DAFÜR UND EINIGE PRAKTISCHE VORSCHLÄGE FÜR SEINE EINFÜHRUNG. BEISPIELE WERDEN SOWOHL AUS SPEZIAL- ALS AUCH AUS WISSENSCHAFTLICHEN BIBLIOTHEKEN HERANGEZOGEN.VERSUCHE, ENTWÜRFE FÜR EINEN CURRENT-AWARENESS-SERVICE IN DER KASHIMIBRAHIM-BIBLIOTHEK, AHMADU-BELLO-UNIVERSITÄT, ZU ERSTELLEN.",
+   "title_german": "SELEKTIVE VERBREITUNG VON INFORMATIONEN IN WISSENSCHAFTLICHEN BIBLIOTHEKEN."},
+  "highlight": {"text_german": ["PRÄSENTIERT EINEN HISTORISCHEN RÜCKBLICK AUF DIE <em>SELEKTIVE</em> <em>VERBREITUNG</em> VON <em>INFORMATIONEN</em> ALS EIN <em>AKTUELLES</em>",
+    "BEISPIELE WERDEN SOWOHL AUS SPEZIAL- ALS AUCH AUS <em>WISSENSCHAFTLICHEN</em> <em>BIBLIOTHEKEN</em> HERANGEZOGEN.VERSUCHE",
+    ", ENTWÜRFE FÜR EINEN <em>CURRENT</em>-<em>AWARENESS</em>-SERVICE IN DER KASHIMIBRAHIM-<em>BIBLIOTHEK</em>, AHMADU-BELLO-UNIVERSITÄT",
+    ", ZU <em>ERSTELLEN</em>."],
+   "title_german": ["<em>SELEKTIVE</em> <em>VERBREITUNG</em> VON <em>INFORMATIONEN</em> IN <em>WISSENSCHAFTLICHEN</em> <em>BIBLIOTHEKEN</em>."]},
+  "position": 10,
+  "score": 40.788223}
+```
+*Explain:*<br></br>
+Searched terms: breit, formation, information, informationsverbreitung, reit, verb, institution, ion, current, selektiv,formation, haft, schaft, wissenschaft, wissenschaftlich, awareness, war, aktull, ell, bibliothek, thek, bereitstellung, reit, stell, bereitstellung, reit, stell, etc.
+```json
+{"score": 40.788223,
+  "text_german": {
+  "total_value": 2.0243845,
+  "details": [
+  "function": {
+      "value": 2.0243845,
+      "description": "weight(Synonym(text_german:breit text_german:formation text_german:information text_german:informationsverbreitung txt_german:reit text_german:verb) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 2130,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 1.5106299,
+      "description": "weight(Synonym(text_german:institution text_german:ion) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 1963,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 8.348173,
+      "description": "weight(text_german:current in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 12,
+      "freq, occurrences of term within document": 1.0},
+  "function": {
+      "value": 7.2820516,
+      "description": "weight(text_german:selektiv in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 27,
+      "freq, occurrences of term within document": 1.0},
+  "function": {
+      "value": 1.8843973,
+      "description": "weight(Synonym(text_german:formation text_german:information text_german:ion) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 2130,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 2.4527209,
+      "description": "weight(Synonym(text_german:haft text_german:schaft text_german:wissenschaft text_german:wissenschaftlich) in 3793) [erFieldSimilarity], result of:",
+      "n, number of documents containing term": 1652,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 1.7344728,
+      "description": "weight(Synonym(text_german:formation text_german:information) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 2130,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 10.889484,
+      "description": "weight(Synonym(text_german:awareness text_german:war) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 232,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 1.7621869,
+      "description": "weight(Synonym(text_german:aktull text_german:ell) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 2278,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 1.0995102,
+      "description": "weight(Synonym(text_german:bibliothek text_german:thek) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 3279,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 1.8002105,
+      "description": "weight(Synonym(text_german:bereitstellung text_german:reit text_german:stell) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 2048,
+      "freq, occurrences of term within document": 0.0}]},
+  "title_german": {
+  "total_value": 3.1039772,
+  "details": [
+  "function": {
+      "value": 3.1039772,
+      "description": "weight(Synonym(title_german:formation title_german:information title_german:ion) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 1037,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 4.8834267,
+      "description": "weight(Synonym(title_german:bereitstellung title_german:reit title_german:stell) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 128,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 2.8268805,
+      "description": "weight(Synonym(title_german:formation title_german:information) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 1037,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 3.5727854,
+      "description": "weight(Synonym(title_german:institution title_german:ion) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 360,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 4.4905267,
+      "description": "weight(Synonym(title_german:haft title_german:schaft title_german:wissenschaft title_german:wissenschaftlich) in 3793) [erFieldSimilarity], result of:",
+      "n, number of documents containing term": 536,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 8.493062,
+      "description": "weight(title_german:selektiv in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 7,
+      "freq, occurrences of term within document": 1.0},
+  "function": {
+      "value": 3.3680954,
+      "description": "weight(Synonym(title_german:breit title_german:formation title_german:information title_german:informationsverbreitung ttle_german:reit title_german:verb) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 1037,
+      "freq, occurrences of term within document": 0.0},
+  "function": {
+      "value": 1.7862496,
+      "description": "weight(Synonym(title_german:bibliothek title_german:thek) in 3793) [PerFieldSimilarity], result of:",
+      "n, number of documents containing term": 1979,
+      "freq, occurrences of term within document": 0.0}]}
+}
+```
+
+**Example: Disjoint result**
+
+**German Analyzer:**
+"position": 5, "score": 29.713594
+
+```json
+{"doc": {"id": 770,
+    "text_german": "BESCHREIBT DEN BEDARF AN SDI-DIENSTEN (SELECTIVE DISSEMINATION OF INFORMATION); SKIZZIERT DIE WICHTIGSTEN VERFAHREN IN SDI; UND DISKUTIERT DEN NICHT-AUTOMATISIERTEN BETRIEB VON SDI-DIENSTEN IN EINER SPEZIALBIBLIOTHEK.",
+    "title_german": "MANUELLE SDI IN SPEZIALBIBLIOTHEKEN."},
+   "highlight": {"text_german": ["BESCHREIBT DEN BEDARF AN <em>SDI</em>-<em>DIENSTEN</em> (SELECTIVE DISSEMINATION OF <em>INFORMATION</em>); SKIZZIERT DIE WICHTIGSTEN",
+     "VERFAHREN IN <em>SDI</em>; UND DISKUTIERT DEN NICHT-AUTOMATISIERTEN BETRIEB VON <em>SDI</em>-<em>DIENSTEN</em> IN EINER SPEZIALBIBLIOTHEK"],
+    "title_german": ["MANUELLE <em>SDI</em> IN SPEZIALBIBLIOTHEKEN."]},
+   "position": 5,
+   "score": 29.713594}
+```
+
+**Dictionary Decompounder:**
+"position": -1, "score": 1.8253653
+```json
+{"doc": {"id": 770}, 
+ "position": -1, 
+ "score": null}
+```
+
+```html
+<em>INFORMATION</em>) "weight(Synonym(text_german:formation text_german:information text_german:ion) in 855) [PerFieldSimilarity], result of:"
+```
+
+*Explain zu German Analyzer:*
+
+*Explain zu **Dictionary Decompounder**:*
+
+
+### 4.4. Why does the Dictionary Decompounder work better than Hyphenation Decompounder?
+
+
+**Acknowledgements:**<br/>
+
+<div className="col text--right">
+    <em>
+        <small>
+            Written by <strong>Miriam Rupprecht</strong>,  Mai 2021
+        </small>
+    </em>
+</div>
