@@ -1,27 +1,27 @@
 ---
 id: decompounding-adi-cacm
 title: German Decompounding
+showAuthor: true
+author: Miriam Rupprecht
+date: Mai 2021
 sidebar_label: Decompounder - Standard vs. German Analyzer
 custom_edit_url: null
+description: 
+keywords:
 ---
 
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from '../doc.css';
 
-## Why is the German Analyzer significantly better than the Standard Analyzer?
+### 4.2. Why is the German Analyzer significantly better than the Standard Analyzer?
 
-While experimenting the scores for the **German Analyzer** always exceeded the scores of the **Standard Analyzer** and on some, like CACM or LISA, there was a increase of nearly 50%, even around 80% with the ADI:
-
-<img
-  alt=""
-  src={useBaseUrl('img/EXP3_Gains.svg')}
-  class= "contents"
-/>
+While experimenting the scores for the **German Analyzer** always exceeded the scores of the **Standard Analyzer** and on some, like [CACM](../guides/data-comparison#cacm) or [LISA](../guides/data-comparison#lisa), there was a increase of nearly 50%, even around 80% with the [ADI](../guides/data-comparison#adi) (see graphic with gains in section [3. Results](../comparisons/german-decomposition#3-results)).
 
 At first this seemed a bit odd, so we looked a bit more into it. While analyzing especially the ADI and the CACM we discovered that the [**Standard Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html) finds more documents that the [**German Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#german-analyzer) which increases the document frequency and therefore returns way more irrelevant documents. 
 The reason here fore is the stop word list that is used. The **Standard Analyzer** doesn't consider any german stop words, while the **German Analyzer** works with a very [rich stop word list.](https://github.com/apache/lucene/blob/main/lucene/analysis/common/src/resources/org/apache/lucene/analysis/snowball/german_stop.txt) Below you can find two more detailed examples, one from the ADI and one from the CACM, that illustrate this phenomenon 
 
-**Example ADI**
+ADI
+======
 
 As a good example for the decrease in irrelevant retrieval in the ADI corpus would be **Query 21**, the F1-Score difference between the **Standard Analyzer** and the **German Analyzer** is `0,416`.
 
@@ -158,7 +158,8 @@ That is because it finds words while stemming which can't be found otherwise.
 With this example we can see, that the **Standard Analyzer** only matches `von` which is filtered by the stop word list in the second approach and doesn't match `test` because the word `Testen` isn't stemmed. 
 It seems like the effect of stemming and stop words are very relevant in german information retrieval.
 
-**Example CACM**
+CACM
+======
 
 To support this conclusion let's look at one more example from the CACM. 
 *Example Query 10*:

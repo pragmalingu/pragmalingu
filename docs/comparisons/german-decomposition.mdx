@@ -3,16 +3,22 @@ id: german-decomposition
 title: German Decomposition
 sidebar_label: Decomposition
 custom_edit_url: null
+description: An article that compares decomposition approaches in Elasticsearch
+keywords: 
+- decomposition
+- information retrieval 
+- german composition
+- Elasticsearch
 ---
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from '../doc.css';
 
-## 1. Introduction
-**Experiments on a german documents**
+## 1. Composition and Decomposition
+### 1.1. Why experiment on a german documents?
 
-Since German has some specific language features which English doesn't provide and that we believe could make a difference in the search result if taken into account, we decided to to work on german texts for this experiment. In order to keep the same corpora we used the [DeepL API](https://www.deepl.com/pro#developer) to translate all our documents and queries into german. For our first comparison on the german corpus we looked into splitting compound words using decomposition.
+Since German has some specific language features which English doesn't provide which - if taken into account - could make a difference in the search result, we decided to to work on german texts for this experiment. In order to keep the same [corpora](../guides/data-comparison) we already used in other experiments the [DeepL API](https://www.deepl.com/pro#developer) to translate all our documents and queries into german. For our first comparison on the german corpus we looked into splitting compound words using decomposition. To understand why decomposition could increase the search results it's necessary to know what composition means.
 
-**What is Composition?**
+### 1.2. What is Composition?
 
 In German, as in some other languages (e.g. Finnish, Dutch), it is possible to create a new word from two or more independent words by means of composition. Thereby, two or more words are combined into one word by so-called fugue elements (e.g.: -(e)s-, -e-, -(e)n-, -er-) to form a coherent word. English does not have this kind of composition, in most cases such word combinations are separated with a space or hyphen.
 
@@ -28,7 +34,7 @@ With this technique an infinite number of words can be strung together. A classi
 Composition must be distinguished from derivation. In a derivation, a root word is changed in its part of speech by a grammatical affix (e.g. "Licht-ung"). In a composition, the original part of speech of the meaning-bearing second word is retained.  
 
 
-**What is the benefit of Decomposition?**
+### 1.3. What is the benefit of Decomposition?
 
 Composition in languages with a rich morphology like German makes it possible to expand the vocabulary to an infinite level. This can cause problems in information retrieval. 
 
@@ -48,9 +54,9 @@ We tried to compare two different decomposition approaches in Elasticsearch:
 To get a baseline to compare the results to we evaluated, we also searched with two more basic approaches:
 
 * [**Standard Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html):<br></br>
-This approach only provides grammar based tokenization while searching.
+This approach only provides grammar based tokenization while searching. No stemmer is used and stop words are included in the search. 
 
-* [**German Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#german-analyzer):<br></br> This approach performs basic stemming while searching and also excludes language specific stop words from the search.
+* [**German Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#german-analyzer):<br></br> This approach performs basic stemming while searching and also excludes language specific stop words from the search in addition to a grammar based tokenization.
 
 **Hypothesis:** Decomposition while using a dictionary, to look up possible compound words, should improve the search for retrieved documents including relevant documents, but it could be that more irrelevant documents are found too. The **Hyphenation Decompounder** should improve the **Dictionary Decompounder**.
 
@@ -107,44 +113,55 @@ For a better overview on how much each approach increased we also measured the g
   class= "contents"
 />
 
+**Conclusion**
+
+We can see an increase of the scores in every corpus comparing the baseline **Standard Analyzer** to the **Hyphenation Decompounder**. Except the Medline corpus, the **Hyphenation Decompounder** seem to work better than the **Dictionary Decompounder**. There are a few examples where decomposition might not be better than regular stemming and stop word removal with the **German Analyzer**. Overall it looks like using any other approach than the baseline **Standard Analyzer** shows an improvement in the results. For a more detailed explanation and some examples feel free to scroll through the following discussion section.
+
 ## 4. Discussion
+
+In this section we want to discuss some of the results in detail. At first we want to show some positive examples on how decompounding can improve search results to underline our hypothesis. After that we try to analyze some unexpected variations in the results like why the **German Analyzer** totally exceeds the **Standard Analyzer** and sometimes even the **Dictionary Decompounder** or why the **Dictionary Decompounder** is slightly better on the medline corpus than the **Hyphenation Decompounder**.
 
 ### 4.1. German Analyzer vs. Dictionary & Hyphentation Decompounder
 
-**Examples why Decomposition works better than the German Analyzer**
-
-To compare the approaches with the **Standard German Analyzer**, the **Dictionary Decompounder** and the **Hyphenation Decompounder** we chose one query from the [NPL corpus](../guides/data-comparison#npl), that as an example.
-
-*Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
-
-There are **20 relevant documents** for this query and the top 20 results are returned.
-These are the true positives, false positives and false negatives distributions in comparison for each approach:
+As we already suggested in the hypothesis, decomposition did increase the search scores. 
+Based on the scores of the **Standard Analyzer**, the outcome became better with the **German Analyzer**. The **Dictionary Decompounder** was able to increase the values once more. On top of that the increase due to the **Hyphentation Decompounder** showed the highest score.
 
 <img
   alt=""
-  src={useBaseUrl('img/EXP3_npl_decomposition_tp_fp_fn.png')}
+  src={useBaseUrl('img/EXP3_NPL_conditions.svg')}
   class= "contents"
 />
 
-As an example document to compare the scores and searched terms in detail we chose the document `81` because the **Hyphenation Decompounder** scored it rightfully as top document.
+The best examples for this can be seen while looking at the [NPL corpus](../guides/data-comparison#npl). To illustrate what exactly caused the increase, we picked out a search query that seemed most informative to us. 
 
 German Analyzer vs. Hyphenation Decompounder
 =============
 
-First of we compared the **Standard German Analyzer** with the **Hyphenation Decompounder**. 
-Below you can compare how many of the tp, fn and fp are overlapping:
+To show in comparison how the **German Analyzer** is surpassed by the **Hyphenation Decompounder**, **Query 23** seemed like the best choice. The f-score difference between both is `0.256`. 
 
-|                                |          | true positives | false positives | false negatives |
-|--------------------------------|----------|----------------|-----------------|-----------------|
-| **German Analyzer**            | total    |     2          | 18              | 18              |
-|                                | disjoint |     0          | 13              | 5               |
-| **Hyphenation Decompounder**  | total    |     7          | 13              | 13              |
-|                                | disjoint |     5          | 8               | 0               |
+*Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
 
-When we try to explain why the **German Analyzer** works better than the **Hyphenation Decompounder** we have to look at the search results in detail.
+There are **20 relevant documents** for this query and with 20 results returned, not all true positives are found.
+We can see, that the **Hyphenation Decompounder** does find 5 more relevant documents than the **German Analyzer**:
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_NPL_distributions_analyzer_hyph.svg')}
+  class= "contents"
+/>
+
+As an example document to compare the scores and searched terms in detail we chose the document `81` because the **Hyphenation Decompounder** scored it rightfully as top document, while the **German Analyzer** doesn't rank it in the top 20.
+
+|                                |  score       | position |
+|--------------------------------|--------------|----------|
+| **German Analyzer**            | 3.3543134    |     -    |
+| **Hyphenation Decompounder**   | 28.156767    |     1    |
+
+
+When we tried to explain why the **German Analyzer** works better than the **Hyphenation Decompounder** we have to look at the search results in detail.
 
 **German Analyzer**
-"position": out of k, "score": 3.3543134
+"position": outside of k, "score": 3.3543134
 ```json
 {
         "_id" : "81",
@@ -159,9 +176,8 @@ When we try to explain why the **German Analyzer** works better than the **Hyphe
         }
 ```
 
-
 **Hyphenation Decompounder**
-"position": 0, "score": 28.156767
+"position": 1, "score": 28.156767
 ```json
 {
   "doc": {
@@ -179,140 +195,60 @@ When we try to explain why the **German Analyzer** works better than the **Hyphe
 
 As we can see in this table the searched terms and therefore the scores diverge widely:
 
-
 <img
   alt=""
   src={useBaseUrl('img/EXP3_npl_hyph_anal_terms.png')}
   class= "contents"
 />
 
+We can clearly see that for example the term `FINSTERNISSEN` doesn't match within the document while using the **German Analyzer**. It gets stemmed by Elasticsearch to the term `finsternis` but since the searched text isn't decompounded with this approach, it won't return `finsternisbeobachtungen` as relevant for the query. Same goes for the term `MIKROWELLENBEREICH` which is only found by the **Hyphenation Decompounder** within the composition `mikrowellenradioquellen`.
 
-Here you can find a list of all the searched terms for each approach and their frequencies per document as well as in how many documents they were found:
+The **German Analyzer** seems to find way less than the **Hyphenation Decompounder**. Even though some of the terms the **Hyphenation** approach extracts are quite unusefull for this query, like `well` and `reich`, it still finds enough relevant terms that weren't found by only using the standard approach.
 
-| **German Analyzer** |              |                |            |                 **Hyphenation Decompounder**                |              |                |            |
-|-------------------|--------------|----------------|------------|:---------------------------------------------------------:|--------------|----------------|------------|
-|                   | term   score | term   per doc | doc   freq |                                                           | term   score | term   per doc | doc   freq |
-| "beobachtung"     | 3,35         | 1              | 640        | "beobachtung"                                             | 3,77         | 1              | 688        |
-| -                 | -            | -              | -          | "sonn"                                                    | 3,71         | 1              | 721        |
-| -                 | -            | -              | -          | "finsternis","finsterniss"                                | 6,53         | 1              | 88         |
-| -                 | -            | -              | -          | "quell"                                                   | 4,51         | 1              | 398        |
-| -                 | -            | -              | -          | "scheib"                                                  | 6,08         | 1              | 123        |
-| -                 | -            | -              | -          | "bereich","mikro",   "mikrowellenbereich", "reich","well" | 3,55         | 4              | 1759       |
-
-*Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
-
-Text highlighted with *Standard German Analyzer*:<br></br>
-    "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von <em>`beobachtungen`</em>"
-
-Text highlighted with *Hyphenation Decompounder*:<br></br>
-      "<em>`finsternisbeobachtungen`</em> von <em>`mikrowellenradioquellen`</em> auf der <em>`sonnenscheibe`</em> im april ergebnisse von <em>`beobachtungen`</em>"<br></br>
-      "flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im <em>`bereich`</em>"
-
-We can clearly see that the term `FINSTERNISSEN` doesn't match within the document while using the **German Analyzer**. It gets stemmed by Elasticsearch to the term `finsternis` but since the searched text isn't decompounded with this approach, it won't return `finsternisbeobachtungen` as relevant for the query. Same goes for the term `MIKROWELLENBEREICH` which is only found by the **Hyphenation Decompounder** within the composition `mikrowellenradioquellen`.
-
-The **Standard German Analyzer** seems to find way less than the **Hyphenation Decompounder**. Even though some of the terms the **Hyphenation** approach extracts are quite unusefull for this query, like `well` and `reich`, it still finds enough relevant terms that weren't found by only using the standard approach.
-
-This shows that the **Decompounder** approach does improve the search results.
+This shows that the **Decompounder** approach can clearly improve the search results.
 
 Dictionary Decompounder vs. Hyphenation Decompounder
 =============
 
-Second we compared the **Dictionary Decompounder** with the **Hyphenation Decompounder** to see how much the improvement between a dictionary and a hyphenation approach weights. 
-Below you can compare how many of the true positives, false negatives and false positives are overlapping between the two approaches:
+Second we compared the **Dictionary Decompounder** with the **Hyphenation Decompounder** to see how much the improvement between a dictionary and a hyphenation approach weights. We used **Query 42** for this comparison, since the f-score difference is `0.25`.
 
-|                     |          | true positives | false positives | false negatives |
-|---------------------|----------|----------------|-----------------|-----------------|
-| **Dictionary Decompounder** | total    |     8          | 18              | 18              |
-|                     | disjoint |     0          | 12              | 6               |
-| **Hyphenation Decompounder**   | total    |     8          | 12              | 12              |
-|                     | disjoint |     6          | 6               | 0               |
+*Example Query 42*: "LÖSUNG VON DIFFERENTIALGLEICHUNGEN PER COMPUTER"
 
-Once again it is helpful to look at one relevant document from the query more closely. The document with the id `81`, which we chose as a an example, does get ranked very high on both approaches. But it's only on the second position with the **dictionary** approach and on the top position with the **hyphenation** approach. 
+The **Hyphenation Analyzer** finds way more true positives than the **Dictionary Decompounder**, out of 36 relevant documents only 1 is found by the **Dictionary** approach and 8 by the **Hyphenation** approach.
+
+<img
+  alt=""
+  src={useBaseUrl('img/EXP3_NPL_distributions_dict_hyph.svg')}
+  class= "contents"
+/>
+
+Once again it is helpful to look at one relevant document from the query more closely. The document with the id `5444`, which we chose as a an example, does get ranked very high on both approaches. But it's only on the second position with the **dictionary** approach and on the top position with the **hyphenation** approach. 
 
 **Dictionary Decompounder**
-"position": 1, "score": 27.676197
+"position": outside top 20, "score": 7.703416
 ```json
-{
-  "doc": {
-    "id": 81,
-    "text_german": "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von beobachtungen der flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im bereich"
-  },
-  "highlight": {
-    "text_german": [
-      "<em>finsternisbeobachtungen</em> von <em>mikrowellenradioquellen</em> auf der <em>sonnenscheibe</em> im april ergebnisse von <em>beobachtungen</em>",
-      "der flussdichtepolarisation und <em>helligkeitsverteilung</em>, die in japan <em>gemacht</em> wurden, sind vier frequenzen",
-      "im <em>bereich</em>"
-    ]
-  }
+{"doc":{"_id" : 5444,
+        "text_german" : "die Lösung partieller Differentialgleichungen durch Differenzverfahren mit dem elektronischen Differentialanalysator"
+        },
+        "highlight" : {
+          "text_german" : [
+            "die <em>Lösung</em> partieller <em>Differentialgleichungen</em> durch Differenzverfahren mit dem elektronischen <em>Differentialanalysator</em>"
+          ]
+        }}
 ```
 
 **Hyphenation Decompounder**
-"position": 0, "score": 28.156767
+"position": 2, "score": 14.950291
 ```json
-{
-  "doc": {
-    "id": 81,
-    "text_german": "finsternisbeobachtungen von mikrowellenradioquellen auf der sonnenscheibe im april ergebnisse von beobachtungen der flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im bereich"
-  },
-  "highlight": {
-    "text_german": [
-      "<em>finsternisbeobachtungen</em> von <em>mikrowellenradioquellen</em> auf der <em>sonnenscheibe</em> im april ergebnisse von <em>beobachtungen</em>",
-      "flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im <em>bereich</em>"
-    ]
-  }
-}
+{"doc": {"id": 5444,
+    "text_german": "die Lösung partieller Differentialgleichungen durch Differenzverfahren mit dem elektronischen Differentialanalysator"},
+   "highlight": {"text_german": ["die <em>Lösung</em> partieller <em>Differentialgleichungen</em> durch Differenzverfahren mit dem elektronischen <em>Differentialanalysator</em>"]}
+   }
 ```
-
-To analyze why this document is rated slightly different, we have to look at the searched terms once again:
-
-<img
-  alt=""
-  src={useBaseUrl('img/EXP3_npl_hyph_dict_terms.png')}
-  class= "contents"
-/>
-
-Here you can find a list of all the searched terms for each approach and their frequencies per document as well as in how many documents they were found:
-
-|                           **Dictionary Decompounder**                          |              |                     |  |  **Hyphenation Decompounder**                                                         |              |                     |            |
-|:----------------------------------------------------------------------------:|--------------|---------------------|:--------------------------:|-----------------------------------------------------------|--------------|---------------------|------------|
-|                                                                              | term   score | term per doc | doc   freq                 |                                                           | term   score | term per doc | doc   freq |
-| "beobachtung",   "acht", "bach"                                              | 3,29         | 6                   | 2217                       | "beobachtung"                                             | 3,77         | 1                   | 688        |
-| "sonn"                                                                       | 3,84         | 1                   | 721                        | "sonn"                                                    | 3,71         | 1                   | 721        |
-| "finsternis",   "finsterniss", "stern"                                       | 6,9          | 2                   | 198                        | "finsternis","finsterniss"                                | 6,53         | 1                   | 88         |
-| "teil",   "verteilung"                                                       | 2,65         | 1                   | 1679                       | -                                                         | -            | -                   | -          |
-| "quell",   "ell"                                                             | 2,09         | 2                   | 3352                       | "quell"                                                   | 4,51         | 1                   | 398        |
-| "scheib",   "eib"                                                            | 6,57         | 2                   | 241                        | "scheib"                                                  | 6,08         | 1                   | 123        |
-| "bereich",   "eich", "ell", "mikro",   "mikrowellenbereich", "reich", "well" | 2,33         | 6                   | 3568                       | "bereich","mikro",   "mikrowellenbereich", "reich","well" | 3,55         | 4                   | 1759       |
-
-
-*Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
-
-Text highlighted with *Dictionary Decompounder*:<br></br>
-      "<em>`finsternisbeobachtungen`</em> von <em>`mikrowellenradioquellen`</em> auf der <em>`sonnenscheibe`</em> im april ergebnisse von <em>beobachtungen</em>"<br></br>
-      "der flussdichtepolarisation und <em>`helligkeitsverteilung`</em>, die in japan <em>`gemacht`</em> wurden, sind vier frequenzen"<br></br>
-      "im <em>`bereich`</em>"
-
-Text highlighted with *Hyphenation Decompounder*:<br></br>
-      "<em>`finsternisbeobachtungen`</em> von <em>`mikrowellenradioquellen`</em> auf der <em>`sonnenscheibe`</em> im april ergebnisse von <em>`beobachtungen`</em>"<br></br>
-      "flussdichtepolarisation und helligkeitsverteilung, die in japan gemacht wurden, sind vier frequenzen im <em>`bereich`</em>"
-
-This example shows that the **Dictionary Decompounder** extracts significantly more search terms within a term group from the query than the **Hyphenation Decompounder**. However, this depresses the tf-idf value, which is included in the calculation of the total term score, because with more documents found the term loses relevance.
-
-The **Hyphenation Decompounder** searches for subwords within the query terms according to certain patterns. If these subwords are not considered relevant because they do not appear in a specified word list, they are not searched for. 
-
-This can be seen especially with the word group `quell`. The **Dictionary Decompounder** additionally includes `ell`, which brings the score to `2.09`. The **Hyphenation Decompounder** has excluded the term `ell` and thus achieves a higher score of `4.51`.
-
-So we can see that more search terms don't necessarily lead to better results, wherefore the **Hyphenation Decompounder** does improve the results of the **Dictionary Decompounder**.
 
 ### 4.2. Why is the German Analyzer significantly better than the Standard Analyzer?
 
-While experimenting the scores for the **German Analyzer** always exceeded the scores of the **Standard Analyzer** and on some, like CACM or LISA, there was a increase of nearly 50%, even around 80% with the ADI:
-
-<img
-  alt=""
-  src={useBaseUrl('img/EXP3_Gains.svg')}
-  class= "contents"
-/>
+While experimenting the scores for the **German Analyzer** always exceeded the scores of the **Standard Analyzer** and on some, like [CACM](../guides/data-comparison#cacm) or [LISA](../guides/data-comparison#lisa), there was a increase of nearly 50%, even around 80% with the [ADI](../guides/data-comparison#adi) (see graphic with gains in section [3. Results](../comparisons/german-decomposition#3-results)).
 
 At first this seemed a bit odd, so we looked a bit more into it. While analyzing especially the ADI and the CACM we discovered that the [**Standard Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html) finds more documents that the [**German Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#german-analyzer) which increases the document frequency and therefore returns way more irrelevant documents. 
 The reason here fore is the stop word list that is used. The **Standard Analyzer** doesn't consider any german stop words, while the **German Analyzer** works with a very [rich stop word list.](https://github.com/apache/lucene/blob/main/lucene/analysis/common/src/resources/org/apache/lucene/analysis/snowball/german_stop.txt) Below you can find two more detailed examples, one from the ADI and one from the CACM, that illustrate this phenomenon 
