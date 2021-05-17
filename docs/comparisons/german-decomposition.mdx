@@ -625,7 +625,7 @@ When we look more detailed on search terms of the one document `2851` that was f
   class= "contents"
 />
 
-Although the scoring of the **German Analyzer** is higher than the scoring of the **Standard Analyzer**, it has a lower position in the ranking. This is because there were other relevant documents in the second approach that had an even better term scoring. For example document `1262` which was on position 1 with the second approach, but only at the 65 position with the first:
+Although the scoring of the **German Analyzer** is higher than the scoring of the **Standard Analyzer**, it has a lower position in the ranking. This is because there were other relevant documents in the second approach that had an even better term scoring. For example document `1262` which was on position 3 with the second approach, but out of the top 20 for the first approach:
 
 <img
   alt=""
@@ -639,7 +639,7 @@ When we look at the highlights of both approaches and which terms are matches, w
 ```json
 {"_id": "1262",
  "_index": "pragmalingu-cacm-german-corpus",
- "_score": 7.32441,
+ "_score": 0.3728282,
  "_source": {"text_german": "Es werden zwei Anweisungen vorgeschlagen, die es einem Programmierer erlauben der in einer prozedurorientierten Sprache schreibt Programmabschnitte anzugeben, die parallel ausgeführt werden sollen. parallel ausgeführt werden sollen.  Die Anweisungen sind DO TOGETHER und HOLD.  Sie dienen einerseits als Klammern zur Festlegung einen Bereich für den Parallelbetrieb festzulegen und teilweise jeden parallelen Pfad innerhalb dieses Bereichs zu definieren.  DO TOGETHERs können verschachtelt werden.  Die Anweisungen sollten besonders besonders effektiv für die Verwendung mit Rechengeräten sein, die in der Lage sind, ein gewisses Maß an Überlappung von Rechenoperationen zu erreichen. ",
   "title_german": "Prozedur-orientierte Sprachanweisungen zur Erleichterung der Parallelverarbeitung"},
  "_type": "_doc",
@@ -651,15 +651,14 @@ When we look at the highlights of both approaches and which terms are matches, w
 
 **German Analyzer**
 ```json
-{"question": " Parallele Sprachen; Sprachen für paralleles Rechnen .N  10. Alec Grimison, Comp Serv, Uris Hall (parallel lang)   ",
- "true_positives": [{"doc": {"id": 1262,
-    "text_german": "Es werden zwei Anweisungen vorgeschlagen, die es einem Programmierer erlauben der in einer prozedurorientierten Sprache schreibt Programmabschnitte anzugeben, die parallel ausgeführt werden sollen. parallel ausgeführt werden sollen.  Die Anweisungen sind DO TOGETHER und HOLD.  Sie dienen einerseits als Klammern zur Festlegung einen Bereich für den Parallelbetrieb festzulegen und teilweise jeden parallelen Pfad innerhalb dieses Bereichs zu definieren.  DO TOGETHERs können verschachtelt werden.  Die Anweisungen sollten besonders besonders effektiv für die Verwendung mit Rechengeräten sein, die in der Lage sind, ein gewisses Maß an Überlappung von Rechenoperationen zu erreichen. ",
-    "title_german": "Prozedur-orientierte Sprachanweisungen zur Erleichterung der Parallelverarbeitung"},
-   "highlight": {"text_german": ["zwei Anweisungen vorgeschlagen, die es einem Programmierer erlauben der in einer prozedurorientierten <em>Sprache</em>",
-     "schreibt Programmabschnitte anzugeben, die <em>parallel</em> ausgeführt werden sollen. <em>parallel</em> ausgeführt werden",
-     "einerseits als Klammern zur Festlegung einen Bereich für den Parallelbetrieb festzulegen und teilweise jeden <em>parallelen</em>"]},
-   "position": 1,
-   "score": 22.625546}]}
+{"doc": {"id": 1262,
+   "text_german": "Es werden zwei Anweisungen vorgeschlagen, die es einem Programmierer erlauben der in einer prozedurorientierten Sprache schreibt Programmabschnitte anzugeben, die parallel ausgeführt werden sollen. parallel ausgeführt werden sollen.  Die Anweisungen sind DO TOGETHER und HOLD.  Sie dienen einerseits als Klammern zur Festlegung einen Bereich für den Parallelbetrieb festzulegen und teilweise jeden parallelen Pfad innerhalb dieses Bereichs zu definieren.  DO TOGETHERs können verschachtelt werden.  Die Anweisungen sollten besonders besonders effektiv für die Verwendung mit Rechengeräten sein, die in der Lage sind, ein gewisses Maß an Überlappung von Rechenoperationen zu erreichen. ",
+   "title_german": "Prozedur-orientierte Sprachanweisungen zur Erleichterung der Parallelverarbeitung"},
+  "highlight": {"text_german": ["zwei Anweisungen vorgeschlagen, die es einem Programmierer erlauben der in einer prozedurorientierten <em>Sprache</em>",
+    "schreibt Programmabschnitte anzugeben, die <em>parallel</em> ausgeführt werden sollen. <em>parallel</em> ausgeführt werden",
+    "einerseits als Klammern zur Festlegung einen Bereich für den Parallelbetrieb festzulegen und teilweise jeden <em>parallelen</em>"]},
+  "position": 3,
+  "score": 16.73008}
 ```
 
 **Conclusion**
@@ -837,7 +836,7 @@ This examples show that sometimes decomposition can lead to a decrease of the va
 
 ### 5.4. Why does the Dictionary Decompounder work better than Hyphenation Decompounder?
 
-While we mostly looked at the comparison between the decompounding and standard approaches, the **Dictionary Decompounder** was always subject to the **Hyphenation Decompounder**. Only in the [Medline corpus](../guides/data-comparison#medline) corpus there were minor deviations in the scores where the **Dictionary Decompounder** did better.
+While we mostly looked at the comparison between the decompounding and standard approaches, the **Dictionary Decompounder** was always subject to the **Hyphenation Decompounder**. Only in the [Medline](../guides/data-comparison#medline) and the [CACM](../guides/data-comparison#cacm) corpus there were minor deviations in the scores where the **Dictionary Decompounder** did better.
 
 <img
   alt=""
