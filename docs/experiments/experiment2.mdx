@@ -376,17 +376,29 @@ This is the simplest way to balance both Precision and Recall, there are also ot
 These are the results for the search on the "title"-field  which compare the multi-match query, a BERT based search and a re-ranking on the top 100 results using BERT. Since the data sets `Medline`,` NPL` and `Time` do not have any titles, the title search was left out for these corpora as with the last experiment.
 
 **Recall**
-<img alt="Recall on title field" src={useBaseUrl('img/EXP2_Recall_title.png')} />
+<img
+  alt="Recall on title field"
+  src={useBaseUrl('img/EXP2_Recall_title.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=crBSdbZMPAH9&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 **Precision**
-<img alt="Precision on title" src={useBaseUrl('img/EXP2_Precision_title.png')} />
+<img
+  alt="Precision on title field"
+  src={useBaseUrl('img/EXP2_Precision_title.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=Bp4g4N7TUpXB&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br /><br />
 
 **F1-Score**
-<img alt="F1-Score on title field" src={useBaseUrl('img/EXP2_Fscore_title.png')} />
+<img
+  alt="F1-Score on title field"
+  src={useBaseUrl('img/EXP2_Fscore_title.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=mYfPAzYTVwRQ&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
@@ -395,17 +407,29 @@ These are the results for the search on the "title"-field  which compare the mul
 These are the results for the search on the "text"-field which compare the multi-match query, a BERT search and a re-ranking on the top 100 results using BERT.
 
 **Recall**
-<img alt="Recall on text field" src={useBaseUrl('img/EXP2_Recall_text.png')} />
+<img
+  alt="Recall on text field"
+  src={useBaseUrl('img/EXP2_Recall_text.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=BXibzPzmf_KK&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 **Precision**
-<img alt="Precision on text" src={useBaseUrl('img/EXP2_Precision_text.png')} />
+<img
+  alt="Precision on text field"
+  src={useBaseUrl('img/EXP2_Precision_text.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=tRF25Yq3G0QU&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br /><br />
 
 **F1-Score**
-<img alt="F1-Score on text field" src={useBaseUrl('img/EXP2_Fscore_text.png')} />
+<img
+  alt="F1-Score on text field"
+  src={useBaseUrl('img/EXP2_FScore_text.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=QA8CpbbRQtIH&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
@@ -413,17 +437,29 @@ These are the results for the search on the "text"-field which compare the multi
 These are the results for the search with a more complex query which searches on both fields "title" and "text" and reranks these results afterwards by computing the cosine similarity for the BERT vectors on title and text. The title field is boosted while reranking. To see the difference these results are compared with the multi-match query on the "title"- and "text"-field, as with the BERT based search on "title" and "text".
 
 **Recall**
-<img alt="Recall on complex re-ranking query" src={useBaseUrl('img/EXP2_Recall_complex.png')} />
+<img
+  alt="Recall on complex re-ranking query"
+  src={useBaseUrl('img/EXP2_Recall_complex.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=tJBsXlxhmgPV&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 **Precision**
-<img alt="Precision on complex re-ranking query" src={useBaseUrl('img/EXP2_Precision_complex.png')} />
+<img
+  alt="Precision on complex re-ranking query"
+  src={useBaseUrl('img/EXP2_Precision_complex.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=N41wwBZA1Z3v&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br /><br />
 
 **F1-Score**
-<img alt="F1-Score on complex re-ranking query" src={useBaseUrl('img/EXP2_Fscore_complex.png')} />
+<img
+  alt="F1-Score  on complex re-ranking query"
+  src={useBaseUrl('img/EXP2_Fscore_complex.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=hO3oqgZE2ys2&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
