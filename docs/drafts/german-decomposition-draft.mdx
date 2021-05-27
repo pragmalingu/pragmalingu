@@ -1,5 +1,5 @@
 ---
-id: german-decomposition-draft
+id: german-decomposition
 title: German Decomposition
 sidebar_label: Decomposition
 custom_edit_url: null
@@ -451,7 +451,7 @@ On the NPL the **Hyphenation Decompounder** seems to work best. It seems to diff
 
 ### 5.2. Why is the German Analyzer significantly better than the Standard Analyzer?
 
-While experimenting the scores for the **German Analyzer** always exceeded the scores of the **Standard Analyzer** and on some corpora, like [CACM](../guides/data-comparison#cacm) or [LISA](../guides/data-comparison#lisa), there was an increase of nearly 50%, even around 80% with the [ADI corpus](../guides/data-comparison#adi) (see graphic with gains in section [3. Results](../comparisons/german-decomposition#3-results)).
+While experimenting the scores for the **German Analyzer** always exceeded the scores of the **Standard Analyzer** and on some corpora, like [CACM](../guides/data-comparison#cacm) or [LISA](../guides/data-comparison#lisa), there was an increase of nearly 50%, even around 80% with the [ADI corpus](../guides/data-comparison#adi) (see graphic with gains in section [3. Results](#3-results)).
 
 At first, this seemed a bit odd, so we looked a bit more into it. While analyzing especially the ADI and the CACM datasets we discovered that the [**Standard Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html) finds more documents than the [**German Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#german-analyzer) which increases the document frequency and therefore returns way more irrelevant documents. 
 The reason for that is the stop word list that is used. The **Standard Analyzer** doesn't consider any German stop words, while the **German Analyzer** works with a very [rich stop word list.](https://github.com/apache/lucene/blob/main/lucene/analysis/common/src/resources/org/apache/lucene/analysis/snowball/german_stop.txt) Below you can find two more detailed examples, one from the ADI and one from the CACM corpus, that illustrate this phenomenon 
