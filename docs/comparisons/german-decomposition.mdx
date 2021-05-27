@@ -314,8 +314,9 @@ Based on the scores of the **Standard Analyzer**, the outcome became better with
 
 The best examples for this can be seen while looking at the [NPL corpus](../guides/data-comparison#npl). To illustrate what exactly caused the increase, we picked out a search query that seemed most informative to us. 
 
-German Analyzer vs. Hyphenation Decompounder
-=============
+<br/><br/>
+
+#### German Analyzer vs. Hyphenation Decompounder
 
 To show in comparison how the **German Analyzer** is surpassed by the **Hyphenation Decompounder**, **Query 23** seemed like the best choice. The f-score difference between both is `0.256`. 
 
@@ -384,9 +385,9 @@ We can clearly see that for example the term `FINSTERNISSEN` doesn't match withi
 The **German Analyzer** seems to find way less than the **Hyphenation Decompounder**. Even though some of the terms the **Hyphenation** approach extracts are quite unusefull for this query, like `well` and `reich`, it still finds enough relevant terms that weren't found by only using the standard approach.
 
 This shows that the **Decompounder** approach can clearly improve the search results.
+<br/><br/>
 
-Dictionary Decompounder vs. Hyphenation Decompounder
-=============
+#### Dictionary Decompounder vs. Hyphenation Decompounder
 
 Second we compared the **Dictionary Decompounder** with the **Hyphenation Decompounder** to see how much the improvement between a dictionary and a hyphenation approach weights. We used **Query 42** for this comparison, since the f-score difference is `0.25`.
 
@@ -452,8 +453,9 @@ While experimenting the scores for the **German Analyzer** always exceeded the s
 At first this seemed a bit odd, so we looked a bit more into it. While analyzing especially the ADI and the CACM we discovered that the [**Standard Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html) finds more documents that the [**German Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#german-analyzer) which increases the document frequency and therefore returns way more irrelevant documents. 
 The reason here fore is the stop word list that is used. The **Standard Analyzer** doesn't consider any german stop words, while the **German Analyzer** works with a very [rich stop word list.](https://github.com/apache/lucene/blob/main/lucene/analysis/common/src/resources/org/apache/lucene/analysis/snowball/german_stop.txt) Below you can find two more detailed examples, one from the ADI and one from the CACM, that illustrate this phenomenon 
 
-ADI
-======
+<br/><br/>
+
+#### ADI
 
 As a good example for the decrease in irrelevant retrieval in the ADI corpus would be **Query 21**, the F1-Score difference between the **Standard Analyzer** and the **German Analyzer** is `0,416`.
 
@@ -600,9 +602,9 @@ That is because it finds words while stemming which can't be found otherwise.
 
 With this example we can see, that the **Standard Analyzer** only matches `von` which is filtered by the stop word list in the second approach and doesn't match `test` because the word `Testen` isn't stemmed. 
 It seems like the effect of stemming and stop words are very relevant in german information retrieval.
+<br/><br/>
 
-CACM
-======
+#### CACM
 
 To support this conclusion let's look at one more example from the CACM. 
 
@@ -669,9 +671,9 @@ This way, you might avoid too many irrelevant documents getting returned that ca
 ### 5.3. Why does German Analyzer work better than Dictionary Decompounder?
 
 The **Decompounders** seemed to work better on most of the corpora we compared, but on the [ADI](../guides/data-comparison#adi), [Cranfield](../guides/data-comparison#cranfield), [LISA](../guides/data-comparison#lisa) and [TIME](../guides/data-comparison#time) corpus to our suprise the **German Analyzer** scores exceeded both decompounding approaches. We looked more into that for the Cranfield and the LISA corpus. We decided to leave the ADI out of this part of the discussion since it's a rather small corpus and also the Time, since the other two show better examples.
+<br/><br/>
 
-Cranfield
-======
+#### Cranfield
 
 To analyze why the results of the **German Analyzer** seem to be better than the decompounding approaches, we chose the **Dictionary Decompounder** for the comparision.
 
@@ -751,9 +753,10 @@ In information retrieval, the tf-idf measure is often consulted when analyzing s
 
 In the tf-idf measure, these two values are weighed against each other. If a term is very rare in the entire corpus, but quite frequent in the document under consideration, it is classified as more relevant.
 </details>
+<br/><br/>
 
-LISA
-======
+#### LISA
+
 
 Similar to the Cranfield corpus, the different values from the **German Analyzer** and **Dictionary Decompounder** are specifically visible in the recall scores:
 
@@ -830,6 +833,7 @@ In information retrieval, the tf-idf measure is often consulted when analyzing s
 
 In the tf-idf measure, these two values are weighed against each other. If a term is very rare in the entire corpus, but quite frequent in the document under consideration, it is classified as more relevant.
 </details>
+<br/><br/>
 
 **Conclusion**
 This examples show that sometimes decomposition can lead to a decrease of the values due to over-decompounding the search terms and therefore returning more noise.
@@ -883,7 +887,7 @@ In information retrieval, the tf-idf measure is often consulted when analyzing s
 
 In the tf-idf measure, these two values are weighed against each other. If a term is very rare in the entire corpus, but quite frequent in the document under consideration, it is classified as more relevant.
 </details>
-
+<br/><br/>
 Here we can see what exactly was matched inside the documents:
 
 **Explain Dictionary Decompounder**
