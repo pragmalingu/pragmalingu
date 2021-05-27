@@ -674,11 +674,12 @@ This would also explain why the standard analyzer performs worse on German text 
 ### 5.3. Why does German Analyzer work better than Dictionary Decompounder?
 
 The **Decompounders** seemed to work better on most of the corpora we compared, but on the [ADI](../guides/data-comparison#adi), [Cranfield](../guides/data-comparison#cranfield), [LISA](../guides/data-comparison#lisa) and [TIME](../guides/data-comparison#time) corpus to our suprise the **German Analyzer** scores exceeded both decompounding approaches. We looked more into that for the Cranfield and the LISA corpus. We decided to leave the ADI out of this part of the discussion since it's a rather small corpus and also the Time, since the other two show better examples.
-<br/><br/>
+
+<br></br>
 
 #### Cranfield
 
-To analyze why the results of the **German Analyzer** seem to be better than the decompounding approaches, we chose the **Dictionary Decompounder** for the comparision.
+To analyze why the results of the **German Analyzer** seem to be better than the decompounding approaches, we chose the **Dictionary Decompounder** for the comparison.
 
 <img
   alt=""
@@ -692,7 +693,7 @@ A good example to see what exactly works better with the **German Analyzer** wou
 *Example Query 3:* " welche Probleme der Wärmeleitung in Verbundplatten bisher gelöst worden sind ."
 
 
-There are 9 relevant documents for this Query where only 1 is returned by the **Dictionary Decompounder** and 6 by the **German Analyzer**:
+There are 9 relevant documents for this query where only 1 is returned by the **Dictionary Decompounder** and 6 by the **German Analyzer**:
 
 <img
   alt=""
@@ -700,8 +701,8 @@ There are 9 relevant documents for this Query where only 1 is returned by the **
   class= "contents"
 />
 
-We chose the one retrieved document that was returned by both approches, `181`. 
-We can see by the scores and positions, that apparently the **DictionaryDecompounder** matches way more documents before matching 181 although the score isn't that different from the **German Analyzer**:
+We chose the one retrieved document that was returned by both approaches, `181`. 
+We can see by the scores and positions, that apparently the **DictionaryDecompounder** matches way more documents before matching document 181, although the score isn't that different from the **German Analyzer**:
 
 |                        | **German Analyzer**    | **Dictionary Decompounder**                         |
 |------------------------|------------------------|-----------------------------------------------------|
@@ -716,7 +717,7 @@ We can see, while looking at the term scores, that the **German Analyzer** does 
   class= "contents"
 />
 
-Although the decompounding matches way more terms inside the documents `text_german` field, both approaches seem to rely more on the `title_german` field score because it was higher:
+Although the decompounding matches way more terms inside the documents `text_german` field, both approaches seem to take the `title_german` field score for the document because it was higher:
 
 **Explain German Analyzer**
 ```json
@@ -743,7 +744,7 @@ Although the decompounding matches way more terms inside the documents `text_ger
 }
 ```
 
-Due to decompounding more documents are found, which decreases the idf and machtes more irrelevant documents. 
+Due to decompounding more documents are found, which decreases the idf and matches more irrelevant documents. 
 The scores for terms like "warmeleitung" will be combined with the scores of the sub-concept "warm". That generalizes the term "warmeleitung" too much.
 To see if that's the case with the other corpora too let's check an example from the LISA corpus as well.
 
@@ -756,10 +757,10 @@ In information retrieval, the tf-idf measure is often consulted when analyzing s
 
 In the tf-idf measure, these two values are weighed against each other. If a term is very rare in the entire corpus, but quite frequent in the document under consideration, it is classified as more relevant.
 </details>
-<br/><br/>
+
+<br></br>
 
 #### LISA
-
 
 Similar to the Cranfield corpus, the different values from the **German Analyzer** and **Dictionary Decompounder** are specifically visible in the recall scores:
 
@@ -796,7 +797,7 @@ The score isn't that different, but the position is. The **Dictionary Decompound
   class= "contents"
 />
 
-The **Dictionary Decompounder** finds way more terms, also including some irrelevant and non-sense words like `aktull` or `formation` w(hich has nothing to do with the searched term `information`).
+The **Dictionary Decompounder** finds way more terms, also including some irrelevant and non-sense words like `aktull` or `formation` (which has nothing to do with the searched term `information`).
 
 **Explain German Analyzer**<br></br>
 ```json
@@ -825,7 +826,7 @@ The **Dictionary Decompounder** finds way more terms, also including some irrele
   "score": 40.788223}
 ```
 
-This concludes that with all those irrelevant `terms` the **Dictionary Decompounder** seems to have the same problem on the LISA corpus as on the Cranfield, the decomposition increases the returned document rate which decreases the idf and therefore matches more irrelevant before the relevant documents.
+This concludes that with all those irrelevant `terms` the **Dictionary Decompounder** seems to have the same problem on the LISA corpus as on the Cranfield, the decomposition increases the returned document rate which decreases the idf and therefore scores irrelevant documents higher than relevant ones.
 
 <details>
 <summary>What is "idf" and why is it relevant?</summary>  
@@ -836,14 +837,15 @@ In information retrieval, the tf-idf measure is often consulted when analyzing s
 
 In the tf-idf measure, these two values are weighed against each other. If a term is very rare in the entire corpus, but quite frequent in the document under consideration, it is classified as more relevant.
 </details>
-<br/><br/>
+<br></br>
 
 **Conclusion**
-This examples show that sometimes decomposition can lead to a decrease of the values due to over-decompounding the search terms and therefore returning more noise.
+These examples show that sometimes decomposition can lead to a decrease in the values due to over-decompounding the search terms and therefore returning more noise.
 
-### 5.4. Why does the Dictionary Decompounder work better than Hyphenation Decompounder?
+### 5.4. Why does the Dictionary Decompounder work better than the Hyphenation Decompounder?
 
-While we mostly looked at the comparison between the decompounding and standard approaches, the **Dictionary Decompounder** was always subject to the **Hyphenation Decompounder**. Only in the [Medline](../guides/data-comparison#medline) and the [CACM](../guides/data-comparison#cacm) corpus there were minor deviations in the scores where the **Dictionary Decompounder** did better.
+We mostly compared decompounding with the standard analyzer. For most of the datasets the **Hyphenation Decompounder** was performing better than the **Dictionary Decompounder**, but for the  [Medline](../guides/data-comparison#medline) and the [CACM](../guides/data-comparison#cacm) corpus there were minor deviations in the scores where the **Dictionary Decompounder** performed better
+.
 
 <img
   alt=""
@@ -851,7 +853,7 @@ While we mostly looked at the comparison between the decompounding and standard 
   class= "contents"
 />
 
-To illustrate what exactly caused the increase, we picked out a search query that seemed most informative to us. 
+To investigate what exactly caused the increase, we picked out a search query that seemed most informative to us. 
 We looked deeper into **Query 27** with a f-score difference of `0.432`.
 
 *Example Query 27:* "Interesse an den parasitären Krankheiten. Filarienparasiten bei Primaten, die Insektenvektoren der Filarien, die verwandten Dipteren, d. h. Culicoides, Mücken usw., die als Vektoren dieser Infektionskrankheit dienen können; auch die Lebenszyklen und die Übertragung der Filarien. Parasiten und Ökologie des Taiwan-Affen, Macaca cyclopis, mit Schwerpunkt auf dem Filarienparasiten, Macacanema formosana."
@@ -864,7 +866,7 @@ There are 18 relevant documents for this query, the **Dictionary Decompounder** 
   class= "contents"
 />
 
-As a good example document to compare the scores and searched terms in detail we chose the document `732` because the **Hyphenation Decompounder** doesn't score it into the top 20 decouments, while the **Dictionary Decompounder** does.
+As a good example document to compare the scores and searched terms in detail we chose the document `732` because the **Hyphenation Decompounder** doesn't score it into the top 20 documents, while the **Dictionary Decompounder** does.
 
 |                     | **Dictionary Decompounder**    | **Hyphenation Decompounder**     |
 |---------------------|--------------------------------|----------------------------------|
@@ -890,7 +892,8 @@ In information retrieval, the tf-idf measure is often consulted when analyzing s
 
 In the tf-idf measure, these two values are weighed against each other. If a term is very rare in the entire corpus, but quite frequent in the document under consideration, it is classified as more relevant.
 </details>
-<br/><br/>
+<br></br>
+
 Here we can see what exactly was matched inside the documents:
 
 **Explain Dictionary Decompounder**
