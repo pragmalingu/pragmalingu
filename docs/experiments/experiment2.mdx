@@ -121,9 +121,9 @@ for ID, doc_data in adi_txt_data.items():
 
 | BERT on title field  |   ADI |   CACM |   CISI |   Cranfield |   LISA |
 |----------------------|-------|--------|--------|-------------|--------|
-| Recall               | 0.459 |  0.093 |  0.039 |       0.24  |  0.139 |
-| Precision            | 0.459 |  0.055 |  0.089 |       0.082 |  0.056 |
-| F-1-Score            | 0.459 |  0.069 |  0.054 |       0.123 |  0.08  |
+| Recall               | 0.459 |  0.109 |  0.039 |       0.24  |  0.139 |
+| Precision            | 0.459 |  0.07  |  0.089 |       0.082 |  0.056 |
+| F-1-Score            | 0.459 |  0.085 |  0.054 |       0.123 |  0.08  |
 
 **Text Embeddings**<br></br>
 The procedure for working with the whole text was a bit more complicated as we first had to split the text into sentences. Otherwise the embeddings would have been far too long or  even cut off. In addition, we suspect that individual sentences are more likely to be similar to the title than the whole text. Therefore, we created a new category inside the corpus dictionaries to store the split sentences for easy access:
@@ -190,7 +190,7 @@ for ID, doc_data in adi_txt_data.items():
 
 | BERT on text field   |   ADI |   CACM |   CISI |   Cranfield |   LISA |   Medline |   NPL |   Time |
 |----------------------|-------|--------|--------|-------------|--------|-----------|-------|--------|
-| Recall               | 0.528 |  0.117 |  0.067 |       0.242 |  0.129 |     0.171 | 0.099 |  0.58  |
+| Recall               | 0.528 |  0.114 |  0.067 |       0.242 |  0.129 |     0.171 | 0.099 |  0.58  |
 | Precision            | 0.12  |  0.062 |  0.096 |       0.084 |  0.043 |     0.21  | 0.089 |  0.117 |
 | F-1-Score            | 0.196 |  0.081 |  0.079 |       0.124 |  0.064 |     0.189 | 0.094 |  0.195 |
 
@@ -272,16 +272,16 @@ In this example we use our search on the "text"-field and the cosine similarity 
 
 | Re-Ranking on title field |   ADI |   CACM |   CISI | Cranfield |  LISA |
 |---------------------------|-------|--------|--------|-----------|-------|
-| Recall                    | 0.472 |  0.209 |  0.059 |     0.405 | 0.306 |
-| Precision                 | 0.111 |  0.117 |  0.094 |     0.147 | 0.141 |
-| F1-Score                  | 0.18  |  0.15  |  0.072 |     0.216 | 0.193 |
+| Recall                    | 0.472 |  0.185 |  0.059 |     0.405 | 0.306 |
+| Precision                 | 0.111 |  0.11  |  0.094 |     0.147 | 0.141 |
+| F1-Score                  | 0.18  |  0.138 |  0.072 |     0.216 | 0.193 |
 
 
 | Re-ranking on text field |   ADI |   CACM |   CISI | Cranfield |  LISA |   Medline |   NPL |   Time |
 |--------------------------|-------|--------|--------|-----------|-------|-----------|-------|--------|
-| Recall                   | 0.537 |  0.297 |  0.112 |     0.515 | 0.355 |     0.335 | 0.233 |  0.774 |
-| Precision                | 0.113 |  0.145 |  0.155 |     0.183 | 0.143 |     0.38  | 0.218 |  0.151 |
-| F1-Score                 | 0.187 |  0.194 |  0.13  |     0.27  | 0.204 |     0.356 | 0.225 |  0.253 |
+| Recall                   | 0.537 |  0.272 |  0.112 |     0.515 | 0.355 |     0.335 | 0.233 |  0.774 |
+| Precision                | 0.113 |  0.13  |  0.155 |     0.183 | 0.143 |     0.38  | 0.218 |  0.151 |
+| F1-Score                 | 0.187 |  0.176 |  0.13  |     0.27  | 0.204 |     0.356 | 0.225 |  0.253 |
 
 
 #### 3.4. Combining those Approaches
@@ -340,14 +340,14 @@ This is the code we used:
 
 | Complex re-ranking query |   ADI |   CACM |   CISI | Cranfield |  LISA |
 |--------------------------|-------|--------|--------|-----------|-------|
-| Recall                   | 0.548 |  0.319 |  0.105 |     0.516 | 0.383 |
-| Precision                | 0.126 |  0.162 |  0.159 |     0.184 | 0.167 |
-| F1-Score                 | 0.205 |  0.215 |  0.127 |     0.271 | 0.233 |
+| Recall                   | 0.556 |  0.294 |  0.105 |     0.516 |  0.383|
+| Precision                | 0.126 |  0.145 |  0.159 |     0.184 | 0.167 |
+| F1-Score                 | 0.205 |  0.194 |  0.127 |     0.271 | 0.233 |
 
 
 ### 4. Results
 
-In order to get suitable comparison values, we decided to carry out the multi-match query in the same way as the BERT based search on the title or text field. In addition to that we tried out how effective re-ranking can be on the BERT based results and also built a more complex query for Elasticsearch to combine everything we evaluated before.
+In order to get suitable comparison values, we decided to carry out the standard analyzer in the same way as the BERT based search on the title or text field. In addition to that we tried out how effective re-ranking can be on the BERT based results and also built a more complex query for Elasticsearch to combine everything we evaluated before.
 To compare our results properly we measured Recall, Precision and F1-Score for every method on every corpus. We divided the results into the search on "title"-field,  on "text"-field and with our more complex query, to avoid confusion.
 
 <details>
@@ -373,57 +373,93 @@ This is the simplest way to balance both Precision and Recall, there are also ot
 </details> 
 
 #### 4.1. Search on the title field
-These are the results for the search on the "title"-field  which compare the multi-match query, a BERT based search and a re-ranking on the top 100 results using BERT. Since the data sets `Medline`,` NPL` and `Time` do not have any titles, the title search was left out for these corpora as with the last experiment.
+These are the results for the search on the "title"-field  which compare the standard analyzer, a BERT based search and a re-ranking on the top 100 results using BERT. Since the data sets `Medline`,` NPL` and `Time` do not have any titles, the title search was left out for these corpora as with the last experiment.
 
 **Recall**
-<img alt="Recall on title field" src={useBaseUrl('img/EXP2_Recall_title.png')} />
+<img
+  alt="Recall on title field"
+  src={useBaseUrl('img/EXP2_Recall_title.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=crBSdbZMPAH9&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 **Precision**
-<img alt="Precision on title" src={useBaseUrl('img/EXP2_Precision_title.png')} />
+<img
+  alt="Precision on title field"
+  src={useBaseUrl('img/EXP2_Precision_title.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=Bp4g4N7TUpXB&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br /><br />
 
 **F1-Score**
-<img alt="F1-Score on title field" src={useBaseUrl('img/EXP2_Fscore_title.png')} />
+<img
+  alt="F1-Score on title field"
+  src={useBaseUrl('img/EXP2_Fscore_title.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=mYfPAzYTVwRQ&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 
 #### 4.2. Search on the text field
-These are the results for the search on the "text"-field which compare the multi-match query, a BERT search and a re-ranking on the top 100 results using BERT.
+These are the results for the search on the "text"-field which compare the standard analyzer, a BERT search and a re-ranking on the top 100 results using BERT.
 
 **Recall**
-<img alt="Recall on text field" src={useBaseUrl('img/EXP2_Recall_text.png')} />
+<img
+  alt="Recall on text field"
+  src={useBaseUrl('img/EXP2_Recall_text.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=BXibzPzmf_KK&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 **Precision**
-<img alt="Precision on text" src={useBaseUrl('img/EXP2_Precision_text.png')} />
+<img
+  alt="Precision on text field"
+  src={useBaseUrl('img/EXP2_Precision_text.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=tRF25Yq3G0QU&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br /><br />
 
 **F1-Score**
-<img alt="F1-Score on text field" src={useBaseUrl('img/EXP2_Fscore_text.png')} />
+<img
+  alt="F1-Score on text field"
+  src={useBaseUrl('img/EXP2_FScore_text.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=QA8CpbbRQtIH&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 #### 4.3. Search with a complex re-ranking query
-These are the results for the search with a more complex query which searches on both fields "title" and "text" and reranks these results afterwards by computing the cosine similarity for the BERT vectors on title and text. The title field is boosted while reranking. To see the difference these results are compared with the multi-match query on the "title"- and "text"-field, as with the BERT based search on "title" and "text".
+These are the results for the search with a more complex query which searches on both fields "title" and "text" and reranks these results afterwards by computing the cosine similarity for the BERT vectors on title and text. The title field is boosted while reranking. To see the difference these results are compared with the standard analyzer on the "title"- and "text"-field, as with the BERT based search on "title" and "text".
 
 **Recall**
-<img alt="Recall on complex re-ranking query" src={useBaseUrl('img/EXP2_Recall_complex.png')} />
+<img
+  alt="Recall on complex re-ranking query"
+  src={useBaseUrl('img/EXP2_Recall_complex.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=tJBsXlxhmgPV&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 **Precision**
-<img alt="Precision on complex re-ranking query" src={useBaseUrl('img/EXP2_Precision_complex.png')} />
+<img
+  alt="Precision on complex re-ranking query"
+  src={useBaseUrl('img/EXP2_Precision_complex.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=N41wwBZA1Z3v&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br /><br />
 
 **F1-Score**
-<img alt="F1-Score on complex re-ranking query" src={useBaseUrl('img/EXP2_Fscore_complex.png')} />
+<img
+  alt="F1-Score  on complex re-ranking query"
+  src={useBaseUrl('img/EXP2_Fscore_complex.svg')}
+  class= "content"
+/>
 <a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=hO3oqgZE2ys2&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
