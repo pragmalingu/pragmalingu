@@ -31,13 +31,13 @@ The second common approach to stemming is [dictionary based stemming](https://ww
 Dictionary stemmers look up words in a dictionary before they remove their inflected endings and reduce them to their stem.
 Dictionary stemmers should work better on iregular words or words that are similar but have different meanings.
 They also should be able to reduce over and understemming and lead to better results than algorithmic stemmers.
-In practice they often perform worse than algorithmic stemmers, because the freely available dictionaries are missing important words or are outdated.
+In practice they sometimes perform worse than algorithmic stemmers, because freely available dictionaries are missing important words or are outdated.
 Dictionary stemmers also have the draw back that their are slower and require more memory because they have to lookup all words in their dictionary.
 
 ### Comparison
 In this comparison we are answering the following questions:
 - How much does the relevancy of search results improve by using a stemmer?
-- How good is the in Elasticsearch included hunspell stemmer performing with a free dictionary?
+- How good is the hunspell stemmer that is included in Elasticsearch performing with a free dictionary?
 
 ## 2. Results
 The following are the results from our [first Experiment](/docs/experiments/experiment1). You can reproduce these results yourself if you follow the instructions on our [experiment section](/docs/experiments/).
@@ -49,8 +49,10 @@ The F1-Score measures a harmonic mean between Precision and Recall. Therefore we
 `F1-Score=(2*Precision*Recall)/(Precision+Recall)`
 This is the simplest way to balance both Precision and Recall, there are also other common options to weight them differently.
 </details> 
+
+
 <img alt="F1-Score" src={useBaseUrl('img/EXP1_F1-Score.png')} />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Gm1Aej_-T9e0"><button class="buttons" >Run it in Google Colab</button></a>
+<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=F_WKHLDXJypJ"><button class="buttons" >Reproduce it in Google Colab</button></a>
 <br />
 <br />
 
@@ -58,16 +60,16 @@ This is the simplest way to balance both Precision and Recall, there are also ot
 On all evaluation datasets except NPL, the algorithmic stemmer outperformed the standard analyzer as well as the hunspell token filter.
 The achieved F1-Score gains over the standard analyzer in percentage points can be seen here:
 
-<img alt="F1-Score Gains" src={useBaseUrl('img/EXP1_F1-Score_Gains.png')} />
+<img alt="F1-Score Gains" src={useBaseUrl('img/EXP1_Gains.svg')} />
 <br /><br />
-Depending on the use-case algorithmic stemming can lead to a 20% improvement in search result relevancy.
+Depending on the use-case algorithmic stemming can lead up to a 22% improvement in search result relevancy.
 Hunspell stemming performs worse than algorithmic stemming on nearly all datasets and can even lead to worse results than no stemming.
 
 The average F1-Score gains over all datasets are:
 
-<img alt="F1-Score Gains" src={useBaseUrl('img/EXP1_F1-Score_Avg_Gains.png')} />
+<img alt="F1-Score Gains" src={useBaseUrl('img/EXP1_Average.svg')} />
 
-Using the stemmer token filter on english documents can therefore improve the f1 score by 10% on average.
+Using the stemmer token filter on english documents can therefore improve the f1 score by 11% on average.
 
 ## 3. Discussion
 
@@ -83,31 +85,35 @@ The are a list of interesting questions that we can ask by just looking at these
 3.   Why is hunspell stemming performing worse that the standard analyzer on the Medline dataset?
 4.   Why is hunspell stemming performing better that the algorithmic stemmer on the NPL dataset?
 
-We will try to answer these questions by breaking down the results on the individual query and word matches.
+We will try to answer these questions by breaking down the results on the individual query and word matches.  
+You can follow all steps by and reproduce our results by running our [comparison notebook](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=X33-_O4rPMso).
 
-### Algorithmic stemming vs standard analyzer
+
+### Algorithmic stemming improvements over the standard analyzer
 We see from the gains figure that algorithmic stemming performs better than the standard analyzer on all testet datasets.
 But how does the algorithmic stemmer achieve these results in practice?
 
-We first use our search analysis tool to figure out the queries that demonstrate the biggest f1-score gains with the stemmer token filter.
-The three queries with the biggest fscore difference are 62, 73 and 52. We will be looking at query 62:
+We answer this by looking at the NPL dataset which shows a big gain of 19,65% for the stemmer token filter over the standard analyzer.
+
+We first use our search analysis tool to figure out the queries that demonstrate [the biggest f1-score gains](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=_fC_-pb7G4HM) with the stemmer token filter.
+The three queries with the biggest fscore difference are 62, 73 and 52. We will be looking at query 62.
 
 
-
-Query 62: *FAST TRANSISTOR COUNTERS*
+The query text of query 63 is `FAST TRANSISTOR COUNTERS`.
 
 We first look at the disjoint true positives sets of the query results for both the algorithmic stemmer and standard analyzer. 
-The highest ranked document for the algorithmic stemmer that is not present in the top k (20) result set of the standard analyzer is document nr. 8341.
+The highest ranked document for the algorithmic stemmer that is not present in the top k (20) result set of the standard analyzer is [document `8341`](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=QjP7C2guRRhm).
+For the standard analyzer the document [appears at position 34](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=1JMpo-U2SWEW) which is outside of our k=20 result set that we use to calculate precision and recall.
 
 The text of relevant document is: 
 > nonsaturating pulse circuits using two junction transistors junction transistors are found to be fast enough for pulse applications if the collector voltage is 
 > prevented from reaching zero switching times can be achieved with available types the required limiting action is effected by introducing diodes which terminate 
 > the switching transients by their breakdown a two transistor binary counter is described
 
-For the **algorithmic stemmer** the document is at position **2** and returns the following highlighted text:
+For the **algorithmic stemmer** the document is at position **3** and returns the following highlighted text:
 > nonsaturating pulse circuits using two junction **transistors**  junction **transistors** are found to be **fast** (...)  a two **transistor** binary **counter** is described
 
-The overall document score of **12.49** is the some of these individual word scores:
+The overall document score of **12.49** is the sum of these individual word scores:
 
 |Word   | Score   | Term Frequency   | Document Frequency |
 |-------|---------|------------------|--------------------|
@@ -134,601 +140,341 @@ The document frequency is also lower, which normally leads to higher score, but 
 <img alt="F1-Score Gains" src={useBaseUrl('img/EXP1_Query_62_explain.svg')} />
 
 
-### Algorithmic vs Hunspell stemming:
+### Hunspell improvements over algorithmic stemming:
 
+The NPL dataset is also the only dataset where our hunspell token filter performed slightly better than the algorithmic stemmer.
+We can use our search analysis tool again to extract relevant examples from the datasets that showcase how the [hunspell stemmer achieves better results](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=dkAJ64J3UnC_).
 
+We start again by calculating the f-score differences for all queries between the hunspell stemmer and the algorithmic one.
+We can then pick the query that shows the biggest f-score difference in favor of the hunspell stemmer, which is query `80`.
 
-Query: I WISH TO HAVE DATA ABOUT THE DESIGN OF MECHANICAL BAND PASS FILTERS FOR GOOD PASS CHARACTERISTICS
+The query text of query 80 is `COULD YOU PLEASE GIVE ME ARTICLES ABOUT THE POSSIBILITIES OF GETTING RECTIFICATION USING METALLIC DEVICES`.
 
-Text: electromechanical quadripoles as coupling filters  
-the equivalent circuits of mechanical resonators and electromechanical transducers are derived and the design of 
-band pass filters consisting of input and output electromechanical transducers coupled by a mechanical transmission line is described
+If we look at the disjoint set of true positives, we find that the hunspell stemmer finds document `8094` at position `1`, while the algorithmic stemmer positions this document at position `130`.
 
-Hunspell hits:
-'electromechanical quadripoles as coupling <em>filters</em>  <em>the</em> equivalent circuits <em>of</em> <em>mechanical</em> resonators and',
-     'electromechanical transducers are derived and <em>the</em> <em>design</em> <em>of</em> <em>band</em> <em>pass</em> <em>filters</em> consisting <em>of</em> input and',
-     'output electromechanical transducers coupled by a <em>mechanical</em> transmission line <em>is</em> described'
+The text of document `8094` is:
+>component design trends metallic rectifiers approach infinite life developments in cu se si ge and rectifiers are surveyed new designs give reduced size and longer life together with higher operating temperature output current and reverse voltage ratings
 
-Score: 27.66
-Position: 8
+We can see that there are some strange tokens in the text `cu se si ge`, we double checked the original files of the dataset and insured that it is actually present there and not an artifact of our processing.
+
+The Hunspell stemmer returns the following highlighted text:
+> component design trends **metallic** **rectifiers** approach infinite life developments in cu se si ge and **rectifiers** are surveyed new designs **give** reduced size and longer life together with higher operating temperature'
+
+The overall document score with the hunspell stemmr of **16.61** is the sum of these individual word scores:
+
+|Word   | Score   | Term Frequency   | Document Frequency |
+|-------|---------|------------------|--------------------|
+|g or give   | 4.74    | 2           | 426                |
+|rectification or  rectify| 5.98| 2  | 180                |
+|metallic   | 5.88 | 1               | 47                 |
+
+The algorithmic stemmer on the other hand returns the following highlighted text:
+> component design trends **metallic** rectifiers approach infinite life developments in cu se si ge and rectifiers are surveyed new designs **give** reduced size and longer life together with higher operating temperature
+
+The overall document score with the algorithmic stemmer of **7.27** is the sum of these individual word scores:
+
+|Word   | Score   | Term Frequency   | Document Frequency |
+|-------|---------|------------------|--------------------|
+|give   | 3.45    | 1                | 426                |
+|metal  | 3.82    | 1                | 300                |
+
+These results show us that the algorimtic stemmer is missing the hit on the search term **RECTIFICATION** which appears in the document as **rectifiers**. 
+We also see that the keyword **metallic** receives a better (lower) DF score with the hunspell stemmer because it is not stemmed to **metal**.
+
+Why doesn't the algorithmic stemmer match **rectification** with **rectifiers**? We can use the analyze api endpoint of elasticsearch to see what the algorithmic stemmer makes of these words:
 ```
+POST /pragmalingu-stemming-npl-corpus/_analyze
 {
-    "score": 27.663153,
-    "text": {
-        "total_value": 8.482999,
-        "details": [
-            {
-                "function": {
-                    "value": 8.482999,
-                    "description": "weight(text:pass in 9960) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 211,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 0.7698462,
-                    "description": "weight(text:i in 9960) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 5540,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 3.2943766,
-                    "description": "weight(text:band in 9960) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 515,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 4.6610727,
-                    "description": "weight(text:filter in 9960) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 442,
-                    "freq, occurrences of term within document": 2.0
-                }
-            },
-            {
-                "function": {
-                    "value": 0.27686566,
-                    "description": "weight(text:the in 9960) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 9422,
-                    "freq, occurrences of term within document": 2.0
-                }
-            },
-            {
-                "function": {
-                    "value": 0.19014841,
-                    "description": "weight(text:of in 9960) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 10165,
-                    "freq, occurrences of term within document": 3.0
-                }
-            },
-            {
-                "function": {
-                    "value": 6.490491,
-                    "description": "weight(text:mechanical in 9960) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 123,
-                    "freq, occurrences of term within document": 2.0
-                }
-            },
-            {
-                "function": {
-                    "value": 3.497353,
-                    "description": "weight(Synonym(text:design text:sign) in 9960) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 996,
-                    "freq, occurrences of term within document": 2.0
-                }
-            }
-        ]
-    }
+  "text": "rectification rectifiers rectify"
 }
-```
-Algorithmic Stemmer hits:
-'electromechanical quadripoles as coupling <em>filters</em>  <em>the</em> equivalent circuits <em>of</em> <em>mechanical</em> resonators and',
-     'electromechanical transducers are derived and <em>the</em> <em>design</em> <em>of</em> <em>band</em> <em>pass</em> <em>filters</em> consisting <em>of</em> input and',
-     'output electromechanical transducers coupled by a <em>mechanical</em> transmission line is described'
-
-Score: 23.35
-Position: 24
-```
-{
-    "score": 23.355726,
-    "text": {
-        "total_value": 7.6372986,
-        "details": [
-            {
-                "function": {
-                    "value": 7.6372986,
-                    "description": "weight(text:pass in 9961) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 290,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 2.5505674,
-                    "description": "weight(text:design in 9961) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 983,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 3.2222745,
-                    "description": "weight(text:band in 9961) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 515,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 4.5917997,
-                    "description": "weight(text:filter in 9961) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 442,
-                    "freq, occurrences of term within document": 2.0
-                }
-            },
-            {
-                "function": {
-                    "value": 0.2727509,
-                    "description": "weight(text:the in 9961) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 9422,
-                    "freq, occurrences of term within document": 2.0
-                }
-            },
-            {
-                "function": {
-                    "value": 0.18800907,
-                    "description": "weight(text:of in 9961) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 10165,
-                    "freq, occurrences of term within document": 3.0
-                }
-            },
-            {
-                "function": {
-                    "value": 4.8930264,
-                    "description": "weight(text:mechan in 9961) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 357,
-                    "freq, occurrences of term within document": 2.0
-                }
-            }
-        ]
-    }
-}
-```
-
-
-Just looking at the best ranked hunspell hit that is not present in the top 20 of the algorithmic stemmer hits doesn't explain to us why hunspell is performing better in this szenario.
-We instead have to look at the disjoint set of false positives between those two stemmers.
-The highest ranked document for the algorithmic stemmer is:
-
-Text: design of transistor i  f  amplifier detector stages with stabilized band pass characteristics  an extension of work described earlier
-id: 666
-
-Algorithmic stemmer hits:
-'<em>design</em> <em>of</em> transistor <em>i</em>  f  amplifier detector stages with stabilized <em>band</em> <em>pass</em> <em>characteristics</em>  an extension',
-     '<em>of</em> work described earlier'
-
-Score: 26.72
-Position: 4
-```
-{
-    "score": 26.723429,
-    "text": {
-        "total_value": 9.461221,
-        "details": [
-            {
-                "function": {
-                    "value": 9.461221,
-                    "description": "weight(text:pass in 3776) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 290,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 3.1596878,
-                    "description": "weight(text:design in 3776) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 983,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 3.3837206,
-                    "description": "weight(text:characterist in 3776) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 826,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 6.536483,
-                    "description": "weight(text:i in 3776) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 71,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 3.9918106,
-                    "description": "weight(text:band in 3776) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 515,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 0.19050553,
-                    "description": "weight(text:of in 3776) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 10165,
-                    "freq, occurrences of term within document": 2.0
-                }
-            }
-        ]
-    }
-}
-```
- Hunspell stemmer hits:
- '<em>design</em> <em>of</em> transistor <em>i</em>  f  amplifier detector stages with stabilized <em>band</em> <em>pass</em> <em>characteristics</em>  an extension',
-      '<em>of</em> work described earlier'
-
-
-Score: 23.03
-Position: 53
-```
-{
-    "score": 23.034937,
-    "text": {
-        "total_value": 10.42015,
-        "details": [
-            {
-                "function": {
-                    "value": 10.42015,
-                    "description": "weight(text:pass in 3775) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 211,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 3.431804,
-                    "description": "weight(text:characteristic in 3775) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 825,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 0.94564575,
-                    "description": "weight(text:i in 3775) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 5540,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 4.04667,
-                    "description": "weight(text:band in 3775) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 515,
-                    "freq, occurrences of term within document": 1.0
-                }
-            },
-            {
-                "function": {
-                    "value": 0.19214848,
-                    "description": "weight(text:of in 3775) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 10165,
-                    "freq, occurrences of term within document": 2.0
-                }
-            },
-            {
-                "function": {
-                    "value": 3.9985192,
-                    "description": "weight(Synonym(text:design text:sign) in 3775) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 996,
-                    "freq, occurrences of term within document": 2.0
-                }
-            }
-        ]
-    }
-}
-```
-#### 2. Algorithmic stemming vs dictionary stemming
-
-Medline 
-
-Query:
-the crystalline lens in vertebrates, including humans.
-
-hit id: 508
-Text 
-"1752. separation of the soluble proteins of bovine lenses on polyacrylamide gels the soluble proteins of bovine lenses were separated by gel
- filtration on polyacryl- amide gels.  the presence of ethylenediaminetetra- acetate in the buffer was found to be essential for achieving a 
- good separation of the lens homogenate into four fractions - a, b, c and d.  ultracentrifugal, electrophoretic and immunochemical analyses were
-  used to compare these fractions with the soluble crystallin fractions of the lens.  fraction a was compared with a-crystallin, fractions b and 
-  c with b-crystallin and fraction d with y-crystallin. the distribution of these four protein fractions in the nuclear and cortical parts of calf 
-  and cow lenses was determined. the oxidation-sensitive protein fraction of the calf lenses was separated from fraction b on an se-sephadex column."
-
-Algorithmic stemmer hits:
-'<em>the</em> presence of ethylenediaminetetra- acetate <em>in</em> <em>the</em> buffer was found to be essential for achieving a',
-     'good separation of <em>the</em> <em>lens</em> homogenate into four fractions - a, b, c and d.',
-     'soluble <em>crystallin</em> fractions of <em>the</em> <em>lens</em>.',
-     'fraction a was compared with a-<em>crystallin</em>, fractions b and c with b-<em>crystallin</em> and fraction d with y-<em>crystallin</em>',
-     '. <em>the</em> distribution of these four protein fractions <em>in</em> <em>the</em> nuclear and cortical parts of calf and cow'
-
-Score: 11.56
-Position: 4
-
-```
-{
-    "score": 11.56134,
-    "text": {
-        "total_value": 0.028388651,
-        "details": [
-            {
-                "function": {
-                    "value": 0.028388651,
-                    "description": "weight(text:the in 134) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 1018,
-                    "freq, occurrences of term within document": 11.0
-                }
-            },
-            {
-                "function": {
-                    "value": 6.8298907,
-                    "description": "weight(text:crystallin in 134) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 20,
-                    "freq, occurrences of term within document": 4.0
-                }
-            },
-            {
-                "function": {
-                    "value": 4.6366253,
-                    "description": "weight(text:len in 134) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 41,
-                    "freq, occurrences of term within document": 2.0
-                }
-            },
-            {
-                "function": {
-                    "value": 0.06643554,
-                    "description": "weight(text:in in 134) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 986,
-                    "freq, occurrences of term within document": 2.0
-                }
-            }
-        ]
-    }
-}
-```
-
-
-Hunspell stemmer hits:
-'1752. separation of <em>the</em> soluble proteins of bovine <em>lenses</em> on polyacrylamide gels <em>the</em> soluble proteins',
-     '<em>the</em> presence of ethylenediaminetetra- acetate <em>in</em> <em>the</em> buffer was found to be essential for achieving a',
-     'good separation of <em>the</em> <em>lens</em> homogenate into four fractions - a, b, c and d.',
-     'soluble crystallin fractions of <em>the</em> <em>lens</em>.',
-     'distribution of these four protein fractions <em>in</em> <em>the</em> nuclear and cortical parts of calf and cow <em>lenses</em>'
-
-Score: 5.2
-Position: 34
-```
-{
-    "score": 5.2029753,
-    "text": {
-        "total_value": 0.028472036,
-        "details": [
-            {
-                "function": {
-                    "value": 0.028472036,
-                    "description": "weight(text:the in 133) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 1018,
-                    "freq, occurrences of term within document": 11.0
-                }
-            },
-            {
-                "function": {
-                    "value": 5.1072903,
-                    "description": "weight(Synonym(text:l text:lens) in 133) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 75,
-                    "freq, occurrences of term within document": 8.0
-                }
-            },
-            {
-                "function": {
-                    "value": 0.06721313,
-                    "description": "weight(text:in in 133) [PerFieldSimilarity], result of:",
-                    "n, number of documents containing term": 986,
-                    "freq, occurrences of term within document": 2.0
-                }
-            }
-        ]
-    }
-}
-```
-Analysis:
-
-Stemming:
-```
+# Response:
 {
   "tokens" : [
     {
-      "token" : "the",
+      "token" : "rectif",
       "start_offset" : 0,
-      "end_offset" : 3,
+      "end_offset" : 13,
       "type" : "<ALPHANUM>",
       "position" : 0
     },
     {
-      "token" : "crystallin",
-      "start_offset" : 4,
-      "end_offset" : 15,
+      "token" : "rectifi",
+      "start_offset" : 14,
+      "end_offset" : 24,
       "type" : "<ALPHANUM>",
       "position" : 1
     },
     {
-      "token" : "len",
-      "start_offset" : 16,
-      "end_offset" : 20,
+      "token" : "rectifi",
+      "start_offset" : 25,
+      "end_offset" : 32,
       "type" : "<ALPHANUM>",
       "position" : 2
-    },
-    {
-      "token" : "in",
-      "start_offset" : 21,
-      "end_offset" : 23,
-      "type" : "<ALPHANUM>",
-      "position" : 3
-    },
-    {
-      "token" : "vertebr",
-      "start_offset" : 24,
-      "end_offset" : 35,
-      "type" : "<ALPHANUM>",
-      "position" : 4
-    },
-    {
-      "token" : "includ",
-      "start_offset" : 37,
-      "end_offset" : 46,
-      "type" : "<ALPHANUM>",
-      "position" : 5
-    },
-    {
-      "token" : "human",
-      "start_offset" : 47,
-      "end_offset" : 53,
-      "type" : "<ALPHANUM>",
-      "position" : 6
     }
   ]
 }
 ```
-Hunspell:
+We can see that **rectification** gets overstemmed to **rectif** instead of **rectifi** and therefore is not matched with the other tokens.
+
+But how exactly does the hunspell stemmer manage to match this keyword? 
+We can also look at the output of the analyze api endpoint to answer this question:
+
+Request:
+```
+POST /pragmalingu-hunspell-npl-corpus/_analyze
+{
+  "text": "rectification rectifiers rectify"
+}
+```
+Response:
 ```
 {
   "tokens" : [
     {
-      "token" : "the",
+      "token" : "rectification",
       "start_offset" : 0,
-      "end_offset" : 3,
+      "end_offset" : 13,
       "type" : "<ALPHANUM>",
       "position" : 0
     },
     {
-      "token" : "crystalline",
-      "start_offset" : 4,
-      "end_offset" : 15,
+      "token" : "rectify",
+      "start_offset" : 0,
+      "end_offset" : 13,
+      "type" : "<ALPHANUM>",
+      "position" : 0
+    },
+    {
+      "token" : "rectify",
+      "start_offset" : 14,
+      "end_offset" : 24,
       "type" : "<ALPHANUM>",
       "position" : 1
     },
     {
-      "token" : "lens",
-      "start_offset" : 16,
-      "end_offset" : 20,
+      "token" : "rectify",
+      "start_offset" : 25,
+      "end_offset" : 32,
       "type" : "<ALPHANUM>",
       "position" : 2
-    },
-    {
-      "token" : "l",
-      "start_offset" : 16,
-      "end_offset" : 20,
-      "type" : "<ALPHANUM>",
-      "position" : 2
-    },
-    {
-      "token" : "in",
-      "start_offset" : 21,
-      "end_offset" : 23,
-      "type" : "<ALPHANUM>",
-      "position" : 3
-    },
-    {
-      "token" : "vertebrate",
-      "start_offset" : 24,
-      "end_offset" : 35,
-      "type" : "<ALPHANUM>",
-      "position" : 4
-    },
-    {
-      "token" : "include",
-      "start_offset" : 37,
-      "end_offset" : 46,
-      "type" : "<ALPHANUM>",
-      "position" : 5
-    },
-    {
-      "token" : "human",
-      "start_offset" : 47,
-      "end_offset" : 53,
-      "type" : "<ALPHANUM>",
-      "position" : 6
     }
   ]
 }
 ```
+How does the hunspell stemmer find the keyword "rectifiers"?
 
-#### 4. Conclusion
-## Abstract
-To find out whether stemming can have a positive effect on search results, we compared the standard Elasticsearch to two of the built-in stemming methods. We used [these free available corpora](http://ir.dcs.gla.ac.uk/resources/test_collections/) hosted by the University of Glasgow to work on. How we parsed and analyzed them in advance, can be found in our [parsing guide](../guides/how-to-parse.mdx) and in our [data set guide](../guides/data-comparison.mdx). While experimenting we found out, that the stemming apparently only improved on some corpora and even seem to worsen some of the results. We have tried to analyze the possible reasons for this in this article. For a detailed description of all methods and data we used, take a look at our [stemming experiment](../experiments/experiment1.mdx).
+We can see that the search term **rectification** gets expanded to the synonym query: `Synonym(text:rectification text:rectify)`. 
+**Rectify** seems to be the stem that the hunspell token filter found in [his dictionary](https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.dic) for the word **rectification** and also **rectifiers**. 
+If we look at the [hunspell dictionary](https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.dic) we find the following entry: `rectify/XNDRSZG`, 
+we can then look at the possible [suffix rules](https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.aff) that enable the hunspell stemmer to match these words.
 
-## Results
-To evaluate the results, we looked at the Precision, Recall and F1-Score values. We visualized them as bar charts and as a table. Check this results on your own by running it on our [Elasticsearch instance](https://colab.research.google.com/drive/1APrjSN-wpWy5xX31akjaWz2xul647rYJ#scrollTo=tApgxGG-lbTG).
+The first relevant rule here is **N**:
+``` 
+SFX N Y 3  
+SFX N e ion e  
+SFX N y ication y  
+SFX N 0 en [^ey]
+```
 
-<details>
-<summary>You need a short reminder on "Precision", "Recall" and "F1-Score"?</summary>  
+The third line `SFX N y ication y` enables the matching of rectification.
 
-**Recall** measures the probability that relevant documents are retrieved. <br />
-`Recall = retrieved & relevant documents / documents labeled as relevant`
+But in the text **rectifiers** are mentioned and not **rectify** so we need an additional rule during indexing that matches **rectifiers** to the stem **rectify**.
 
-**Precision** measures the probability that retrieved documents are relevant to the search query. <br/>
-`Precision = retrieved & relevant documents / retrieved documents`
+The rule **Z** has a matching line for that:  
+```
+SFX Z Y 4  
+SFX Z 0 rs e  
+SFX Z y iers \[^aeiou\]y  
+SFX Z 0 ers \[aeiou\]y  
+SFX Z 0 ers \[^ey\]  
+```
 
-**F1-Score** is a simple way to measure a middle score between Precision and Recall. <br />
-`F1-Score=(2*Precision*Recall)/(Precision+Recall)`
+Here the thried line `SFX Z y iers [^aeiou]y` would match the word rectifiers and thus enable the token filter to replace it with the base entry in the dictionary.
 
-</details>  
+There is a good explanation on how these hunspell dictionaries and affix files work on the [chromium developer documentation site](https://www.chromium.org/developers/how-tos/editing-the-spell-checking-dictionaries#TOC-Full-details).
 
-<img alt="Recall" src={useBaseUrl('img/Recall.png')} />
+### Algorithmic stemmer improvements over hunspell:
 
-|           |   cranfield |   CISI |   ADI |   medline |   CACM |   LISA |   Time |   NPL |
-|-----------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| standard  |       0.15  |  0.103 | 0.328 |     0.032 |  0.034 |  0.337 |  0.772 | 0.233 |
-| stemmer   |       0.15  |  0.121 | 0.254 |     0.032 |  0.044 |  0.393 |  0.78  | 0.285 |
-| hunspell  |       0.149 |  0.12  | 0.256 |     0.045 |  0.037 |  0.391 |  0.777 | 0.292 |
+In most cases the algoritmic stemmer outperformes the hunspell stemmer.
+We are looking at the CACM and ADI dataset which show the biggest differences to find examples that explain this performance.
 
-<img alt="Recall" src={useBaseUrl('img/Precision.png')} />
+First we look at the CACM dataset to find good examples.  
+We calcuclate the f-score differences for both approaches with our search analysis tool and pick query **26** because it exhibits the biggest f-score difference between the two approaches.  
 
-|           |   cranfield |   CISI |   ADI |   medline |   CACM |   LISA |   Time |   NPL |
-|-----------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| standard  |       0.056 |  0.154 | 0.074 |     0.031 |  0.022 |  0.157 |  0.15  | 0.217 |
-| stemming  |       0.057 |  0.169 | 0.063 |     0.031 |  0.028 |  0.191 |  0.152 | 0.258 |
-| hunspell  |       0.057 |  0.167 | 0.063 |     0.041 |  0.024 |  0.186 |  0.151 | 0.258 |
+The query text of query 26 is:
+>Concurrency control mechanisms in operating systems  
 
-<img alt="F1-Score" src={useBaseUrl('img/F1-Score.png')} />
+The first document in the disjoint set of true positives that is not found by the hunspell stemmer is document `1198`.
 
-|           |   cranfield |   CISI |   ADI |   medline |   CACM |   LISA |   Time |   NPL |
-|-----------|-------------|--------|-------|-----------|--------|--------|--------|-------|
-| standard  |       0.081 |  0.123 | 0.12  |     0.032 |  0.027 |  0.214 |  0.251 | 0.225 |
-| stemming  |       0.082 |  0.141 | 0.101 |     0.032 |  0.034 |  0.257 |  0.255 | 0.271 |
-| hunspell  |       0.082 |  0.14  | 0.101 |     0.043 |  0.029 |  0.252 |  0.252 | 0.274 |
+The text and title of the document are:  
+*Title:*
+>Solution of a Problem in Concurrent Programming Control  
 
-<a class="buttons" href="https://colab.research.google.com/drive/1APrjSN-wpWy5xX31akjaWz2xul647rYJ#scrollTo=zliqyx3u1qSw"><button class="buttons" >Try it yourself!</button></a>
+*Text:*
+>A number of mainly independent sequential-cyclic processes with restricted means of communication  with each other can be made in such a way that at any moment one and only one of them is engaged in the  "critical section" of its cycle. 
 
-## Analysis
-Before we started experimenting on these basic approaches, we thought we would be able to achieve a large improvement in the search results by simply applying stemming methods.
-However, we discovered that the effect of stemming varied greatly depending on the corpora.
-For the **Cranfield** corpus, stemming - neither the algorithmic nor the dictionary approach -  had any significant influence on the results.
+The document appears at position `3` for the algorithmic stemmer and at position `50` for the hunspell stemmer.
 
-The results on the **CACM** and **Time** corpus showed a slight improvement from the *Stemmer Token Filter*, but hardly any from the *Hunspell Token Filter*. A clearer improvement could be seen for the corpora **CISI**, **LISA**, and **NPL**. The results for the *Hunspell Token Filter* or the *Stemmer Token Filter* again, depended on the corpus.
+The algorithmic stemmer returns the following highlighted text:
+> independent sequential-cyclic processes with restricted means of communication  with each other can be made **in** such a way that at any moment one and only one of them is engaged **in** the  "critical section" of its
+And the following highlighted title:
+>'Solution of a Problem **in** **Concurrent** Programming **Control**'
 
-The **Medline** corpus only improved with the *Hunspell Token Filter*, which could possibly be explained by the fact that the dictionary covers many terms from the medical field. On the **ADI** corpus there was actually a significant deterioration in the results due to stemming. However, this can probably be explained by the small amount of data, since the **ADI** corpus is the smallest with only 84 documents.
+The overall document score with the algorithmic stemmer of **12.06** is the sum of the word scores in the **title** field:
 
-## Conclusion
+|Word   | Field | Score   | Term Frequency   | Document Frequency |
+|-------|-------|---------|------------------|--------------------|
+|in     | text  | 0.40    | 2                | 1236               |
+|concurr| title | 5.77    | 1                | 8                  |
+|control| title | 4.30    | 1                | 38                 |
+|in     | title | 1.98    | 1                | 416                |
 
-While looking more into the stemming approaches regarding the results we discovered that the *Stemmer Token Filter* seems to have trouble with overstemming more often than the *Hunspell Token Filter*. The *Hunspell Token Filter*, on the other hand, does not always provide only one mapping per word, but sometimes multiple stems, which can lead to problems with ambiguous queries.
+Only the matches in the title field are counted for the overall document score.
+This happens because we are using the default scoring strategie for the multi match query that is [**best_field**](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#multi-match-types), 
+which takes the highest score of one of the searched fields as the documents overall score.
 
-Overall, it cannot be said that stemming generally improves search results. It seems to depend very much on the documents, as well as on the stemming method used, to what extent, if any, an improvement is visible.
+The hunspell stemmer on the other hand returns the following highlighted text:  
+>independent sequential-cyclic processes with restricted means of communication with each other can be made **in** such a way that at any moment one and only one of them is engaged **in** the "critical section" of its  
+And the following highlighted title:
+>Solution of a Problem **in** Concurrent Programming **Control**  
+
+The overall document score with the hunspell stemmer of **6.66** is also the sum of the word scores in the **title** field:
+
+|Word   | Field | Score   | Term Frequency   | Document Frequency |
+|-------|-------|---------|------------------|--------------------|
+|in     | text  | 0.41    | 2                | 1236               |
+|control| title | 4.62    | 1                | 31                 |
+|in     | title | 2.04    | 1                | 416                |
+
+
+The hunspell stemmer was not able to match the important keyword **Concurrency** with **Concurrent** in the document title.
+We can look at the output of the analyze API endpoint of Elasticsearch to see what the hunspell stemmer makes of these two keywords:
+Request:
+```
+POST /pragmalingu-hunspell-cacm-corpus/_analyze
+{
+  "text": "concurrency concurrent"
+}
+```
+Response:
+```
+{
+  "tokens" : [
+    {
+      "token" : "concurrency",
+      "start_offset" : 0,
+      "end_offset" : 11,
+      "type" : "<ALPHANUM>",
+      "position" : 0
+    },
+    {
+      "token" : "current",
+      "start_offset" : 12,
+      "end_offset" : 22,
+      "type" : "<ALPHANUM>",
+      "position" : 1
+    }
+  ]
+}
+```
+We can see that concurrency is not stemmed and concurrent seems to be overstemmed to current. We can look at the hunspell dictionary and affix file to see which rules lead to this outcome:  
+
+For concurrency there is exactly one entry:  
+`concurrency`  
+For concurrent we find the following rule that seems so explain the overstemming to the term current  
+`current/FAY`  
+The rules **FAY** in the affix file are:
+```
+PFX A Y 1
+PFX A   0     re         .
+
+PFX F Y 1
+PFX F   0     con        .
+
+SFX Y Y 1
+SFX Y   0     ly         .
+```
+This means that the words **current**, **recurrent**, **concurrent** and **currently** are all stemmed to **current**.
+
+This seems to indicate that the hunspell dictionaries we are using that are freely available for spellchecking are not optimized for this stemmer use-case.
+
+### Standard analyzer impovements over hunspell:
+
+On the medline dataset the hunspell stemmer performed worse than the default standard analyzer. 
+We are again looking at the biggest [f-score difference](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=KLDIRhISQnls&line=2&uniqifier=1) 
+in favor of the standard analyzer to find examples that explain this performance drawback of the hunspell stemmer.
+
+Query 1 exhibits the biggest f-score difference between the standard analyzer and the hunspell stemmer.
+
+The query text of query 1 is:
+>the crystalline lens in vertebrates, including humans.  
+
+The first document in the disjoint true positive set of query 1 is document `170`.
+The text of document 170 is:
+>identification of species-specific and organ-specific antigens in lens proteins. 
+>the species-specific and organ-specific antigens of lens were investigated by gel diffusion and immunoelectrophoresis techniques. 
+>it  was found that rabbit antiserum to bovine lens showed cross reaction with other bovine tissues.
+>these cross-reacting antigens were the b- -  and y-crystallins .
+>there were two major and a minor organ-specific antigen in lens .
+>both the major antigens had a mobility and were        identified as the a-crystallin of lens .
+
+The standard analyzer returns this document at position 9 with the following highlighted matched keywords:
+> identification of species-specific and organ-specific antigens **in** **lens** proteins. 
+>**the** species-specific and organ-specific antigens of **lens** were investigated by gel diffusion reaction with other bovine tissues. 
+>these cross-reacting antigens were **the** b- -  and y-crystallins there were two major and a minor organ-specific
+>antigen **in** **lens** . both **the** major antigens had a mobility and were identified as **the** a-crystallin of **lens**.
+
+The overall document score with the standard analyzer was **6.22** and was the some of the following keyword scores: 
+
+|Word   | Score   | Term Frequency   | Document Frequency |
+|-------|---------|------------------|--------------------|
+|the    | 0.022   | 4                | 2020               |
+|lens   | 6.13    | 5                | 41                 |
+|in     | 0.07    | 2                | 987                |
+
+The hunspell stemmer instead positioned the document `170` at position 25 for query 1 and returned the following highlighted text:
+>Identification of species-specific and organ-specific antigens **in** **lens** proteins. 
+>**The** species-specific and organ-specific antigens of **lens** were investigated by gel diffusion and immunoelectrophoresis techniques.
+>It was found that rabbit antiserum to bovine **lens** showed cross reaction with other bovine organ-specific 
+>antigen **in** lens.Both **the** major antigens had a mobility and were identified as **the** a-crystallin of **lens**.
+
+The overall document score with the hunspell stemmer was **5.378082** which is slightly lower than the standard analyzer score:
+
+|Word   | Score   | Term Frequency   | Document Frequency |
+|-------|---------|------------------|--------------------|
+|the    | 0.026   | 4                | 1018               |
+|l or lens | 5.27 | 8                | 75                 |
+|in     | 0.07    | 2                | 986                |
+
+We can see that nearly all of the score difference comes mostly from the different weighting of the hits for the term **lens**. 
+The hunspell stemmer searches both with the original term lens as well as only with the letter l. 
+This seems to come from the hunspell dictionary that contains the following entry:  
+```
+l/SDXTGJ  
+```
+Combined with the suffix rule X:  
+```
+SFX X Y 3
+SFX X   e     ions       e
+SFX X   y     ications   y
+SFX X   0     ens        [^ey]
+```
+Which leads to the dictionary entry **l** as well as the entry `lens/MS` matching. 
+Both terms combined have a higher document frequency of 75 than just the term **lens** where the document frequency is 41.
+
+This is another indication that the freely available libre office dictionaries that we are using for the hunspell token filter are not 
+
+## 4. Conclusion
+
+For all our tested datasets algorithmic stemming showed considerable increases in f-score, ranging from 1.4-21.9%.
+As algorithmic stemming is build in to the language analyzers provided by Elasticsearch it is fairly easy to use.
+Due to it's rule based nature it doesn't come with a considerable processing or memory overhead.
+
+Dictionary based stemming, as provided by the hunspell token filter, is not as easy to use, because you need a good dictionary that is tailored to the stemming tasks.
+The analysis in our discusion section indicated that the freely available hunspell dictionaries that we used from the libreoffice project are not really suitable for stemming.
+Hunspell dictionary stemming improved over the standard analyzer in all but one dataset, but it could not beat the algorithmic stemmer with the dictionaries we tested.
+
+The overall conclusion and recommendations from our experiment is:
+- Use the [language analyzers provided by Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html) to get a quick and cheap boost in relevancy for your search use-case.
+- Consider the [hunspell token filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html) only if you have access to a good dictionary and are sure that it will improve relevancy for your use-case.
+- Don't choose the hunspell token filter with the freely available libreoffice dictionaries over the algoritmic stemmers.
