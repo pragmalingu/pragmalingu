@@ -14,59 +14,59 @@ import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from '../doc.css';
 
 ## 1. Composition and Decomposition
-### 1.1. Why experiment on a german documents?
+### 1.1. Why experiment on German documents?
 
-Since German has some specific language features which English doesn't provide which - if considered - could make a difference in the search result, we decided to work on German texts for this experiment. There are not many German datasets freely available, that is why we used the [DeepL API](https://www.deepl.com/pro#developer) to translate the same [corpora](../guides/data-comparison) we already used in other experiments. For our first comparison on the German corpora we looked into splitting compound words using decomposition. To understand why decomposition could increase the search results it's necessary to know what composition means.
+Since German has some specific language features which are not present in English and that, when considered,  can make a difference in search results, we decided to work on German texts for this experiment. There are not many German datasets freely available which is why we used the [DeepL API](https://www.deepl.com/pro#developer) to translate the same [corpora](../guides/data-comparison) we have already used in previous experiments. For our first comparison on the German corpora, we looked into splitting compound words using decomposition. To understand why decomposition may increase the search results it is necessary to first know what composition means.
 
 ### 1.2. What is Composition?
 
-In German, as in some other languages (e.g. Finnish, Dutch), it is possible to create a new word from two or more independent words by means of composition. Thereby, two or more words are combined into one word by so-called “Fugenelemente” or linking elements (e.g.: -(e)s-, -e-, -(e)n-, -er-) to form a coherent word. English does not have this kind of composition, in most cases such word combinations are separated with a space or hyphen.
+In German, as in some other languages (e.g. Finnish, Dutch), it is possible to create a new word from two or more independent words through composition. Thereby, two or more words are combined into one word by so-called “Fugenelemente” or linking elements (e.g.: -(e)s-, -e-, -(e)n-, -er-) to form a coherent word. English does not have this kind of composition. In most cases, such word combinations are separated with a space or hyphen.
 
-Examples of composition in German would be:
+Examples of composition in German include:
 
 * "Kapitän" + "Mütze" => "Kapitänsmütze" (captain's cap)
 * "Apfel" + "Baum" => "Apfelbaum" (apple tree)
 * "Blumen" + "Topf" => "Blumentopf" (flower pot)
 
 
-With this technique an infinite number of words can be strung together. A classic example would be the "Donaudampfschifffahrtskapitänsmütze" (Danube steamboat captain's cap). The last word is always the carrier of meaning and determines both the grammatical gender and the primary meaning of the word. 
+With this technique, an infinite number of words can be strung together. A classic example would be the "Donaudampfschifffahrtskapitänsmütze" (Danube steamboat captain's cap). The last word is always the carrier of meaning and determines both the grammatical gender and the primary meaning of the newly compounded word. 
 
-Composition must be distinguished from derivation. In a derivation, a root word is changed in its part of speech by a grammatical affix (e.g. "Licht-ung"). In a composition, the original part of speech of the meaning-bearing second word is retained.
+Composition must be distinguished from derivation. In a derivation, a root word changes its part of speech by a grammatical affix (e.g. "Licht-ung"). In a composition, the word retains its original part of speech. 
 
 
 ### 1.3. What is the benefit of Decomposition?
 
-Composition in languages with a rich morphology like German makes it possible to expand the vocabulary to an infinite level. This can cause problems in information retrieval. 
+Composition in languages with rich morphology, like German, makes it possible to expand the vocabulary to an infinite level. This can cause problems in information retrieval. 
 
-For example, if you search for "Atomkraftwerk" (atomic power plant), you will also be interested in articles that deal with the more general topic of "Atomkraft" (atomic power). If you do not break down this composite in a search, it can quickly happen that relevant results are not found. On the other hand, too much decomposition can also result in too much irrelevant information being returned. In this example, articles that are only about "Kraft" (power) would be too allegorical in most cases and would not lead to the desired search result.
+For example, if you search for "Atomkraftwerk" (atomic power plant), you are also likely interested in articles that deal with the more general topic of "Atomkraft" (atomic power). If you do not break down this composite in a search, it can quickly happen that relevant results are not found. On the other hand, too much decomposition can also result in too much irrelevant information being returned. In this example, articles that are only about "Kraft" (power) would be too generic in most cases and would not lead to the desired search result.
 
-To improve the IR performance it can be helpful to use linguistically motivated decomposition of compounded words. Other than in German, compounds in English are typically written as separate words and can therefore easily be found. 
+To improve the IR performance it can be helpful to use linguistically motivated decomposition of compounded words. Unlike in German, compounds in English are typically written as separate words and can therefore be easily found. 
 
-## 2. Approaches and Hypothesis
+## 2. Approaches and Hypotheses
 
 We tried to compare two different decomposition approaches in Elasticsearch: 
  * [**Dictionary Decompounder Token Filter**](https://www.elastic.co/guide/en/elasticsearch//reference/master/analysis-dict-decomp-tokenfilter.html): <br></br>
- This token filteruses a brute force approach to look up all possible subwords in a compound dictionary. If subwords are found those are included in the scoring of the documents. For example: If our dictionary includes "Donau'' and "Dampfschiff" the search for "Donaudampfschiff" would search for "Donaudampfschiff", "Donau" and "dampfschiff". This should in theory perform better than a search only using the **Standard Analyzer**.
+This token filter uses a brute force approach to look up all possible subwords in a compound dictionary. If subwords are found those are included in the scoring of the documents. For example: If our dictionary includes "Donau'' and "Dampfschiff" the search for "Donaudampfschiff" would search for "Donaudampfschiff", "Donau" and "dampfschiff". This should in theory perform better than a search using only the **Standard Analyzer**.
 
-* [**Hyphenation Decompounder Token Filter**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hyp-decomp-tokenfilter.html): <br></br> This approach uses XML-based hyphenation patterns to search for subwords in a compound dictionary.This token filter is faster than the dictionary decompounder and the recommended filter for [decompounding by Elastic](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-dict-decomp-tokenfilter.html#analysis-dict-decomp-tokenfilter)..<br></br>
+* [**Hyphenation Decompounder Token Filter**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hyp-decomp-tokenfilter.html): <br></br> This approach uses XML-based hyphenation patterns to search for subwords in a compound dictionary. This token filter is faster than the dictionary decompounder and the recommended filter for [decompounding by Elastic](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-dict-decomp-tokenfilter.html#analysis-dict-decomp-tokenfilter)..<br></br>
 
 
 To get a baseline to compare the results against, we also searched with two more basic approaches:
 
 * [**Standard Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html):<br></br>
-This approach only provides grammar based tokenization while searching. No stemmer is used and stop words are included in the search. 
+This approach only provides grammar-based tokenization while searching. No stemmer is used and stop words are included in the search. 
 
-* [**German Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#german-analyzer):<br></br> This approach performs basic stemming while searching and also excludes language specific stop words from the search in addition to a grammar based tokenization.
+* [**German Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#german-analyzer):<br></br> This approach performs basic stemming while searching while also excluding language-specific stop words from the search in addition to grammar-based tokenization.
 
-**Hypothesis:** Decomposition while using a dictionary, to look up possible compound words, should improve the search for retrieved documents including relevant documents, but it could be that more irrelevant documents are found too. The **Hyphenation Decompounder** should perform better than the **Dictionary Decompounder**, because it should search with less irrelevant compounds
+**Hypothesis:** Decomposition while using a dictionary to look up possible compound words should improve the search for retrieved documents, including relevant documents, but it could be that more irrelevant documents are also returned. The **Hyphenation Decompounder** should perform better than the **Dictionary Decompounder** because it should search with fewer irrelevant compounds
 
 ## 3. Experiment
 
-Before we could start experimenting, we needed all the documents and queries translated into German, so we could index every corpus with the matching settings for each approach. Afterwards we run the Evaluation API of Elasticsearch as we already explained in our [first experiment](../experiments/experiment1#1-standard-elasticsearch-analyzer) and visualized the results.
+Before we could start experimenting, we needed all the documents and queries translated into German so we could index each corpus with the matching settings for each approach. Afterward, we ran the Evaluation API of Elasticsearch as explained in our [first experiment](../experiments/experiment1#1-standard-elasticsearch-analyzer) and visualized the results.
 
 #### 3.1. Translation via DeepL API
 
-As already mentioned we used the [DeepL API](https://www.deepl.com/pro#developer) to translate all our previous used data into german. That worked pretty well except for a few adjustments we needed to do to the corpora. One important issue we came across is that the translator gets a bit confused if the text contains additional and leading white spaces which can happen if the text already was tokenized by preprocessing. It's not a major issue but if for example a sentence looks like this example from the Cranfield corpus:
+As previously mentioned, we used the [DeepL API](https://www.deepl.com/pro#developer) to translate all our previously used data into German. Generally, this worked well except for a few adjustments we needed to make to the corpora. One important issue we came across was that the translator gets a bit confused if the text contains additional and leading white spaces which can happen if the text had previously been tokenized by preprocessing. It's not a major issue, however, if a sentence looks like this example from the Cranfield corpus:
 
 ```
   the integrated remaining lift
@@ -76,7 +76,7 @@ well with a potential flow theory .
 the specific configuration of the experiment .
 ```
 
-DeepL has some problems with getting the upper- and lowercase distinction right:
+DeepL has some problems with getting the upper- and lower-case distinction right:
 
 ```
   der integrierte Restauftrieb
@@ -86,8 +86,8 @@ gut mit einer Potentialströmungstheorie übereinstimmt.
 die spezifische Konfiguration des Experiments .
 ```
 
-That's not a huge problem but we parsed our data sets once again, removed unnecessary spaces and tabs, saved them as tsv and translated them with those new created files.
-As we can see in the example above, the translation is good enough to work with it. 
+This does not represent a major problem, however, we parsed our data sets once again, removed unnecessary spaces and tabs, saved them as TSVs, and translated them with those newly created files.
+As we can see in the above example,  the translation is good enough to work with. 
 
 #### 3.2. Baseline Setup
 
@@ -109,7 +109,7 @@ german_analyzer = {
 }
 ```
 
-Here you can see both approaches in comparison:
+Here you can see a comparison of both approaches:
 
 | Standard Analyzer    |   ADI |   CACM |   CISI |   Cranfield |   LISA |   Medline |   NPL |   Time |
 |----------------------|-------|--------|--------|-------------|--------|-----------|-------|--------|
@@ -126,7 +126,7 @@ Here you can see both approaches in comparison:
 
 #### 3.3. Dictionary Decompounder
 
-We configured the **Dictionary Decompounder** for the settings of every corpus index following the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch//reference/master/analysis-dict-decomp-tokenfilter.html):
+We configured the **Dictionary Decompounder** for the settings of each corpus index following the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch//reference/master/analysis-dict-decomp-tokenfilter.html):
 
 ```python
 german_decompounding = {
@@ -180,11 +180,11 @@ These were the results of the *Dictionary Decompounder*:
 | Recall                  | 0.595 |  0.239 |  0.103 |       0.352 |  0.347 |     0.301 | 0.183 |  0.746 |
 | Precision               | 0.126 |  0.112 |  0.147 |       0.127 |  0.149 |     0.342 | 0.178 |  0.144 |
 | F1-Score                | 0.208 |  0.152 |  0.121 |       0.187 |  0.208 |     0.32  | 0.181 |  0.241 |
-
+                  
 
 #### 3.4. Hyphenation Decompounder
 
-We configured the **Hyphenation Decompounder** for the settings of every corpus index following the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hyp-decomp-tokenfilter.html):
+We configured the **Hyphenation Decompounder** for the settings of each corpus index following the [Elasticsearch documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hyp-decomp-tokenfilter.html):
 
 ```python
 german_hyphenation_decompounding = {
@@ -242,15 +242,15 @@ These were the results of the *Hyphenation Decompounder*:
 
 ## 4. Results
 
-To compare our results properly we plotted Recall, Precision, and F1-Score for every method on every corpus.
+To compare our results properly we plotted Recall, Precision, and F1-Score for each method on every corpus.
 
 **Recall**
 <details>
 <summary>What is "Recall"?</summary>  
 Recall measures the probability that relevant documents are retrieved. Therefore, the number of all retrieved relevant documents is divided by the number of all documents that are labeled as relevant. For example, if we were to return 10 documents, 
-8 of which are relevant to our search and 4 of these are retrieved, then the Recall measure would be 4/8 = 0.5.
+8 of which are relevant to our search and 4 of these are retrieved, then the Recall score would be 4/8 = 0.5.
 
-To measure Recall it is necessary to have the relevant documents labeled. Recall only looks at relevant documents that were retrieved and does not take into account any irrelevant documents which may have been retrieved.
+To measure Recall it is necessary to have the relevant documents properly labeled. Recall only looks at relevant documents that were retrieved and does not take into account any irrelevant documents which may have been retrieved.
 </details>  
 <img
   alt="Recall"
@@ -262,9 +262,9 @@ To measure Recall it is necessary to have the relevant documents labeled. Recall
 <details>
 <summary>What is "Precision"?</summary>  
 Precision measures the probability that retrieved documents are relevant to the search query. Therefore, the number of all retrieved relevant documents is divided by the number of all retrieved documents.  
-For example if we retrieve 10 search results and only 5 are relevant for our search, the Precision measure would be: 5/10 = 0.5.
+For example, if we retrieve 10 search results and only 5 are relevant for our search, the Precision score would be: 5/10 = 0.5.
 
-To measure the Precision it is necessary to have the relevant documents labeled as such. Precision only looks at the documents that are retrieved and does not account for relevant documents which were not retrieved.
+To measure the Precision it is necessary to have the relevant documents properly labeled. Precision only looks at the documents that are retrieved and does not account for relevant documents which were not retrieved.
 </details> 
 <img
   alt="Precision"
@@ -274,7 +274,7 @@ To measure the Precision it is necessary to have the relevant documents labeled 
 
 **F1-Score**
 <details>
-<summary>What is "F1-Score"?</summary>  
+<summary>What is an "F1-Score"?</summary>  
 The F1-Score measures a harmonic mean between Precision and Recall. Therefore we multiply Precision and Recall by two and divide it by the sum of Precision and Recall: <br />
 `F1-Score=(2*Precision*Recall)/(Precision+Recall)`
 This is the simplest way to balance both Precision and Recall, there are also other common options to weight them differently.
@@ -285,7 +285,7 @@ This is the simplest way to balance both Precision and Recall, there are also ot
   class= "contents"
 />
 
-For a better overview on how much each approach increased we also measured the gains using the **Standard Analyzer** values as a baseline:
+For a better overview on how much each approach increased, we also measured the gains using the **Standard Analyzer** values as a baseline:
 
 <img
   alt="Gains"
@@ -296,16 +296,16 @@ For a better overview on how much each approach increased we also measured the g
 **Conclusion**
 
 We can see an increase in the scores in every corpus comparing the baseline **Standard Analyzer** to the **Hyphenation Decompounder**.   
-In all corpora except the Medline corpus, the **Hyphenation Decompounder** seems to perform better than the **Dictionary Decompounder**. There are a few examples where decomposition might not be better than regular stemming and stop word removal with the **German Analyzer**. Overall it looks like using any other approach than the baseline **Standard Analyzer** shows an improvement in the results. For a more detailed explanation and some examples feel free to scroll through the following discussion section.
+In all corpora except the Medline corpus, the **Hyphenation Decompounder** seems to perform better than the **Dictionary Decompounder**. There are a few examples where regular stemming and stop word removal might be better than decomposition with the **German Analyzer**. Overall it looks like using any approach other than the baseline **Standard Analyzer** shows an improvement in the results. For a more detailed explanation and some examples please look through the following discussion section.
 
 ## 5. Discussion
 
-In this section we want to discuss some results in detail. At first we want to show some positive examples on how decompounding can improve search results to underline our hypothesis. After that, we try to analyze some unexpected variations in the results like why the **German Analyzer** totally exceeds the **Standard Analyzer** and sometimes even the **Dictionary Decompounder** or why the **Dictionary Decompounder** is slightly better on the Medline corpus than the **Hyphenation Decompounder**.
+In this section, we want to discuss some of our results in more detail. First, we want to show some positive examples of how decompounding can improve search results to underline our hypothesis. After that, we will try to analyze some unexpected variations in the results such as why the **German Analyzer** is vastly superior to the **Standard Analyzer** and sometimes even the **Dictionary Decompounder**, or why the **Dictionary Decompounder** is slightly better than the **Hyphenation Decompounder** on the Medline corpus.
 
 ### 5.1. German Analyzer vs. Dictionary & Hyphenation Decompounder
 
-As we already suggested in the hypothesis, decomposition did increase the search scores. 
-Based on the scores of the **Standard Analyzer**, the outcome became better with the **German Analyzer**. The **Dictionary Decompounder** was able to increase the values once more. On top of that the increase due to the **Hyphenation Decompounder** showed the highest score.
+As previously suggested in the hypothesis section, decomposition did increase the search scores. 
+Based on the scores of the **Standard Analyzer**, the outcome became better with the **German Analyzer**. The **Dictionary Decompounder** was able to increase the values once again. On top of that, the increase from the **Hyphenation Decompounder** showed the highest score.
 
 <img
   alt=""
@@ -313,13 +313,14 @@ Based on the scores of the **Standard Analyzer**, the outcome became better with
   class= "contents"
 />
 
-The best examples for this can be seen while looking at the [NPL corpus](../guides/data-comparison#npl). To illustrate what exactly caused the increase, we picked out a search query that seemed most informative to us. 
+The best examples for this can be seen while looking at the [NPL corpus](../guides/data-comparison#npl). To illustrate what exactly caused this increase, we selected a search query that seemed the most informative to us.
+
 <br></br>
 
 #### German Analyzer vs. Hyphenation Decompounder
 
 
-To show in comparison how the **German Analyzer** is surpassed by the **Hyphenation Decompounder**, **Query 23** seemed like the best choice. The f-score difference between both is `0.256`. 
+To show how the **German Analyzer** is surpassed by the **Hyphenation Decompounder**, **Query 23** seemed like the best choice. The F-Score difference between both is `0.256`. 
 
 *Example Query 23:* "BEOBACHTUNGEN DER SONNE WÄHREND FINSTERNISSEN, DIE DIE VERTEILUNG DER QUELLEN AUF DER SCHEIBE IM MIKROWELLENBEREICH ERGEBEN"
 
@@ -332,7 +333,7 @@ We can see, that the **Hyphenation Decompounder** does find 5 more relevant docu
   class= "contents"
 />
 
-As an example document to compare the scores and searched terms in detail we chose the document `81` because the **Hyphenation Decompounder** scored it rightfully as top document, while the **German Analyzer** doesn't rank it in the top 20.
+As an example document to compare the scores and searched terms in detail, we chose document `81` because the **Hyphenation Decompounder** scored it rightfully as the top document, while the **German Analyzer** does not rank it in the top 20.
 
 |                        | **German Analyzer**    | **Hyphenation Decompounder**                        |
 |------------------------|------------------------|-----------------------------------------------------|
@@ -340,7 +341,7 @@ As an example document to compare the scores and searched terms in detail we cho
 | score                  | 3.3543134              | 28.156767                                           |
 
 
-When we try to explain why the **German Analyzer** works better than the **Hyphenation Decompounder** we have to look at the search results in detail.
+To explain why the **German Analyzer** works better than the **Hyphenation Decompounder** we have to look at the search results in detail.
 
 **Explain German Analyzer**<br></br>
 ```json
@@ -373,7 +374,7 @@ When we try to explain why the **German Analyzer** works better than the **Hyphe
 }
 ```
 
-As we can see in this table the matched terms and therefore the scores diverge widely:
+As we can see in this table the matched terms and, therefore, the scores diverge widely:
 
 <img
   alt=""
@@ -381,21 +382,21 @@ As we can see in this table the matched terms and therefore the scores diverge w
   class= "contents"
 />
 
-We can clearly see that for example the term `FINSTERNISSEN` doesn't match within the document while using the **German Analyzer**. It gets stemmed by Elasticsearch to the term `finsternis` but since the searched text isn't decompounded with this approach, it won't return `finsternisbeobachtungen` as relevant for the query. Same goes for the term `MIKROWELLENBEREICH` which is only found by the **Hyphenation Decompounder** within the composition `mikrowellenradioquellen`.
+We can clearly see that, for example, the term `FINSTERNISSEN` does not match within the document while using the **German Analyzer**. It gets stemmed by Elasticsearch to the term `finsternis` but, since the searched text isn't decompounded with this approach, it won't return `finsternisbeobachtungen` as relevant to the query. The same goes for the term `MIKROWELLENBEREICH`, which is only found by the **Hyphenation Decompounder** within the composition `mikrowellenradioquellen`.
 
-The **German Analyzer** seems to find way less than the **Hyphenation Decompounder**. Even though some of the terms that the **Hyphenation** approach extracts are quite unuseful for this query, like `well` and `reich`, it still finds enough relevant terms that weren't found by only using the standard approach.
+The **German Analyzer** seems to find far fewer results than the **Hyphenation Decompounder**. Even though some of the terms that the **Hyphenation** approach extracts are quite unuseful for this query, like `well` and `reich`, it still finds enough relevant terms that were not found by only using the standard approach.
 
-This shows that the **Decompounder** approach can clearly improve the search results.
+This shows that the **Decompounder** approach can clearly improve search results.
 
 <br></br>
 
 #### Dictionary Decompounder vs. Hyphenation Decompounder
 
-Second we compared the **Dictionary Decompounder** with the **Hyphenation Decompounder** to see how in some cases the hyphenation approach improves over the brute force decompounding. We used **Query 42** for this comparison, since the f-score difference is `0.25`.
+Second, we compared the **Dictionary Decompounder** with the **Hyphenation Decompounder** to see how, in some cases, the hyphenation approach improves over brute force decompounding. We used **Query 42** for this comparison since the F-Score difference is `0.25`.
 
 *Example Query 42*: "LÖSUNG VON DIFFERENTIALGLEICHUNGEN PER COMPUTER"
 
-The **Hyphenation Decompounder** finds way more true positives than the **Dictionary Decompounder**, out of 36 relevant documents only 1 is found by the brute force approach of the **Dictionary Decompounder** and 8 by the **Hyphenation Decompounder**.
+The **Hyphenation Decompounder** returns far more true positives than the **Dictionary Decompounder**, out of 36 relevant documents only 1 is found by the brute force approach of the **Dictionary Decompounder** compared to 8 by the **Hyphenation Decompounder**.
 
 <img
   alt=""
@@ -404,7 +405,7 @@ The **Hyphenation Decompounder** finds way more true positives than the **Dictio
 />
 
 
-Once again it is helpful to look at one relevant document from the query more closely. The document with the id `5444`, which we chose as an example, does not get ranked into the top 20 retrieved documents for the **Dictionary Decompounder**, but is on the second position for the **Hyphenation Decompounder**. 
+Once again it is helpful to look at one relevant document from the query more closely. The document with the ID `5444`, which we chose as an example, does not get ranked into the top 20 retrieved documents for the **Dictionary Decompounder**, but is in the second position for the **Hyphenation Decompounder**. 
 
 |                        | **Dictionary Decompounder** | **Hyphenation Decompounder** |
 |------------------------|-----------------------------|------------------------------|
@@ -443,23 +444,23 @@ We can see that the score of the **Dictionary** approach is half of the **Hyphen
   class= "contents"
 />
 
-As we can see, the **Dictionary Decompounder** seems to search on more sub terms for `differentialgleichung`than the **Hyphenation Decompounder**. This leads to a higher document frequency which reduces the term score. So the **Dictionary** approach searches more terms that aren't relevant for the query and therefore is more likely to score relevant documents lower than irrelevant ones.
+As we can see, the **Dictionary Decompounder** seems to search on more sub-terms for `differentialgleichung` than the **Hyphenation Decompounder**. This leads to a higher document frequency which reduces the term score. So the **Dictionary** approach searches more terms that aren't relevant for the query and, therefore, is more likely to score relevant documents lower than irrelevant ones.
 
 **Conclusion**
-On the NPL the **Hyphenation Decompounder** seems to work best. It seems to differentiate between necessary decompounding and words that only raise the document frequency. These examples underline our hypothesis that raking decomposition into account can affect the search scores positively.
+On the NPL, the **Hyphenation Decompounder** seems to work best. It seems to differentiate between necessary decompounding and words that only raise the document frequency. These examples underline our hypothesis that taking decomposition into account can positively affect the search scores.
 
 ### 5.2. Why is the German Analyzer significantly better than the Standard Analyzer?
 
-While experimenting the scores for the **German Analyzer** always exceeded the scores of the **Standard Analyzer** and on some corpora, like [CACM](../guides/data-comparison#cacm) or [LISA](../guides/data-comparison#lisa), there was an increase of nearly 50%, even around 80% with the [ADI corpus](../guides/data-comparison#adi) (see graphic with gains in section [3. Results](../comparisons/german-decomposition#3-results)).
+While experimenting, the scores for the **German Analyzer** always exceeded the scores of the **Standard Analyzer** and on some corpora, like [CACM](../guides/data-comparison#cacm) or [LISA](../guides/data-comparison#lisa), there was an increase of nearly 50%, up to 80% with the [ADI corpus](../guides/data-comparison#adi) (see graphic with gains in section [3. Results](../comparisons/german-decomposition#3-results)).
 
-At first, this seemed a bit odd, so we looked a bit more into it. While analyzing especially the ADI and the CACM datasets we discovered that the [**Standard Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html) finds more documents than the [**German Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#german-analyzer) which increases the document frequency and therefore returns way more irrelevant documents. 
-The reason for that is the stop word list that is used. The **Standard Analyzer** doesn't consider any German stop words, while the **German Analyzer** works with a very [rich stop word list.](https://github.com/apache/lucene/blob/main/lucene/analysis/common/src/resources/org/apache/lucene/analysis/snowball/german_stop.txt) Below you can find two more detailed examples, one from the ADI and one from the CACM corpus, that illustrate this phenomenon 
+At first, this seemed strange, so we looked into it a bit more. While analyzing the ADI and the CACM datasets, we discovered that the [**Standard Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-standard-analyzer.html) finds more documents than the [**German Analyzer**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html#german-analyzer) which increases the document frequency and therefore returns significantly more irrelevant documents. 
+The reason for that is the stop word list that is used. The **Standard Analyzer** doesn't consider any German stop words, while the **German Analyzer** works with a [very rich stop word list.](https://github.com/apache/lucene/blob/main/lucene/analysis/common/src/resources/org/apache/lucene/analysis/snowball/german_stop.txt) Below, you can find two more detailed examples, one from the ADI and one from the CACM corpus, which illustrate this phenomenon. 
 
 <br></br>
 
 #### ADI
 
-As a good example for the decrease in irrelevant retrieval in the ADI corpus would be **Query 21**, the F1-Score difference between the **Standard Analyzer** and the **German Analyzer** is `0,416`.
+A good example of the decrease in irrelevant retrieval in the ADI corpus is **Query 21**, the F1-Score difference between the **Standard Analyzer** and the **German Analyzer** is `0,416`.
 
 *Example Query 21:* " Die Notwendigkeit, Personal für den Informationsbereich bereitzustellen."
 
@@ -471,7 +472,7 @@ It's a relatively short query which has only 5 relevant documents, which are fou
   class= "contents"
 />
 
-As an example document to compare the scores in detail we chose the document `21` because the **Standard Analyzer** ranked it lower than the **German Analyzer** even though the scores were nearly the same.
+As an example document to compare the scores in detail, we chose the document `21` because the **Standard Analyzer** ranked it lower than the **German Analyzer** even though the scores were nearly the same.
 
 
 |                        | **Standard Analyzer** | **German Analyzer** |
@@ -480,7 +481,7 @@ As an example document to compare the scores in detail we chose the document `21
 | score                  | 2.9156718             | 2.9190629           |
 
 
-It seems that other documents like `38` where scored higher because there were matching stop words like `die` and `für` in it:
+It seems that other documents like `38` were scored higher because there were matching stop words like `die` and `für` in it:
 
 **Explain Standard Analyzer**
 ```json
@@ -505,9 +506,9 @@ It seems that other documents like `38` where scored higher because there were m
     "score": 3.8836367
   }
 ```
-The average scores returned from the **Standard Analyzer** are higher than the scores returned by the **German Analyzer** but since the **Standard Analyzer** always returns a lot of noise with it, it gets worse results when you look at the average scores over all queries.
+The average scores returned from the **Standard Analyzer** are higher than the scores returned by the **German Analyzer** but since the **Standard Analyzer** always returns a lot of noise with it, it provides worse results when you look at the average scores across all queries.
 
-But the **Standard Analyzer** doesn’t always return high scores. Since it only searches on the given terms without stemming, it sometimes scores significantly worse.
+But the **Standard Analyzer** does not always return high scores. Since it only searches on the given terms without stemming, it sometimes scores significantly worse.
 A good example for that can be found in **Query 20**:
 
 <img
@@ -518,7 +519,7 @@ A good example for that can be found in **Query 20**:
 
 *Example Query 20*: "Testen von automatisierten Informationssystemen."
 
-There are 3 relevant documents, only 1 is found by the **Standard Analyzer** and 2 are found by the **German Analyzer**. And since the false positive rate is also higher with the first approach, this weights even more.
+There are 3 relevant documents, only 1 is found by the **Standard Analyzer** and 2 are found by the **German Analyzer**. And since the false positive rate is also higher with the first approach, this is weighted even higher.
 
 If you look at document `65`, which is only matched by the **German Analyzer**, you can see that it is scored 10 times higher by it than by the **Standard Analyzer**:
 
@@ -528,14 +529,14 @@ If you look at document `65`, which is only matched by the **German Analyzer**, 
   class= "contents"
 />
 
-The position and the score of this document in both approaches vary a lot:
+The position and the score of this document in both approaches vary greatly:
 
-|                        | **Standrad Analzyer** | **German Analyzer** |
+|                        | **Standard Analyzer** | **German Analyzer** |
 |------------------------|-----------------------|---------------------|
 | position               | -                     | 3                   |
 | score                  | 0.3869483             | 3.3748484           |
 
-That is because it finds words while stemming which can't be found otherwise.
+That is because it finds words while stemming which can not be found otherwise.
 
 **Explain Standard Analyzer**
 ```json
@@ -602,14 +603,14 @@ That is because it finds words while stemming which can't be found otherwise.
 }
 ```
 
-With this example we can see, that the **Standard Analyzer** only matches `von` which is filtered by the stop word list in the second approach and doesn't match `test` because the word `Testen` isn't stemmed. 
+In this example, we can see that the **Standard Analyzer** only matches `von` which is filtered by the stop word list in the second approach and doesn't match `test` because the word `Testen` isn't stemmed. 
 It seems like the effect of stemming and stop words are very relevant in German information retrieval.
 
 <br></br>
 
 #### CACM
 
-To support this conclusion let's look at one more example from the CACM dataset. 
+To support this conclusion let us look at one more example from the CACM dataset. 
 
 *Example Query 10*: "Parallele Sprachen; Sprachen für paralleles Rechnen .N  10. Alec Grimison, Comp Serv, Uris Hall (parallel lang)"
 
@@ -622,7 +623,7 @@ Overall, we can see that the **German Analyzer** does find significantly more tr
 />
 
 The first approach only returns 1 out of 35 relevant documents while the second approach returns 15.
-When we look more detailed on search terms of the one document `2851` that was found in both approaches, then we can see, that once again stemming does do the trick:
+When we look at more detailed search terms of the one document `2851` that was found in both approaches, then we can see that once again, stemming does the trick:
 
 <img
   alt=""
@@ -630,7 +631,7 @@ When we look more detailed on search terms of the one document `2851` that was f
   class= "contents"
 />
 
-Although the scoring of the **German Analyzer** is higher than the scoring of the **Standard Analyzer**, it has a lower position in the ranking. This is because there were other relevant documents in the second approach that had an even better term scoring. For example, document `1262` which was on position 3 with the second approach, but out of the top 20 for the first approach:
+Although the scoring of the **German Analyzer** is higher than the scoring of the **Standard Analyzer**, it has a lower position in the ranking. This is because there were other relevant documents in the second approach that had an even better term scoring. For example, document `1262` which was ranked at position 3 with the second approach, but out of the top 20 for the first:
 
 <img
   alt=""
@@ -638,7 +639,7 @@ Although the scoring of the **German Analyzer** is higher than the scoring of th
   class= "contents"
 />
 
-When we look at the highlights of both approaches and which terms are matches, we can see that the main difference between them is that the second approach matches `sprach` instead of `für`. Since `für` is a very common stop word in German, the document frequency of this term decreases the score a lot. 
+When we look at the highlights of both approaches and which terms are matches, we can see that the main difference between them is that the second approach matches `sprach` instead of `für`. Since `für` is a very common stop word in German, the document frequency of this term decreases the score significantly. 
 
 **Standard Analyzer**
 ```json
@@ -668,18 +669,18 @@ When we look at the highlights of both approaches and which terms are matches, w
 
 **Conclusion**
 
-Our results suggest that since German contains significantly more semantically empty words that do not contribute any content value to the search, it might be very important to include stop words into the search parameters, especially in German.This way, you might avoid too many irrelevant documents getting returned that can suppress relevant search results.  
-This would also explain why the standard analyzer performs worse on German text than on English texts. You can look at the results of the standard analyzer on English texts in our [stemming experiment](../experiments/experiment1.mdx)
+Our results suggest that since German contains significantly more semantically empty words that do not contribute any content value to the search, it might be important to include stop words into the search parameters in German. This way, it may be possible to avoid too many irrelevant documents getting returned which can suppress relevant search results.  
+This would also explain why the standard analyzer performs worse on German texts than on English texts. You can look at the results of the standard analyzer on English texts in our [stemming experiment](../experiments/experiment1.mdx)
 
-### 5.3. Why does German Analyzer work better than Dictionary Decompounder?
+### 5.3. Why does the German Analyzer work better than the Dictionary Decompounder?
 
-The **Decompounders** seemed to work better on most of the corpora we compared, but on the [ADI](../guides/data-comparison#adi), [Cranfield](../guides/data-comparison#cranfield), [LISA](../guides/data-comparison#lisa) and [TIME](../guides/data-comparison#time) corpus to our suprise the **German Analyzer** scores exceeded both decompounding approaches. We looked more into that for the Cranfield and the LISA corpus. We decided to leave the ADI out of this part of the discussion since it's a rather small corpus and also the Time, since the other two show better examples.
+The **Decompounders** seemed to work better on most of the corpora we compared, but on the [ADI](../guides/data-comparison#adi), [Cranfield](../guides/data-comparison#cranfield), [LISA](../guides/data-comparison#lisa), and [TIME](../guides/data-comparison#time) corpora the **German Analyzer** scores exceeded both decompounding approaches. We looked more into that for the Cranfield and the LISA corpora. We decided to leave the ADI out of this part of the discussion since it is a rather small corpus and also the Time, since the other two show better examples.
 
 <br></br>
 
 #### Cranfield
 
-To analyze why the results of the **German Analyzer** seem to be better than the decompounding approaches, we chose the **Dictionary Decompounder** for the comparison.
+To analyze why the results of the **German Analyzer** seem to be better than the decompounding approaches, we chose the **Dictionary Decompounder** for this comparison.
 
 <img
   alt=""
@@ -687,7 +688,7 @@ To analyze why the results of the **German Analyzer** seem to be better than the
   class= "contents"
 />
 
-A good example to see what exactly works better with the **German Analyzer** would be **Query 3** with a f-score difference of `0.428`.
+A good example to see exactly what works better with the **German Analyzer** would be **Query 3** with an F-Score difference of `0.428`.
 
 
 *Example Query 3:* " welche Probleme der Wärmeleitung in Verbundplatten bisher gelöst worden sind ."
@@ -702,14 +703,14 @@ There are 9 relevant documents for this query where only 1 is returned by the **
 />
 
 We chose the one retrieved document that was returned by both approaches, `181`. 
-We can see by the scores and positions, that apparently the **DictionaryDecompounder** matches way more documents before matching document 181, although the score isn't that different from the **German Analyzer**:
+We can see by the scores and positions that, apparently, the **Dictionary Decompounder** matches far more documents before matching document 181, although the score isn't that different from the **German Analyzer**:
 
 |                        | **German Analyzer**    | **Dictionary Decompounder**                         |
 |------------------------|------------------------|-----------------------------------------------------|
 | position               | 3                      | 12                                                  |
 | score                  | 11.539416              | 10.477009                                           |
 
-We can see, while looking at the term scores, that the **German Analyzer** does get better scores for every matched term group:
+ While looking at the term scores, we can see that the **German Analyzer** does get better scores for every matched term group:
 
 <img
   alt=""
@@ -717,7 +718,7 @@ We can see, while looking at the term scores, that the **German Analyzer** does 
   class= "contents"
 />
 
-Although the decompounding matches way more terms inside the documents `text_german` field, both approaches seem to take the `title_german` field score for the document because it was higher:
+Although the decompounding matches far more terms inside the documents `text_german` field, both approaches seem to take the `title_german` field score for the document because it was higher:
 
 **Explain German Analyzer**
 ```json
@@ -744,25 +745,25 @@ Although the decompounding matches way more terms inside the documents `text_ger
 }
 ```
 
-Due to decompounding more documents are found, which decreases the idf and matches more irrelevant documents. 
+Due to decompounding, more documents are found which decreases the idf and matches more irrelevant documents. 
 The scores for terms like "warmeleitung" will be combined with the scores of the sub-concept "warm". That generalizes the term "warmeleitung" too much.
-To see if that's the case with the other corpora too let's check an example from the LISA corpus as well.
+To test if that was the case with the other corpora,  let us check an example from the LISA corpus as well.
 
 <details>
 <summary>What is "idf" and why is it relevant?</summary>  
 
 In information retrieval, the tf-idf measure is often consulted when analyzing search results.
-* **tf** stands for "term frequency" and describes how often a term occurs in the considered document, therefore this value only depends on the current document
-* **idf** stands for "inverse document frequency" and describes how frequent a term occurs in *all* available documents, therefore this value depends on the entire corpus
+* **tf** stands for "term frequency" and describes how often a term occurs in the considered document, therefore this value only depends on the current document.
+* **idf** stands for "inverse document frequency" and describes how frequently a term occurs in *all* available documents, therefore this value depends on the entire corpus.
 
-In the tf-idf measure, these two values are weighed against each other. If a term is very rare in the entire corpus, but quite frequent in the document under consideration, it is classified as more relevant.
+In the tf-idf measure, these two values are weighted against each other. If a term is very rare in the entire corpus, but quite frequent in the document under consideration, it is classified as more relevant.
 </details>
 
 <br></br>
 
 #### LISA
 
-Similar to the Cranfield corpus, the different values from the **German Analyzer** and **Dictionary Decompounder** are specifically visible in the recall scores:
+Similar to the Cranfield corpus, the different values from the **German Analyzer** and **Dictionary Decompounder** are especially visible in the recall scores:
 
 <img
   alt=""
@@ -770,11 +771,11 @@ Similar to the Cranfield corpus, the different values from the **German Analyzer
   class= "contents"
 />
 
-As an example for this corpus we chose **Query 10** with the highest f-score difference of `0.30`.
+As an example for this corpus, we chose **Query 10** with the highest F-Score difference of `0.30`.
 
 *Example Query 10:* "ICH INTERESSIERE MICH FÜR INFORMATIONEN ÜBER DIE BEREITSTELLUNG AKTUELLER AWARENESS BULLETINS, INSBESONDERE SDI-DIENSTE IN BELIEBIGEN INSTITUTIONEN, Z.B. IN WISSENSCHAFTLICHEN BIBLIOTHEKEN, IN DER INDUSTRIE UND IN BELIEBIGEN THEMENBEREICHEN.  SDI, SELEKTIVE INFORMATIONSVERBREITUNG, CURRENT AWARENESS BULLETINS, INFORMATION BULLETINS."
 
-This query has 14 relevant documents, the **German Analyzer** retunrs 10 while the **Dictionary Decompounder** only retrieves 5:
+This query has 14 relevant documents, the **German Analyzer** returns 10 while the **Dictionary Decompounder** only returns 5:
 
 <img
   alt=""
@@ -782,14 +783,14 @@ This query has 14 relevant documents, the **German Analyzer** retunrs 10 while t
   class= "contents"
 />
 
-To see why the **German Analyzer** finds two times more true positives we looked at one of the overlapping documents, document `5801`.
+To see why the **German Analyzer** finds twice as many true positives, we looked at one of the overlapping documents, document `5801`.
 
 |                        | **German Analyzer**               | **Dictionary Decompounder**          |
 |------------------------|-----------------------------------|--------------------------------------|
 | position               | 2                                 | 10                                   |
 | score                  | 39.544914                         | 40.788223                            |
 
-The score isn't that different, but the position is. The **Dictionary Decompounder** seems to find way more irrelevant documents before retrieving relevant ones. When we look at the terms, we can see why:
+The score is not that different, but the position is. The **Dictionary Decompounder** seems to find far more irrelevant documents before retrieving relevant ones. When we look at the terms, we can see why:
 
 <img
   alt=""
@@ -797,7 +798,7 @@ The score isn't that different, but the position is. The **Dictionary Decompound
   class= "contents"
 />
 
-The **Dictionary Decompounder** finds way more terms, also including some irrelevant and non-sense words like `aktull` or `formation` (which has nothing to do with the searched term `information`).
+The **Dictionary Decompounder** finds far more terms, also including some irrelevant and nonsense words like `aktull` or `formation` (which has nothing to do with the searched term `information`).
 
 **Explain German Analyzer**<br></br>
 ```json
@@ -826,25 +827,25 @@ The **Dictionary Decompounder** finds way more terms, also including some irrele
   "score": 40.788223}
 ```
 
-This concludes that with all those irrelevant `terms` the **Dictionary Decompounder** seems to have the same problem on the LISA corpus as on the Cranfield, the decomposition increases the returned document rate which decreases the idf and therefore scores irrelevant documents higher than relevant ones.
+This concludes that with all those irrelevant `terms` the **Dictionary Decompounder** seems to have the same problem on the LISA corpus as on Cranfield, the decomposition increases the returned document rate, which decreases the idf and therefore scores irrelevant documents higher than relevant ones.
 
 <details>
 <summary>What is "idf" and why is it relevant?</summary>  
 
 In information retrieval, the tf-idf measure is often consulted when analyzing search results.
-* **tf** stands for "term frequency" and describes how often a term occurs in the considered document, therefore this value only depends on the current document
-* **idf** stands for "inverse document frequency" and describes how frequent a term occurs in *all* available documents, therefore this value depends on the entire corpus
+* **tf** stands for "term frequency" and describes how often a term occurs in the considered document, therefore this value only depends on the current document.
+* **idf** stands for "inverse document frequency" and describes how frequently a term occurs in *all* available documents, therefore this value depends on the entire corpus.
 
-In the tf-idf measure, these two values are weighed against each other. If a term is very rare in the entire corpus, but quite frequent in the document under consideration, it is classified as more relevant.
+In the tf-idf measure, these two values are weighted against each other. If a term is very rare in the entire corpus, but quite frequent in the document under consideration, it is classified as more relevant.
 </details>
 <br></br>
 
 **Conclusion**
-These examples show that sometimes decomposition can lead to a decrease in the values due to over-decompounding the search terms and therefore returning more noise.
+These examples show that sometimes decomposition can lead to a decrease in the values due to over-decompounding the search terms thereby returning more noise.
 
 ### 5.4. Why does the Dictionary Decompounder work better than the Hyphenation Decompounder?
 
-We mostly compared decompounding with the standard analyzer. For most of the datasets the **Hyphenation Decompounder** was performing better than the **Dictionary Decompounder**, but for the  [Medline](../guides/data-comparison#medline) and the [CACM](../guides/data-comparison#cacm) corpus there were minor deviations in the scores where the **Dictionary Decompounder** performed better
+We mostly compared decompounding with the standard analyzer. For most of the datasets the **Hyphenation Decompounder**  performed better than the **Dictionary Decompounder**, but for the  [Medline](../guides/data-comparison#medline) and the [CACM](../guides/data-comparison#cacm) corpora, there were minor deviations in the scores where the **Dictionary Decompounder** performed better.
 .
 
 <img
@@ -853,12 +854,12 @@ We mostly compared decompounding with the standard analyzer. For most of the dat
   class= "contents"
 />
 
-To investigate what exactly caused the increase, we picked out a search query that seemed most informative to us. 
-We looked deeper into **Query 27** with a f-score difference of `0.432`.
+To investigate what exactly caused this increase, we picked out a search query that seemed the most informative to us. 
+We looked deeper into **Query 27** with an F-Score difference of `0.432`.
 
 *Example Query 27:* "Interesse an den parasitären Krankheiten. Filarienparasiten bei Primaten, die Insektenvektoren der Filarien, die verwandten Dipteren, d. h. Culicoides, Mücken usw., die als Vektoren dieser Infektionskrankheit dienen können; auch die Lebenszyklen und die Übertragung der Filarien. Parasiten und Ökologie des Taiwan-Affen, Macaca cyclopis, mit Schwerpunkt auf dem Filarienparasiten, Macacanema formosana."
 
-There are 18 relevant documents for this query, the **Dictionary Decompounder** returns 12 true positives and the **Hyphenation Decompounder** three times less, only 4:
+There are 18 relevant documents for this query, the **Dictionary Decompounder** returns 12 true positives and the **Hyphenation Decompounder** three times fewer, only 4:
 
 <img
   alt=""
@@ -873,7 +874,7 @@ As a good example document to compare the scores and searched terms in detail we
 | position            | 5                              | -                                |
 | score               | 42.184074                      |  3.2657375                       |
 
-When we look at the term scores it is clear, that the **Dictionary** approach finds way more terms:
+When we look at the term scores, it is clear that the **Dictionary** approach finds far more terms:
 
 <img
   alt=""
@@ -881,16 +882,16 @@ When we look at the term scores it is clear, that the **Dictionary** approach fi
   class= "contents"
 />
 
-In contrast to the previous examples where more terms increased the idf and therefore the overall term, this seems to be different in the Medline corpus. Since it's filled with medical documents, we think there are less irrelevant terms ins general.
+In contrast to the previous examples, where more terms increased the idf and therefore the overall term, this seems to be different in the Medline corpus. Since it is filled with medical documents, we think there are fewer irrelevant terms in general.
 
 <details>
 <summary>What is "idf" and why is it relevant?</summary>  
 
 In information retrieval, the tf-idf measure is often consulted when analyzing search results.
-* **tf** stands for "term frequency" and describes how often a term occurs in the considered document, therefore this value only depends on the current document
-* **idf** stands for "inverse document frequency" and describes how frequent a term occurs in *all* available documents, therefore this value depends on the entire corpus
+* **tf** stands for "term frequency" and describes how often a term occurs in the considered document, therefore this value only depends on the current document.
+* **idf** stands for "inverse document frequency" and describes how frequently a term occurs in *all* available documents, therefore this value depends on the entire corpus.
 
-In the tf-idf measure, these two values are weighed against each other. If a term is very rare in the entire corpus, but quite frequent in the document under consideration, it is classified as more relevant.
+In the tf-idf measure, these two values are weighted against each other. If a term is very rare in the entire corpus, but quite frequent in the document under consideration, it is classified as more relevant.
 </details>
 <br></br>
 
@@ -926,14 +927,16 @@ Here we can see what exactly was matched inside the documents:
 ```
 
 **Conclusion**
-On the one hand the queries of the Medline corpus are in general very long and not representative for a standard search query, on the other hand the overall score difference between these two approaches isn't that big. Therefore we concluded the obersavtion that the **Dictionary Decompounder** scores better than the **Hyphenation Decompounder** won't happen that often and if not in a nameable scope. Therefore we think it is okay to ignore this occurence for our overall conclusion.
+On the one hand, the queries of the Medline corpus are in general very long and not representative of a standard search query. On the other hand, the overall score difference between these two approaches is not that big. Therefore, we concluded the observation that the **Dictionary Decompounder** scores better than the **Hyphenation Decompounder** won't happen that often and not in a nameable scope. Therefore we think it is okay to ignore this occurrence for our overall conclusion.
 
 **Acknowledgements:**<br/>
+Thanks to Kenny Hall for proofreading this article.
+
 
 <div className="col text--right">
     <em>
         <small>
-            Written by <strong>Miriam Rupprecht</strong>,  Mai 2021
+            Written by <strong>Samy Ateia</strong> and <strong>Miriam Rupprecht</strong>,  Mai 2021
         </small>
     </em>
 </div>
