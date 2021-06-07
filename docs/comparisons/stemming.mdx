@@ -10,43 +10,37 @@ import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from '../doc.css';
 
 ## 1. What is Stemming?
-Stemming is the process of removing the alternating endings from words.  
-The words **fish**, **fishing**, **fished** would all be reduced to their common word stem **fish**. 
-This stem is then stored in the inverted index of the search engine instead of the original word at that position. 
-When you search with either of the original words, your query is also stemmed and the search engine can find all documents that contain words with the same stem. 
+Stemming is the process of removing the alternating endings from words. Words with the same meaning, but different endings can then be matched better.  For example, The words **fish**, **fishing**, and **fished** would all be reduced to their common word stem **fish**. For the usage in a search engine, this stem is then stored in the [inverted index](https://en.wikipedia.org/wiki/Search_engine_indexing#Inverted_indices) instead of the original word at that position. 
+When you search with any of the original words, your query is also stemmed and the search engine can find all documents that contain words with the same stem. This way, more relevant documents are found since the search query does not only rely on the given word forms but also matches the same word with different endings.
 
 There are two common approaches to implement stemming in search engines.  
 
 
 ### Algorithmic Stemming
-The [Porter stemming algorithm](https://snowballstem.org/algorithms/porter/stemmer.html) created by [Martin Porter](https://en.wikipedia.org/wiki/Martin_Porter) is one of the most popular algorithmic stemmers 
-and used by default in the built in [language analyzers](https://www.elastic.co/guide/en/elasticsearch/reference/7.12/analysis-stemmer-tokenfilter.html) in Elasticsearch.
-Algorithmic stemmers are very fast and don't need a lot of memory because they only apply a set of rules, that represent the common rules how words are [inflected](https://en.wikipedia.org/wiki/Inflection) in a specific language.  
-Because there are always exceptions to a rule, an algorithmic stemmer might produce the same stem for words that have different meanings.
-This error is called **overstemming**. 
-Another error that can happen is called **understemming** and happens when two inflected words with different endings but the same meaning and stem are not reduced to the same stem.
+The [Porter stemming algorithm](https://snowballstem.org/algorithms/porter/stemmer.html), created by [Martin Porter](https://en.wikipedia.org/wiki/Martin_Porter), is one of the most popular algorithmic stemmers and is used by default in the built-in [language analyzers](https://www.elastic.co/guide/en/elasticsearch/reference/7.12/analysis-stemmer-tokenfilter.html) in Elasticsearch.
+Algorithmic stemmers are very fast and do not require a lot of memory as they only apply a set of rules that represents the common rules on how words are [inflected](https://en.wikipedia.org/wiki/Inflection) in a specific language.  
+Because there are always exceptions in natural language, an algorithmic stemmer might produce the same stem for words that have different meanings.
+This error is called [**overstemming**](https://en.wikipedia.org/wiki/Stemming#Error_metrics). 
+Another error that can happen is called [**understemming**](https://en.wikipedia.org/wiki/Stemming#Error_metrics) and happens when two inflected words with different endings but the same meaning and stem are not reduced to the same stem.
 
 ### Dictionary Based Stemming
-The second common approach to stemming is [dictionary-based stemming](https://www.elastic.co/guide/en/elasticsearch/reference/current/stemming.html#dictionary-stemmers).
-Dictionary stemmers look up words in a dictionary before they remove their inflected endings and reduce them to their stem.
-Dictionary stemmers should work better on irregular words or words that are similar but have different meanings.
-They also should be able to reduce over and understemming and lead to better results than algorithmic stemmers.
-In practice, they sometimes perform worse than algorithmic stemmers because freely available dictionaries are missing important words or are outdated.
-Dictionary stemmers also have the draw back that they are slower and require more memory because they have to look up all words in their dictionary.
+The second approach to stemming is [dictionary-based stemming](https://www.elastic.co/guide/en/elasticsearch/reference/current/stemming.html#dictionary-stemmers).
+Dictionary stemmers look up words in a dictionary before they remove their inflected endings and reduce them to their stem. This approach should work better on irregular words or words that are similar but have different meanings. Dictionary stemmers should be able to reduce over- and understemming and achieve better results than algorithmic stemmers. In practice, they sometimes perform worse than algorithmic stemmers because freely available dictionaries are never complete and are often missing important words or are outdated. Dictionary stemmers also have the drawback that they are slower and require more memory as they have to look up all the words in their dictionary.
 
 ### Comparison
-In this comparison we are answering the following questions:
+In this comparison we will answer the following questions:
 - How much does the relevancy of search results improve by using a stemmer?
-- How good is the Hunspell stemmer that is included in Elasticsearch performing with a free dictionary?
+- How well does the Hunspell stemmer that is included in Elasticsearch perform with a free dictionary?
 
 ## 2. Results
-The following are the results from our [first experiment](../experiments/experiment1). You can reproduce these results yourself if you follow the instructions on our [experiment section](../experiments/experiments-intro).
+The following results are from our [First Experiment](../experiments/experiment1). You can reproduce these results yourself if you follow the instructions in our [experiment section](../experiments/experiments-intro).
 
 **F1-Score**
 <details>
-<summary>What is "F1-Score"?</summary>  
-The F1-Score measures a harmonic mean between Precision and Recall. Therefore we multiply Precision and Recall by two and divide it by the sum of Precision and Recall: <br />
-`F1-Score=(2*Precision*Recall)/(Precision+Recall)`
+<summary>What is an "F1-Score"?</summary>  
+
+The F1-Score measures a harmonic mean between Precision and Recall. Therefore, we multiply Precision and Recall by two and divide it by the sum of Precision and Recall:  
+`F1-Score=(2*Precision*Recall)/(Precision+Recall)`  
 This is the simplest way to balance both Precision and Recall, there are also other common options to weight them differently.
 </details> 
 
@@ -57,66 +51,62 @@ This is the simplest way to balance both Precision and Recall, there are also ot
 <br />
 
 
-On all evaluation datasets except NPL, the algorithmic stemmer outperformed the standard analyzer as well as the Hunspell token filter.
-The achieved F1-Score gains over the standard analyzer in percentage points can be seen here:
+On all evaluation datasets except NPL, the Algorithmic Stemmer outperformed the Standard Analyzer as well as the Hunspell Token Filter.
+The achieved F1-Score gains - measured in percentage points - with the Standard Analyzer as the baseline can be seen here:
 
 <img alt="F1-Score Gains" src={useBaseUrl('img/EXP1_Gains.svg')} />
-<br /><br />
-Depending on the use-case algorithmic stemming can lead up to a **22% improvement** in search result relevancy.
-Hunspell stemming performs worse than algorithmic stemming on nearly all datasets and can even lead to worse results than no stemming.
+<br />
+<br />
 
-The average f1-Score gains over all datasets are:
+Depending on the use-case, algorithmic stemming can create up to a **22% improvement** in the relevance of the search results. Hunspell stemming performs worse than algorithmic stemming on nearly all datasets and can even lead to worse results than no stemming.
+
+The average F1-Score gains across all datasets are:
 
 <img alt="F1-Score Gains" src={useBaseUrl('img/EXP1_Average.svg')} />
 
-Using the stemmer token filter on English documents can therefore improve the f1 score by 11% on average.
+Using the Stemmer Token Filter on English documents can therefore improve the F1-Score by an average of 11%.
 
 ## 3. Discussion
 
-Looking at the f1-score from our approaches we can see that both stemming approaches perform better than the standard baseline on most datasets.
-Algorithmic stemming performs better than the standard analyzer on all datasets, it has the biggest gains on the CACM and NPL datasets.
-Hunspell stemming performs worse than algorithmic stemming on most datasets except NPL where it performs slightly better.
-Hunspell stemming performs worse than the standard analyzer on the medline dataset.
+Looking at the F1-Score from our approaches we can see that both stemming approaches perform better than the standard baseline on most of the datasets. The Algorithmic Stemmer performs better than the Standard Analyzer with the largest gains on the CACM and NPL corpora. The Hunspell Stemmer performs worse than the Algorithmic Stemmer on most of the datasets except the NPL dataset, where it performs slightly better. On the Medline corpus, the Hunspell Stemmer performs even worse than the Standard Analyzer.
 
-There are a list of interesting questions that we can ask by just looking at these results:
+There are several interesting questions that we can ask based on these results:
 
-1.   Why is algorithmic stemming performing better than the standard analyzer?
-2.   Why is algorithmic stemming performing better than Hunspell stemming?
-3.   Why is Hunspell stemming performing worse that the standard analyzer on the Medline dataset?
-4.   Why is Hunspell stemming performing better than the algorithmic stemmer on the NPL dataset?
+1.   Why does the Algorithmic Stemmer perform better than the Standard Analyzer?
+2.   Why does the Algorithmic Stemmer perform better than the Hunspell Stemmer?
+3.   Why does the Hunspell Stemmer perform worse than the Standard Analyzer on the Medline dataset?
+4.   Why does the Hunspell Stemmer perform better than the Algorithmic Stemmer on the NPL dataset?
 
-We will try to answer these questions by breaking down the results on the individual query and word matches.  
-You can follow all steps by and reproduce our results by running our [comparison notebook](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=X33-_O4rPMso).
+We will try to answer these questions by breaking down the results of the individual query and word matches.  
+You can follow all steps in detail and reproduce the results by running our [comparison notebook](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=X33-_O4rPMso).
 
 
-### Algorithmic stemming improvements over the standard analyzer
-We see from the gains figure that algorithmic stemming performs better than the standard analyzer on all tested datasets.
-But how does the algorithmic stemmer achieve these results in practice?
+### 3.1 Algorithmic Stemmer improvements over the Standard Analyzer
+We can see from the gains that the Algorithmic Stemmer performs better than the Standard Analyzer on all tested datasets.
+But how does the Algorithmic Stemmer achieve these results?
 
-We answer this by looking at the NPL dataset which shows a big gain of **19.65%** for the stemmer token filter over the standard analyzer.
+We can answer this by looking at the NPL dataset which shows a significant gain of **19.65%** for the Stemmer Token Filter over the Standard Analyzer.
 
-We first use our search analysis tool to figure out the queries that demonstrate [the biggest f1-score gains](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=_fC_-pb7G4HM) with the stemmer token filter.
-The three queries with the biggest f-score difference are **62**, **73** and **52**. We will be looking at query **62**.
+We first used our search analysis tool to figure out the queries that demonstrate [the largest F1-Score improvements](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=_fC_-pb7G4HM) with the Stemmer Token Filter.
+The three queries with the biggest F1-Score difference are **62**, **73** and **52**. We will be looking at query **62**.
 
 
 The query text of query 63 is:  
 >FAST TRANSISTOR COUNTERS.
 
-We first look at the disjoint true positives sets of the query results for both the algorithmic stemmer and standard analyzer. 
-The highest ranked document for the algorithmic stemmer that is not present in the top **k=20** result set of the standard analyzer is [document `8341`](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=QjP7C2guRRhm).
-For the standard analyzer the document [appears at position 34](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=1JMpo-U2SWEW) which is outside our **k=20** result set that we used to calculate precision and recall.
+We first looked at the disjoint true positives sets of the query results for both the Algorithmic Stemmer and the Standard Analyzer. The highest-ranked document for the Algorithmic Stemmer that is not present in the top **k=20** results of the Standard Analyzer is [document `8341`](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=QjP7C2guRRhm). For the Standard ,Analyzer this document [appears at position 34](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=1JMpo-U2SWEW) which is outside the **k=20** result set that we used to calculate precision and recall.
 
-The text of relevant document is: 
+The text of the relevant document is: 
 > nonsaturating pulse circuits using two junction transistors junction transistors are found to be fast enough for pulse applications if the collector voltage is 
 > prevented from reaching zero switching times can be achieved with available types the required limiting action is effected by introducing diodes which terminate 
 > the switching transients by their breakdown a two transistor binary counter is described
 
-For the **algorithmic stemmer** the document is at position **3** and returns the following highlighted text:
+For the **Algorithmic Stemmer** the document is at position **3** and returns the following highlighted text:
 > nonsaturating pulse circuits using two junction **transistors**  junction **transistors** are found to be **fast** (...)  a two **transistor** binary **counter** is described
 
-The overall document score of **12.49** is the sum of these individual word scores:
+The overall document score of **12.49** is the sum of these individual term scores:
 
-|Word   | Score   | Term Frequency   | Document Frequency |
+|Term   | Score   | Term Frequency   | Document Frequency |
 |-------|---------|------------------|--------------------|
 |fast   | 4.31    | 1                | 84                 |
 |transistor | 4.22| 3                | 640                |
@@ -125,65 +115,64 @@ The overall document score of **12.49** is the sum of these individual word scor
 
 
 
-For the **standard analyzer** the same document is at position **33** and returns the following highlighted text:
+For the **Standard Analyzer** the same document is at position **34** and returns the following highlighted text:
 > nonsaturating pulse circuits using two junction transistors  junction transistors are found to be **fast** is effected by introducing diodes which terminate the switching transients by their breakdown  a two **transistor**
 
-The overall document score of **7.10** is the sum of these individual word scores:
+The overall document score of **7.10** is the sum of these individual term scores:
 
-|Word   | Score   | Term Frequency   | Document Frequency |
+|Term   | Score   | Term Frequency   | Document Frequency |
 |-------|---------|------------------|--------------------|
 |fast   | 4.31    | 1                | 84                 |
 |transistor | 2.78| 1                | 479                |
 
-We can see that for the standard analyzer the inflected word **counters** is not matched with the word **counter** in the document. 
-The occurrences of the word **transistors** is also not matched with the stem **transistor** used in the query and therefore the term frequency and score of the word is lower.
-The document frequency is also lower, which normally leads to higher score, but cannot make up for the lower term frequency in this instance.
+We can see that for the Standard Analyzer the inflected word **counters** is not matched with the word **counter** in the document. The occurrences of the word **transistors** is also not matched with the stem **transistor** used in the query and, therefore, the term frequency and score of the word are lower.
+The document frequency is also lower, which normally leads to a higher score, but cannot make up for the lower term frequency in this instance.
+
 <img alt="F1-Scores " src={useBaseUrl('img/EXP1_Query_62_explain.svg')} />
 
 
-### Hunspell improvements over algorithmic stemming:
+### 3.2 Hunspell Stemmer improvements over the Algorithmic Stemmer:
 
-The NPL dataset is also the only dataset where our Hunspell token filter performed slightly better than the algorithmic stemmer.
-We can use our search analysis tool again to extract relevant examples from the datasets that showcase how the [Hunspell stemmer achieves better results](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=dkAJ64J3UnC_).
+The NPL dataset is also the only dataset where our Hunspell Token Filter performed slightly better than the Algorithmic Stemmer. We can use our search analysis tool again to extract relevant examples from the datasets that show how the [Hunspell Stemmer achieves better results](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=dkAJ64J3UnC_).
 
-We start again by calculating the f-score differences for all queries between the Hunspell stemmer and the algorithmic one.
-Likewise, we then pick the query that shows the biggest f-score difference favoring the Hunspell stemmer, which is query `80`.
+We again started by calculating the F1-Score differences for all queries between the Hunspell stemmer and the Algorithmic Stemmer.
+Likewise, we picked the query that showed the biggest F1-Score difference favoring the Hunspell Stemmer, which is query `80`.
 
 The query text of query 80 is: 
 >COULD YOU PLEASE GIVE ME ARTICLES ABOUT THE POSSIBILITIES OF GETTING RECTIFICATION USING METALLIC DEVICES.
 
-If we look at the disjoint set of true positives, we find that the Hunspell stemmer finds document `8094` at position `1`, while the algorithmic stemmer positions this document at position `130`.
+If we look at the disjoint set of true positives, we can see that the Hunspell Stemmer finds document `8094` at position `1`, while the Algorithmic Stemmer ranks this document at position `130`.
 
 The text of document `8094` is:
 >component design trends metallic rectifiers approach infinite life developments in cu se si ge and rectifiers are surveyed new designs give reduced size and longer life together with higher operating temperature output current and reverse voltage ratings
 
-We can see that there are some strange tokens in the text `cu se si ge`, we double-checked the original files of the dataset and insured that it is actually present there and not an artifact of our processing.
+As we can see, there are some strange tokens in the text: `cu se si ge`. We double-checked the original files of the dataset to ensure that it is actually in the files and not an artifact of our processing.
 
-The Hunspell stemmer returns the following highlighted text:
+The Hunspell Stemmer returns the following highlighted text:
 > component design trends **metallic** **rectifiers** approach infinite life developments in cu se si ge and **rectifiers** are surveyed new designs **give** reduced size and longer life together with higher operating temperature'
 
-The overall document score with the Hunspell stemmer of **16.61** is the sum of these individual word scores:
+The overall document score with the Hunspell Stemmer of **16.61** is the sum of these individual term scores:
 
-|Word   | Score   | Term Frequency   | Document Frequency |
+|Term   | Score   | Term Frequency   | Document Frequency |
 |-------|---------|------------------|--------------------|
 |g or give   | 4.74    | 2           | 426                |
 |rectification or  rectify| 5.98| 2  | 180                |
 |metallic   | 5.88 | 1               | 47                 |
 
-The algorithmic stemmer on the other hand returns the following highlighted text:
+The Algorithmic Stemmer on the other hand returns the following highlighted text:
 > component design trends **metallic** rectifiers approach infinite life developments in cu se si ge and rectifiers are surveyed new designs **give** reduced size and longer life together with higher operating temperature
 
-The overall document score with the algorithmic stemmer of **7.27** is the sum of these individual word scores:
+The overall document score with the algorithmic stemmer of **7.27** is the sum of these individual term scores:
 
-|Word   | Score   | Term Frequency   | Document Frequency |
+|Term   | Score   | Term Frequency   | Document Frequency |
 |-------|---------|------------------|--------------------|
 |give   | 3.45    | 1                | 426                |
 |metal  | 3.82    | 1                | 300                |
 
-These results show us that the algorithmic stemmer is missing the hit on the search term **RECTIFICATION** which appears in the document as **rectifiers**. 
-We also see that the keyword **metallic** receives a better (lower) document frequency with the Hunspell stemmer because it is not stemmed to **metal**.
+These results show us that the Algorithmic Stemmer is missing the hit on the search term **RECTIFICATION** which appears in the document as **rectifiers**. 
+We also see that the keyword **metallic** receives a better (lower) document frequency with the Hunspell Stemmer because it is not stemmed to **metal**.
 
-Why doesn't the algorithmic stemmer match **rectification** with **rectifiers**? We can use the Analyze API endpoint of Elasticsearch to see what the algorithmic stemmer makes of these words:
+Why doesn't the Algorithmic Stemmer match **rectification** with **rectifiers**? We can use the Analyze API endpoint of Elasticsearch to see how the Algorithmic Stemmer handles these words:
 ```
 POST /pragmalingu-stemming-npl-corpus/_analyze
 {
@@ -216,9 +205,9 @@ POST /pragmalingu-stemming-npl-corpus/_analyze
   ]
 }
 ```
-We can see that **rectification** gets overstemmed to **rectif** instead of **rectifi** and therefore is not matched with the other tokens.
+Here we can see that **rectification** gets overstemmed to **rectif** instead of **rectifi** and is, therefore, not matched with the other tokens.
 
-But how exactly does the Hunspell stemmer manage to match this keyword? 
+But how exactly does the Hunspell Stemmer manage to match this keyword? 
 We can also look at the output of the Analyze API endpoint to answer this question:
 
 Request:
@@ -265,10 +254,9 @@ Response:
 ```
 How does the Hunspell stemmer find the keyword "rectifiers"?
 
-We can see that the search term **rectification** gets expanded to the synonym query: `Synonym(text:rectification text:rectify)`. 
-**Rectify** seems to be the stem that the Hunspell token filter found in [his dictionary](https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.dic) for the word **rectification** and also **rectifiers**. 
-If we look at the [Hunspell dictionary](https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.dic) we find the following entry: `rectify/XNDRSZG`, 
-we can then look at the possible [suffix rules](https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.aff) that enable the Hunspell stemmer to match these words.
+We can see that the search term **rectification** gets expanded to the following [synonym query](https://lucene.apache.org/core/8_8_2/core/org/apache/lucene/search/SynonymQuery.html): `Synonym(text:rectification text:rectify)`. This means that Elasticsearch is looking up both terms at the same position, combining their term frequency, and using the highest document frequency for the score.
+**Rectify** seems to be the stem that the Hunspell Token Filter found in [its dictionary](https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.dic) for the word **rectification** and also **rectifiers**. If we look at the [Hunspell dictionary](https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.dic) we find the following entry: `rectify/XNDRSZG`, 
+To understand these letters, we can look at the corresponding [suffix rules](https://cgit.freedesktop.org/libreoffice/dictionaries/plain/en/en_US.aff) that enable the Hunspell stemmer to match these words.
 
 The first relevant rule here is **N**:
 ``` 
@@ -277,6 +265,7 @@ SFX N e ion e
 SFX N y ication y  
 SFX N 0 en [^ey]
 ```
+There is a good explanation on how these Hunspell dictionaries and affix files work and what the individual columns in the rules mean on the [Chromium developer documentation site](https://www.chromium.org/developers/how-tos/editing-the-spell-checking-dictionaries#TOC-Full-details).
 
 The third line `SFX N y ication y` enables the matching of rectification.
 
@@ -291,40 +280,38 @@ SFX Z 0 ers \[aeiou\]y
 SFX Z 0 ers \[^ey\]  
 ```
 
-Here the third line `SFX Z y iers [^aeiou]y` would match the word rectifiers and thus enable the token filter to replace it with the base entry in the dictionary.
+Here, the third line `SFX Z y iers [^aeiou]y` would match the word **rectifiers** and thus enable the token filter to replace it with the base entry in the dictionary.
 
-There is a good explanation on how these Hunspell dictionaries and affix files work on the [Chromium developer documentation site](https://www.chromium.org/developers/how-tos/editing-the-spell-checking-dictionaries#TOC-Full-details).
 
-### Algorithmic stemmer improvements over Hunspell:
+### 3.3 Algorithmic Stemmer improvements over the Hunspell Stemmer:
 
-In most cases, the algorithmic stemmer outperforms the Hunspell stemmer.
-We are looking at the CACM and ADI dataset which show the most significant differences to find examples that explain this performance.
+In most cases, the Algorithmic Stemmer outperforms the Hunspell Stemmer.
+To find examples that explain this performance, we looked at the CACM and ADI datasets, as they showed the most significant differences.
 
-First we look at the CACM dataset to find good examples.  
-We calculate the f-score differences for both approaches with our search analysis tool and pick query **26** because it exhibits the biggest f-score difference between the two approaches.  
+First, we looked at the CACM dataset to find good examples. We calculated the F1-Score differences for both approaches with our [search analysis tool](https://search-analysis.readthedocs.io/en/latest/) and picked query **26** because it exhibits the greatest F1-Score difference between the two approaches.  
 
 The query text of query 26 is:
 >Concurrency control mechanisms in operating systems  
 
-The first document in the disjoint set of true positives that is not found by the Hunspell stemmer is document `1198`.
+The first document in the disjoint set of true positives that is not found by the Hunspell Stemmer is document `1198`.
 
-The text and title of the document are:  
+The text and the title of the document are:  
 *Title:*
 >Solution of a Problem in Concurrent Programming Control  
 
 *Text:*
 >A number of mainly independent sequential-cyclic processes with restricted means of communication  with each other can be made in such a way that at any moment one and only one of them is engaged in the  "critical section" of its cycle. 
 
-The document appears at position `3` for the algorithmic stemmer and at position `50` for the Hunspell stemmer.
+The document appears at position `3` for the Algorithmic Stemmer and at position `50` for the Hunspell Stemmer.
 
-The algorithmic stemmer returns the following highlighted text:
+The Algorithmic Stemmer returns the following highlighted text:
 > independent sequential-cyclic processes with restricted means of communication  with each other can be made **in** such a way that at any moment one and only one of them is engaged **in** the  "critical section" of its
 And the following highlighted title:
 >'Solution of a Problem **in** **Concurrent** Programming **Control**'
 
-The overall document score with the algorithmic stemmer of **12.06** is the sum of the word scores in the **title** field:
+The overall document score with the Algorithmic Stemmer of **12.06** is the sum of the term scores in the **title** field:
 
-|Word   | Field | Score   | Term Frequency   | Document Frequency |
+|Term   | Field | Score   | Term Frequency   | Document Frequency |
 |-------|-------|---------|------------------|--------------------|
 |in     | text  | 0.40    | 2                | 1236               |
 |concurr| title | 5.77    | 1                | 8                  |
@@ -332,25 +319,24 @@ The overall document score with the algorithmic stemmer of **12.06** is the sum 
 |in     | title | 1.98    | 1                | 416                |
 
 Only the matches in the title field are counted for the overall document score.
-This happens because we are using the default scoring strategy for the multi match query that is [**best_field**](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#multi-match-types), 
-which takes the highest score of one of the searched fields as the documents overall score.
+This happens because we are using the default scoring strategy for the multi-match query that is [**best_field**](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-multi-match-query.html#multi-match-types), which takes the highest score of one of the searched fields as the document's overall score.
 
-The Hunspell stemmer on the other hand returns the following highlighted text:  
+The Hunspell Stemmer, on the other hand, returns the following highlighted text:  
 >independent sequential-cyclic processes with restricted means of communication with each other can be made **in** such a way that at any moment one and only one of them is engaged **in** the "critical section" of its  
 And the following highlighted title:
 >Solution of a Problem **in** Concurrent Programming **Control**  
 
-The overall document score with the Hunspell stemmer of **6.66** is also the sum of the word scores in the **title** field:
+The overall document score with the Hunspell Stemmer of **6.66** is also the sum of the term scores in the **title** field:
 
-|Word   | Field | Score   | Term Frequency   | Document Frequency |
+|Term   | Field | Score   | Term Frequency   | Document Frequency |
 |-------|-------|---------|------------------|--------------------|
 |in     | text  | 0.41    | 2                | 1236               |
 |control| title | 4.62    | 1                | 31                 |
 |in     | title | 2.04    | 1                | 416                |
 
 
-The Hunspell stemmer could not match the important keyword **Concurrency** with **Concurrent** in the document title.
-We can look at the output of the Analyze API endpoint of Elasticsearch to see what the Hunspell stemmer makes of these two keywords:
+The Hunspell Stemmer could not match the important keyword **Concurrency** with **Concurrent** in the document title.
+We can look at the output of the Analyze API endpoint of Elasticsearch to see how the Hunspell Stemmer handles these two words:
 Request:
 ```
 POST /pragmalingu-hunspell-cacm-corpus/_analyze
@@ -379,11 +365,10 @@ Response:
   ]
 }
 ```
-We can see that concurrency is not stemmed and concurrent seems to be overstemmed to current. We can look at the Hunspell dictionary and affix file to see which rules lead to this outcome:  
+We can see that **concurrency** is not stemmed and **concurrent** seems to be overstemmed to **current**. We can look at the Hunspell dictionary and the affix file to see which rules lead to this outcome:  
 
-For concurrency there is exactly one entry:  
-`concurrency`  
-For concurrent we find the following rule that seems so explain the overstemming to the term current  
+For **concurrency** there is exactly one entry: `concurrency`  
+For `concurrent` we find the following rule that seems so explain the overstemming to the term **current**.  
 `current/FAY`  
 The rules **FAY** in the affix file are:
 ```
@@ -396,17 +381,15 @@ PFX F   0     con        .
 SFX Y Y 1
 SFX Y   0     ly         .
 ```
-This means that the words **current**, **recurrent**, **concurrent** and **currently** are all stemmed to **current**.
+This means that the words **current**, **recurrent**, **concurrent**, and **currently** are all stemmed to **current**.
 
-This seems to indicate that the Hunspell dictionaries we are using that are freely available for spellchecking are not optimized for this stemmer use-case.
+This seems to indicate that the Hunspell dictionaries we are using, which are freely available for spell-checking, are not optimized for this stemmer use-case.
 
-### Standard analyzer improvements over Hunspell:
+### 3.4 Standard Analyzer improvements over the Hunspell Stemmer:
 
-On the Medline dataset the Hunspell stemmer performed worse than the default standard analyzer. 
-We are again looking at the biggest [f-score difference](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=KLDIRhISQnls&line=2&uniqifier=1) 
-favoring the standard analyzer to find examples that explain this performance drawback of the Hunspell stemmer.
+On the Medline dataset, the Hunspell Stemmer performed worse than the default Standard Analyzer. We are again looking at the biggest [F1-Score difference](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=KLDIRhISQnls&line=2&uniqifier=1) favoring the Standard Analyzer to find examples that explain the poor performance of the Hunspell Stemmer.
 
-Query 1 exhibits the biggest f-score difference between the standard analyzer and the Hunspell stemmer.
+Query 1 exhibits the biggest F1-Score difference between the Standard Analyzer and the Hunspell Stemmer.
 
 The query text of query 1 is:
 >the crystalline lens in vertebrates, including humans.  
@@ -420,36 +403,36 @@ The text of document 170 is:
 >there were two major and a minor organ-specific antigen in lens .
 >both the major antigens had a mobility and were        identified as the a-crystallin of lens .
 
-The standard analyzer returns this document at position 9 with the following highlighted matched keywords:
+The Standard Analyzer returns this document at position 9 with the following highlighted matched keywords:
 > identification of species-specific and organ-specific antigens **in** **lens** proteins. 
 >**the** species-specific and organ-specific antigens of **lens** were investigated by gel diffusion reaction with other bovine tissues. 
 >these cross-reacting antigens were **the** b- -  and y-crystallins there were two major and a minor organ-specific
 >antigen **in** **lens** . both **the** major antigens had a mobility and were identified as **the** a-crystallin of **lens**.
 
-The overall document score with the standard analyzer was **6.22** and was the sum of the following keyword scores: 
+The overall document score with the Standard Analyzer was **6.22** and was the sum of the following term scores: 
 
-|Word   | Score   | Term Frequency   | Document Frequency |
+|Term   | Score   | Term Frequency   | Document Frequency |
 |-------|---------|------------------|--------------------|
 |the    | 0.022   | 4                | 2020               |
 |lens   | 6.13    | 5                | 41                 |
 |in     | 0.07    | 2                | 987                |
 
-The Hunspell stemmer instead positioned the document `170` at position 25 for query 1 and returned the following highlighted text:
+The Hunspell Stemmer instead positioned the document `170` at position 25 for query 1 and returned the following highlighted text:
 >Identification of species-specific and organ-specific antigens **in** **lens** proteins. 
 >**The** species-specific and organ-specific antigens of **lens** were investigated by gel diffusion and immunoelectrophoresis techniques.
 >It was found that rabbit antiserum to bovine **lens** showed cross reaction with other bovine organ-specific 
 >antigen **in** lens.Both **the** major antigens had a mobility and were identified as **the** a-crystallin of **lens**.
 
-The overall document score with the Hunspell stemmer was **5.378082** which is slightly lower than the standard analyzer score:
+The overall document score with the Hunspell Stemmer was **5.378082** which is slightly lower than the Standard Analyzer score:
 
-|Word   | Score   | Term Frequency   | Document Frequency |
+|Term   | Score   | Term Frequency   | Document Frequency |
 |-------|---------|------------------|--------------------|
 |the    | 0.026   | 4                | 1018               |
 |l or lens | 5.27 | 8                | 75                 |
 |in     | 0.07    | 2                | 986                |
 
-We can see that nearly all the score difference comes from the different weighting of the hits for the term **lens**. 
-The Hunspell stemmer searches both with the original term lens and with the letter l. 
+We can see that nearly all the score differences come from the different weighting of the hits for the term **lens**. 
+The Hunspell Stemmer searches both with the original term **lens** and with the letter **l**. 
 This seems to come from the Hunspell dictionary that contains the following entry:  
 ```
 l/SDXTGJ  
@@ -461,22 +444,21 @@ SFX X   e     ions       e
 SFX X   y     ications   y
 SFX X   0     ens        [^ey]
 ```
-Together, they lead to the dictionary entry **l** as well as the entry `lens/MS` matching. 
-Both terms combined have a higher document frequency of 75 than just the term **lens** where the document frequency is 41.
+Where the fourth line `SFX X   0     ens        [^ey]` leads to a match with the word *lens*.
+Together, they lead to the dictionary entry **l** and the entry `lens/MS` matching. 
+Both terms combined have a higher document frequency of **75** than just the term **lens** where the document frequency is **41**.
 
-This is another indication that the freely available LibreOffice dictionaries that we are using for the Hunspell token filter are not optimized for the stemming use-case.
+This is another indication that the freely available LibreOffice dictionaries that we are using for the Hunspell Token Filter are not optimized for the stemming use-case.
 
 ## 4. Conclusion
 
-For all our tested datasets algorithmic stemming showed considerable increases in f-score, ranging from 1.4-21.9%.
-As algorithmic stemming is built in to the language analyzers provided by Elasticsearch it is fairly easy to use.
-Due to its rule-based nature it doesn't come with a considerable processing or memory overhead.
+For all our tested datasets, algorithmic stemming showed considerable increases in the F1-Score gains, ranging from 1.4% - 21.9%. As algorithmic stemming is built into the language analyzers provided by Elasticsearch, it is fairly easy to use. Due to its rule-based nature, it does not come with a considerable processing or memory overhead.
 
-Dictionary based stemming, as provided by the Hunspell token filter, is not as easy to use because you need a good dictionary that is tailored to the stemming tasks.
+Dictionary based stemming, as provided by the Hunspell Token Filter, is not especially easy to use since you need a good dictionary that is tailored to the stemming tasks.
 The analysis in our discussion section indicated that the freely available Hunspell dictionaries that we used from the LibreOffice project are not really suitable for stemming.
-Hunspell dictionary stemming improved over the standard analyzer in all but one dataset, but it could not beat the algorithmic stemmer with the dictionaries we tested.
+Hunspell dictionary stemming improved over the Standard Analyzer in all but one dataset, but it could not beat the Algorithmic Stemmer with the dictionaries we tested.
 
-The overall conclusion and recommendations from our experiment is:
-- Use the [language analyzers provided by Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html) to get a quick and cheap boost in relevancy for your search use-case.
-- Consider the [Hunspell token filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html) only if you have access to a good dictionary and are sure that it will improve relevancy for your use-case.
-- Don't choose the Hunspell token filter with the freely available LibreOffice dictionaries over the algorithmic stemmers.
+The overall conclusions and recommendations from our experiment are:
+- To get a quick and cheap boost in relevancy for your search use-case, use the [Language Analyzers provided by Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html).
+- Only consider the [Hunspell Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html) if you have access to a good dictionary and are sure that it will improve relevancy for your use-case.
+- Don't choose the Hunspell Token Filter with the freely available LibreOffice dictionaries over the algorithmic stemmers.
