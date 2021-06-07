@@ -24,6 +24,9 @@ This table shows a quick overview of all the free data sets we’ve looked at:
 | OHSUMED                  | Free     | 20.000    | -       | None                                  |
 | Europarl Parallel Corpus | Free     | N.A.      | -       | &lt;CHAPTER ID=?>, &lt;SPEAKER ID =?> |
 
+Data Sets we used in our Experiments
+======
+
 ## ADI
  
 **Description:**<br />An extremely small data set containing fewer than 100 examples. It does not offer many prospects beyond experimenting with machine learning on small data sets.
@@ -388,60 +391,6 @@ CLASSIFICATIONS. #
  
 **Source:** http://ir.dcs.gla.ac.uk/resources/test_collections/lisa/
  
-## MS MARCO Document Ranking
-**Description:**<br /> MS MARCO stands for "Microsoft Machine Reading Comprehension" and is a large scale dataset which can be used on machine reading comprehension, question answering, passage ranking, Keyphrase Extraction, and Conversational Search Studies. It holds over 3 million (3,213,835) documents and more than one million (1,010,916) unique queries, that were extracted from anonymized Bing usage logs.
- 
-For our case we focused on the MS MARCO Document Ranking corpus which is available through [github](https://github.com/microsoft/MSMARCO-Document-Ranking).
- 
-**Documents:**<br /> The documents are downloadable as a tsv-file (msmarco-docs.tsv), which makes them easy to parse. There are over 3 million (3,213,835) documents with assigned ID, title and website link (where the document was extracted from). ID, title, and document text are separated by tabs and every new entry starts with a newline. If there is no title available there a "." instead of it.
- 
-*Example:*
-```
-D1555982       https://answers.yahoo.com/question/index?qid=20071007114826AAwCFvR      The hot glowing surfaces of stars emit energy in the form of electromagnetic radiation.?      Science & Mathematics Physics The hot glowing surfaces of stars emit energy in the form of electromagnetic radiation.? It is a good approximation to assume that the emissivity e is equal to 1 for these surfaces. Find the radius of the star Rigel, the bright blue star in the constellation Orion that radiates energy at a rate of 2.7 x 10^32 W and has a surface temperature of 11,000 K. Assume that the star is spherical. Use σ =... show more Follow 3 answers Answers Relevance Rating Newest Oldest Best Answer: Stefan-Boltzmann law states that the energy flux by radiation is proportional to the forth power of the temperature: q = ε · σ · T^4 The total energy flux at a spherical surface of Radius R is Q = q·π·R² = ε·σ·T^4·π·R² Hence the radius is R = √ ( Q / (ε·σ·T^4·π) ) = √ ( 2.7x10+32 W / (1 · 5.67x10-8W/m²K^4 · (1100K)^4 · π) ) = 3.22x10+13 m Source (s):http://en.wikipedia.org/wiki/Stefan_bolt...schmiso · 1 decade ago0 18 Comment Schmiso, you forgot a 4 in your answer. Your link even says it: L = 4pi (R^2)sigma (T^4). Using L, luminosity, as the energy in this problem, you can find the radius R by doing sqrt (L/ (4pisigma (T^4)). Hope this helps everyone. Caroline · 4 years ago4 1 Comment (Stefan-Boltzmann law) L = 4pi*R^2*sigma*T^4 Solving for R we get: => R = (1/ (2T^2)) * sqrt (L/ (pi*sigma)) Plugging in your values you should get: => R = (1/ (2 (11,000K)^2)) *sqrt ( (2.7*10^32W)/ (pi * (5.67*10^-8 W/m^2K^4))) R = 1.609 * 10^11 m? · 3 years ago0 1 Comment Maybe you would like to learn more about one of these? Want to build a free website? Interested in dating sites? Need a Home Security Safe? How to order contacts online?
-```
-**Queries:**<br /> There are over one million (1,010,916) unique, real queries which are assigned to a unique ID. The queries can all be found in the Q&A corpus; for the Documents Ranking corpus only ⅛ of the queries were used. Those were split into train, development, and test sets. We used the development set for our experiments because in order to use the Ranking Evaluation API of Elasticsearch you need relevance assessments. Those were only provided by the development set.
-The development queries (5,193) are stored in the file `msmarco-docdev-queries.tsv`. Each row of the file holds the query and its ID separated by one tab.
- 
-*Example:*
-```
-121352           define extreme
-634306           what does chattel mean on credit history
-920825           what was the great leap forward brainly
-510633           tattoo fixers how much does it cost
-737889           what is decentralization process.
-278900           how many cars enter the la jolla concours d' elegance?
-674172           what is a bank transit number
-303205           how much can i contribute to nondeductible ira
-570009           what are the four major groups of elements
-492875           sanitizer temperature
-```
- 
- 
-**Relevance Assessments:**<br />
-The relevance assessments can be found in the `msmarco-docdev-qrels.tsv` file. Each row holds the query ID, a `0`, the document-ID and a `1`; all separated by a space.
- 
-*Example:*
-```
-2 0 D1650436 1
-1215 0 D1202771 1
-1288 0 D1547717 1
-1576 0 D1313702 1
-2235 0 D2113408 1
-2798 0 D2830290 1
-2962 0 D125453 1
-```
- 
-**Other Files:** <br />
-`msmarco-docs-lookup.tsv` <br />
-`msmarco-doctrain-queries.tsv` <br />
-`msmarco-docdev-top100` <br />
-`docleaderboard-queries.tsv`<br />
-`docleaderboard-top100` <br />
- 
-**Parsing Problems:** -<br />
- 
-**Source:** https://github.com/microsoft/MSMARCO-Document-Ranking
- 
 ## Medline
  
 **Description:**<br />A document collection of short medical articles with very specific queries.
@@ -647,6 +596,60 @@ The next item is the debate on the report (A5-0107/1999) by Mr Berend, on behalf
 **Other Files:** -
  
 **Source:** http://www.statmt.org/europarl/
+
+### MS MARCO Document Ranking
+**Description:**<br /> MS MARCO stands for "Microsoft Machine Reading Comprehension" and is a large scale dataset which can be used on machine reading comprehension, question answering, passage ranking, Keyphrase Extraction, and Conversational Search Studies. It holds over 3 million (3,213,835) documents and more than one million (1,010,916) unique queries, that were extracted from anonymized Bing usage logs.
+ 
+For our case we focused on the MS MARCO Document Ranking corpus which is available through [github](https://github.com/microsoft/MSMARCO-Document-Ranking).
+ 
+**Documents:**<br /> The documents are downloadable as a tsv-file (msmarco-docs.tsv), which makes them easy to parse. There are over 3 million (3,213,835) documents with assigned ID, title and website link (where the document was extracted from). ID, title, and document text are separated by tabs and every new entry starts with a newline. If there is no title available there a "." instead of it.
+ 
+*Example:*
+```
+D1555982       https://answers.yahoo.com/question/index?qid=20071007114826AAwCFvR      The hot glowing surfaces of stars emit energy in the form of electromagnetic radiation.?      Science & Mathematics Physics The hot glowing surfaces of stars emit energy in the form of electromagnetic radiation.? It is a good approximation to assume that the emissivity e is equal to 1 for these surfaces. Find the radius of the star Rigel, the bright blue star in the constellation Orion that radiates energy at a rate of 2.7 x 10^32 W and has a surface temperature of 11,000 K. Assume that the star is spherical. Use σ =... show more Follow 3 answers Answers Relevance Rating Newest Oldest Best Answer: Stefan-Boltzmann law states that the energy flux by radiation is proportional to the forth power of the temperature: q = ε · σ · T^4 The total energy flux at a spherical surface of Radius R is Q = q·π·R² = ε·σ·T^4·π·R² Hence the radius is R = √ ( Q / (ε·σ·T^4·π) ) = √ ( 2.7x10+32 W / (1 · 5.67x10-8W/m²K^4 · (1100K)^4 · π) ) = 3.22x10+13 m Source (s):http://en.wikipedia.org/wiki/Stefan_bolt...schmiso · 1 decade ago0 18 Comment Schmiso, you forgot a 4 in your answer. Your link even says it: L = 4pi (R^2)sigma (T^4). Using L, luminosity, as the energy in this problem, you can find the radius R by doing sqrt (L/ (4pisigma (T^4)). Hope this helps everyone. Caroline · 4 years ago4 1 Comment (Stefan-Boltzmann law) L = 4pi*R^2*sigma*T^4 Solving for R we get: => R = (1/ (2T^2)) * sqrt (L/ (pi*sigma)) Plugging in your values you should get: => R = (1/ (2 (11,000K)^2)) *sqrt ( (2.7*10^32W)/ (pi * (5.67*10^-8 W/m^2K^4))) R = 1.609 * 10^11 m? · 3 years ago0 1 Comment Maybe you would like to learn more about one of these? Want to build a free website? Interested in dating sites? Need a Home Security Safe? How to order contacts online?
+```
+**Queries:**<br /> There are over one million (1,010,916) unique, real queries which are assigned to a unique ID. The queries can all be found in the Q&A corpus; for the Documents Ranking corpus only ⅛ of the queries were used. Those were split into train, development, and test sets. We used the development set for our experiments because in order to use the Ranking Evaluation API of Elasticsearch you need relevance assessments. Those were only provided by the development set.
+The development queries (5,193) are stored in the file `msmarco-docdev-queries.tsv`. Each row of the file holds the query and its ID separated by one tab.
+ 
+*Example:*
+```
+121352           define extreme
+634306           what does chattel mean on credit history
+920825           what was the great leap forward brainly
+510633           tattoo fixers how much does it cost
+737889           what is decentralization process.
+278900           how many cars enter the la jolla concours d' elegance?
+674172           what is a bank transit number
+303205           how much can i contribute to nondeductible ira
+570009           what are the four major groups of elements
+492875           sanitizer temperature
+```
+ 
+ 
+**Relevance Assessments:**<br />
+The relevance assessments can be found in the `msmarco-docdev-qrels.tsv` file. Each row holds the query ID, a `0`, the document-ID and a `1`; all separated by a space.
+ 
+*Example:*
+```
+2 0 D1650436 1
+1215 0 D1202771 1
+1288 0 D1547717 1
+1576 0 D1313702 1
+2235 0 D2113408 1
+2798 0 D2830290 1
+2962 0 D125453 1
+```
+ 
+**Other Files:** <br />
+`msmarco-docs-lookup.tsv` <br />
+`msmarco-doctrain-queries.tsv` <br />
+`msmarco-docdev-top100` <br />
+`docleaderboard-queries.tsv`<br />
+`docleaderboard-top100` <br />
+ 
+**Parsing Problems:** -<br />
+ 
+**Source:** https://github.com/microsoft/MSMARCO-Document-Ranking
  
 ### OHSUMED
  

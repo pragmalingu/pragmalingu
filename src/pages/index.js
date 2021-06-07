@@ -68,7 +68,7 @@ function ProjectTitle() {
 
 
 function Home() {
-  useEffect(() => {
+  /*useEffect(() => {
     const scr = document.createElement('script');
     scr.innerHTML = `new Crate({
       server: '731151531818352770', // dima-no-dimo's server
@@ -78,7 +78,7 @@ function Home() {
     scr.setAttribute('async', true);
     scr.setAttribute('defer', true)
     document.body.appendChild(scr)
-  }, [])
+  }, [])*/
 
   const context = useDocusaurusContext();
   const { siteConfig = {} } = context;
