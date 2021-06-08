@@ -7,8 +7,9 @@ authorFBID:
 
 Welcome to our blog page! Stay tuned for updates.
 
+
 <img
   alt="Rikki"
-  src={useBaseUrl('img/Rikki_About.png')}
+  src='/img/kleines_Icon_2.png'
   className= "mascott"
 />
