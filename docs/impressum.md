@@ -15,7 +15,7 @@ Carl-Thiel-Str. 5
 Samy Ateia
 
 **Kontakt:**  
-Telefon: 089 356478 87  
+Telefon: [+4994120600896](tel:+4994120600896)  
 E-Mail: info@pragmalingu.de
 
 **Umsatzsteuer-ID:**  
