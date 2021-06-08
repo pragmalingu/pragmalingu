@@ -143,15 +143,31 @@ The list of cross-references shows the reference ID followed by `4`, `5`, or `6`
     of documents that cite X.
 ```
  
-**Queries:**<br /> The file `query.text` contains sixty-four (64) query sentences which also use the same markers as the text.
+**Queries:**<br /> The file `query.text` contains sixty-four (64) query sentences which also use the same markers as the text. Not all queries hold information on all tags and since some of the information can be misleading, it is best to only use the `.W` and `.I` tags information.
+They appear in the following order:<br />
+(.I) ID <br />
+(.W) Query <br />
+(.A) Author list <br />
+(.N) Authors name and some keywords on what the query searches for <br />
  
 *Example:*
 ```
-.I 10
+.I 33
 .W
- Parallel languages; languages for parallel computation
+ Articles about the sensitivity of the eigenvalue decomposition of real
+matrices, in particular, zero-one matrices.  I'm especially interested in
+the separation of eigenspaces corresponding to distinct eigenvalues.
+Articles on the subject:
+C. Davis and W.M. Kahn, "The rotation of eigenvectors by a permutation:,
+SIAM J. Numerical Analysis, vol. 7, no. 1 (1970); G.W. Stewart, "Error
+bounds for approximate invariant subspaces of closed linear operators",
+SIAM J. Numerical Analysis., Vol. 8, no. 4 (1971).
+.A
+Davis, C.
+Kahn, W.M.
+Stewart, G.W.
 .N
- 10. Alec Grimison, Comp Serv, Uris Hall (parallel lang)
+ 33. Bengt Aspvall (sens of eigenval decomp of real matrices)
 ```
  
 **Relevance Assessments:**<br />In `qrels.text` query-ID is followed by document-ID followed by 0 int and 0.0 float. Every document has its own row and can be used as a trainable vector.
