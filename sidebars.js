@@ -4,8 +4,8 @@ module.exports = {
   comparisons: [
      'comparisons/comparisons-intro',
      'comparisons/stemming',
-     'comparisons/embeddings',
-     'comparisons/german-decomposition'
+     'comparisons/german-decomposition',
+     'comparisons/embeddings'
   ],
   guides: [
      'guides/guides-intro',
