@@ -255,7 +255,7 @@ To measure Recall it is necessary to have the relevant documents properly labele
 <img
   alt="Recall"
   src={useBaseUrl('img/EXP3_Recall.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 **Precision**
@@ -269,7 +269,7 @@ To measure the Precision it is necessary to have the relevant documents properly
 <img
   alt="Precision"
   src={useBaseUrl('img/EXP3_Precision.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 **F1-Score**
@@ -282,7 +282,7 @@ This is the simplest way to balance both Precision and Recall, there are also ot
 <img
   alt="F1-Score"
   src={useBaseUrl('img/EXP3_Fscore.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 For a better overview on how much each approach increased, we also measured the gains using the **Standard Analyzer** values as a baseline:
@@ -290,7 +290,7 @@ For a better overview on how much each approach increased, we also measured the 
 <img
   alt="Gains"
   src={useBaseUrl('img/EXP3_Gains.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 **Conclusion**
@@ -310,7 +310,7 @@ Based on the scores of the **Standard Analyzer**, the outcome became better with
 <img
   alt=""
   src={useBaseUrl('img/EXP3_NPL_conditions.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 The best examples for this can be seen while looking at the [NPL corpus](../guides/data-comparison#npl). To illustrate what exactly caused this increase, we selected a search query that seemed the most informative to us.
@@ -330,7 +330,7 @@ We can see, that the **Hyphenation Decompounder** does find 5 more relevant docu
 <img
   alt=""
   src={useBaseUrl('img/EXP3_NPL_distributions_analyzer_hyph.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 As an example document to compare the scores and searched terms in detail, we chose document `81` because the **Hyphenation Decompounder** scored it rightfully as the top document, while the **German Analyzer** does not rank it in the top 20.
@@ -379,7 +379,7 @@ As we can see in this table the matched terms and, therefore, the scores diverge
 <img
   alt=""
   src={useBaseUrl('img/EXP3_npl_23_81.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 We can clearly see that, for example, the term `FINSTERNISSEN` does not match within the document while using the **German Analyzer**. It gets stemmed by Elasticsearch to the term `finsternis` but, since the searched text isn't decompounded with this approach, it won't return `finsternisbeobachtungen` as relevant to the query. The same goes for the term `MIKROWELLENBEREICH`, which is only found by the **Hyphenation Decompounder** within the composition `mikrowellenradioquellen`.
@@ -401,7 +401,7 @@ The **Hyphenation Decompounder** returns far more true positives than the **Dict
 <img
   alt=""
   src={useBaseUrl('img/EXP3_NPL_distributions_dict_hyph.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 
@@ -441,7 +441,7 @@ We can see that the score of the **Dictionary** approach is half of the **Hyphen
 <img
   alt=""
   src={useBaseUrl('img/EXP3_npl_42_5444.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 As we can see, the **Dictionary Decompounder** seems to search on more sub-terms for `differentialgleichung` than the **Hyphenation Decompounder**. This leads to a higher document frequency which reduces the term score. So the **Dictionary** approach searches more terms that aren't relevant for the query and, therefore, is more likely to score relevant documents lower than irrelevant ones.
@@ -469,7 +469,7 @@ It's a relatively short query which has only 5 relevant documents, which are fou
 <img
   alt=""
   src={useBaseUrl('img/EXP3_ADI_distributions_21.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 As an example document to compare the scores in detail, we chose the document `21` because the **Standard Analyzer** ranked it lower than the **German Analyzer** even though the scores were nearly the same.
@@ -514,7 +514,7 @@ A good example for that can be found in **Query 20**:
 <img
   alt=""
   src={useBaseUrl('img/EXP3_ADI_distributions_20.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 *Example Query 20*: "Testen von automatisierten Informationssystemen."
@@ -526,7 +526,7 @@ If you look at document `65`, which is only matched by the **German Analyzer**, 
 <img
   alt=""
   src={useBaseUrl('img/EXP3_ADI_20_65.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 The position and the score of this document in both approaches vary greatly:
@@ -619,7 +619,7 @@ Overall, we can see that the **German Analyzer** does find significantly more tr
 <img
   alt=""
   src={useBaseUrl('img/EXP3_CACM_distributions_10.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 The first approach only returns 1 out of 35 relevant documents while the second approach returns 15.
@@ -628,7 +628,7 @@ When we look at more detailed search terms of the one document `2851` that was f
 <img
   alt=""
   src={useBaseUrl('img/EXP3_cacm_10_2851.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 Although the scoring of the **German Analyzer** is higher than the scoring of the **Standard Analyzer**, it has a lower position in the ranking. This is because there were other relevant documents in the second approach that had an even better term scoring. For example, document `1262` which was ranked at position 3 with the second approach, but out of the top 20 for the first:
@@ -636,7 +636,7 @@ Although the scoring of the **German Analyzer** is higher than the scoring of th
 <img
   alt=""
   src={useBaseUrl('img/EXP3_cacm_10_1262.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 When we look at the highlights of both approaches and which terms are matches, we can see that the main difference between them is that the second approach matches `sprach` instead of `für`. Since `für` is a very common stop word in German, the document frequency of this term decreases the score significantly. 
@@ -685,7 +685,7 @@ To analyze why the results of the **German Analyzer** seem to be better than the
 <img
   alt=""
   src={useBaseUrl('img/EXP3_cran_conditions.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 A good example to see exactly what works better with the **German Analyzer** would be **Query 3** with an F-Score difference of `0.428`.
@@ -699,7 +699,7 @@ There are 9 relevant documents for this query where only 1 is returned by the **
 <img
   alt=""
   src={useBaseUrl('img/EXP3_cran_distributions_3.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 We chose the one retrieved document that was returned by both approaches, `181`. 
@@ -715,7 +715,7 @@ We can see by the scores and positions that, apparently, the **Dictionary Decomp
 <img
   alt=""
   src={useBaseUrl('img/EXP3_cran_3_181.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 Although the decompounding matches far more terms inside the documents `text_german` field, both approaches seem to take the `title_german` field score for the document because it was higher:
@@ -768,7 +768,7 @@ Similar to the Cranfield corpus, the different values from the **German Analyzer
 <img
   alt=""
   src={useBaseUrl('img/EXP3_lisa_conditions.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 As an example for this corpus, we chose **Query 10** with the highest F-Score difference of `0.30`.
@@ -780,7 +780,7 @@ This query has 14 relevant documents, the **German Analyzer** returns 10 while t
 <img
   alt=""
   src={useBaseUrl('img/EXP3_lisa_distributions_10.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 To see why the **German Analyzer** finds twice as many true positives, we looked at one of the overlapping documents, document `5801`.
@@ -795,7 +795,7 @@ The score is not that different, but the position is. The **Dictionary Decompoun
 <img
   alt=""
   src={useBaseUrl('img/EXP3_lisa_10_770.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 The **Dictionary Decompounder** finds far more terms, also including some irrelevant and nonsense words like `aktull` or `formation` (which has nothing to do with the searched term `information`).
@@ -851,7 +851,7 @@ We mostly compared decompounding with the standard analyzer. For most of the dat
 <img
   alt=""
   src={useBaseUrl('img/EXP3_medline_conditions.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 To investigate what exactly caused this increase, we picked out a search query that seemed the most informative to us. 
@@ -864,7 +864,7 @@ There are 18 relevant documents for this query, the **Dictionary Decompounder** 
 <img
   alt=""
   src={useBaseUrl('img/EXP3_medline_distributions_27.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 As a good example document to compare the scores and searched terms in detail we chose the document `732` because the **Hyphenation Decompounder** doesn't score it into the top 20 documents, while the **Dictionary Decompounder** does.
@@ -879,7 +879,7 @@ When we look at the term scores, it is clear that the **Dictionary** approach fi
 <img
   alt=""
   src={useBaseUrl('img/EXP3_med_27_732.svg')}
-  class= "contents"
+  className= "contents"
 />
 
 In contrast to the previous examples, where more terms increased the idf and therefore the overall term, this seems to be different in the Medline corpus. Since it is filled with medical documents, we think there are fewer irrelevant terms in general.

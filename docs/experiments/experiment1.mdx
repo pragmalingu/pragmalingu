@@ -130,7 +130,7 @@ stemming_analyser = {
     }
 }
 ```
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Q9EMclEPLvMS"><button class="buttons" >Run it in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Q9EMclEPLvMS"><button className="buttons" >Run it in Google Colab</button></a>
 <br/><br/>
 
 Afterwards, we incorporated the `stemming_analyser` into the index settings, which we then used to index the documents of each corpus:
@@ -144,7 +144,7 @@ settings = {
     }
 }
 ```
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Q9EMclEPLvMS"><button class="buttons" >Run it in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Q9EMclEPLvMS"><button className="buttons" >Run it in Google Colab</button></a>
 <br/><br/>
 
 These were the results with the *Stemmer Token Filter* applied:
@@ -191,7 +191,7 @@ dictionary_analyser = {
     }
 }
 ```
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Y1DRyRSxZZE7"><button class="buttons" >Run it in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Y1DRyRSxZZE7"><button className="buttons" >Run it in Google Colab</button></a>
 <br/><br/>
 Afterwards, we embedded the analyser into the settings to index our documents with it:
 
@@ -203,7 +203,7 @@ settings = {
         "analysis": dictionary_analyser
     }
 ```
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Y1DRyRSxZZE7"><button class="buttons" >Run it in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Y1DRyRSxZZE7"><button className="buttons" >Run it in Google Colab</button></a>
 <br/><br/>
 These were the results of the *Hunspell Token Filter*:
 
@@ -228,9 +228,9 @@ To measure Recall it is necessary to have the relevant documents labeled. Recall
 <img
   alt="Recall"
   src={useBaseUrl('img/EXP1_Recall.svg')}
-  class= "content"
+  className= "content"
 />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=CemuLaUAMHKP"><button class="buttons" >Run it in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=CemuLaUAMHKP"><button className="buttons" >Run it in Google Colab</button></a>
 <br/><br/>
 
 **Precision**
@@ -244,9 +244,9 @@ To measure the Precision it is necessary to have the relevant documents labeled 
 <img
   alt="Recall"
   src={useBaseUrl('img/EXP1_Precision.svg')}
-  class= "content"
+  className= "content"
 />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=kJbezFbtMVp3"><button class="buttons" >Run it in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=kJbezFbtMVp3"><button className="buttons" >Run it in Google Colab</button></a>
 <br/><br/>  
 
 **F1-Score**
@@ -259,16 +259,16 @@ This is the simplest way to balance both Precision and Recall, there are also ot
 <img
   alt="Recall"
   src={useBaseUrl('img/EXP1_FScore.svg')}
-  class= "content"
+  className= "content"
 />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Gm1Aej_-T9e0"><button class="buttons" >Run it in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb#scrollTo=Gm1Aej_-T9e0"><button className="buttons" >Run it in Google Colab</button></a>
 <br/><br/>
 
 
 It is apparent that the algorithmic stemmer offers some improvements over no stemming. The dictionary based hunspell stemming seems to perform either better or worse depending on the corpora.
 For a more detailed analysis check out our [Simple Search vs. Stemming Comparison](./comparisons/stemming.mdx).
 
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb"><button class="buttons" >Try it yourself!</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Experiment/First_Experiment_Stemming.ipynb"><button className="buttons" >Try it yourself!</button></a>
 
 <br/>
 <br/>
