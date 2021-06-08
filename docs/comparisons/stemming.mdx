@@ -52,7 +52,7 @@ This is the simplest way to balance both Precision and Recall, there are also ot
 
 
 <img alt="F1-Score" src={useBaseUrl('img/EXP1_FScore.svg')} />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=F_WKHLDXJypJ"><button class="buttons" >Reproduce it in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=F_WKHLDXJypJ"><button className="buttons" >Reproduce it in Google Colab</button></a>
 <br />
 <br />
 
@@ -94,13 +94,13 @@ But how does the Algorithmic Stemmer achieve these results?
 We can answer this by looking at the NPL dataset which shows a significant gain of **19.65%** for the Stemmer Token Filter over the Standard Analyzer.
 
 We first used our search analysis tool to figure out the queries that demonstrate [the largest F1-Score improvements](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=_fC_-pb7G4HM) with the Stemmer Token Filter.
-The three queries with the biggest F1-Score difference are **62**, **73** and **52**. We will be looking at query **62**.
+The three queries with the biggest F1-Score difference are **62**, **73**, and **52**. We will be looking at query **62**.
 
 
 The query text of query 63 is:  
 >FAST TRANSISTOR COUNTERS.
 
-We first looked at the disjoint true positives sets of the query results for both the Algorithmic Stemmer and the Standard Analyzer. The highest-ranked document for the Algorithmic Stemmer that is not present in the top **k=20** results of the Standard Analyzer is [document `8341`](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=QjP7C2guRRhm). For the Standard ,Analyzer this document [appears at position 34](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=1JMpo-U2SWEW) which is outside the **k=20** result set that we used to calculate precision and recall.
+We first looked at the disjoint true positives sets of the query results for both the Algorithmic Stemmer and the Standard Analyzer. The highest-ranked document for the Algorithmic Stemmer that is not present in the top **k=20** results of the Standard Analyzer is [document `8341`](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=QjP7C2guRRhm). For the Standard Analyzer, this document [appears at position 34](https://colab.research.google.com/github/pragmalingu/experiments/blob/master/01_Stemming/Evaluation/Comparison_Stemming_vs_Standard_Search.ipynb#scrollTo=1JMpo-U2SWEW) which is outside the **k=20** result set that we used to calculate precision and recall.
 
 The text of the relevant document is: 
 > nonsaturating pulse circuits using two junction transistors junction transistors are found to be fast enough for pulse applications if the collector voltage is 
@@ -131,7 +131,7 @@ The overall document score of **7.10** is the sum of these individual term score
 |fast   | 4.31    | 1                | 84                 |
 |transistor | 2.78| 1                | 479                |
 
-We can see that for the Standard Analyzer the inflected word **counters** is not matched with the word **counter** in the document. The occurrences of the word **transistors** is also not matched with the stem **transistor** used in the query and, therefore, the term frequency and score of the word are lower.
+We can see that for the Standard Analyzer the inflected word **counters** is not matched with the word **counter** in the document. The occurrences of the word **transistors** are also not matched with the stem **transistor** used in the query and, therefore, the term frequency and score of the word are lower.
 The document frequency is also lower, which normally leads to a higher score, but cannot make up for the lower term frequency in this instance.
 
 <img alt="F1-Scores " src={useBaseUrl('img/EXP1_Query_62_explain.svg')} />
@@ -271,7 +271,7 @@ SFX N e ion e
 SFX N y ication y  
 SFX N 0 en [^ey]
 ```
-There is a good explanation on how these Hunspell dictionaries and affix files work and what the individual columns in the rules mean on the [Chromium developer documentation site](https://www.chromium.org/developers/how-tos/editing-the-spell-checking-dictionaries#TOC-Full-details).
+There is a good explanation of how these Hunspell dictionaries and affix files work and what the individual columns in the rules mean on the [Chromium developer documentation site](https://www.chromium.org/developers/how-tos/editing-the-spell-checking-dictionaries#TOC-Full-details).
 
 The third line `SFX N y ication y` enables the matching of rectification.
 
@@ -374,7 +374,7 @@ Response:
 We can see that **concurrency** is not stemmed and **concurrent** seems to be overstemmed to **current**. We can look at the Hunspell dictionary and the affix file to see which rules lead to this outcome:  
 
 For **concurrency** there is exactly one entry: `concurrency`  
-For `concurrent` we find the following rule that seems so explain the overstemming to the term **current**.  
+For `concurrent` we find the following rule that seems to explain the overstemming to the term **current**.  
 `current/FAY`  
 The rules **FAY** in the affix file are:
 ```
@@ -389,7 +389,7 @@ SFX Y   0     ly         .
 ```
 This means that the words **current**, **recurrent**, **concurrent**, and **currently** are all stemmed to **current**.
 
-This seems to indicate that the Hunspell dictionaries we are using, which are freely available for spell-checking, are not optimized for this stemmer use-case.
+This seems to indicate that the Hunspell dictionaries we are using, which are freely available for spell-checking, are not optimized for this stemmer use case.
 
 ### 3.4 Standard Analyzer improvements over the Hunspell Stemmer:
 
@@ -458,9 +458,9 @@ This is another indication that the freely available LibreOffice dictionaries th
 
 ## 4. Conclusion
 
-For all our tested datasets, algorithmic stemming showed considerable increases in the F1-Score gains, ranging from 1.4% - 21.9%. As algorithmic stemming is built into the language analyzers provided by Elasticsearch, it is fairly easy to use. Due to its rule-based nature, it does not come with a considerable processing or memory overhead.
+For all our tested datasets, algorithmic stemming showed considerable increases in the F1-Score gains, ranging from 1.4% - 21.9%. As algorithmic stemming is built into the language analyzers provided by Elasticsearch, it is fairly easy to use. Due to its rule-based nature, it does not come with considerable processing or memory overhead.
 
-Dictionary based stemming, as provided by the Hunspell Token Filter, is not especially easy to use since you need a good dictionary that is tailored to the stemming tasks.
+Dictionary-based stemming, as provided by the Hunspell Token Filter, is not especially easy to use since you need a good dictionary that is tailored to the stemming tasks.
 The analysis in our discussion section indicated that the freely available Hunspell dictionaries that we used from the LibreOffice project are not really suitable for stemming.
 Hunspell dictionary stemming improved over the Standard Analyzer in all but one dataset, but it could not beat the Algorithmic Stemmer with the dictionaries we tested.
 
@@ -468,8 +468,8 @@ The overall conclusions and recommendations from our experiment are:
 - To get a quick and cheap boost in relevancy for your search use-case, use the [Language Analyzers provided by Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html).
 - Only consider the [Hunspell Token Filter](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hunspell-tokenfilter.html) if you have access to a good dictionary and are sure that it will improve relevancy for your use-case.
 - Don't choose the Hunspell Token Filter with the freely available LibreOffice dictionaries over the algorithmic stemmers.
-
-**Acknowledgements:**<br/>
+**Acknowledgements:**  
+  
 Thanks to Kenny Hall for proofreading this article.
 
 

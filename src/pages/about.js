@@ -33,7 +33,7 @@ function About() {
                     <h2>Mission</h2>
                     <p>
                         The mission of PragmaLingu is:
-                      <div class="entry-content">
+                      <div className="entry-content">
                             <ul>
                                 <li> To create simple, intuitive and open resources; to understand, validate and reproduce novel solutions to search and NLP use-cases.</li>
                                 <li> To advance these solutions, by exploring the usefulness of pragmatic concepts for these use-cases.</li>
@@ -48,7 +48,7 @@ function About() {
                     <h2>Contribute</h2>
                     <p>
                         What can you do to help?
-                      <div class="entry-content">
+                      <div className="entry-content">
                             <ul>
                                 <li> Ask questions on our public Discord server if you don’t understand something or if some of our articles and explanations are not clear.</li>
                                 <li>Create pull requests for improvements or fixes on <a href='https://github.com/pragmalingu/experiments'> GitHub </a>

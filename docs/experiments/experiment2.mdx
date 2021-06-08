@@ -74,7 +74,7 @@ from sentence_transformers import SentenceTransformer
 model = SentenceTransformer('bert-base-nli-mean-tokens')
 
 ```
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=8rWL3C3BLMAR&line=1&uniqifier=1"><button class="buttons" >Run BERT model in Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=8rWL3C3BLMAR&line=1&uniqifier=1"><button className="buttons" >Run BERT model in Colab</button></a>
 
 ### 3. Experimenting With Sentence Embeddings From BERT 
 After initializing the BERT model, we converted the documents and the search queries into sentence embeddings. Then - similarly to our last experiment - we calculated comparable values using the [Ranking Evaluation API](../guides/ranking-api.mdx).
@@ -121,7 +121,7 @@ for ID, doc_data in adi_txt_data.items():
           }
     )
 ```
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=ZaxpCqSDShgg&line=1&uniqifier=1"><button class="buttons" >Run this in Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=ZaxpCqSDShgg&line=1&uniqifier=1"><button className="buttons" >Run this in Colab</button></a>
 
 *Note*: Not every corpus has titles, that is why we excluded the `Medline`, `NPL` and `Time` corpus for the title search.
 
@@ -190,7 +190,7 @@ for ID, doc_data in adi_txt_data.items():
     )
 ```
 
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=ZaxpCqSDShgg&line=1&uniqifier=1"><button class="buttons" >Run this in Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=ZaxpCqSDShgg&line=1&uniqifier=1"><button className="buttons" >Run this in Colab</button></a>
 
 *Note*: Not every document has text, so for some corpora we needed to check that while indexing, e.g. the `CACM` corpus.
 
@@ -385,27 +385,27 @@ These are the results for the search on the "title"-field  which compare the sta
 <img
   alt="Recall on title field"
   src={useBaseUrl('img/EXP2_Recall_title.svg')}
-  class= "content"
+  className= "content"
 />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=crBSdbZMPAH9&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=crBSdbZMPAH9&line=1&uniqifier=1"><button className="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 **Precision**
 <img
   alt="Precision on title field"
   src={useBaseUrl('img/EXP2_Precision_title.svg')}
-  class= "content"
+  className= "content"
 />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=Bp4g4N7TUpXB&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=Bp4g4N7TUpXB&line=1&uniqifier=1"><button className="buttons" >Run this in Google Colab</button></a>
 <br /><br />
 
 **F1-Score**
 <img
   alt="F1-Score on title field"
   src={useBaseUrl('img/EXP2_Fscore_title.svg')}
-  class= "content"
+  className= "content"
 />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=mYfPAzYTVwRQ&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=mYfPAzYTVwRQ&line=1&uniqifier=1"><button className="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 
@@ -416,27 +416,27 @@ These are the results for the search on the "text"-field which compare the stand
 <img
   alt="Recall on text field"
   src={useBaseUrl('img/EXP2_Recall_text.svg')}
-  class= "content"
+  className= "content"
 />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=BXibzPzmf_KK&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=BXibzPzmf_KK&line=1&uniqifier=1"><button className="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 **Precision**
 <img
   alt="Precision on text field"
   src={useBaseUrl('img/EXP2_Precision_text.svg')}
-  class= "content"
+  className= "content"
 />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=tRF25Yq3G0QU&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=tRF25Yq3G0QU&line=1&uniqifier=1"><button className="buttons" >Run this in Google Colab</button></a>
 <br /><br />
 
 **F1-Score**
 <img
   alt="F1-Score on text field"
   src={useBaseUrl('img/EXP2_Fscore_text.svg')}
-  class= "content"
+  className= "content"
 />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=QA8CpbbRQtIH&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=QA8CpbbRQtIH&line=1&uniqifier=1"><button className="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 #### 4.3. Search with a complex re-ranking query
@@ -446,33 +446,33 @@ These are the results for the search with a more complex query which searches on
 <img
   alt="Recall on complex re-ranking query"
   src={useBaseUrl('img/EXP2_Recall_complex.svg')}
-  class= "content"
+  className= "content"
 />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=tJBsXlxhmgPV&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=tJBsXlxhmgPV&line=1&uniqifier=1"><button className="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 **Precision**
 <img
   alt="Precision on complex re-ranking query"
   src={useBaseUrl('img/EXP2_Precision_complex.svg')}
-  class= "content"
+  className= "content"
 />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=N41wwBZA1Z3v&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=N41wwBZA1Z3v&line=1&uniqifier=1"><button className="buttons" >Run this in Google Colab</button></a>
 <br /><br />
 
 **F1-Score**
 <img
   alt="F1-Score  on complex re-ranking query"
   src={useBaseUrl('img/EXP2_Fscore_complex.svg')}
-  class= "content"
+  className= "content"
 />
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=hO3oqgZE2ys2&line=1&uniqifier=1"><button class="buttons" >Run this in Google Colab</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=hO3oqgZE2ys2&line=1&uniqifier=1"><button className="buttons" >Run this in Google Colab</button></a>
 <br/><br/>
 
 
 For a more detailed analysis check out our [Embedding Comparison](./comparisons/embeddings.mdx).
 
-<a class="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=n93d8RqwhKXs"><button class="buttons" >Try it yourself!</button></a>
+<a className="buttons" href="https://colab.research.google.com/github/pragmalingu/experiments/blob/master/02_Embeddings/Experiment/Second_Experiment_BERT_Embeddings.ipynb#scrollTo=n93d8RqwhKXs"><button className="buttons" >Try it yourself!</button></a>
 
 
 <br/>
