@@ -49,6 +49,11 @@ module.exports = {
           position: 'left'
         },
         {
+          to:'blog',
+          label: 'Blog',
+          position: 'left'
+        },
+        {
           to: 'docs/about/team', 
           label: 'About', 
           position: 'left'

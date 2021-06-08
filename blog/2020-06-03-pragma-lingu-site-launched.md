@@ -1,10 +1,14 @@
 ---
 title: PragmaLingu, Launches Site
-author: Miriam
-authorURL: http://github.com/
+author: PragmaLingu
+authorURL: https://github.com/pragmalingu
 authorFBID: 
 ---
 
-Well. Finally got around to putting this old website together. 
-Neat thing about it and I can use Markdown to author my posts. 
-It actually is a lot easier than I thought it was going to be.
+Welcome to our blog page! Stay tuned for updates.
+
+<img
+  alt="Rikki"
+  src={useBaseUrl('img/Rikki_About.png')}
+  className= "mascott"
+/>
