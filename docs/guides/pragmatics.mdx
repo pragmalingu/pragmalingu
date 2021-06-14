@@ -16,47 +16,92 @@ import styles from '../doc.css';
 
 Pragmatics is difficult to define in concrete terms. In linguistic research, there are various approaches to how pragmatics can be approached. 
 
-On the one hand there is the Anglo-American component view on pragmatics, where pragmatics is defined as 
-`the systematic study of meaning by virtue, or dependent on, the use of language.` (Huang 2007, 2013c, 2014:2, 2016)
+On the one hand there is the Anglo-American component view on pragmatics, where pragmatics is defined as: 
+>Pragmatics is the systematic study of meaning by virtue, or dependent on, the use of language. (Huang 2007, 2013c, 2014:2, 2016)
 
-Within this approach pragmatics exist in a linguistic theory where there are a number of core components like phonetics, phonology, morphology, synatx and semantics. Thomas C. Scott-Phillips illustrated this approach within his essay "Pragmatics and the aims of language evolution":
+Within this approach pragmatics exist in a linguistic theory where there are a number of core components like phonetics, phonology, morphology, synatx and semantics. Thomas C. Scott-Phillips illustrated this approach within his essay **"Pragmatics and the aims of language evolution"**:
 
 <img
   alt=""
-  src={useBaseUrl('Pragmatics_language_layers_Scott.png')}
+  src={useBaseUrl('img/Pragmatics_language_layers_Scott.png')}
   className= "contents"
 />
 
 He defines pragmatics as the outermost and thus the most abstract layer of a language. According to Scott, pragmatics carries the meaning of a statement in the context of the conversation.
 
-On the other hand there is the European Continental view on pragmatics, where pragmatic
-`is a general function (i.e. cognitive, social, and cultural) perspective on linguistic phenomena in relation to their usage in forms of behaviour.` (Verschueren 1999:7, 11, 1995:12)
+On the other hand there is the European Continental view on pragmatics, where pragmatics is defined as:
+> Pragmatic is a general function (i.e. cognitive, social, and cultural) perspective on linguistic phenomena in relation to their usage in forms of behaviour. (Verschueren 1999:7, 11, 1995:12)
 
 We can profit from both of these approaches to get an understanding of the concept pragmatics.
 
 As a conclusion we can create this very simple definition:
-`Pragmatics is the study of language use in context.`
+>Pragmatics is the study of language use in context.
 
 In order to understand pragmatic contexts, it is not enough to just look at a sentence, it is always necessary to consider the contextual circumstances as well.
 In this article will use mostly the Anglo-American structure to explain some of the central concepts of pragmatics.
 
 ## 2. Central concepts of pragmatics
 
-To use language given pragmatic concepts in Information Retrieval we have to find rules to represent those concepts. In order to do that it is helpful to categorize them given the needed context. 
+To find a useful way to handle the language given pragmatic concepts in Information Retrieval and NLP in general, we have to find rules to represent those concepts. In order to do that it is helpful to categorize them given the situation they appear in. 
 
 "The Oxford Handbook of Pragmatics" tries to divide pragmatics into the following central concepts: 
 
-* Implicature
+* Conversational Implicature
 * Presupposition
 * Speech Acts
 * Deixis
 * Reference
 * Context
 
-Im Folgenden werden wir kurz zu jedem dieser Konzepte kurze Beispiele bringen und anschließend anhand dieser Beispiele erklären, warum die pragmatische Suche noch immer ein großes Problem in Natural Language Processing darstellt.
+In the following, we will briefly explain those concepts using examples and then use those to explain why pragmatic search is still a major problem in Natural Language Processing.
 
-### 2.1. Implicature
+### 2.1. Conversational Implicature
+The conversational implicature can be defined as an additional meaning of an statement that is not apparent from the literal meaning but must be inferred from the context. 
 
+*For example:*
+>A: "I'm out of milk." <br></br>
+>B: "There's a supermarket next door."
+
+The answer B gives A doesn't make sense if you're not aware of the fact, that you can find milk inside a supermarket. Therefor it is implicated by B that A has this knowledge and knows what to do with it concerning A's sentence.
+
+This shows that a conversational implicature is part of what a speaker means, but not part of what the sentence means.
+
+The *implicature* shouldn't be mixed up with the term  *implication*. *Implication* is a term used in semantics to represent connections that can be concluded without any context but from having some basic knowledge. 
+
+*For example:*
+> "The cat lies on the carpet."
+
+This implies that the carpet lies under the cat. The only knowledge we need to comprehend this implication is, how to revert this sentence semantically. 
+
+Paul Grice's defined the cooperative principle through his pragmatic theory and introduced its attendant maxims of conversation in his book "Studies in the Way of Words", 1989. **The cooperative principle** implies that when we communicate, we are effective and cooperative and assume the same from our conversational partner. The four maxims are rules which can predict how to stay true to the cooperative principle:
+
+1. **Maxim of quantity** is about being informative. 
+<br></br>One should make their utterance as informative as the current conversation purpose requires, but not more than that.
+2. **Maxim of quality** is about being truthful. 
+<br></br>This means one shouldn't say anything they think is false, but also shouldn't say anything they can't give adequate reasons for its truth.
+3. **Maxim of relation** is about being relevant. 
+<br></br>One shouldn't say anything that isn't relevant to the conversation.
+4. **Maxim of manner** is about being clear. 
+<br></br>This means obscure language, ambiguity, prolixity should be avoided and proper language used.
+
+By following the cooperative principle we're able to make conclusions and thus implicature. 
+Often those maxims are broken on purpose, to get a specific effect.
+
+1. **Violation of the quantity maxim**
+* Tautologies: “It is what it is”, “voll und ganz”
+2. **Violation of the quality maxim**
+* Irony/sarkasm: “Oh great...”
+* Understatement/overstatement: “I was barely drunk after all.”, “This will take ages.”
+* Lying
+3. **Violation of the relation maxim**
+* abrupter Themenwechsel: “Was halten Sie von der politischen Lage?” - “Das Wetter ist heute aber besonders schön!”
+* Ausweichen: “Was ist denn die Hauptstadt von Tadschikistan?” - “Berlin ist es nicht.”
+4. **Violation of the manner maxim**
+* Beschönigung: “Er brachte eine Reihe von Tönen hervor, die den Noten einer Arie aus Rigoletto nahe kamen.”
+* Obskure Sprache: “Wo warst du denn? Hast du etwas eingekauft?” - “Vielleicht, vielleicht auch nicht. Lass dich überraschen!”
+
+
+These maxims are not an ideal categorization but they can help to understand implicature and to determine the problems with it in NLP.
 
 ### 2.2. Presupposition
 
@@ -73,7 +118,7 @@ Im Folgenden werden wir kurz zu jedem dieser Konzepte kurze Beispiele bringen un
 ### 2.6. Context
 
 
-## 3. Problems with pragmatic search
+## 3. Problems with pragmatics in NLP
 
 We can divide the pragmatic context in Information Retrieval through looking at the types of information we need to get a search result:
 
