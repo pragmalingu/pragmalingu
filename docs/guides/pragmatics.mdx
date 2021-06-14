@@ -12,9 +12,14 @@ keywords:
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from '../doc.css';
 
-## 1. Was ist Pragmatics?
+## 1. What is Pragmatics?
 
-Um Pragmatik zu verstehen, muss man sich zunächst allgemein bewusst werden, woraus die Sprache sich zusammensetzt. Dies hat Thomas C. Scott-Phillips in seinem essay "Pragmatics and the aims of language evolution" in einer einfachen Grafik dargestellt:
+Pragmatics is difficult to define in concrete terms. In linguistic research, there are various approaches to how pragmatics can be approached. 
+
+On the one hand there is the Anglo-American component view on pragmatics, where pragmatics is defined as 
+`the systematic study of meaning by virtue, or dependent on, the use of language.` (Huang 2007, 2013c, 2014:2, 2016)
+
+Within this approach pragmatics exist in a linguistic theory where there are a number of core components like phonetics, phonology, morphology, synatx and semantics. Thomas C. Scott-Phillips illustrated this approach within his essay "Pragmatics and the aims of language evolution":
 
 <img
   alt=""
@@ -22,12 +27,25 @@ Um Pragmatik zu verstehen, muss man sich zunächst allgemein bewusst werden, wor
   className= "contents"
 />
 
-Dabei definiert er die Pragmatik als die äußerste und damit auch die abstrakteste Schicht einer Sprache. Laut Scott trägt die Pragmatik die Bedeutung einer Aussage im Kontext der Unterhaltung.
-Um pragmatische Zusammenhänge verstehen zu können, reicht es nicht aus sich lediglich einen Satz anzusehen, es ist immer nötig auch die kontextuellen Begebenheiten in Betracht zu ziehen.
+He defines pragmatics as the outermost and thus the most abstract layer of a language. According to Scott, pragmatics carries the meaning of a statement in the context of the conversation.
 
+On the other hand there is the European Continental view on pragmatics, where pragmatic
+`is a general function (i.e. cognitive, social, and cultural) perspective on linguistic phenomena in relation to their usage in forms of behaviour.` (Verschueren 1999:7, 11, 1995:12)
 
-## 2. Bereiche der Pragmatik
-"The Oxford Handbook of Pragmatics" tries to classify pragmatics into the following central concepts: 
+We can profit from both of these approaches to get an understanding of the concept pragmatics.
+
+As a conclusion we can create this very simple definition:
+`Pragmatics is the study of language use in context.`
+
+In order to understand pragmatic contexts, it is not enough to just look at a sentence, it is always necessary to consider the contextual circumstances as well.
+In this article will use mostly the Anglo-American structure to explain some of the central concepts of pragmatics.
+
+## 2. Central concepts of pragmatics
+
+To use language given pragmatic concepts in Information Retrieval we have to find rules to represent those concepts. In order to do that it is helpful to categorize them given the needed context. 
+
+"The Oxford Handbook of Pragmatics" tries to divide pragmatics into the following central concepts: 
+
 * Implicature
 * Presupposition
 * Speech Acts
@@ -56,3 +74,12 @@ Im Folgenden werden wir kurz zu jedem dieser Konzepte kurze Beispiele bringen un
 
 
 ## 3. Problems with pragmatic search
+
+We can divide the pragmatic context in Information Retrieval through looking at the types of information we need to get a search result:
+
+* Basic Knowledge (common knowledge about general topics)
+*For example:* If someone searches for "birth month cancer", the basic knowledge should lead to the zodiac sign and not the illness, because it is obviously a search request for the zodiac sign.
+* User Information (which domains does the user normally search in)
+*For example:* If someone tends to search for their horoscope every day, it is way more likely they want an article about the zodiac sign `Cancer` than the deadly illness. 
+* Corpus Information (what information can be extracted from the corpus)
+*For example:* If there is only information about zodiac sign `Cancer` in the corpus, it won't find anything about the illness.
