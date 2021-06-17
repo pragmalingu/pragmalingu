@@ -24,7 +24,7 @@ function About() {
                         that this pragmatic perspective is intuitive and makes learning fun.
                     </p>
                     <div className={styles.coverContainer}>
-                        <img src="img/Rikki_About_smaller.jpg" className={styles.cover} />
+                        <img src="img/Rikki_About_smaller.webp" className={styles.cover} />
                     </div>
                 </div>
             </header>
@@ -184,7 +184,7 @@ function About() {
                             <div className="avatar avatar--vertical">
                                 <img
                                     className="avatar__photo avatar__photo--xl"
-                                    src="/img/Rikki_About_smaller.jpg"
+                                    src="/img/Rikki_About_smaller.webp"
                                 />
                                 <div className="avatar__intro">
                                     <h3 className="avatar__name">Rikki</h3>
