@@ -20,7 +20,7 @@ module.exports = {
   themes: ['@docusaurus/theme-live-codeblock'],
   title: 'PragmaLingu',
   tagline: 'PragmaLingu - Semantic Search and NLP',
-  url: 'http://www.pragmalingu.de',
+  url: 'https://www.pragmalingu.de',
   baseUrl: '/',
   favicon: 'img/kleines_Icon_1.png',
   organizationName: 'pragmalingu', // Usually your GitHub org/user name.
@@ -30,7 +30,7 @@ module.exports = {
       title: '',
       logo: {
         alt: '',
-        src: 'img/kleines_Icon_2.png',
+        src: 'img/kleines_Icon_2.webp',
       },
     items: [
         {
@@ -136,7 +136,12 @@ module.exports = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+        sitemap: {
+          changefreq: 'weekly',
+          priority: 0.5,
+          trailingSlash: true,
+        },
       },
-    ],
+    ]
   ],
 };

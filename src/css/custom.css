@@ -144,7 +144,7 @@ body {
   .mascott {
     width: 60%;
     float: left;
-    margin: 18px;
+    margin-right: 18px;
   }
 } 
 .menu__link--active:not(.menu__link--sublist) {
