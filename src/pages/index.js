@@ -11,7 +11,7 @@ const features = [
   {
     title: <>Comparisons</>,
     imageUrl: 'img/Rikki_Comparison_dynamisch.webp',
-    link:'https://pragmalingu.de/docs/comparisons/comparisons-intro',
+    link:'https://pragmalingu.de/docs/comparisons/comparisons-intro/',
     description: (
       <>
         How can you improve search relevance? Does a dictionary stemmer perform better than an algorithmic one? What about embeddings and deep learning models?
@@ -22,7 +22,7 @@ const features = [
   {
     title: <>Experiments</>,
     imageUrl: 'img/Rikki_Experiments_dynamisch.webp',
-    link: 'https://pragmalingu.de/docs/experiments/experiments-intro',
+    link: 'https://pragmalingu.de/docs/experiments/experiments-intro/',
     description: (
       <>
         You want to run your own evaluation from start to finish? How do you prepare the data sets, configure your search engine and run the evaluation?
@@ -33,11 +33,11 @@ const features = [
   {
     title: <>Guides</>,
     imageUrl: 'img/Rikki_Guides_dynamisch.webp',
-    link: 'https://pragmalingu.de/docs/guides/guides-intro',
+    link: 'https://pragmalingu.de/docs/guides/guides-intro/',
     description: (
       <>
         You want to dive deeper into the used datasets, algorithms and search engines? 
-        Here you can find in-depth guides about the techniques and tools we use, as well as interesting topics and new developments.
+        Here you can find in-depth guides about the techniques and tools we use, as well as interesting topics and new developments. You can start by reading about <a href="https://pragmalingu.de/docs/guides/pragmatics/'">pragmatics</a> in general.
       </>
     ),
   },

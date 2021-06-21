@@ -10,6 +10,7 @@ module.exports = {
   guides: [
      'guides/guides-intro',
      'guides/basic-definitions',
+     'guides/pragmatics',
      'guides/data-comparison',
      'guides/how-to-parse',
      'guides/elastic-setup',
