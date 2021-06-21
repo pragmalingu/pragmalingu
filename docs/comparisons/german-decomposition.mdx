@@ -48,7 +48,7 @@ We tried to compare two different decomposition approaches in Elasticsearch:
  * [**Dictionary Decompounder Token Filter**](https://www.elastic.co/guide/en/elasticsearch//reference/master/analysis-dict-decomp-tokenfilter.html): <br></br>
 This token filter uses a brute force approach to look up all possible subwords in a compound dictionary. If subwords are found those are included in the scoring of the documents. For example: If our dictionary includes "Donau'' and "Dampfschiff" the search for "Donaudampfschiff" would search for "Donaudampfschiff", "Donau" and "dampfschiff". This should in theory perform better than a search using only the **Standard Analyzer**.
 
-* [**Hyphenation Decompounder Token Filter**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hyp-decomp-tokenfilter.html): <br></br> This approach uses XML-based hyphenation patterns to search for subwords in a compound dictionary. This token filter is faster than the dictionary decompounder and the recommended filter for [decompounding by Elastic](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-dict-decomp-tokenfilter.html#analysis-dict-decomp-tokenfilter)..<br></br>
+* [**Hyphenation Decompounder Token Filter**](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-hyp-decomp-tokenfilter.html): <br></br> This approach uses XML-based hyphenation patterns to search for subwords in a compound dictionary. This token filter is faster than the dictionary decompounder and the recommended filter for [decompounding by Elastic](https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-dict-decomp-tokenfilter.html#analysis-dict-decomp-tokenfilter).<br></br>
 
 
 To get a baseline to compare the results against, we also searched with two more basic approaches:
@@ -301,12 +301,18 @@ In all corpora except the Medline corpus, the **Hyphenation Decompounder** seems
 
 ## 5. Discussion
 
-In this section, we want to discuss some of our results in more detail. First, we want to show some positive examples of how decompounding can improve search results to underline our hypothesis. After that, we will try to analyze some unexpected variations in the results such as why the **German Analyzer** is vastly superior to the **Standard Analyzer** and sometimes even the **Dictionary Decompounder**, or why the **Dictionary Decompounder** is slightly better than the **Hyphenation Decompounder** on the Medline corpus.
+In this section, we want to discuss some of our results in more detail. 
+First, we want to show some positive examples of how decompounding can improve search results to underline our hypothesis. 
+After that, we will try to analyze some unexpected variations in the results such as why the **German Analyzer** is vastly superior to the **Standard Analyzer** and sometimes even the **Dictionary Decompounder**, 
+or why the **Dictionary Decompounder** is slightly better than the **Hyphenation Decompounder** on the Medline corpus.
 
 ### 5.1. German Analyzer vs. Dictionary & Hyphenation Decompounder
 
 As previously suggested in the hypothesis section, decomposition did increase the search scores. 
-Based on the scores of the **Standard Analyzer**, the outcome became better with the **German Analyzer**. The **Dictionary Decompounder** was able to increase the values once again. On top of that, the increase from the **Hyphenation Decompounder** showed the highest score.
+The best examples for this can be seen while looking at the [NPL corpus](../guides/data-comparison#npl). 
+Based on the scores of the **Standard Analyzer**, the outcome became better with the **German Analyzer**. 
+The **Dictionary Decompounder** was able to increase the values once again. 
+On top of that, the increase from the **Hyphenation Decompounder** showed the highest score.
 
 <img
   alt=""
@@ -314,9 +320,9 @@ Based on the scores of the **Standard Analyzer**, the outcome became better with
   className= "contents"
 />
 
-The best examples for this can be seen while looking at the [NPL corpus](../guides/data-comparison#npl). To illustrate what exactly caused this increase, we selected a search query that seemed the most informative to us.
+To illustrate what exactly caused this increase, we selected a search query that seemed the most informative to us.
 
-<br></br>
+<br></br>  
 
 #### German Analyzer vs. Hyphenation Decompounder
 
@@ -393,11 +399,13 @@ This shows that the **Decompounder** approach can clearly improve search results
 
 #### Dictionary Decompounder vs. Hyphenation Decompounder
 
-Second, we compared the **Dictionary Decompounder** with the **Hyphenation Decompounder** to see how, in some cases, the hyphenation approach improves over brute force decompounding. We used **Query 42** for this comparison since the F-Score difference is `0.25`.
+Second, we compared the **Dictionary Decompounder** with the **Hyphenation Decompounder** to see how, in some cases, the hyphenation approach improves over brute force decompounding. 
+We used **Query 42** for this comparison since the F-Score difference is `0.25`.
 
 *Example Query 42*: "LÖSUNG VON DIFFERENTIALGLEICHUNGEN PER COMPUTER"
 
-The **Hyphenation Decompounder** returns far more true positives than the **Dictionary Decompounder**, out of 36 relevant documents only 1 is found by the brute force approach of the **Dictionary Decompounder** compared to 8 by the **Hyphenation Decompounder**.
+The **Hyphenation Decompounder** returns far more true positives than the **Dictionary Decompounder**, 
+out of 36 relevant documents only 1 is found by the brute force approach of the **Dictionary Decompounder** compared to 8 by the **Hyphenation Decompounder**.
 
 <img
   alt=""
@@ -447,8 +455,8 @@ We can see that the score of the **Dictionary** approach is half of the **Hyphen
 
 As we can see, the **Dictionary Decompounder** seems to search on more sub-terms for `differentialgleichung` than the **Hyphenation Decompounder**. This leads to a higher document frequency which reduces the term score. So the **Dictionary** approach searches more terms that aren't relevant for the query and, therefore, is more likely to score relevant documents lower than irrelevant ones.
 
-**Conclusion**
-On the NPL, the **Hyphenation Decompounder** seems to work best. It seems to differentiate between necessary decompounding and words that only raise the document frequency. These examples underline our hypothesis that taking decomposition into account can positively affect the search scores.
+**Conclusion**  
+On the NPL corpus, the **Hyphenation Decompounder** seems to work best. It seems to differentiate between necessary decompounding and words that only raise the document frequency. These examples underline our hypothesis that taking decomposition into account can positively affect the search scores.
 
 ### 5.2. Why is the German Analyzer significantly better than the Standard Analyzer?
 
@@ -797,7 +805,7 @@ The score is not that different, but the position is. The **Dictionary Decompoun
   className= "contents"
 />
 
-The **Dictionary Decompounder** finds far more terms, also including some irrelevant and nonsense words like `aktull` or `formation` (which has nothing to do with the searched term `information`).
+The **Dictionary Decompounder** finds far more terms, also including some irrelevant and nonsense words like `formation` (which has nothing to do with the searched term `information`).
 
 **Explain German Analyzer**<br></br>
 ```json
