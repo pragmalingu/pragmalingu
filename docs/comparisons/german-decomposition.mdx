@@ -645,15 +645,13 @@ When we look at the highlights of both approaches and which terms are matches, w
 **Standard Analyzer**
 ```json
 {"_id": "1262",
- "_index": "pragmalingu-cacm-german-corpus",
- "_score": 0.3728282,
- "_source": {"text_german": "Es werden zwei Anweisungen vorgeschlagen, die es einem Programmierer erlauben der in einer prozedurorientierten Sprache schreibt Programmabschnitte anzugeben, die parallel ausgeführt werden sollen. parallel ausgeführt werden sollen.  Die Anweisungen sind DO TOGETHER und HOLD.  Sie dienen einerseits als Klammern zur Festlegung einen Bereich für den Parallelbetrieb festzulegen und teilweise jeden parallelen Pfad innerhalb dieses Bereichs zu definieren.  DO TOGETHERs können verschachtelt werden.  Die Anweisungen sollten besonders besonders effektiv für die Verwendung mit Rechengeräten sein, die in der Lage sind, ein gewisses Maß an Überlappung von Rechenoperationen zu erreichen. ",
-  "title_german": "Prozedur-orientierte Sprachanweisungen zur Erleichterung der Parallelverarbeitung"},
- "_type": "_doc",
- "highlight": {"text_german": ["Programmierer erlauben der in einer prozedurorientierten Sprache schreibt Programmabschnitte anzugeben, die <em>parallel</em>",
-   "ausgeführt werden sollen. <em>parallel</em> ausgeführt werden sollen.",
-   "Sie dienen einerseits als Klammern zur Festlegung einen Bereich <em>für</em> den Parallelbetrieb festzulegen und",
-   "Die Anweisungen sollten besonders besonders effektiv <em>für</em> die Verwendung mit Rechengeräten sein, die in"]}}
+  "_index": "pragmalingu-cacm-german-corpus",
+  "_score": 0.3728282,
+  "_source": {"text_german": "Es werden zwei Anweisungen vorgeschlagen, die es einem Programmierer erlauben der in einer prozedurorientierten Sprache schreibt Programmabschnitte anzugeben, die parallel ausgeführt werden sollen. parallel ausgeführt werden sollen.  Die Anweisungen sind DO TOGETHER und HOLD.  Sie dienen einerseits als Klammern zur Festlegung einen Bereich für den Parallelbetrieb festzulegen und teilweise jeden parallelen Pfad innerhalb dieses Bereichs zu definieren.  DO TOGETHERs können verschachtelt werden.  Die Anweisungen sollten besonders besonders effektiv für die Verwendung mit Rechengeräten sein, die in der Lage sind, ein gewisses Maß an Überlappung von Rechenoperationen zu erreichen. ",
+   "title_german": "Prozedur-orientierte Sprachanweisungen zur Erleichterung der Parallelverarbeitung"},
+  "_type": "_doc",
+  "highlight": {"text_german": ["Sie dienen einerseits als Klammern zur Festlegung einen Bereich <em>für</em> den Parallelbetrieb festzulegen und",
+    "Die Anweisungen sollten besonders besonders effektiv <em>für</em> die Verwendung mit Rechengeräten sein, die in"]}}
 ```
 
 **German Analyzer**
@@ -795,7 +793,7 @@ The score is not that different, but the position is. The **Dictionary Decompoun
 
 <img
   alt=""
-  src={useBaseUrl('img/EXP3_lisa_10_770.svg')}
+  src={useBaseUrl('img/EXP3_lisa_10_5801.svg')}
   className= "contents"
 />
 
