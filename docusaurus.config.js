@@ -30,7 +30,7 @@ module.exports = {
       title: '',
       logo: {
         alt: '',
-        src: 'img/kleines_Icon_2.png',
+        src: 'img/kleines_Icon_2.webp',
       },
     items: [
         {

@@ -10,7 +10,7 @@ import Mailto from 'react-mailto.js';
 const features = [
   {
     title: <>Comparisons</>,
-    imageUrl: 'img/Rikki_Comparison_dynamisch.png',
+    imageUrl: 'img/Rikki_Comparison_dynamisch.webp',
     link:'https://pragmalingu.de/docs/comparisons/comparisons-intro',
     description: (
       <>
@@ -21,7 +21,7 @@ const features = [
   },
   {
     title: <>Experiments</>,
-    imageUrl: 'img/Rikki_Experiments_dynamisch.png',
+    imageUrl: 'img/Rikki_Experiments_dynamisch.webp',
     link: 'https://pragmalingu.de/docs/experiments/experiments-intro',
     description: (
       <>
@@ -32,7 +32,7 @@ const features = [
   },
   {
     title: <>Guides</>,
-    imageUrl: 'img/Rikki_Guides_dynamisch.png',
+    imageUrl: 'img/Rikki_Guides_dynamisch.webp',
     link: 'https://pragmalingu.de/docs/guides/guides-intro',
     description: (
       <>
@@ -61,7 +61,7 @@ function Feature({ imageUrl, title, description,link }) {
 function ProjectTitle() {
   return (
     <div className={styles.coverContainer}>
-      <img src="img/Logo_orangenerHG.png" className={styles.cover} />
+      <img src="img/Logo_orangenerHG.webp" className={styles.cover} />
     </div>
   );
 }
