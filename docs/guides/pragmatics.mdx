@@ -44,16 +44,15 @@ In this article will use mostly the Anglo-American structure to explain some of 
 
 To find a useful way to handle the language given pragmatic concepts in Information Retrieval and NLP in general, we have to find rules to represent those concepts. In order to do that it is helpful to categorize them given the situation they appear in. 
 
-["The Oxford Handbook of Pragmatics"](https://www.oxfordhandbooks.com/view/10.1093/oxfordhb/9780199697960.001.0001/oxfordhb-9780199697960?rskey=tO58NA&result=1) tries to divide pragmatics into the following central concepts: 
+In combination of ["The Oxford Handbook of Pragmatics"](https://www.oxfordhandbooks.com/view/10.1093/oxfordhb/9780199697960.001.0001/oxfordhb-9780199697960?rskey=tO58NA&result=1) and Stephen C. Levinson's book ["Pragmatics"](https://www.cambridge.org/highereducation/books/pragmatics/6D0011901AE9E92CBC1F5F21D7C598C3#overview) we tried to divide pragmatics into the following central concepts: 
 
 * Conversational Implicature
 * Presupposition
 * Speech Acts
-* Deixis
-* Reference
-* Context
+* Reference and Deixis
+* Conversational Structure and Politolinguistics 
 
-In the following, we will briefly explain those concepts using ["The Oxford Handbook of Pragmatics"](https://www.oxfordhandbooks.com/view/10.1093/oxfordhb/9780199697960.001.0001/oxfordhb-9780199697960?rskey=tO58NA&result=1) as a main source. We will give examples and then use those to explain why pragmatic search is still a major problem in Natural Language Processing.
+In the following, we will briefly explain those concepts using mainly ["The Oxford Handbook of Pragmatics"](https://www.oxfordhandbooks.com/view/10.1093/oxfordhb/9780199697960.001.0001/oxfordhb-9780199697960?rskey=tO58NA&result=1) as well as a few other sources listed in the [further reading](#4-further-reading) section. We will give you some examples to explain how those concepts work and why pragmatic search is still a major problem in Natural Language Processing.
 
 ### 2.1. Conversational Implicature
 The conversational implicature can be defined as an additional meaning of an statement that is not apparent from the literal meaning but must be inferred from the context. 
@@ -234,8 +233,19 @@ Other references that are difficult to fit into these two categories would be:
 
 While some of these references can be solved with looking at more surrounding text, there are some - for example those who refer to objects or persons outside of the text - which are nearly unsolvable without the right context.
 
-### 2.6. Context
+### 2.6. Conversational Structure and Politolinguistics
 
+Although these two topics are often handled separately in the literature, we have decided to combine conversation structure and political linguistics under one heading, since they do not play a separate role for our experiments.
+
+**Conversation structure (also conversation analysis)**.
+In conversation structure, we study and analyze how people carry on conversations with each other. 
+Characteristics such as constitutivity, processuality, interactivity, methodicity, and pragmaticity are examined in more detail.
+This analysis takes place on different levels, the factual level, action level, social level, appeal level, the modality of the conversation and the establishment of reciprocity.
+
+**Politolinguistics (also Political Communication)**.
+Political linguistics studies how language and politics function in various contexts. For example, it examines the relationship between language and the political system, language and the political process, and language and individual policy fields.
+
+Both areas are mainly considered in the case of spoken language, which is why they are of little importance for extracting information from documents. One could consider them when searching typed conversations.
 
 ## 3. Problems with pragmatics in NLP
 
