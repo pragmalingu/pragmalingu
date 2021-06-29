@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>PragmaLingu Blog</title>
+        <link>https://www.pragmalingu.de/blog</link>
+        <description>PragmaLingu Blog</description>
+        <lastBuildDate>Wed, 03 Jun 2020 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <item>
+            <title><![CDATA[PragmaLingu, Launches Site]]></title>
+            <link>https://www.pragmalingu.de/blog/2020/06/03/pragma-lingu-site-launched</link>
+            <guid>PragmaLingu, Launches Site</guid>
+            <pubDate>Wed, 03 Jun 2020 00:00:00 GMT</pubDate>
+            <description><![CDATA[Welcome to our blog page! Stay tuned for updates.]]></description>
+        </item>
+    </channel>
+</rss>
