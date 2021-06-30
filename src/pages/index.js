@@ -37,7 +37,7 @@ const features = [
     description: (
       <>
         You want to dive deeper into the used datasets, algorithms and search engines? 
-        Here you can find in-depth guides about the techniques and tools we use, as well as interesting topics and new developments. You can start by reading about <a href="https://pragmalingu.de/docs/guides/pragmatics/'">pragmatics</a> in general.
+        Here you can find in-depth guides about the techniques and tools we use, as well as interesting topics and new developments. You can start by reading about <a href="https://pragmalingu.de/docs/guides/pragmatics/">pragmatics</a> in general.
       </>
     ),
   },
