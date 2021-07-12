@@ -1,1 +1,0 @@
-(self.webpackChunkpragmalingu_github_io=self.webpackChunkpragmalingu_github_io||[]).push([[841],{6353:function(e){"use strict";e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"PragmaLingu, Launches Site","permalink":"/blog/2020/06/03/pragma-lingu-site-launched"}]}')}}]);
